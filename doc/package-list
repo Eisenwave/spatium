@@ -1,0 +1,8 @@
+net.grian.spatium
+net.grian.spatium.api
+net.grian.spatium.coll
+net.grian.spatium.curve
+net.grian.spatium.enums
+net.grian.spatium.impl
+net.grian.spatium.matrix
+net.grian.spatium.util
