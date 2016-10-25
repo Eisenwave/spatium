@@ -19,6 +19,15 @@ public class Plane6f implements Plane {
 		this.zn = zn;
 	}
 	
+	public Plane6f(Plane6f copyOf) {
+		this.xc = copyOf.xc;
+		this.yc = copyOf.yc;
+		this.zc = copyOf.zc;
+		this.xn = copyOf.xn;
+		this.yn = copyOf.yn;
+		this.zn = copyOf.zn;
+	}
+	
 	public Plane6f(Vector center, Vector normal) {
 		this(
 				center.getX(), center.getY(), center.getZ(),
@@ -27,6 +36,38 @@ public class Plane6f implements Plane {
 	
 	public Plane6f() {
 		this(0, 0, 0, 0, 0, 0);
+	}
+	
+	// GETTERS
+	
+	@Override
+	public float getCenterX() {
+		return xc;
+	}
+
+	@Override
+	public float getCenterY() {
+		return yc;
+	}
+
+	@Override
+	public float getCenterZ() {
+		return zc;
+	}
+
+	@Override
+	public float getNormalX() {
+		return xn;
+	}
+
+	@Override
+	public float getNormalY() {
+		return yn;
+	}
+
+	@Override
+	public float getNormalZ() {
+		return zn;
 	}
 
 	@Override
@@ -38,7 +79,14 @@ public class Plane6f implements Plane {
 	public Vector getNormal() {
 		return Vector.fromXYZ(xn, yn, zn);
 	}
+	
+	// CHECKERS
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Plane && equals((Plane) obj);
+	}
+	
 	@Override
 	public boolean contains(float x, float y, float z) {
 		float
@@ -49,6 +97,8 @@ public class Plane6f implements Plane {
 		// dot product of normal vector and dist between center and point
 		return Spatium.equals(xn*dx + y*dy + z*dz, 0) ;
 	}
+	
+	// GETTERS
 
 	@Override
 	public Plane setCenter(float x, float y, float z) {
@@ -66,6 +116,11 @@ public class Plane6f implements Plane {
 		return this;
 	}
 	
+	// MISC
 	
+	@Override
+	public Plane clone() {
+		return new Plane6f(this);
+	}
 
 }

@@ -2,7 +2,6 @@ package net.grian.spatium.matrix;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.MatrixImpl;
-import net.grian.spatium.util.PrimArrays;
 
 /**
  * A two-dimensional matrix of numbers. This matrix, as all classes of Spatium
@@ -64,17 +63,24 @@ public interface Matrix {
 	 * not equal the columns of the second matrix
 	 */
 	public static Matrix product(Matrix a, Matrix b) {
-		if (a.getRows() != b.getColumns())
+		if (a.getColumns() != b.getRows())
 			throw new IncompatibleMatrixException(a, b);
 		
-		final int row = a.getRows(), col = b.getColumns();
-		float[] result = new float[row * col];
+		final int
+		arow = a.getRows(), acol = a.getColumns(),
+		brow = b.getRows(), bcol = b.getColumns();
+		float[] result = new float[arow * bcol];
 		
-		for (int i = 0; i < row; i++)
-			for (int j = 0; j < col; j++)
-				result[i + j*row] = PrimArrays.product(a.getRow(j), b.getColumn(i));
+		/* outer loop for acquiring the position (i, j) in the product matrix */
+		for (int i = 0; i < arow; i++) for (int j = 0; j < bcol; j++) {
+			final int index = i*bcol + j;
+			
+			/* inner loop for calculating the result at (i, j) */
+			for (int k = 0, l = 0; k < acol && l < brow; k++, l++)
+				result[index] += a.get(i, k) * b.get(l, j);
+		}
 		
-		return create(row, col, result);
+		return create(arow, bcol, result);
 	}
 	
 	/**
@@ -92,11 +98,121 @@ public interface Matrix {
 	public static Matrix bigger(Matrix matrix, int row, int col) {
 		if (row == 0 && col == 0) return matrix.clone();
 		
-		return matrix;
+		final int
+		arow = matrix.getRows(),
+		acol = matrix.getColumns(),
+		brow = arow + row,
+		bcol = acol + col;
+		
+		float[] content = new float[brow * bcol];
+		
+		for (int i = 0; i < arow && i < brow; i++) for (int j = 0; j < acol && i < bcol; j++) {
+			final int index = i * bcol + j;
+			content[index] = matrix.get(i, j);
+		}
+				
+		return create(brow, bcol, content);
 	}
 	
 	/**
-	 * Creates a new matrix with specified content.
+	 * Returns a new transponed version of a given matrix. This matrix will
+	 * have the same amount of rows as the original has columns and the same
+	 * amount of columns as the original has rows.
+	 * 
+	 * @param matrix the matrix
+	 * @return a new matrix
+	 */
+	public static Matrix transpone(Matrix matrix) {
+		final int
+		row = matrix.getRows(),
+		col = matrix.getColumns();
+		
+		Matrix result = create(col, row);
+		
+		for (int i = 0; i<row; i++) for (int j = 0; j<col; j++)
+			result.set(j, i, matrix.get(i, j));
+		
+		return result;
+	}
+	
+	/**
+	 * Creates a 2x2 scaling matrix for x and y coordinates.
+	 * 
+	 * @param x the x scale
+	 * @param y the y scale
+	 * @return a new scaling matrix
+	 */
+	public static Matrix fromScale(float x, float y) {
+		float[] content = new float[4];
+		content[0] = x;
+		content[3] = y;
+		
+		return create(2, 2, content);
+	}
+	
+	/**
+	 * Creates a 3x3 scaling matrix for x, y and z coordinates.
+	 * 
+	 * @param x the scale on the x-axis
+	 * @param y the scale on the y-axis
+	 * @param z the scale on the z-axis
+	 * @return a new scaling matrix
+	 */
+	public static Matrix fromScale(float x, float y, float z) {
+		float[] content = new float[9];
+		content[0] = x;
+		content[4] = y;
+		content[8] = z;
+		
+		return create(3, 3, content);
+	}
+	
+	/**
+	 * Creates a n x n scaling matrix for varying coordinates.
+	 * 
+	 * @param coords the coordinates
+	 * @return a new scaling matrix
+	 */
+	public static Matrix fromScale(float... coords) {
+		if (coords.length == 0)
+			throw new IllegalMatrixSizeException("no coords given");
+		
+		final int size = coords.length;
+		float[] content = new float[size * size];
+		
+		for (int i = 0; i<size; i++)
+			content[i * size + i] = coords[i];
+		
+		return Matrix.create(size, size, content);
+	}
+	
+	/**
+	 * Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll.
+	 * 
+	 * @param yaw the yaw of the rotation
+	 * @param pitch the pitch of the rotation
+	 * @param roll the roll of the rotation
+	 * @return a new rotation matrix
+	 */
+	public static Matrix fromRotation(float yaw, float pitch, float roll) {
+		float[] content = new float[9];
+		//TODO implement rotation matrices
+		
+		return Matrix.create(3, 3, content);
+	}
+	
+	/**
+	 * Creates a new matrix with specified content. Note that the input content
+	 * is being interpreted depending on the given rows and columns.
+	 * 
+	 * <br><br>For example, a 3x3 matrix will be filled in the following way:
+	 * <blockquote>
+	 *   {@code [(0,0) (0,1) (0,2) (1,0) (1,1) (1,2) (2,0) (2,1) (2,2)]}
+	 *   <br>when the indices {@code (i,j)} represent the row index {@code (i)}
+	 *   and the column index {@code (j)}.
+	 * </blockquote>
+	 * Should the provided array not meet the size requirements
+	 * {@code length = rows * columns}, the matrix can not be created.
 	 * 
 	 * @param rows the amount of rows of the matrix (> 0)
 	 * @param columns the amount of columns of the matrix (> 0)
@@ -105,7 +221,7 @@ public interface Matrix {
 	 * @throws IllegalMatrixSizeException if the content array's length is not
 	 * equal to {@code rows * columns}
 	 */
-	public static Matrix create(int rows, int columns, float[] content) {
+	public static Matrix create(int rows, int columns, float... content) {
 		return new MatrixImpl(rows, columns, content);
 	}
 	
@@ -188,7 +304,7 @@ public interface Matrix {
 	 */
 	public default boolean equalSize(Matrix matrix) {
 		return
-				this.getRows() == matrix.getRows() &&
+				this.getRows()    == matrix.getRows() &&
 				this.getColumns() == matrix.getColumns();
 	}
 	

@@ -10,6 +10,7 @@ public class Collisions {
 	/**
 	 * Tests whether two points collide. This is equivalent to testing whether
 	 * the two points are in the same position.
+	 * 
 	 * @param a the first point
 	 * @param b the second point
 	 * @return whether the points collide

@@ -58,6 +58,21 @@ public class AxisAlignedBB6f implements AxisAlignedBB {
 	}
 	
 	@Override
+	public float getSizeX() {
+		return xmax - xmin;
+	}
+	
+	@Override
+	public float getSizeY() {
+		return ymax - ymin;
+	}
+	
+	@Override
+	public float getSizeZ() {
+		return zmax - zmin;
+	}
+	
+	@Override
 	public Vector getMin() {
 		return Vector.fromXYZ(xmin, ymin, zmin);
 	}

@@ -1,4 +1,4 @@
-package net.grian.spatium.api;
+package net.grian.spatium;
 
 import java.io.Serializable;
 

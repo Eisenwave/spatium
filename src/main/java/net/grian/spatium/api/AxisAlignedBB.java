@@ -7,6 +7,17 @@ import net.grian.spatium.impl.AxisAlignedBB6f;
  */
 public interface AxisAlignedBB extends BoundingBox {
 	
+	/**
+	 * Creates a new bounding box between two points.
+	 * 
+	 * @param xa the x of the first point
+	 * @param ya the y of the first point
+	 * @param za the z of the first point
+	 * @param xb the x of the second point
+	 * @param yb the y of the second point
+	 * @param zb the z of the second point
+	 * @return a new bounding box
+	 */
 	public static AxisAlignedBB fromPoints(float xa, float ya, float za, float xb, float yb, float zb) {
 		return new AxisAlignedBB6f(xa, ya, za, xb, yb, zb);
 	}
@@ -22,6 +33,13 @@ public interface AxisAlignedBB extends BoundingBox {
 				);
 	}
 	
+	/**
+	 * Creates a new bounding box between two points.
+	 * 
+	 * @param from the first point
+	 * @param to the second point
+	 * @return a new bounding box
+	 */
 	public static AxisAlignedBB between(Vector from, Vector to) {
 		return fromPoints(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
 	}
@@ -40,14 +58,48 @@ public interface AxisAlignedBB extends BoundingBox {
 	
 	public abstract float getMaxZ();
 	
-	public abstract Vector getDimensions();
+	public abstract float getSizeX();
 	
-	public abstract float getVolume();
+	public abstract float getSizeY();
+	
+	public abstract float getSizeZ();
+	
+	/**
+	 * Returns the dimensions of the bounding box in a new vector.
+	 * 
+	 * @return the dimensions of the bounding box in a new vector
+	 */
+	public default Vector getDimensions() {
+		return Vector.fromXYZ(getSizeX(), getSizeY(), getSizeZ());
+	}
+	
+	/**
+	 * Returns the volume of the bounding box.
+	 * 
+	 * @return the volume of the bounding box
+	 */
+	public default float getVolume() {
+		return getSizeX() * getSizeY() * getSizeZ();
+	}
 	
 	// CHECKERS
 	
+	/**
+	 * Returns whether this bounding box contains a point of given coordinates.
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return whether this bounding box contains a point of given coordinates
+	 */
 	public abstract boolean contains(float x, float y, float z);
 	
+	/**
+	 * Returns whether this bounding box contains a point of given coordinates.
+	 * 
+	 * @param point the point
+	 * @return whether this bounding box contains a point of given coordinates
+	 */
 	public default boolean contains(Vector point) {
 		return contains(point.getX(), point.getY(), point.getZ());
 	}

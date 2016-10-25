@@ -1,5 +1,6 @@
 package net.grian.spatium.api;
 
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.BlockVector3i;
 
 public interface BlockVector extends SpatiumObject {
@@ -18,14 +19,37 @@ public interface BlockVector extends SpatiumObject {
 	
 	// GETTERS
 	
+	/**
+	 * Returns the x-coordinate of the block.
+	 * 
+	 * @return the x-coordinate of the block
+	 */
 	public abstract int getX();
 	
+	/**
+	 * Returns the y-coordinate of the block.
+	 * 
+	 * @return the y-coordinate of the block
+	 */
 	public abstract int getY();
 	
+	/**
+	 * Returns the z-coordinate of the block.
+	 * 
+	 * @return the z-coordinate of the block
+	 */
 	public abstract int getZ();
 	
 	// SETTERS
-	
+
+	/**
+	 * Sets all block coordinates.
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return itself
+	 */
 	public abstract BlockVector set(int x, int y, int z);
 	
 	public abstract BlockVector setX(int x);
@@ -72,17 +96,34 @@ public interface BlockVector extends SpatiumObject {
 	
 	// CHECKERS
 	
-	public default boolean equals(BlockVector vector) {
+	/**
+	 * Returns whether these coordinates are equal to other coordinates.
+	 * 
+	 * @param block the block
+	 * @return whether these and the coordinates of the block are equal
+	 */
+	public default boolean equals(BlockVector block) {
 		return
-				this.getX() == vector.getX() &&
-				this.getY() == vector.getY() &&
-				this.getZ() == vector.getZ();
+				this.getX() == block.getX() &&
+				this.getY() == block.getY() &&
+				this.getZ() == block.getZ();
 	}
 	
 	// MISC
 	
+	/**
+	 * Returns a copy of these block coordinates.
+	 * 
+	 * @return a copy of these block coordinates.
+	 */
 	public abstract BlockVector clone();
 	
+	/**
+	 * Converts these block coordinates into an array containing the x, y and z
+	 * coordinates in order.
+	 * 
+	 * @return these coordinates in a new array
+	 */
 	public abstract int[] toArray();
 
 }

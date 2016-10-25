@@ -3,6 +3,7 @@ package net.grian.spatium.impl;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 import net.grian.spatium.util.PrimArrays;
+import net.grian.spatium.util.Strings;
 
 public class MatrixImpl implements Matrix {
 	
@@ -32,7 +33,7 @@ public class MatrixImpl implements Matrix {
 	public float get(int row, int col) {
 		validate(row, col);
 		
-		return content[row + col*rows];
+		return content[row*columns + col];
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class MatrixImpl implements Matrix {
 	public Matrix set(int row, int col, float value) {
 		validate(row, col);
 		
-		content[row + col * rows] = value;
+		content[row*columns + col] = value;
 		return this;
 	}
 	
@@ -93,18 +94,27 @@ public class MatrixImpl implements Matrix {
 		return new MatrixImpl(this);
 	}
 	
+	@Override
+	public String toString() {
+		String[] rowArray = new String[rows];
+		for (int i = 0; i < rows; i++) {
+			rowArray[i] = "[" + Strings.join(", ", getRow(i)) + "]";
+		}
+		return "[" + Strings.join(", ", rowArray) + "]";
+	}
+	
 	// VALIDATE
 	
 	private void validateCol(int col) {
-		if (col <= 0)
-			throw new MatrixIndexOutOfBoundsException("col "+col+" <= 0");
+		if (col < 0)
+			throw new MatrixIndexOutOfBoundsException("col "+col+" < 0");
 		if (col >= columns)
 			throw new MatrixIndexOutOfBoundsException("col "+col+" >= "+columns+" columns");
 	}
 	
 	private void validateRow(int row) {
-		if (row <= 0)
-			throw new MatrixIndexOutOfBoundsException("row "+row+" <= 0");
+		if (row < 0)
+			throw new MatrixIndexOutOfBoundsException("row "+row+" < 0");
 		if (row >= rows)
 			throw new MatrixIndexOutOfBoundsException("row "+row+" >= "+rows+" rows");
 	}
