@@ -1,8 +1,8 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.api.Plane;
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.Plane;
+import net.grian.spatium.geo.Vector;
 
 public class Plane6f implements Plane {
 	

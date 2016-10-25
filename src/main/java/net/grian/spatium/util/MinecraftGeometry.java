@@ -1,9 +1,9 @@
 package net.grian.spatium.util;
 
-import net.grian.spatium.api.Vector;
 import net.grian.spatium.enums.CardinalDirection;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.enums.Face;
+import net.grian.spatium.geo.Vector;
 
 public final class MinecraftGeometry {
 	

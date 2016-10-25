@@ -2,8 +2,8 @@ package net.grian.spatium.impl;
 
 import java.util.Arrays;
 
-import net.grian.spatium.api.BlockVector;
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo.Vector;
 
 public class Vector3f implements Vector {
 	

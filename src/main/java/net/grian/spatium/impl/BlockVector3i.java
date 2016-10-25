@@ -2,9 +2,9 @@ package net.grian.spatium.impl;
 
 import java.util.Arrays;
 
-import net.grian.spatium.api.BlockVector;
-import net.grian.spatium.api.Vector;
 import net.grian.spatium.enums.Direction;
+import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo.Vector;
 import net.grian.spatium.util.PrimMath;
 
 public class BlockVector3i implements BlockVector {

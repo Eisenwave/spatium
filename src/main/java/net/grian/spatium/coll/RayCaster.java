@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.api.Ray;
+import net.grian.spatium.geo.Ray;
 
 @FunctionalInterface
 public interface RayCaster<T extends Collideable> {

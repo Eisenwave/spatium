@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import net.grian.spatium.api.Ray;
 import net.grian.spatium.coll.Collideable;
 import net.grian.spatium.coll.Collisions;
 import net.grian.spatium.coll.RayCollision;
 import net.grian.spatium.coll.Universe;
+import net.grian.spatium.geo.Ray;
 
 public class UniverseImpl<T> implements Universe<T> {
 	

@@ -1,4 +1,4 @@
-package net.grian.spatium.api;
+package net.grian.spatium.geo;
 
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.BlockVector3i;

@@ -3,7 +3,7 @@ package net.grian.spatium.coll;
 import java.util.List;
 import java.util.Set;
 
-import net.grian.spatium.api.Ray;
+import net.grian.spatium.geo.Ray;
 import net.grian.spatium.impl.UniverseImpl;
 
 public interface Universe<T> {

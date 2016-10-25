@@ -1,10 +1,10 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.api.AxisAlignedTSBP;
-import net.grian.spatium.api.Ray;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.enums.Direction.AxisDirection;
+import net.grian.spatium.geo.AxisAlignedTSBP;
+import net.grian.spatium.geo.Ray;
 
 public class AxisAlignedTSBP3f implements AxisAlignedTSBP {
 	

@@ -1,7 +1,7 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.api.Sphere;
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.Sphere;
+import net.grian.spatium.geo.Vector;
 
 public class Sphere4f implements Sphere {
 	

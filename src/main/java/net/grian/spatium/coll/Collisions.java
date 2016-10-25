@@ -1,7 +1,7 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.api.*;
+import net.grian.spatium.geo.*;
 
 public class Collisions {
 	

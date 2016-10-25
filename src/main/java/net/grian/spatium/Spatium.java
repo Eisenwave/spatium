@@ -1,6 +1,6 @@
 package net.grian.spatium;
 
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.Vector;
 
 public class Spatium {
 	

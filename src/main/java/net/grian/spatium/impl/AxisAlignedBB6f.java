@@ -1,7 +1,7 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.api.AxisAlignedBB;
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.AxisAlignedBB;
+import net.grian.spatium.geo.Vector;
 
 public class AxisAlignedBB6f implements AxisAlignedBB {
 	

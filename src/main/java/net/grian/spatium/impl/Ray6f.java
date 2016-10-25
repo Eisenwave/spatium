@@ -1,8 +1,8 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.api.Ray;
-import net.grian.spatium.api.Vector;
+import net.grian.spatium.geo.Ray;
+import net.grian.spatium.geo.Vector;
 
 public class Ray6f implements Ray {
 	
