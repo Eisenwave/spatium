@@ -43,7 +43,7 @@ public class Spatium {
 	}
 
 	public static float radians(float degrees) {
-		return (float) (DEG_TO_RAD * degrees);
+		return DEG_TO_RAD * degrees;//
 	}
 	
 }
