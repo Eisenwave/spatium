@@ -8,11 +8,6 @@ public class Main {
         Quaternion b = Quaternion.create(1, 1, 1, Spatium.DEG_TO_RAD *  90);
         Quaternion c = Quaternion.product(a, b);
         System.out.println(a + " * " + b + " = " + c);
-        int x = 0, y = 50;
-        while(x>100 || y>=-50) {
-            y--; x++;
-            System.out.print("!");
-        }
     }
 
 }
