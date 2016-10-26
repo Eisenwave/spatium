@@ -179,8 +179,9 @@ public interface Matrix {
 		
 		final int size = coords.length;
 		float[] content = new float[size * size];
-		
-		for (int i = 0; i<size; i++)
+
+        //noinspection ManualArrayCopy
+        for (int i = 0; i<size; i++)
 			content[i * size + i] = coords[i];
 		
 		return Matrix.create(size, size, content);
@@ -299,6 +300,7 @@ public interface Matrix {
 	
 	/**
 	 * Returns whether this and the compared matrix are equal in size.
+	 *
 	 * @param matrix the matrix
 	 * @return whether this and the compared matrix are equal in size
 	 */

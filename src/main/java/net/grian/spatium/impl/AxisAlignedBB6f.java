@@ -144,5 +144,10 @@ public class AxisAlignedBB6f implements AxisAlignedBB {
 	public AxisAlignedBB6f clone() {
 		return new AxisAlignedBB6f(this);
 	}
-	
+
+	@Override
+	public byte getCollisionId() {
+		return 0;
+	}
+
 }

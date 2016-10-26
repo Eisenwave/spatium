@@ -142,5 +142,10 @@ public interface Plane extends Collideable {
 	// MISC
 	
 	public abstract Plane clone();
+	
+	@Override
+	public default byte getCollisionId() {
+		return PLANE;
+	}
 
 }

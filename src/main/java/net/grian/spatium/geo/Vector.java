@@ -247,6 +247,10 @@ public interface Vector extends Collideable {
 	public default Vector cross(Vector v) {
 		return cross(v.getX(), v.getY(), v.getZ());
 	}
+
+	public default Vector rotate(Quaternion q) {
+		return this.set(Quaternion.product(q, this));
+	}
 	
 	// CHECKERS
 	
@@ -274,9 +278,19 @@ public interface Vector extends Collideable {
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
 	 * @param z the z-coordinate
-	 * @return itsef
+	 * @return itself
 	 */
 	public abstract Vector set(float x, float y, float z);
+
+    /**
+     * Sets the coordinates of this vector to the coordinates of another vector.
+     *
+     * @param v the vector
+     * @return itself
+     */
+    public default Vector set(Vector v) {
+        return set(v.getX(), v.getY(), v.getZ());
+    }
 	
 	/**
 	 * Sets the x of the vector.
@@ -339,7 +353,7 @@ public interface Vector extends Collideable {
 	}
 	
 	/**
-	 * Mutliplies the coordinates of this vector.
+	 * Multiplies the coordinates of this vector.
 	 * 
 	 * @param x the x factor
 	 * @param y the y factor
@@ -453,5 +467,10 @@ public interface Vector extends Collideable {
 	 * @return a copy of this vector
 	 */
 	public abstract Vector clone();
+	
+	@Override
+	public default byte getCollisionId() {
+		return VECTOR;
+	}
 	
 }

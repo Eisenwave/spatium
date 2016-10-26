@@ -18,11 +18,19 @@ public interface AxisAlignedBB extends BoundingBox {
 	 * @param zb the z of the second point
 	 * @return a new bounding box
 	 */
-	public static AxisAlignedBB fromPoints(float xa, float ya, float za, float xb, float yb, float zb) {
+    public static AxisAlignedBB fromPoints(float xa, float ya, float za, float xb, float yb, float zb) {
 		return new AxisAlignedBB6f(xa, ya, za, xb, yb, zb);
 	}
-	
-	public static AxisAlignedBB cube(Vector center, float size) {
+
+	/**
+     * Creates a new cubical axis aligned bounding box around a center and of a set size. Each side of the cube will
+     * be twice as long as the specified size.
+     *
+	 * @param center the center of the cube
+	 * @param size the size of the cube
+	 * @return a new axis aligned bounding box
+	 */
+	public static AxisAlignedBB createCube(Vector center, float size) {
 		return new AxisAlignedBB6f(
 				center.getX() - size,
 				center.getY() - size,
@@ -45,24 +53,24 @@ public interface AxisAlignedBB extends BoundingBox {
 	}
 	
 	// GETTERS
-	
-	public abstract float getMinX();
-	
-	public abstract float getMinY();
-	
-	public abstract float getMinZ();
-	
-	public abstract float getMaxX();
-	
-	public abstract float getMaxY();
-	
-	public abstract float getMaxZ();
-	
-	public abstract float getSizeX();
-	
-	public abstract float getSizeY();
-	
-	public abstract float getSizeZ();
+
+	public float getMinX();
+
+	public float getMinY();
+
+	public float getMinZ();
+
+	public float getMaxX();
+
+	public float getMaxY();
+
+	public float getMaxZ();
+
+	public float getSizeX();
+
+	public float getSizeY();
+
+	public float getSizeZ();
 	
 	/**
 	 * Returns the dimensions of the bounding box in a new vector.
@@ -92,7 +100,7 @@ public interface AxisAlignedBB extends BoundingBox {
 	 * @param z the z-coordinate
 	 * @return whether this bounding box contains a point of given coordinates
 	 */
-	public abstract boolean contains(float x, float y, float z);
+	public boolean contains(float x, float y, float z);
 	
 	/**
 	 * Returns whether this bounding box contains a point of given coordinates.
@@ -106,26 +114,26 @@ public interface AxisAlignedBB extends BoundingBox {
 	
 	// SETTERS
 	
-	public abstract AxisAlignedBB move(float x, float y, float z);
-	
+	AxisAlignedBB move(float x, float y, float z);
+
 	public default AxisAlignedBB move(Vector v) {
 		return move(v.getX(), v.getY(), v.getZ());
 	}
-	
-	public abstract AxisAlignedBB scale(float x, float y, float z);
-	
+
+	public AxisAlignedBB scale(float x, float y, float z);
+
 	public default AxisAlignedBB scale(Vector v) {
 		return scale(v.getX(), v.getY(), v.getZ());
 	}
-	
-	public abstract AxisAlignedBB grow(float x, float y, float z);
-	
+
+	public AxisAlignedBB grow(float x, float y, float z);
+
 	public default AxisAlignedBB grow(Vector v) {
 		return grow(v.getX(), v.getY(), v.getZ());
 	}
 	
 	// MISC
 	
-	public abstract AxisAlignedBB clone();
+	AxisAlignedBB clone();
 
 }

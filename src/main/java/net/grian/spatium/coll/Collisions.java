@@ -8,8 +8,7 @@ public class Collisions {
 	private Collisions() {}
 	
 	/**
-	 * Tests whether two points collide. This is equivalent to testing whether
-	 * the two points are in the same position.
+	 * Tests whether two points collide. This is equivalent to testing whether the two points are in the same position.
 	 * 
 	 * @param a the first point
 	 * @param b the second point
@@ -21,6 +20,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether two {@link Sphere}s collide/intersect.
+	 *
 	 * @param a the first sphere
 	 * @param b the second sphere
 	 * @return whether the spheres collide/intersect.
@@ -47,6 +47,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether two {@link AxisAlignedTSBP}s collide/intersect.
+	 *
 	 * @param a the first plane
 	 * @param b the second plane
 	 * @return whether the planes collide/intersect
@@ -63,6 +64,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether a {@link Ray} and a Point ({@link Vector}) collide.
+	 *
 	 * @param ray the ray
 	 * @param point the point
 	 * @return whether the box and the point collide
@@ -73,6 +75,8 @@ public class Collisions {
 	
 	/**
 	 * Tests whether a {@link Ray} and a {@link AxisAlignedBB} collide.
+	 *
+	 *
 	 * @param ray the ray
 	 * @param box the bounding box
 	 * @return whether the ray and the box collide
@@ -83,6 +87,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether a {@link Sphere} and a Point collide.
+	 *
 	 * @param sphere the sphere
 	 * @param point the point
 	 * @return whether the sphere and the point collide
@@ -93,6 +98,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether an {@link AxisAlignedBB} and a Point collide.
+	 *
 	 * @param box the bounding box
 	 * @param point the point
 	 * @return whether the box and the point collide
@@ -103,6 +109,7 @@ public class Collisions {
 	
 	/**
 	 * Tests whether an {@link AxisAlignedTSBP} and a Point collide.
+	 *
 	 * @param plane the plane
 	 * @param point the point
 	 * @return whether the box and the point collide
@@ -113,8 +120,6 @@ public class Collisions {
 	
 	public static float rayCast(Ray ray, Collideable c) throws UnsupportedOperationException {
 		if (c instanceof Ray)
-			return rayCast(ray, (Ray) c);
-		else if (c instanceof Ray)
 			return rayCast(ray, (Ray) c);
 		else if (c instanceof Sphere)
 			return rayCast(ray, (Sphere) c);
@@ -218,10 +223,9 @@ public class Collisions {
             	float
             	lengthCenterBase = Vector.between(center, base).getLength(),
         		lengthOriginBase = Vector.between(origin, base).getLength(),
-        		dist = (float) Math.sqrt(radius * radius + lengthCenterBase * lengthOriginBase),
-        		di1 = dist - lengthOriginBase;
+        		dist = (float) Math.sqrt(radius * radius + lengthCenterBase * lengthOriginBase);
 
-            	return di1;
+				return dist - lengthOriginBase;
         	}
         	
         }
@@ -319,7 +323,7 @@ public class Collisions {
 		if (tmin > tzmax || tzmin > tmax)
 			return Float.NaN;
 		if (tzmin > tmin) tmin = tzmin;
-		if (tzmax < tmax) tmax = tzmax;
+		//if (tzmax < tmax) tmax = tzmax;
 		
 		return tmin;
 	}

@@ -197,5 +197,10 @@ public interface Ray extends Collideable {
 	// MISC
 	
 	public abstract Ray clone();
+	
+	@Override
+	public default byte getCollisionId() {
+		return RAY;
+	}
 
 }

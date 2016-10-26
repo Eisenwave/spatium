@@ -13,8 +13,8 @@ public class PolarVector3f implements Vector {
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
-	
-	public PolarVector3f(PolarVector3f copyOf) {
+
+	private PolarVector3f(PolarVector3f copyOf) {
 		this(copyOf.radius, copyOf.yaw, copyOf.pitch);
 	}
 

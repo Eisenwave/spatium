@@ -10,6 +10,10 @@ public class Spatium {
 	 */
 	public final static float EPSILON = 0.00001f;
 
+	public final static float
+			DEG_TO_RAD = (float) (Math.PI / 180),
+			RAD_TO_DEG = (float) (180 / Math.PI);
+
 	/**
 	 * Checks whether the difference betweent two values {@code a, b} is
 	 * smaller than the maximum precision {@link #EPSILON}. This method is used
@@ -32,6 +36,14 @@ public class Spatium {
 	
 	public static float length(float x, float y, float z) {
 		return (float) Math.sqrt(x*x + y*y + z*z);
+	}
+
+	public static float degrees(float radians) {
+		return (float) (RAD_TO_DEG * radians);
+	}
+
+	public static float radians(float degrees) {
+		return (float) (DEG_TO_RAD * degrees);
 	}
 	
 }

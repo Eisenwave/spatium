@@ -159,5 +159,10 @@ public interface Sphere extends Collideable {
 	// MISC
 	
 	public abstract Sphere clone();
+	
+	@Override
+	public default byte getCollisionId() {
+		return SPHERE;
+	}
 
 }

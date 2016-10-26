@@ -1,8 +1,8 @@
 package net.grian.spatium.coll;
 
 @FunctionalInterface
-public interface CollisionTester<A extends Collideable, B extends Collideable> {
+public interface CollisionTester {
 	
-	public boolean test(A a, B b);
+	public boolean test(Collideable a, Collideable b);
 
 }

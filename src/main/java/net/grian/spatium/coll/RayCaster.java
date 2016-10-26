@@ -3,8 +3,8 @@ package net.grian.spatium.coll;
 import net.grian.spatium.geo.Ray;
 
 @FunctionalInterface
-public interface RayCaster<T extends Collideable> {
+public interface RayCaster {
 	
-	public abstract float rayCast(Ray ray, T c);
+	public abstract float rayCast(Ray ray, Collideable c);
 
 }

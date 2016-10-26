@@ -9,39 +9,43 @@ public interface AxisAlignedTSBP extends Collideable {
 	
 	// GETTERS
 	
-	public abstract Direction getDirection();
+	Direction getDirection();
 	
-	public default Axis getAxis() {
+	default Axis getAxis() {
 		return getDirection().axis();
 	}
 	
-	public abstract float getMinX();
+	float getMinX();
 	
-	public abstract float getMinY();
+	float getMinY();
 	
-	public abstract float getMinZ();
+	float getMinZ();
 	
-	public abstract float getMaxX();
+	float getMaxX();
 	
-	public abstract float getMaxY();
+	float getMaxY();
 	
-	public abstract float getMaxZ();
+	float getMaxZ();
 	
-	public default Vector getMin() {
+    default Vector getMin() {
 		return Vector.fromXYZ(getMinX(), getMinY(), getMinZ());
 	}
 	
-	public default Vector getMax() {
+    default Vector getMax() {
 		return Vector.fromXYZ(getMaxX(), getMaxY(), getMaxZ());
 	}
+
+	default Vector getCenter() {
+		return null;
+	}
 	
-	public abstract float getMinWidth();
+	float getMinWidth();
 	
-	public abstract float getMinHeight();
+	float getMinHeight();
 	
-	public abstract float getMaxWidth();
-	
-	public abstract float getMaxHeight();
+	float getMaxWidth();
+
+    float getMaxHeight();
 	
 	/**
 	 * Returns the depth of the plane in the direction it is in. For instance,
@@ -103,5 +107,12 @@ public interface AxisAlignedTSBP extends Collideable {
 	 * @see Direction#opposite()
 	 */
 	public abstract AxisAlignedTSBP mirror();
+	
+	// MISC
+	
+	@Override
+	public default byte getCollisionId() {
+		return AATSBP;
+	}
 	
 }
