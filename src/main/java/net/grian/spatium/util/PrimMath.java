@@ -2,18 +2,10 @@ package net.grian.spatium.util;
 
 import java.util.Random;
 
+@SuppressWarnings("WeakerAccess")
 public final class PrimMath {
 	
-	public final static double
-	sqrt_1d3 = Math.sqrt(1/3),
-	sqrt_1d2 = Math.sqrt(1/2);
-	
-	public final static float
-	f_sqrt_1d2 = (float) sqrt_1d2,
-	f_sqrt_1d3 = (float) sqrt_1d3;
-	
 	private PrimMath() {}
-	
 	
 	//// FLOOR ////
 	public static long floorAsLong(float f) {
@@ -160,73 +152,73 @@ public final class PrimMath {
 	//// SUM ////
 	public static long sumAsLong(long...array) {
 		long sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (long val : array) sum += val;
 		return sum;
 	}
 	
 	public static long sumAsLong(int...array) {
 		long sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (int val : array) sum += val;
 		return sum;
 	}
 	
 	public static long sumAsLong(short...array) {
 		long sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (short val : array) sum += val;
 		return sum;
 	}
 	
 	public static long sumAsLong(byte...array) {
 		long sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (byte val : array) sum += val;
 		return sum;
 	}
 	
 	public static int sumAsInt(int...array) {
 		int sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (int val : array) sum += val;
 		return sum;
 	}
 	
 	public static int sumAsInt(short...array) {
 		int sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (short val : array) sum += val;
 		return sum;
 	}
 	
 	public static int sumAsInt(byte...array) {
 		int sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (byte val : array) sum += val;
 		return sum;
 	}
 	
 	public static short sumAsShort(short...array) {
 		short sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (short val : array) sum += val;
 		return sum;
 	}
 	
 	public static short sumAsShort(byte...array) {
 		short sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (byte val : array) sum += val;
 		return sum;
 	}
 	
 	public static double sumAsDouble(double...array) {
 		double sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (double val : array) sum += val;
 		return sum;
 	}
 	
 	public static double sumAsDouble(float...array) {
 		double sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (float val : array) sum += val;
 		return sum;
 	}
 	
 	public static float sumAsFloat(float...array) {
 		float sum = 0;
-		for (int i = 0; i<array.length; i++) sum += array[i];
+		for (float val : array) sum += val;
 		return sum;
 	}
 	

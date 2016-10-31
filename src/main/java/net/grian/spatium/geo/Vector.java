@@ -1,7 +1,8 @@
 package net.grian.spatium.geo;
 
+import net.grian.spatium.MinecraftSpecific;
 import net.grian.spatium.Spatium;
-import net.grian.spatium.coll.Collideable;
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Vector3f;
 import net.grian.spatium.util.MinecraftGeometry;
 
@@ -9,7 +10,7 @@ import net.grian.spatium.util.MinecraftGeometry;
  * A three-dimensional vector. Can be either karthesian or polar depending on
  * the implementation.
  */
-public interface Vector extends Collideable {
+public interface Vector extends SpatiumObject {
 	
 	/**
 	 * Creates a new Vector.
@@ -122,36 +123,44 @@ public interface Vector extends Collideable {
 	
 	/**
 	 * Returns the y of the vector.
+     *
 	 * @return the y of the vector
 	 */
 	public abstract float getY();
 	
 	/**
 	 * Returns the z of the vector.
+     *
 	 * @return the z of the vector
 	 */
 	public abstract float getZ();
 	
 	/**
-	 * Returns the yaw of the vector.
+	 * Returns the yaw of the vector in degrees.
+	 *
 	 * @return the yaw of the vector
 	 */
+    @MinecraftSpecific
 	public abstract float getYaw();
 	
 	/**
 	 * Returns the pitch of the vector.
+     *
 	 * @return the pitch of the vector
 	 */
+	@MinecraftSpecific
 	public abstract float getPitch();
 	
 	/**
 	 * Returns the length of the vector.
+     *
 	 * @return the length of the vector
 	 */
 	public abstract float getLength();
 	
 	/**
 	 * Returns the squared length of the vector.
+     *
 	 * @return the squared length of the vector
 	 */
 	public abstract float getLengthSquared();
@@ -177,32 +186,65 @@ public interface Vector extends Collideable {
 	}
 	
 	/**
-	 * Returns the angle between this vector and another vector.
+	 * Returns the signed angle between this vector and another vector.
 	 * 
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
 	 * @param z the z-coordinate
-	 * @return the angle to another vector
+	 * @return the signed angle to another vector
 	 */
 	public abstract float angleTo(float x, float y, float z);
 	
 	/**
-	 * Returns the angle between this vector and another vector.
+	 * Returns the signed angle between this vector and another vector.
 	 * 
 	 * @param v the vector
-	 * @return the angle to another vector
+	 * @return the signed angle to another vector
 	 */
 	public default float angleTo(Vector v) {
 		return angleTo(v.getX(), v.getY(), v.getZ());
 	}
-	
-	public abstract Vector midPoint(Vector v, float t);
+
+    /**
+     * Returns the signed angle of this vector to a plane. This is equivalent to the signed angle of the plane's
+     * normal vector.
+     *
+     * @param plane the plane
+     * @return the signed angle to the plane
+     */
+	public default float angleTo(Plane plane) {
+        return angleTo(plane.getNormalX(), plane.getNormalY(), plane.getNormalZ());
+    }
+
+    /**
+     * <p>
+     *     Returns a new point between this point and another with a weight t. The weight specifies how close the point
+     *     is to this point.
+     * </p>
+     * <p>
+     *     At 0, the result will be a clone of this point. At 1, the result will be a clone of the other point.
+     * </p>
+     *
+     * @param point the other point
+     * @param t the weight ({@code 0 <= t <= 1})
+     * @return a point between this and another point
+     * @throws IllegalArgumentException if t is smaller than 0 or larger than 1
+     */
+	public default Vector midPoint(Vector point, float t) {
+        if (t < 0 || t > 1) throw new IllegalArgumentException("weight out of range ("+t+")");
+        float k = 1-t;
+        return Vector.fromXYZ(
+                (this.getX() * k) + (point.getX() * t),
+                (this.getX() * k) + (point.getY() * t),
+                (this.getX() * k) + (point.getZ() * t));
+    }
 	
 	/**
 	 * Returns the middle-point between this point and another point.
 	 * 
 	 * @param point the point
 	 * @return the middle-point to another point
+     * @see #midPoint(Vector, float)
 	 */
 	public default Vector midPoint(Vector point) {
 		return midPoint(point, 0.5f);
@@ -246,10 +288,6 @@ public interface Vector extends Collideable {
 	 */
 	public default Vector cross(Vector v) {
 		return cross(v.getX(), v.getY(), v.getZ());
-	}
-
-	public default Vector rotate(Quaternion q) {
-		return this.set(Quaternion.product(q, this));
 	}
 	
 	// CHECKERS
@@ -347,9 +385,15 @@ public interface Vector extends Collideable {
 	 * @return itself
 	 */
 	public abstract Vector subtract(float x, float y, float z);
-	
+
+	/**
+	 * Subtracts another vector from this vector.
+	 *
+	 * @param v the vector to subtract
+	 * @return itself
+	 */
 	public default Vector subtract(Vector v) {
-		return multiply(v.getX(), v.getY(), v.getZ());
+		return subtract(v.getX(), v.getY(), v.getZ());
 	}
 	
 	/**
@@ -367,7 +411,9 @@ public interface Vector extends Collideable {
 	 * @param factor the factor
 	 * @return itself
 	 */
-	public abstract Vector multiply(float factor);
+	public default Vector multiply(float factor) {
+        return multiply(factor, factor, factor);
+    }
 	
 	/**
 	 * Divides the coordinates of this vector.
@@ -385,7 +431,9 @@ public interface Vector extends Collideable {
 	 * @param divisor the divisor
 	 * @return itself
 	 */
-	public abstract Vector divide(float divisor);
+	public default Vector divide(float divisor) {
+        return divide(divisor, divisor, divisor);
+    }
 	
 	/**
 	 * Divides the vector through its own length / Sets the length of the
@@ -412,6 +460,7 @@ public interface Vector extends Collideable {
 	 * @param yaw the yaw
 	 * @return itself
 	 */
+    @MinecraftSpecific
 	public abstract Vector setYaw(float yaw);
 	
 	/**
@@ -420,6 +469,7 @@ public interface Vector extends Collideable {
 	 * @param pitch the pitch
 	 * @return itself
 	 */
+    @MinecraftSpecific
 	public abstract Vector setPitch(float pitch);
 	
 	/**
@@ -430,6 +480,7 @@ public interface Vector extends Collideable {
 	 * @param pitch the pitch
 	 * @return itself
 	 */
+    @MinecraftSpecific
 	public abstract Vector setRadiusYawPitch(float radius, float yaw, float pitch);
 	
 	/**
@@ -439,6 +490,7 @@ public interface Vector extends Collideable {
 	 * @param pitch the pitch
 	 * @return itself
 	 */
+    @MinecraftSpecific
 	public default Vector setYawPitch(float yaw, float pitch) {
 		return setRadiusYawPitch(getLength(), yaw, pitch);
 	}
@@ -451,26 +503,20 @@ public interface Vector extends Collideable {
 	 * 
 	 * @return the coordinates of this vector in a new array
 	 */
-	public abstract float[] toArray();
+	public default float[] toArray() {
+		return new float[] {getX(), getY(), getZ()};
+	}
 	
 	/**
-	 * Converts this vector to block coordinates.
+	 * Converts this vector to block coordinates. This means getting the coordinates of the block
+     * in space that this vector is inside.
 	 * 
 	 * @return new block coordinates
 	 */
 	public default BlockVector toBlockVector() {
 		return BlockVector.fromVector(this);
 	}
-	
-	/**
-	 * Returns a copy of this vector.
-	 * @return a copy of this vector
-	 */
+
 	public abstract Vector clone();
-	
-	@Override
-	public default byte getCollisionId() {
-		return VECTOR;
-	}
 	
 }

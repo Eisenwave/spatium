@@ -8,7 +8,6 @@ import net.grian.spatium.util.Strings;
 public class MatrixImpl implements Matrix {
 	
 	private final int rows, columns;
-	
 	private final float[] content;
 	
 	public MatrixImpl(int rows, int columns, float[] content) {

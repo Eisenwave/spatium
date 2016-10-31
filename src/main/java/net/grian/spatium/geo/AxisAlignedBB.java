@@ -5,7 +5,7 @@ import net.grian.spatium.impl.AxisAlignedBB6f;
 /**
  * An axis aligned bounding box, or the cubical space between two points.
  */
-public interface AxisAlignedBB extends BoundingBox {
+public interface AxisAlignedBB {
 	
 	/**
 	 * Creates a new bounding box between two points.
@@ -54,23 +54,33 @@ public interface AxisAlignedBB extends BoundingBox {
 	
 	// GETTERS
 
-	public float getMinX();
+	public abstract float getMinX();
 
-	public float getMinY();
+	public abstract float getMinY();
 
-	public float getMinZ();
+	public abstract float getMinZ();
 
-	public float getMaxX();
+	public abstract float getMaxX();
 
-	public float getMaxY();
+	public abstract float getMaxY();
 
-	public float getMaxZ();
+	public abstract float getMaxZ();
 
-	public float getSizeX();
+	public abstract float getSizeX();
 
-	public float getSizeY();
+	public abstract float getSizeY();
 
-	public float getSizeZ();
+	public abstract float getSizeZ();
+
+    public abstract Vector getCenter();
+
+	public default Vector getMin() {
+		return Vector.fromXYZ(getMinX(), getMinY(), getMinZ());
+	}
+
+	public default Vector getMax() {
+		return Vector.fromXYZ(getMaxX(), getMaxY(), getMaxZ());
+	}
 	
 	/**
 	 * Returns the dimensions of the bounding box in a new vector.
@@ -113,27 +123,27 @@ public interface AxisAlignedBB extends BoundingBox {
 	}
 	
 	// SETTERS
-	
-	AxisAlignedBB move(float x, float y, float z);
+
+	public abstract AxisAlignedBB move(float x, float y, float z);
 
 	public default AxisAlignedBB move(Vector v) {
 		return move(v.getX(), v.getY(), v.getZ());
 	}
 
-	public AxisAlignedBB scale(float x, float y, float z);
+	public abstract AxisAlignedBB scale(float x, float y, float z);
 
 	public default AxisAlignedBB scale(Vector v) {
 		return scale(v.getX(), v.getY(), v.getZ());
 	}
 
-	public AxisAlignedBB grow(float x, float y, float z);
+	public abstract AxisAlignedBB grow(float x, float y, float z);
 
 	public default AxisAlignedBB grow(Vector v) {
 		return grow(v.getX(), v.getY(), v.getZ());
 	}
 	
 	// MISC
-	
-	AxisAlignedBB clone();
+
+	public abstract AxisAlignedBB clone();
 
 }

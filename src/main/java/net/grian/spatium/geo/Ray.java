@@ -1,19 +1,49 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.coll.Collideable;
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Ray6f;
 
-public interface Ray extends Collideable {
-	
+/**
+ * A ray, defined by an origin and a direction.
+ */
+public interface Ray extends SpatiumObject {
+
+    /**
+     * Creates a new ray from 3 coordinates for the origin point and 3 coordinates for the direction vector.
+     *
+     * @param xo the x-coordinate of the origin
+     * @param yo the y-coordinate of the origin
+     * @param zo the z-coordinate of the origin
+     * @param xd the x-coordinate of the direction
+     * @param yd the y-coordinate of the direction
+     * @param zd the z-coordinate of the direction
+     * @return a new ray
+     */
 	public static Ray fromOriginAndDirection(float xo, float yo, float zo, float xd, float yd, float zd) {
 		return new Ray6f(xo, yo, zo, xd, yd, zd);
 	}
-	
+
+    /**
+     * Creates a new ray from an origin point and a direction vector.
+     *
+     * @param origin the origin
+     * @param dir the direction
+     * @return a new ray
+     */
 	public static Ray fromOriginAndDirection(Vector origin, Vector dir) {
 		return new Ray6f(origin, dir);
 	}
-	
+
+    /**
+     * Creates a new ray between two points.
+     * The origin will be a copy of the point {@code from}.
+     * The directional vector will be a new vector from {@code from} to {@code to}.
+     *
+     * @param from the first point
+     * @param to the second point
+     * @return a new ray
+     */
 	public static Ray between(Vector from, Vector to) {
 		return new Ray6f(from, Vector.between(from, to));
 	}
@@ -74,14 +104,18 @@ public interface Ray extends Collideable {
 	 * 
 	 * @return the origin of this ray in a new vector
 	 */
-	public abstract Vector getOrigin();
+	public default Vector getOrigin() {
+		return Vector.fromXYZ(getOriginX(), getOriginY(), getOriginZ());
+	}
 	
 	/**
 	 * Returns the direction of this ray in a new vector.
 	 * 
 	 * @return the direction of this ray in a new vector
 	 */
-	public abstract Vector getDirection();
+	public default Vector getDirection() {
+        return Vector.fromXYZ(getDirX(), getDirY(), getDirZ());
+    }
 	
 	/**
 	 * Returns the end of this ray in a new vector. This is equal to the sum of
@@ -89,7 +123,9 @@ public interface Ray extends Collideable {
 	 * 
 	 * @return the end of this ray in a new vector
 	 */
-	public abstract Vector getEnd();
+	public default Vector getEnd() {
+        return Vector.fromXYZ(getOriginX() + getDirX(), getOriginY() + getDirY(), getOriginZ() + getDirZ());
+    }
 	
 	public abstract Vector mostPositivePoint();
 	
@@ -175,6 +211,16 @@ public interface Ray extends Collideable {
 	 * @return itself
 	 */
 	public abstract Ray setOrigin(float x, float y, float z);
+
+    /**
+     * Sets the origin of the ray to a given point.
+     *
+     * @param point the point
+     * @return itself
+     */
+    public default Ray setOrigin(Vector point) {
+        return setOrigin(point.getX(), point.getY(), point.getZ());
+    }
 	
 	/**
 	 * Sets the direction of the ray to a given vector.
@@ -197,10 +243,5 @@ public interface Ray extends Collideable {
 	// MISC
 	
 	public abstract Ray clone();
-	
-	@Override
-	public default byte getCollisionId() {
-		return RAY;
-	}
 
 }

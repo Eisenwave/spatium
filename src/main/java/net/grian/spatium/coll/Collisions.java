@@ -118,18 +118,6 @@ public class Collisions {
 		return plane.contains(point);
 	}
 	
-	public static float rayCast(Ray ray, Collideable c) throws UnsupportedOperationException {
-		if (c instanceof Ray)
-			return rayCast(ray, (Ray) c);
-		else if (c instanceof Sphere)
-			return rayCast(ray, (Sphere) c);
-		else if (c instanceof AxisAlignedBB)
-			return rayCast(ray, (AxisAlignedBB) c);
-		
-		else
-			throw new UnsupportedOperationException("ray can not collide with "+c.getClass().getName());
-	}
-	
 	/**
 	 * Tests where two {@link Ray}s collide.
 	 * 
@@ -327,6 +315,20 @@ public class Collisions {
 		
 		return tmin;
 	}
+
+	public static float rayCast(Ray ray, Plane plane) {
+        float dotNumerator, dotDenominator;
+        Vector normal = plane.getNormal();
+
+        dotDenominator = normal.dot( ray.getDirection() );
+        if (Spatium.equals(dotDenominator, 0)) //ray and plane are parallel
+            return Float.NaN;
+
+        //calculate the distance between the linePoint and the line-plane intersection point
+        dotNumerator = normal.dot( plane.getCenter().subtract(ray.getOrigin()) );
+
+        return dotNumerator / dotDenominator;
+    }
 	
 	/**
 	 * Returns the intersection of two {@link AxisAlignedBB}s.

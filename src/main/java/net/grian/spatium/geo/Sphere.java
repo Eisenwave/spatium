@@ -1,10 +1,10 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.coll.Collideable;
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Sphere4f;
 
-public interface Sphere extends Collideable {
+public interface Sphere extends SpatiumObject {
 	
 	/**
 	 * Constructs a new sphere.
@@ -54,7 +54,9 @@ public interface Sphere extends Collideable {
 	 * 
 	 * @return the center of this sphere
 	 */
-	public abstract Vector getCenter();
+	public default Vector getCenter() {
+		return Vector.fromXYZ(getX(), getY(), getZ());
+	}
 	
 	/**
 	 * Returns the radius of this sphere.
@@ -159,10 +161,5 @@ public interface Sphere extends Collideable {
 	// MISC
 	
 	public abstract Sphere clone();
-	
-	@Override
-	public default byte getCollisionId() {
-		return SPHERE;
-	}
 
 }

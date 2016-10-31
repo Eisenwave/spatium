@@ -1,6 +1,8 @@
 package net.grian.spatium.matrix;
 
+import net.grian.spatium.MinecraftSpecific;
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo.Vector;
 import net.grian.spatium.impl.MatrixImpl;
 
 /**
@@ -186,21 +188,97 @@ public interface Matrix {
 		
 		return Matrix.create(size, size, content);
 	}
+
+    /**
+     * Returns a 3x3 rotation matrix from a yaw. Yaw is a clockwise rotation around the y-axis.
+     *
+     * @param yaw the yaw in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromYaw(float yaw) {
+        float theta = Spatium.radians(yaw);
+        return Matrix.create(3, 3,
+                (float)-Math.cos(theta), 0, (float)-Math.sin(theta),
+                                      0, 1, 0,
+                (float) Math.sin(theta), 0, (float)-Math.cos(theta));
+    }
+
+    /**
+     * Returns a 3x3 rotation matrix from a pitch. Pitch is a clockwise rotation around the x-axis.
+     *
+     * @param pitch the pitch in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+	public static Matrix fromPitch(float pitch) {
+        float phi = Spatium.radians(pitch);
+        return Matrix.create(3, 3,
+                (float)-Math.cos(phi), (float) Math.sin(phi), 0,
+                (float)-Math.sin(phi), (float)-Math.cos(phi), 0,
+                0,                     0,                     1);
+    }
+
+    /**
+     * Returns a 3x3 rotation matrix from a roll. Roll is a clockwise rotation around the z-axis.
+     *
+     * @param roll the roll in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromRoll(float roll) {
+        float psi = Spatium.radians(roll);
+        return Matrix.create(3, 3,
+                1, 0, 0,
+                0, (float)-Math.cos(psi), (float) Math.sin(psi),
+                0, (float)-Math.sin(psi), (float)-Math.cos(psi));
+    }
 	
 	/**
-	 * Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll.
+     * <p>
+     *     Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll. Note that first roll, then pitch and then
+     *     yaw are being applied.
+     * </p>
+	 * The result of this rotation will be the following:
+     * <ol>
+     *     <li>roll (clockwise rotation around z-axis) applied
+     *     <li>pitch (clockwise rotation around x-axis) applied
+     *     <li>yaw (clockwise rotation around y-axis) applied
+	 * </ol>
 	 * 
 	 * @param yaw the yaw of the rotation
 	 * @param pitch the pitch of the rotation
 	 * @param roll the roll of the rotation
 	 * @return a new rotation matrix
 	 */
-	public static Matrix fromRotation(float yaw, float pitch, float roll) {
-		float[] content = new float[9];
-		//TODO implement rotation matrices
-		
-		return Matrix.create(3, 3, content);
+    @MinecraftSpecific
+	public static Matrix fromYawPitchRoll(float yaw, float pitch, float roll) {
+		float theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
+		return Matrix.create(3, 3,
+                //first row
+                (float) (Math.cos(theta) * Math.cos(phi)),
+                0,
+                0,
+                //second row
+                (float) (Math.sin(theta) * Math.cos(phi)),
+                0,
+                0,
+                //third row
+                (float) Math.sin(phi),
+                (float)-(Math.cos(phi) * Math.sin(psi)),
+                (float) (Math.cos(phi) * Math.cos(psi))
+                );//TODO Complete yaw, pitch, roll matrix
 	}
+
+    /**
+     * Creates a new 3x1 (single column) matrix from a Vector.
+     *
+     * @param v the vector
+     * @return a new matrix
+     */
+	public static Matrix fromVector(Vector v) {
+        return create(3, 1, v.getX(), v.getY(), v.getZ());
+    }
 	
 	/**
 	 * Creates a new matrix with specified content. Note that the input content
@@ -331,11 +409,7 @@ public interface Matrix {
 	public abstract Matrix scale(float factor);
 	
 	// MISC
-	
-	/**
-	 * Returns a copy of this matrix.
-	 * @return a copy of this matrix
-	 */
+
 	public abstract Matrix clone();
 
 }

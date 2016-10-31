@@ -110,12 +110,7 @@ public interface BlockVector extends SpatiumObject {
 	}
 	
 	// MISC
-	
-	/**
-	 * Returns a copy of these block coordinates.
-	 * 
-	 * @return a copy of these block coordinates.
-	 */
+
 	public abstract BlockVector clone();
 	
 	/**
@@ -124,6 +119,8 @@ public interface BlockVector extends SpatiumObject {
 	 * 
 	 * @return these coordinates in a new array
 	 */
-	public abstract int[] toArray();
+	public default int[] toArray() {
+		return new int[] {getX(), getY(), getZ()};
+	}
 
 }

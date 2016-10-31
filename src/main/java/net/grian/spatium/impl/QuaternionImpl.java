@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.geo.Quaternion;
+import net.grian.spatium.transform.Quaternion;
 import net.grian.spatium.geo.Vector;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
@@ -60,8 +60,8 @@ public class QuaternionImpl implements Quaternion {
     }
 
     @Override
-    public float dot(Quaternion quat) {
-        return x * quat.getX() + y * quat.getY() + z * quat.getZ() + w * quat.getW();
+    public float dot(Quaternion q) {
+        return x * q.getX() + y * q.getY() + z * q.getZ() + w * q.getW();
     }
 
     @Override

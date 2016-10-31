@@ -2,6 +2,7 @@ package net.grian.spatium.impl;
 
 import java.util.Arrays;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.geo.BlockVector;
 import net.grian.spatium.geo.Vector;
 
@@ -46,12 +47,12 @@ public class Vector3f implements Vector {
 	
 	@Override
 	public float getYaw() {
-		return (float) Math.atan2(z, x);
+		return Spatium.degrees( (float)-Math.atan2(x, z) );
 	}
 	
 	@Override
 	public float getPitch() {
-		return (float) Math.atan(y / Math.sqrt(x*x + z*z));
+		return Spatium.degrees( (float) Math.atan(y / Math.sqrt(x*x + z*z)) );
 	}
 	
 	@Override
@@ -106,9 +107,7 @@ public class Vector3f implements Vector {
 	
 	@Override
 	public float angleTo(float x, float y, float z) {
-		return (float) Math.acos(
-				dot(x, y, z) /
-				this.getLength() * Math.sqrt(x*x + y*y + z*z));
+		return (float) Math.acos( dot(x, y, z) / (this.getLength() * Math.sqrt(x*x + y*y + z*z)));
 	}
 
 	@Override
@@ -233,15 +232,23 @@ public class Vector3f implements Vector {
 	}
 
 	@Override
-	public float[] toArray() {
-		return new float[] {x, y, z};
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof Vector && equals((Vector) obj);
 	}
-	
+
+	// MISC
+
+
+    @Override
+    public String toString() {
+        return "("+x+", "+y+", "+z+")";
+    }
+
+    @Override
+    public float[] toArray() {
+        return new float[] {x, y, z};
+    }
+
 	@Override
 	public int hashCode() {
 		return Arrays.hashCode(toArray());

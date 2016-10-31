@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.grian</groupId>
   <artifactId>spatium</artifactId>
-  <version>1.8</version>
+  <version>0.1</version>
   <build>
     <plugins>
       <plugin>

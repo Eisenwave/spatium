@@ -145,9 +145,4 @@ public class AxisAlignedBB6f implements AxisAlignedBB {
 		return new AxisAlignedBB6f(this);
 	}
 
-	@Override
-	public byte getCollisionId() {
-		return 0;
-	}
-
 }

@@ -1,6 +1,8 @@
-package net.grian.spatium.geo;
+package net.grian.spatium.transform;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.SpatiumObject;
+import net.grian.spatium.geo.Vector;
 import net.grian.spatium.impl.QuaternionImpl;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
@@ -11,7 +13,7 @@ import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
  *     <br>{@code w + xi + yj + zk}
  * <p/>
  */
-public interface Quaternion {
+public interface Quaternion extends SpatiumObject {
 
     /**
      * Creates a new quaternion from vector coordinates and a scale.
@@ -22,7 +24,7 @@ public interface Quaternion {
      * @param w the scale
      * @return a new quaternion
      */
-    public static Quaternion create(float x, float y, float z, float w) {
+    public static Quaternion fromXYZW(float x, float y, float z, float w) {
         return new QuaternionImpl(x, y, z, w);
     }
 
@@ -33,8 +35,25 @@ public interface Quaternion {
      * @param w the scale
      * @return a new quaternion
      */
-    public static Quaternion create(Vector vector, float w) {
+    public static Quaternion fromXYZW(Vector vector, float w) {
         return new QuaternionImpl(vector, w);
+    }
+
+    /**
+     * <p>
+     *     Creates a new quaternion from a vector. The scale of the quaternion will be 0, the vector part of the
+     *     quaternion will be equal to the vector's coordinates.
+     * </p>
+     * <p>
+     *     This operation is equivalent to calling {@link #fromXYZW(Vector, float)}. With the parameters {@code vector}
+     *     and {@code 0}.
+     * </p>
+     *
+     * @param vector the vector
+     * @return a new quaternion
+     */
+    public static Quaternion fromVector(Vector vector) {
+        return fromXYZW(vector, 0);
     }
 
     /**
@@ -50,14 +69,14 @@ public interface Quaternion {
                 halfYaw = x * 0.5f,
                 halfPitch = y * 0.5f,
                 halfRoll = z * 0.5f,
-                sinYaw = (float)Math.sin(halfYaw),
-                cosYaw = (float)Math.cos(halfYaw),
-                sinPitch = (float)Math.sin(halfPitch),
-                cosPitch = (float)Math.cos(halfPitch),
-                sinRoll = (float)Math.sin(halfRoll),
-                cosRoll = (float)Math.cos(halfRoll);
+                sinYaw   = (float) Math.sin(halfYaw),
+                cosYaw   = (float) Math.cos(halfYaw),
+                sinPitch = (float) Math.sin(halfPitch),
+                cosPitch = (float) Math.cos(halfPitch),
+                sinRoll  = (float) Math.sin(halfRoll),
+                cosRoll  = (float) Math.cos(halfRoll);
 
-        return Quaternion.create(
+        return fromXYZW(
                 cosYaw * cosPitch * cosRoll + sinYaw * sinPitch * sinRoll,
                 cosYaw * cosPitch * sinRoll - sinYaw * sinPitch * cosRoll,
                 cosYaw * sinPitch * cosRoll + sinYaw * cosPitch * sinRoll,
@@ -74,11 +93,40 @@ public interface Quaternion {
      * @return a new quaternion
      */
     public static Quaternion fromEulerDeg(float x, float y, float z) {
-        return fromEulerRad(x*Spatium.DEG_TO_RAD, y*Spatium.DEG_TO_RAD, z*Spatium.DEG_TO_RAD);
+        return fromEulerRad(Spatium.radians(x), Spatium.radians(y), Spatium.radians(z));
     }
 
     /**
-     * Returns the product of two quaternions <code>c = a * b</code>.
+     * Returns a new quaternion from yaw, pitch and roll.
+     *
+     * @param yaw the yaw
+     * @param pitch the pitch
+     * @param roll the roll
+     * @return a new quaternion
+     */
+    public static Quaternion fromYawPitchRoll(float yaw, float pitch, float roll) {
+        return fromEulerDeg(-pitch, -yaw, -roll);
+    }
+
+    /**
+     * Returns a new Quaternion that is a rotation around a given axis with angle theta.
+     *
+     * @param axis the axis of rotation, a unit vector
+     * @param theta the angle of rotation in radians
+     * @return a new quaternion
+     */
+    public static Quaternion fromRotation(Vector axis, float theta) {
+        float halfTheta = theta * 0.5f;
+        return fromXYZW(
+                axis.clone().multiply((float) Math.sin(halfTheta)),
+                (float) Math.cos(halfTheta));
+    }
+
+    /**
+     * <p>
+     *     Returns the product of two quaternions <code>c = a * b</code>. (See
+     *     <a href = "https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton Product<a/> for reference)
+     * </p>
      * <p>
      *     This operation is equivalent to first performing the rotation a and then the rotation b as each pair of
      *     rotations can be described by another rotation.
@@ -93,7 +141,7 @@ public interface Quaternion {
                 lx = a.getX(), ly = a.getY(), lz = a.getZ(), lw = a.getW(),
                 rx = b.getX(), ry = b.getY(), rz = b.getZ(), rw = b.getW();
 
-        return Quaternion.create(
+        return Quaternion.fromXYZW(
                 lw*rx + lx*rw + ly*rz - lz*ry,
                 lw*ry - lx*rz + ly*rw + lz*rx,
                 lw*rz + lx*ry - ly*rx + lz*rw,
@@ -102,28 +150,30 @@ public interface Quaternion {
     }
 
     /**
-     * Returns the product of a quaternion (rotation) and a point.
-     * <p>
-     *     This operation is equivalent to applying the rotation q to the point.
-     * </p>
+     * Returns a new Quaternion which is the conjugate of a given Quaternion. This can be used as a faster alternative
+     * to {@link #clone()}.{@link #conjugate()}. Which first clones the object and then mutates it with conjugation.
      *
-     * @param q the quaternion (rotation)
-     * @param point the point to be rotated
-     * @return a new rotated point
+     * @param q the quaternion to conjugate
+     * @return the complex conjugate of the quaternion
      */
-    public static Vector product(Quaternion q, Vector point) {
-        float
-                px = point.getX(), py = point.getY(), pz = point.getZ(),
-                qx = q.getX(), qy = q.getY(), qz = q.getZ(), w = q.getW(),
-                x2 = qx * 2,   y2 = qy * 2,   z2 = qz * 2,
-                xx = qx * x2,  yy = qy * y2,  zz = qz * z2,
-                xy = qx * y2,  xz = qx * z2,  yz = qy * z2,
-                wx = w * x2,   wy = w * y2,   wz = w * z2;
+    public static Quaternion conjugate(Quaternion q) {
+        return fromXYZW(-q.getX(), -q.getY(), -q.getZ(), q.getW());
+    }
 
-        return Vector.fromXYZ(
-                px * (1 - (yy + zz)) + py * (xy - wz)       + pz * (xz + wy),
-                px * (xy + wz)       + py * (1 - (xx + zz)) + pz * (yz - wx),
-                px * (xz - wy)       + py * (yz + wx)       + pz * (1 - (xx + yy))
+    /**
+     * Returns a new Quaternion which is the inverse of a given Quaternion. This can be used as a faster alternative
+     * to {@link #clone()}.{@link #invert()}. Which first clones the object and then mutates it with inversion.
+     *
+     * @param q the quaternion to invert
+     * @return the inverse of the quaternion
+     */
+    public static Quaternion inverse(Quaternion q) {
+        float t = 1 / q.getLengthSquared();
+        return Quaternion.fromXYZW(
+            q.getX() * -t,
+            q.getY() * -t,
+            q.getZ() * -t,
+            q.getW() *  t
         );
     }
 
@@ -261,6 +311,31 @@ public interface Quaternion {
     public abstract Quaternion add(Quaternion q);
 
     /**
+     * Adds the rotation q to this quaternion. This operation is equivalent to multiplying q (right hand side) with this
+     * quaternion (left hand side).
+     *
+     * @param q the rotation to add
+     * @return itself
+     * @see #multiply(Quaternion)
+     */
+    public default Quaternion addRotation(Quaternion q) {
+        return multiply(q);
+    }
+
+    /**
+     * Subtracts the rotation q from this quaternion. This operation is equivalent to multiplying q (right hand side)
+     * with this quaternion inverted (left hand side).
+     *
+     * @param q the rotation to subtract
+     * @return itself
+     * @see #invert()
+     * @see #multiply(Quaternion)
+     */
+    public default Quaternion subtractRotation(Quaternion q) {
+        return invert().multiply(q);
+    }
+
+    /**
      * Multiplies this quaternion with a factor (scalar multiplication).
      *
      * @param scale the scale
@@ -308,10 +383,17 @@ public interface Quaternion {
     public abstract Quaternion divide(Quaternion q);
 
     /**
-     * Normalizes the quaternion, seen as a four-dimensional vector.
-     * This is equivalent to settings its length to 1.
+     * <p>
+     *     Normalizes the quaternion, turning it into a unit quaternion. This means that the length of the quaternion is
+     *     equal to 1.
+     * </p>
+     * <p>
+     *     Hence, this operation is equivalent to {@code this.setLength(1)}
+     * </p>
+     *
      *
      * @return itself
+     * @see Vector#normalize()
      */
     public default Quaternion normalize() {
         return setLength(1);
@@ -324,7 +406,7 @@ public interface Quaternion {
      * @return itself
      */
     public default Quaternion setLength(float length) {
-        return divide(length / getLength());
+        return multiply(length / getLength());
     }
 
     // MISC

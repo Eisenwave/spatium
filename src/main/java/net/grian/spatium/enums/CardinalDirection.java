@@ -1,5 +1,6 @@
 package net.grian.spatium.enums;
 
+@SuppressWarnings("Duplicates")
 public enum CardinalDirection {
 	NORTH (180, Face.NORTH),
 	EAST  (-90, Face.EAST),
@@ -97,16 +98,5 @@ public enum CardinalDirection {
 		default: throw new IllegalArgumentException("Initials must be N, E, S, W");
 		}
 	}
-	
-	/**
-	 * Returns the amount of counter clockwise steps neccessary to get face
-	 * another cardinal direction.
-	 * @param to the other direction
-	 */
-	public byte counterClockwiseSteps(CardinalDirection to) {
-		if (this == CardinalDirection.NORTH && to == CardinalDirection.WEST)
-			return -1;
-		
-		else return (byte) (to.ordinal() - this.ordinal());
-	}
+
 }

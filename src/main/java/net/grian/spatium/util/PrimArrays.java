@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings({"WeakerAccess", "ManualArrayCopy"})
 public final class PrimArrays {
 	
 	private PrimArrays() {}
@@ -36,7 +37,7 @@ public final class PrimArrays {
 	
 	public static char[] primitiveCharArray(Character[] array) {
 		char[] prim = new char[array.length];
-		for (int i = 0; i<array.length; i++) prim[i] = array[i].charValue();
+		for (int i = 0; i<array.length; i++) prim[i] = array[i];
 		return prim;
 	}
 	
@@ -88,7 +89,7 @@ public final class PrimArrays {
 		char[] prim = new char[collection.size()];
 		
 		int i = 0;
-		for (Character val : collection) prim[i++] = val.charValue();
+		for (Character val : collection) prim[i++] = val;
 		return prim;
 	}
 	
@@ -299,50 +300,58 @@ public final class PrimArrays {
 	}
 	
 	public static <T> boolean contains(T[] array, T value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i].equals(value)) return true;
+		for (T anArray : array)
+			if (anArray.equals(value))
+				return true;
 		return false;
 	}
 	
 	public static boolean contains(long[] array, long value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (long anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(int[] array, int value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (int anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(short[] array, short value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (short anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(byte[] array, byte value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (byte anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(char[] array, char value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (char anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(double[] array, double value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (double anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
 	public static boolean contains(float[] array, float value) {
-		for (int i = 0; i<array.length; i++)
-			if (array[i] == value) return true;
+        for (float anArray : array)
+            if (anArray == value)
+                return true;
 		return false;
 	}
 	
@@ -400,136 +409,120 @@ public final class PrimArrays {
 	@SafeVarargs
 	public static <T> T[] merge(T[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (T[] array1 : arrays) length += array1.length;
 		
 		T[] result = newInstance(arrays.getClass().getComponentType(), length);
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			T[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (T[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static long[] merge(long[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (long[] array1 : arrays) length += array1.length;
 		
 		long[] result = new long[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			long[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (long[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static int[] merge(int[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (int[] array1 : arrays) length += array1.length;
 		
 		int[] result = new int[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			int[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (int[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static short[] merge(short[]... arrays) {
 		int length = 0;
-		for (short i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (short[] array1 : arrays) length += array1.length;
 		
 		short[] result = new short[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			short[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (short[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static char[] merge(char[]... arrays) {
 		int length = 0;
-		for (char i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (char[] array1 : arrays) length += array1.length;
 		
 		char[] result = new char[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			char[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (char[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static byte[] merge(byte[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (byte[] array1 : arrays) length += array1.length;
 		
 		byte[] result = new byte[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			byte[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (byte[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static double[] merge(double[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (double[] array1 : arrays) length += array1.length;
 		
 		double[] result = new double[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			double[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (double[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
 	
 	public static float[] merge(float[]... arrays) {
 		int length = 0;
-		for (int i = 0; i<arrays.length; i++)
-			length += arrays[i].length;
+        for (float[] array1 : arrays) length += array1.length;
 		
 		float[] result = new float[length];
 		int offset = 0;
-		for (int i = 0; i<arrays.length; i++) {
-			float[] array = arrays[i];
-			for (int i2 = 0; i2<array.length; i2++)
-				result[offset + i2] = array[i2];
-			offset += array.length;
-		}
+        for (float[] array : arrays) {
+            for (int i2 = 0; i2 < array.length; i2++)
+                result[offset + i2] = array[i2];
+            offset += array.length;
+        }
 		
 		return result;
 	}
@@ -604,13 +597,11 @@ public final class PrimArrays {
 	
 	public static <T> boolean overlap(T[] array1, T[] array2) {
 		if (array1.length < array2.length) {//iterate over shorter array to trigger contains() less often and reduce overhead
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (T anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (T anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -618,13 +609,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(long[] array1, long[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (long anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (long anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -632,13 +621,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(int[] array1, int[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (int anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (int anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -646,13 +633,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(short[] array1, short[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (short anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (short anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -660,13 +645,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(char[] array1, char[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (char anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (char anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -674,13 +657,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(byte[] array1, byte[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (byte anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (byte anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -688,13 +669,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(double[] array1, double[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (double anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (double anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;
@@ -702,13 +681,11 @@ public final class PrimArrays {
 	
 	public static boolean overlap(float[] array1, float[] array2) {
 		if (array1.length < array2.length) {
-			for (int i = 0; i<array1.length; i++)
-				if (contains(array2, array1[i])) return true;
+            for (float anArray1 : array1) if (contains(array2, anArray1)) return true;
 		}
 		else {
 			assert array1.length > array2.length;
-			for (int i = 0; i<array2.length; i++)
-				if (contains(array1, array2[i])) return true;
+            for (float anArray2 : array2) if (contains(array1, anArray2)) return true;
 		}
 		
 		return false;

@@ -1,10 +1,10 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.coll.Collideable;
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Plane6f;
 
-public interface Plane extends Collideable {
+public interface Plane extends SpatiumObject {
 	
 	/**
 	 * Constructs a new plane from a center point and a normal vector.
@@ -42,22 +42,66 @@ public interface Plane extends Collideable {
 	}
 	
 	// GETTERS
-	
+
+	/**
+	 * Returns the x-coordinate of the center of the plane.
+     *
+	 * @return the x-coordinate of the center of the plane
+	 */
 	public abstract float getCenterX();
-	
+
+    /**
+     * Returns the y-coordinate of the center of the plane.
+     *
+     * @return the y-coordinate of the center of the plane
+     */
 	public abstract float getCenterY();
-	
+
+    /**
+     * Returns the z-coordinate of the center of the plane.
+     *
+     * @return the z-coordinate of the center of the plane
+     */
 	public abstract float getCenterZ();
-	
+
+    /**
+     * Returns the x-coordinate of the normal vector of the plane.
+     *
+     * @return the x-coordinate of the normal vector of the plane
+     */
 	public abstract float getNormalX();
-	
+
+    /**
+     * Returns the y-coordinate of the normal vector of the plane.
+     *
+     * @return the y-coordinate of the normal vector of the plane
+     */
 	public abstract float getNormalY();
-	
+
+    /**
+     * Returns the z-coordinate of the normal vector of the plane.
+     *
+     * @return the z-coordinate of the normal vector of the plane
+     */
 	public abstract float getNormalZ();
-	
-	public abstract Vector getCenter();
-	
-	public abstract Vector getNormal();
+
+    /**
+     * Returns the center of the plane.
+     *
+     * @return the center of the plane
+     */
+	public default Vector getCenter() {
+		return Vector.fromXYZ(getCenterX(), getCenterY(), getCenterZ());
+	}
+
+    /**
+     * Returns the normal vector of the plane.
+     *
+     * @return the normal vector of the plane
+     */
+	public default Vector getNormal() {
+        return Vector.fromXYZ(getNormalX(), getNormalY(), getNormalZ());
+    }
 	
 	// CHECKERS
 	
@@ -142,10 +186,5 @@ public interface Plane extends Collideable {
 	// MISC
 	
 	public abstract Plane clone();
-	
-	@Override
-	public default byte getCollisionId() {
-		return PLANE;
-	}
 
 }

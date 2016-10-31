@@ -1,11 +1,10 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.coll.Collideable;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.enums.Direction;
 
-public interface AxisAlignedTSBP extends Collideable {
+public interface AxisAlignedTSBP {
 	
 	// GETTERS
 	
@@ -109,10 +108,7 @@ public interface AxisAlignedTSBP extends Collideable {
 	public abstract AxisAlignedTSBP mirror();
 	
 	// MISC
-	
-	@Override
-	public default byte getCollisionId() {
-		return AATSBP;
-	}
+
+	public abstract AxisAlignedTSBP clone();
 	
 }

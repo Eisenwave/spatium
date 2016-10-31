@@ -25,20 +25,5 @@ public interface Universe<T> {
 	 * @return the type of objects in the universe
 	 */
 	public abstract Class<T> getHandleType();
-	
-	/**
-	 * Returns all {@link Collideable}s in this universe, aka. all obstructions
-	 * when casting a ray.
-	 * @return all collideables in the universe
-	 */
-	public abstract Set<Collideable> getContent();
-	
-	/**
-	 * Casts a ray into the universe and returns a new list containing all
-	 * the collisions of the ray.
-	 * @param ray the ray
-	 * @return all collisions of the ray
-	 */
-	public abstract List<RayCollision<T>> castRay(Ray ray);
 
 }
