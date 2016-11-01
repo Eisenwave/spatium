@@ -9,16 +9,16 @@ import net.grian.spatium.coll.Universe;
 import net.grian.spatium.geo.Ray;
 
 public class UniverseImpl<T> implements Universe<T> {
-	
-	private final Class<T> handleType;
-	
-	public UniverseImpl(Class<T> handleType) {
-		this.handleType = handleType;
-	}
 
-	@Override
-	public Class<T> getHandleType() {
-		return handleType;
-	}
+    private final Class<T> handleType;
+
+    public UniverseImpl(Class<T> handleType) {
+        this.handleType = handleType;
+    }
+
+    @Override
+    public Class<T> getHandleType() {
+        return handleType;
+    }
 
 }

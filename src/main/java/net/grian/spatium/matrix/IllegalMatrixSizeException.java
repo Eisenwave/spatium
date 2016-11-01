@@ -1,10 +1,10 @@
 package net.grian.spatium.matrix;
 
 public class IllegalMatrixSizeException extends MatrixException {
-	
-	private static final long serialVersionUID = 40327185242610835L;
-	
-	public IllegalMatrixSizeException() {
+
+    private static final long serialVersionUID = 40327185242610835L;
+
+    public IllegalMatrixSizeException() {
         super();
     }
     
