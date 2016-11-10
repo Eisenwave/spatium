@@ -223,16 +223,14 @@ public final class PrimArrays {
 	
 	public static int[] clone(int[] array) {
 		int[] result = new int[array.length];
-		for (int i = 0; i<array.length; i++)
-			result[i] = array[i];
-		return result;
+        System.arraycopy(array, 0, result, 0, array.length);
+        return result;
 	}
 	
 	public static float[] clone(float[] array) {
-		float[] result = new float[array.length];
-		for (int i = 0; i<array.length; i++)
-			result[i] = array[i];
-		return result;
+        float[] result = new float[array.length];
+        System.arraycopy(array, 0, result, 0, array.length);
+        return result;
 	}
 	
 	public static char[] clone(char[] array) {
@@ -241,12 +239,12 @@ public final class PrimArrays {
 			result[i] = array[i];
 		return result;
 	}
-	
+
 	/*
 	public static <T extends Cloneable> T[] deepClone(T[] array) {
 		T[] result = newInstance(array.getClass().getComponentType(), array.length);
 		for (int i = 0; i<array.length; i++)
-			result[i] = Objects.clone(array[i]);
+			result[i] = array[i].clone();System.
 		return result;
 	}
 	*/
@@ -1080,6 +1078,26 @@ public final class PrimArrays {
 			result *= array[i];
 		return result;
 	}
+
+    public static float sum(float[] array) {
+        if (array.length == 0) return 0;
+        else if (array.length == 1) return array[0];
+
+        float result = array[0];
+        for (int i = 1; i<array.length; i++)
+            result *= array[i];
+        return result;
+    }
+
+    public static double sum(double[] array) {
+        if (array.length == 0) return 0;
+        else if (array.length == 1) return array[0];
+
+        double result = array[0];
+        for (int i = 1; i<array.length; i++)
+            result *= array[i];
+        return result;
+    }
 	
 	public static int product(int[] array, int min, int max) {
 		if (min > max) return 0;
@@ -1108,5 +1126,30 @@ public final class PrimArrays {
 		
 		return result;
 	}
+
+	public static void normalize(float[] array) {
+        float sum = sum(array);
+
+    }
+
+    public static void add(float[] array, float summand) {
+        for (int i = 0; i<array.length; i++)
+            array[i] += summand;
+    }
+
+    public static void subtract(float[] array, float subtrahend) {
+        for (int i = 0; i<array.length; i++)
+            array[i] -= subtrahend;
+    }
+
+    public static void multiply(float[] array, float factor) {
+        for (int i = 0; i<array.length; i++)
+            array[i] *= factor;
+    }
+
+    public static void divide(float[] array, float divisor) {
+        for (int i = 0; i<array.length; i++)
+            array[i] /= divisor;
+    }
 
 }

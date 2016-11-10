@@ -2,7 +2,7 @@ package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.Sphere4f;
+import net.grian.spatium.impl.SphereImpl;
 
 public interface Sphere extends SpatiumObject {
 
@@ -12,7 +12,7 @@ public interface Sphere extends SpatiumObject {
      * @return a new sphere
      */
     public static Sphere create() {
-        return new Sphere4f();
+        return new SphereImpl();
     }
 
     /**
@@ -23,7 +23,7 @@ public interface Sphere extends SpatiumObject {
      * @return a new sphere
      */
     public static Sphere fromCenterAndRadius(Vector center, float radius) {
-        return new Sphere4f(center, radius);
+        return new SphereImpl(center, radius);
     }
 
     // GETTERS
@@ -91,7 +91,9 @@ public interface Sphere extends SpatiumObject {
      * @param z the z-coordinate of the point
      * @return whether this sphere contains the point
      */
-    public abstract boolean contains(float x, float y, float z);
+    public default boolean contains(float x, float y, float z) {
+        return Spatium.length(x-getX(), y-getY(), z-getZ()) <= getRadius();
+    }
 
     /**
      * Returns whether this sphere contains a given point.

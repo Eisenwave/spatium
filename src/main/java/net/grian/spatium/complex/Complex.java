@@ -2,8 +2,8 @@ package net.grian.spatium.complex;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.EulerComplexImpl;
-import net.grian.spatium.impl.KarthesianComplexImpl;
+import net.grian.spatium.impl.ComplexImplCartesian;
+import net.grian.spatium.impl.ComplexImplEuler;
 
 /**
  * A complex number which can either be provided in the form: {@code z = a + bi}
@@ -12,7 +12,7 @@ import net.grian.spatium.impl.KarthesianComplexImpl;
 public interface Complex extends SpatiumObject {
 
     /**
-     * Returns a new karthesian implementation of a complex number in the form:
+     * Returns a new cartesian implementation of a complex number in the form:
      * <blockquote>
      *   {@code z = a + bi}
      * </blockquote>
@@ -21,8 +21,8 @@ public interface Complex extends SpatiumObject {
      * @param b the imaginary part
      * @return a new complex number
      */
-    public static KarthesianComplex newKarthesian(float a, float b) {
-        return new KarthesianComplexImpl(a, b);
+    public static CartesianComplex newCartesian(float a, float b) {
+        return new ComplexImplCartesian(a, b);
     }
 
     /**
@@ -36,37 +36,42 @@ public interface Complex extends SpatiumObject {
      * @return a new complex number
      */
     public static EulerComplex newEuler(float r, float phi) {
-        return new EulerComplexImpl(r, phi);
+        return new ComplexImplEuler(r, phi);
     }
 
     // GETTERS
 
     /**
      * Returns the real part of this complex number.
+     *
      * @return the real part
      */
     public abstract float getReal();
 
     /**
      * Returns the imaginary part of this complex number.
+     *
      * @return the imaginary part
      */
     public abstract float getImaginary();
 
     /**
      * Returns the angle {@code phi} of this complex number.
+     *
      * @return the angle
      */
     public abstract float getAngle();
 
     /**
      * Returns the radius of this complex number.
+     *
      * @return the radius
      */
     public abstract float getRadius();
 
     /**
      * Returns the squared radius of this complex number.
+     *
      * @return the squared radius
      */
     public abstract float getRadiusSquared();
@@ -165,13 +170,13 @@ public interface Complex extends SpatiumObject {
     // MISC
 
     /**
-     * Returns a new karthesian representation of this complex number. If this
-     * complex number is already represented in a the karthesian form, the
+     * Returns a new cartesian representation of this complex number. If this
+     * complex number is already represented in a the cartesian form, the
      * returned object is equal to {@link #clone()}.
      *
-     * @return a new karthesian complex number
+     * @return a new cartesian complex number
      */
-    public abstract KarthesianComplex toKarthesian();
+    public abstract CartesianComplex toCartesian();
 
     /**
      * Returns a new euler representation of this complex number. If this
@@ -184,7 +189,7 @@ public interface Complex extends SpatiumObject {
 
     /**
      * Returns a new copy of this complex number. The representation of the
-     * complex number (karthesian or euler) will be the same as the original
+     * complex number (cartesian or euler) will be the same as the original
      * object's.
      *
      * @return a copy of this complex number of equal representation

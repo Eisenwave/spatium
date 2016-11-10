@@ -1,20 +1,20 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.BlockVector3i;
+import net.grian.spatium.impl.BlockVectorImpl;
 
 public interface BlockVector extends SpatiumObject {
 
     public static BlockVector create() {
-        return new BlockVector3i();
+        return new BlockVectorImpl();
     }
 
     public static BlockVector fromXYZ(int x, int y, int z) {
-        return new BlockVector3i(x, y, z);
+        return new BlockVectorImpl(x, y, z);
     }
 
     public static BlockVector fromVector(Vector vector) {
-        return new BlockVector3i(vector);
+        return new BlockVectorImpl(vector);
     }
 
     // GETTERS

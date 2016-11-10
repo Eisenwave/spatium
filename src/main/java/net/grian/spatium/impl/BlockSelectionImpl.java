@@ -2,9 +2,8 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
-import net.grian.spatium.util.ArrayMath;
+import net.grian.spatium.iter.BlockIterator;
 
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 public class BlockSelectionImpl implements BlockSelection {
@@ -102,20 +101,17 @@ public class BlockSelectionImpl implements BlockSelection {
         xmax += x;
         ymax += y;
         zmax += z;
-        concurrentModification = true;
         return this;
     }
 
     @Override
     public BlockSelection scale(int x, int y, int z) {
-        concurrentModification = true;
         //TODO implement this
         return this;
     }
 
     @Override
     public BlockSelection grow(int x, int y, int z) {
-        concurrentModification = true;
         //TODO implement this
         return this;
     }
@@ -127,33 +123,7 @@ public class BlockSelectionImpl implements BlockSelection {
 
     @Override
     public Iterator<BlockVector> iterator() {
-        return new BlockIterator();
-    }
-
-    protected boolean concurrentModification = false;
-
-    private class BlockIterator implements Iterator<BlockVector> {
-
-        private boolean first = true;
-        private int index = 0, x = getSizeX(), y = getSizeY(), z = getSizeZ();
-        private final int limit = getVolume();
-
-        @Override
-        public boolean hasNext() {
-            return index < limit;
-        }
-
-        @Override
-        public BlockVector next() {
-            if (first) {
-                concurrentModification = false;
-                first = false;
-            }
-            if (concurrentModification) //block modified throughout iteration
-                throw new ConcurrentModificationException();
-            int[] block = ArrayMath.indexToCoords3D(index, x, y, z);
-            return BlockVector.fromXYZ(block[0], block[1], block[2]);
-        }
+        return new BlockIterator(this);
     }
 
 }

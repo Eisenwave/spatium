@@ -123,6 +123,24 @@ public interface Quaternion extends SpatiumObject {
     }
 
     /**
+     * Returns a new Quaternion that is a rotation around a given axis with angle theta.
+     *
+     * @param ax the x-coordinate of the axis
+     * @param ay the y-coordinate of the axis
+     * @param az the z-coordinate of the axis
+     * @param theta the angle of rotation in radians
+     * @return a new quaternion
+     */
+    public static Quaternion fromRotation(float ax, float ay, float az, float theta) {
+        float
+                halfTheta = theta * 0.5f,
+                t = (float) Math.sin(halfTheta),
+                w = (float) Math.cos(halfTheta);
+
+        return fromXYZW(ax * t, ay * t, az * t, w);
+    }
+
+    /**
      * <p>
      *     Returns the product of two quaternions <code>c = a * b</code>. (See
      *     <a href = "https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton Product<a/> for reference)
@@ -284,6 +302,16 @@ public interface Quaternion extends SpatiumObject {
     public abstract Quaternion setW(float w);
 
     public abstract Quaternion set(float x, float y, float z, float w);
+
+    /**
+     * Changes the angle of this quaternion.
+     *
+     * @param theta the angle in radians
+     * @return itself
+     */
+    public default Quaternion setAngle(float theta) {
+        return setW( (float) Math.cos(theta / 2) );
+    }
 
     /**
      * Conjugates the quaternion.

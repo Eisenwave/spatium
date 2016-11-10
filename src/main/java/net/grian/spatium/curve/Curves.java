@@ -4,15 +4,15 @@ import net.grian.spatium.geo.Vector;
 
 public class Curves {
 
-    public Vector bezier(float t, Vector a, Vector b) {
+    public static Vector bezier(float t, Vector a, Vector b) {
         return a.midPoint(b, t);
     }
 
-    public Vector bezier(float t, Vector a, Vector b, Vector c) {
+    public static Vector bezier(float t, Vector a, Vector b, Vector c) {
         return bezier(t, bezier(t, a, b), bezier(t, b, c));
     }
 
-    public Vector bezier(float t, Vector... points) {
+    public static Vector bezier(float t, Vector... points) {
         if (points.length == 0) throw new IllegalArgumentException();
         if (points.length == 1) return points[0].clone();
         if (points.length == 2) return bezier(t, points[0], points[1]);

@@ -1,11 +1,13 @@
 package net.grian.spatium.geo;
 
-import net.grian.spatium.impl.AxisAlignedBB6f;
+import net.grian.spatium.Spatium;
+import net.grian.spatium.SpatiumObject;
+import net.grian.spatium.impl.AxisAlignedBBImpl;
 
 /**
  * An axis aligned bounding box, or the cubical space between two points.
  */
-public interface AxisAlignedBB {
+public interface AxisAlignedBB extends SpatiumObject {
 
     /**
      * Creates a new bounding box between two points.
@@ -19,7 +21,7 @@ public interface AxisAlignedBB {
      * @return a new bounding box
      */
     public static AxisAlignedBB fromPoints(float xa, float ya, float za, float xb, float yb, float zb) {
-        return new AxisAlignedBB6f(xa, ya, za, xb, yb, zb);
+        return new AxisAlignedBBImpl(xa, ya, za, xb, yb, zb);
     }
 
     /**
@@ -31,7 +33,7 @@ public interface AxisAlignedBB {
      * @return a new axis aligned bounding box
      */
     public static AxisAlignedBB createCube(Vector center, float size) {
-        return new AxisAlignedBB6f(
+        return new AxisAlignedBBImpl(
                 center.getX() - size,
                 center.getY() - size,
                 center.getZ() - size,
@@ -66,13 +68,24 @@ public interface AxisAlignedBB {
 
     public abstract float getMaxZ();
 
-    public abstract float getSizeX();
+    public default float getSizeX() {
+        return getMaxX() - getMinX();
+    }
 
-    public abstract float getSizeY();
+    public default float getSizeY() {
+        return getMaxY() - getMinY();
+    }
 
-    public abstract float getSizeZ();
+    public default float getSizeZ() {
+        return getMaxZ() - getMinZ();
+    }
 
-    public abstract Vector getCenter();
+    public default Vector getCenter() {
+        return Vector.fromXYZ(
+                (getMinX() + getMaxX()) * 0.5f,
+                (getMinY() + getMaxY()) * 0.5f,
+                (getMinZ() + getMaxZ()) * 0.5f);
+    }
 
     public default Vector getMin() {
         return Vector.fromXYZ(getMinX(), getMinY(), getMinZ());
@@ -102,6 +115,16 @@ public interface AxisAlignedBB {
 
     // CHECKERS
 
+    public default boolean equals(AxisAlignedBB box) {
+        return
+                Spatium.equals(this.getMinX(), box.getMinX()) &&
+                Spatium.equals(this.getMinY(), box.getMinY()) &&
+                Spatium.equals(this.getMinZ(), box.getMinZ()) &&
+                Spatium.equals(this.getMaxX(), box.getMaxX()) &&
+                Spatium.equals(this.getMaxY(), box.getMaxY()) &&
+                Spatium.equals(this.getMaxZ(), box.getMaxZ());
+    }
+
     /**
      * Returns whether this bounding box contains a point of given coordinates.
      *
@@ -110,7 +133,12 @@ public interface AxisAlignedBB {
      * @param z the z-coordinate
      * @return whether this bounding box contains a point of given coordinates
      */
-    public boolean contains(float x, float y, float z);
+    public default boolean contains(float x, float y, float z) {
+        return
+                x >= getMinX() && x <= getMaxX() &&
+                y >= getMinY() && y <= getMaxY() &&
+                z >= getMinZ() && z <= getMaxZ();
+    }
 
     /**
      * Returns whether this bounding box contains a point of given coordinates.

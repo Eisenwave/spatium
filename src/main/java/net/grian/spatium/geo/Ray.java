@@ -1,13 +1,15 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.Ray6f;
+import net.grian.spatium.impl.RayImpl;
+import net.grian.spatium.iter.IntervalIterator;
+
+import java.util.Iterator;
 
 /**
  * A ray, defined by an origin and a direction.
  */
-public interface Ray extends SpatiumObject {
+public interface Ray extends Path {
 
     /**
      * Creates a new ray from 3 coordinates for the origin point and 3 coordinates for the direction vector.
@@ -21,7 +23,7 @@ public interface Ray extends SpatiumObject {
      * @return a new ray
      */
     public static Ray fromOriginAndDirection(float xo, float yo, float zo, float xd, float yd, float zd) {
-        return new Ray6f(xo, yo, zo, xd, yd, zd);
+        return new RayImpl(xo, yo, zo, xd, yd, zd);
     }
 
     /**
@@ -32,7 +34,7 @@ public interface Ray extends SpatiumObject {
      * @return a new ray
      */
     public static Ray fromOriginAndDirection(Vector origin, Vector dir) {
-        return new Ray6f(origin, dir);
+        return new RayImpl(origin, dir);
     }
 
     /**
@@ -45,7 +47,7 @@ public interface Ray extends SpatiumObject {
      * @return a new ray
      */
     public static Ray between(Vector from, Vector to) {
-        return new Ray6f(from, Vector.between(from, to));
+        return new RayImpl(from, Vector.between(from, to));
     }
 
     // GETTERS
@@ -100,6 +102,13 @@ public interface Ray extends SpatiumObject {
     public abstract float getLength();
 
     /**
+     * Returns the squared length of this ray.
+     *
+     * @return the squared length of this ray
+     */
+    public abstract float getLengthSquared();
+
+    /**
      * Returns the origin of this ray in a new vector.
      *
      * @return the origin of this ray in a new vector
@@ -126,10 +135,6 @@ public interface Ray extends SpatiumObject {
     public default Vector getEnd() {
         return Vector.fromXYZ(getOriginX() + getDirX(), getOriginY() + getDirY(), getOriginZ() + getDirZ());
     }
-
-    public abstract Vector mostPositivePoint();
-
-    public abstract Vector mostNegativePoint();
 
     /**
      * Returns the closest point on this ray to another ray. Note that this
@@ -242,6 +247,53 @@ public interface Ray extends SpatiumObject {
 
     // MISC
 
+    /**
+     * <p>
+     *     Returns a new interval iterator for this ray. This iterator will return all points in a given interval that
+     *     are on a ray.
+     * </p>
+     * <p>
+     *     For example, a ray with length 1 will produce an iterator that iterates over precisely 3 points if the
+     *     interval is 0.5 (or 0.4).
+     * </p>
+     * <p>
+     *     To get an iterator that iterates over a specified amount of points {@code x}, make use of
+     *     <blockquote>
+     *         {@code intervalIterator( getLength() / (x - 1) )}
+     *     </blockquote>
+     * </p>
+     *
+     * @param interval the interval of iteration
+     * @return a new interval iterator
+     */
+    public default Iterator<Vector> intervalIterator(float interval) {
+        return new IntervalIterator(this, interval);
+    }
+
+    /**
+     * Returns a given amount of equally distributed points on this ray.
+     *
+     * @param amount the amount
+     * @return an array containing points on this ray
+     */
+    public default Vector[] getPoints(int amount) {
+        if (amount < 0) throw new IllegalArgumentException("amount < 0");
+        if (amount == 0) return new Vector[0];
+        if (amount == 1) return new Vector[] {getOrigin()};
+        if (amount == 2) return new Vector[] {getOrigin(), getEnd()};
+
+        int t = amount - 1, i = 0;
+        Vector[] result = new Vector[amount];
+
+        Iterator<Vector> iter = intervalIterator(getLengthSquared() / t*t);
+        while (iter.hasNext())
+            result[i++] = iter.next();
+
+        return result;
+    }
+
     public abstract Ray clone();
+
+
 
 }

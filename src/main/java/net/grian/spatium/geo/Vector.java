@@ -3,7 +3,7 @@ package net.grian.spatium.geo;
 import net.grian.spatium.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.Vector3f;
+import net.grian.spatium.impl.VectorImpl;
 import net.grian.spatium.util.MinecraftGeometry;
 
 /**
@@ -18,7 +18,7 @@ public interface Vector extends SpatiumObject {
      * @return a new Vector
      */
     public static Vector create() {
-        return new Vector3f();
+        return new VectorImpl();
     }
 
     /**
@@ -30,7 +30,7 @@ public interface Vector extends SpatiumObject {
      * @return a new Vector
      */
     public static Vector fromXYZ(float x, float y, float z) {
-        return new Vector3f(x, y, z);
+        return new VectorImpl(x, y, z);
     }
 
     /**
@@ -40,7 +40,7 @@ public interface Vector extends SpatiumObject {
      * @return a new Vector
      */
     public static Vector fromBlock(BlockVector block) {
-        return new Vector3f(block);
+        return new VectorImpl(block);
     }
 
     /**
@@ -75,7 +75,7 @@ public interface Vector extends SpatiumObject {
      * @return a new Vector between these points
      */
     public static Vector between(Vector from, Vector to) {
-        return new Vector3f(
+        return new VectorImpl(
                 to.getX() - from.getX(),
                 to.getY() - from.getY(),
                 to.getZ() - from.getZ());

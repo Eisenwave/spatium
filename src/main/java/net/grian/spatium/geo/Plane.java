@@ -2,7 +2,7 @@ package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
-import net.grian.spatium.impl.Plane6f;
+import net.grian.spatium.impl.PlaneImpl;
 
 public interface Plane extends SpatiumObject {
 
@@ -18,7 +18,7 @@ public interface Plane extends SpatiumObject {
      * @return a new plane
      */
     public static Plane create(float xc, float yc, float zc, float xn, float yn, float zn) {
-        return new Plane6f(xc, yc, zc, xn, yn, zn);
+        return new PlaneImpl(xc, yc, zc, xn, yn, zn);
     }
 
     /**
@@ -29,7 +29,7 @@ public interface Plane extends SpatiumObject {
      * @return a new plane
      */
     public static Plane create(Vector center, Vector normal) {
-        return new Plane6f(center, normal);
+        return new PlaneImpl(center, normal);
     }
 
     /**
@@ -38,7 +38,7 @@ public interface Plane extends SpatiumObject {
      * @return a new plane
      */
     public static Plane create() {
-        return new Plane6f();
+        return new PlaneImpl();
     }
 
     // GETTERS

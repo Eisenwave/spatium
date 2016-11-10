@@ -11,6 +11,31 @@ public final class Transformations {
 
     /**
      * <p>
+     *     Scales a point around an anchor instead of the origin.
+     * </p>
+     * The following special cases exist:
+     * <ul>
+     *     <li>scaling a point around itself will return a clone of the point
+     *     <li>scaling a point with a factor of 0 will return the anchor
+     *     <li>scaling a point with a factor of 1 will return a clone of the point
+     *     <li>scaling a point with a negative factor is possible and will mirror the point around the anchor
+     * </ul>
+     *
+     * @param point the point to scale
+     * @param anchor the anchor of the scale
+     * @param factor the scale factor
+     * @return a new scaled vector
+     */
+    public static Vector scale(Vector point, Vector anchor, float factor) {
+        return Vector.fromXYZ(
+                anchor.getX() + (point.getX() - anchor.getX()) * factor,
+                anchor.getY() + (point.getY() - anchor.getY()) * factor,
+                anchor.getZ() + (point.getZ() - anchor.getZ()) * factor
+        );
+    }
+
+    /**
+     * <p>
      *     Rotates the point around a given axis with a given angle theta.
      * </p>
      * <p>

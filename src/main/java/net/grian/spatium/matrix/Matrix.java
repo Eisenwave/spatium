@@ -86,6 +86,40 @@ public interface Matrix {
     }
 
     /**
+     * <p>
+     *     Returns the product of a series of matrices.
+     * </p>
+     * List of special cases:
+     * <ul>
+     *     <li>if the array contains no matrices, an exception is thrown
+     *     <li>if the array contains one matrix, the result is a clone of the matrix
+     * </ul>
+     *
+     * @param matrices the matrices
+     * @return the matrix
+     * @throws IllegalArgumentException if the array is empty
+     */
+    public static Matrix product(Matrix... matrices) {
+        if (matrices.length == 0) throw new IllegalArgumentException("no matrices given");
+        if (matrices.length == 1) return matrices[0].clone();
+        if (matrices.length == 2) return product(matrices[0], matrices[1]);
+
+        Matrix result = matrices[0];
+        for (int i = 1; i<matrices.length; i++)
+            result = product(result, matrices[i]);
+
+        return result;
+    }
+
+    public static Matrix square(Matrix matrix) {
+        return Matrix.product(matrix, matrix);
+    }
+
+    public static Matrix cube(Matrix matrix) {
+        return Matrix.product(Matrix.product(matrix, matrix), matrix);
+    }
+
+    /**
      * Increases or decreases the size of the matrix by a specified amount
      * of rows or columns. When size is being increased, all the new rows and
      * columns are filled with zero.
@@ -314,7 +348,7 @@ public interface Matrix {
      * amount of columns <= 0
      */
     public static Matrix create(int rows, int columns) {
-        return create(rows, columns, null);
+        return new MatrixImpl(rows, columns);
     }
 
     // GETTERS
@@ -365,12 +399,12 @@ public interface Matrix {
      * @return whether this matrix is equal to another matrix
      */
     public default boolean equals(Matrix matrix) {
-        int row = getRows(), col = getColumns();
+        final int row = getRows(), col = getColumns();
         if (row != matrix.getRows() || col != matrix.getColumns())
             return false;
 
-        while (--row >= 0) while (--col >= 0)
-            if (!Spatium.equals(this.get(row, col), matrix.get(row, col)))
+        for (int i = 0; i<row; i++) for (int j = 0; j<col; j++)
+            if (!Spatium.equals(this.get(i, j), matrix.get(i, j)))
                 return false;
 
         return true;

@@ -73,10 +73,6 @@ public interface BlockSelection extends Iterable<BlockVector> {
      */
     public int getMinZ();
 
-    public default BlockVector getMin() {
-        return BlockVector.fromXYZ(getMinX(), getMinY(), getMinZ());
-    }
-
     /**
      * Returns the maximum x-coordinate of this selection.
      *
@@ -98,6 +94,10 @@ public interface BlockSelection extends Iterable<BlockVector> {
      */
     public int getMaxZ();
 
+    public default BlockVector getMin() {
+        return BlockVector.fromXYZ(getMinX(), getMinY(), getMinZ());
+    }
+
     public default BlockVector getMax() {
         return BlockVector.fromXYZ(getMaxX(), getMaxY(), getMaxZ());
     }
@@ -107,21 +107,27 @@ public interface BlockSelection extends Iterable<BlockVector> {
      *
      * @return the size of the block selection on the x-axis
      */
-    public int getSizeX();
+    public default int getSizeX() {
+        return getMaxX() - getMinX() + 1;
+    }
 
     /**
      * Returns the size of the block selection on the y-axis. This will be at least one block.
      *
      * @return the size of the block selection on the y-axis
      */
-    public int getSizeY();
+    public default int getSizeY() {
+        return getMaxY() - getMinY() + 1;
+    }
 
     /**
      * Returns the size of the block selection on the z-axis. This will be at least one block.
      *
      * @return the size of the block selection on the z-axis
      */
-    public int getSizeZ();
+    public default int getSizeZ() {
+        return getMaxZ() - getMinZ() + 1;
+    }
 
     /**
      * Returns the dimensions of the bounding box in a new vector.
@@ -143,14 +149,14 @@ public interface BlockSelection extends Iterable<BlockVector> {
 
     // CHECKERS
 
-    public default boolean equals(BlockSelection selection) {
+    public default boolean equals(BlockSelection blocks) {
         return
-                this.getMinX() == selection.getMinX() &&
-                this.getMinY() == selection.getMinY() &&
-                this.getMinZ() == selection.getMinZ() &&
-                this.getMaxX() == selection.getMaxX() &&
-                this.getMaxY() == selection.getMaxY() &&
-                this.getMaxZ() == selection.getMaxZ();
+                this.getMinX() == blocks.getMinX() &&
+                this.getMinY() == blocks.getMinY() &&
+                this.getMinZ() == blocks.getMinZ() &&
+                this.getMaxX() == blocks.getMaxX() &&
+                this.getMaxY() == blocks.getMaxY() &&
+                this.getMaxZ() == blocks.getMaxZ();
     }
 
     /**
@@ -161,7 +167,12 @@ public interface BlockSelection extends Iterable<BlockVector> {
      * @param z the z-coordinate
      * @return whether this block selection contains the block
      */
-    public abstract boolean contains(int x, int y, int z);
+    public default boolean contains(int x, int y, int z) {
+        return
+                x >= getMinX() && x <= getMaxX() &&
+                y >= getMinY() && y <= getMaxY() &&
+                z >= getMinZ() && z <= getMaxZ();
+    }
 
     /**
      * Returns whether this block selection contains a block of given coordinates.
