@@ -6,16 +6,18 @@ import net.grian.spatium.geo.Vector;
 import net.grian.spatium.impl.MatrixImpl;
 
 /**
- * A two-dimensional matrix of numbers. This matrix, as all classes of Spatium
- * is mutable, although in this case only to an extent
- * 
- * <br><br>The content of the matrix can be modified using
- * {@link #set(int, int, float)} and retreived using {@link #get(int, int)},
- * however the size of the matrix is final and can not be changed.
- * 
- * <br><br>Thus, mathematical operations are provided in the utility methods
- * {@link #sum(Matrix, Matrix)} and {@link #product(Matrix, Matrix)}.
- *
+ * <p>
+ *     A two-dimensional matrix of numbers. This matrix, as all classes of Spatium is mutable, although in this case
+ *     only to an extent.
+ * </p>
+ * <p>
+ *     The content of the matrix can be modified using {@link #set(int, int, float)} and retrieved using
+ *     {@link #get(int, int)}, however the size of the matrix is final and can not be changed.
+ * </p>
+ * <p>
+ *     Thus, mathematical operations are provided in the utility methods {@link #sum(Matrix, Matrix)} and
+ *     {@link #product(Matrix, Matrix)}.
+ * </p>
  */
 public interface Matrix {
 
@@ -42,6 +44,12 @@ public interface Matrix {
         return create(row, col, result);
     }
 
+    /**
+     * Returns the sum of several matrices.
+     *
+     * @param matrices the matrices
+     * @return the sum of the matrices
+     */
     public static Matrix sum(Matrix... matrices) {
         if (matrices.length == 0)
             throw new IllegalArgumentException("no matrices given");
@@ -111,10 +119,22 @@ public interface Matrix {
         return result;
     }
 
+    /**
+     * Returns the square of the matrix.
+     *
+     * @param matrix the matrix
+     * @return the square of the matrix
+     */
     public static Matrix square(Matrix matrix) {
         return Matrix.product(matrix, matrix);
     }
 
+    /**
+     * Returns the cube of the matrix.
+     *
+     * @param matrix the matrix
+     * @return the cube of the matrix
+     */
     public static Matrix cube(Matrix matrix) {
         return Matrix.product(Matrix.product(matrix, matrix), matrix);
     }
@@ -151,14 +171,13 @@ public interface Matrix {
     }
 
     /**
-     * Returns a new transponed version of a given matrix. This matrix will
-     * have the same amount of rows as the original has columns and the same
-     * amount of columns as the original has rows.
+     * Returns a new transposed version of a given matrix. This matrix will have the same amount of rows as the original
+     * has columns and the same amount of columns as the original has rows.
      *
      * @param matrix the matrix
      * @return a new matrix
      */
-    public static Matrix transpone(Matrix matrix) {
+    public static Matrix transpose(Matrix matrix) {
         final int
         row = matrix.getRows(),
         col = matrix.getColumns();
@@ -210,8 +229,7 @@ public interface Matrix {
      * @return a new scaling matrix
      */
     public static Matrix fromScale(float... coords) {
-        if (coords.length == 0)
-            throw new IllegalMatrixSizeException("no coords given");
+        if (coords.length == 0) throw new IllegalMatrixSizeException("no coordinates given");
 
         final int size = coords.length;
         float[] content = new float[size * size];

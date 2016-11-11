@@ -31,6 +31,7 @@ public enum CardinalDirection {
 
     /**
      * Returns the {@link Face} corresponding to this cardinal direction.
+     *
      * @return the corresponding face
      */
     public Face face() {

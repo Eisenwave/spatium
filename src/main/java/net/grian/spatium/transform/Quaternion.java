@@ -7,16 +7,19 @@ import net.grian.spatium.impl.QuaternionImpl;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
 /**
- * A Quaternion (4 dimensional number) which is used to represent rotations in 3D-Space around a vector.
+ * <p>
+ *     A Quaternion (4 dimensional number) which is used to represent rotations in 3D-Space around a vector.
+ * </p>
  * <p>
  *     Quaternions are provided in the form:
  *     <br>{@code w + xi + yj + zk}
  * <p/>
  */
-public interface Quaternion extends SpatiumObject {
+public interface Quaternion extends SpatiumObject, Transformation {
 
     /**
      * Creates a new quaternion from vector coordinates and a scale.
+     * <br><u>Do not use this method unless you really know what you're doing.</u>
      *
      * @param x the x-coordinate
      * @param y the y-coordinate
@@ -30,6 +33,7 @@ public interface Quaternion extends SpatiumObject {
 
     /**
      * Creates a new quaternion from vector coordinates and a scale.
+     * <br><u>Do not use this method unless you really know what you're doing.</u>
      *
      * @param vector the vector
      * @param w the scale
@@ -48,6 +52,7 @@ public interface Quaternion extends SpatiumObject {
      *     This operation is equivalent to calling {@link #fromXYZW(Vector, float)}. With the parameters {@code vector}
      *     and {@code 0}.
      * </p>
+     * <br><u>Do not use this method unless you really know what you're doing.</u>
      *
      * @param vector the vector
      * @return a new quaternion
@@ -419,7 +424,6 @@ public interface Quaternion extends SpatiumObject {
      *     Hence, this operation is equivalent to {@code this.setLength(1)}
      * </p>
      *
-     *
      * @return itself
      * @see Vector#normalize()
      */
@@ -438,6 +442,12 @@ public interface Quaternion extends SpatiumObject {
     }
 
     // MISC
+
+
+    @Override
+    public default Vector apply(Vector v) {
+        return Transformations.rotate(v, this);
+    }
 
     public abstract Quaternion clone();
 

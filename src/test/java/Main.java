@@ -29,8 +29,8 @@ public class Main {
 
         System.out.println(a + " * " + b + " = " + Matrix.product(a, b));
         System.out.println(a + "^2 = " + Matrix.square(a));
-        System.out.println(c + "^T * "+c +" = "+Matrix.product(Matrix.transpone(c), c));
-        System.out.println(c + " * "+c +"^T = "+Matrix.product(c, Matrix.transpone(c)));
+        System.out.println(c + "^T * "+c +" = "+Matrix.product(Matrix.transpose(c), c));
+        System.out.println(c + " * "+c +"^T = "+Matrix.product(c, Matrix.transpose(c)));
         System.out.println(d + "^2 = " + Matrix.square(d));
         System.out.println(d + "^3 = " + Matrix.cube(d));
     }

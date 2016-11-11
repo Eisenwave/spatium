@@ -54,4 +54,8 @@ public class PathImplLinear implements Path {
         return points[0].clone();
     }
 
+    @Override
+    public Vector[] getControlPoints() {
+        return PrimArrays.clone(points);
+    }
 }

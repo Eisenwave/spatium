@@ -21,13 +21,21 @@ public class PathImplBezier implements Path {
 
     @Override
     public float getLength() {
-        //TODO implement this
-        return 0;
+        float result = 0;
+        for (int i = 1; i<points.length; i++)
+            result += points[i].distanceTo(points[i-1]);
+
+        return result;
+    }
+
+    @Override
+    public Vector[] getControlPoints() {
+        return PrimArrays.clone(points);
     }
 
     @Override
     public float getLengthSquared() {
-        //TODO implement this
-        return 0;
+        float l = getLength();
+        return l*l;
     }
 }

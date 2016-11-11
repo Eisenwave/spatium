@@ -162,6 +162,17 @@ public interface Sphere extends SpatiumObject {
 
     // MISC
 
+    /**
+     * Returns a circular path on the sphere. This circle is the intersection of a plane represented by a given
+     * normal vector.
+     *
+     * @param normal the normal vector of the plane
+     * @return a new circular path on the plane
+     */
+    public default Path getCircle(Vector normal) {
+        return Path.circle(this, normal);
+    }
+
     public abstract Sphere clone();
 
 }

@@ -59,9 +59,9 @@ public enum Direction {
         case Z: return Direction.POSITIVE_Z;
         }
         else switch (axis) {
-        case X: return Direction.POSITIVE_X;
-        case Y: return Direction.POSITIVE_Y;
-        case Z: return Direction.POSITIVE_Z;
+        case X: return Direction.NEGATIVE_X;
+        case Y: return Direction.NEGATIVE_Y;
+        case Z: return Direction.NEGATIVE_Z;
         }
         assert false: "axis = "+axis+", direction = "+direction;
         return null;

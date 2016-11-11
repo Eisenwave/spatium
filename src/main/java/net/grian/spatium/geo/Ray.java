@@ -146,6 +146,11 @@ public interface Ray extends Path {
      */
     public abstract Vector closestPointTo(Vector point);
 
+    @Override
+    public default Vector[] getControlPoints() {
+        return new Vector[] {getOrigin(), getEnd()};
+    }
+
     // CHECKERS
 
     /**

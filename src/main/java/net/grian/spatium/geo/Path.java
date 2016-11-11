@@ -43,7 +43,8 @@ public interface Path extends SpatiumObject {
     }
 
     /**
-     * Creates a new path representing a bezier curve between an array of given points.
+     * Creates a new <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">bezier curve</a> between an array of
+     * given points.
      *
      * @param points the points
      * @return a new path
@@ -110,6 +111,30 @@ public interface Path extends SpatiumObject {
     public default Vector getEnd() {
         return getPoint(1);
     }
+
+    /**
+     * <p>
+     *     Returns all control points of this path. These are points relevant to the shape of the curve.
+     * </p>
+     * Examples of control points:
+     * <ul>
+     *     <li>control points of a bezier curve</li>
+     *     <li>points that a linear path consists of</li>
+     *     <li>the origin and end of a ray</li>
+     *     <li>the center of a circle</li>
+     * </ul>
+     * <p>
+     *     The meaning of control points changes depending on the path that is implementing this interface, they don't
+     *     have to be on the path, just relevant to the construction of it.
+     * </p>
+     * <p>
+     *     It is important to note that the array is always a new object, although <u>its content's mutation can mutate
+     *     the path.</u>
+     * </p>
+     *
+     * @return a new non-empty array of points relevant to the construction of the curve
+     */
+    public abstract Vector[] getControlPoints();
 
     /**
      * Returns an even amount of equally distributed points on this path.

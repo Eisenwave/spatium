@@ -65,6 +65,11 @@ public class PathImplCircle implements Path {
         return r * r;
     }
 
+    @Override
+    public Vector[] getControlPoints() {
+        return new Vector[] {Vector.fromXYZ(ox, oy, oz)};
+    }
+
     /**
      * Is a tautology since a circle is always a closed path.
      *

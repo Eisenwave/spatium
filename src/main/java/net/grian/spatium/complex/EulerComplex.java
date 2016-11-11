@@ -5,7 +5,7 @@ import net.grian.spatium.Spatium;
 /**
  * A complex number, represented in the form:
  * <blockquote>
- *   {@code z = r * exp(phi * pi * i)}
+ *   <code>z = r * e<sup>phi*pi*i</sup></code>
  * </blockquote>
  */
 public interface EulerComplex extends Complex {
