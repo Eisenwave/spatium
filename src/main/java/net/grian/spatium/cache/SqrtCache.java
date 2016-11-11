@@ -28,9 +28,18 @@ public class SqrtCache {
     }
 
     /**
+     * Returns the maximum input value of the {@link #sqrt(double)} method to be cached.
+     *
+     * @return the maximum cached value
+     */
+    public double getMax() {
+        return max;
+    }
+
+    /**
      * Returns the amount of cached sqrt values.
      */
-    public int size() {
+    public int getCapacity() {
         return size;
     }
 

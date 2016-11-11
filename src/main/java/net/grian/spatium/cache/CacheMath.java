@@ -17,7 +17,7 @@ package net.grian.spatium.cache;
  * </p>
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class CacheMath {
+public final class CacheMath {
 
     private CacheMath() {}
 
@@ -55,16 +55,29 @@ public class CacheMath {
         return cacheSqrt==null? Math.sqrt(number) : cacheSqrt.sqrt(number);
     }
 
-    public static void setAsinCache(AsinCache cache) {
-        cacheAsin = cache;
+    public static void setAsinCapacity(int capacity) {
+        if (cacheAsin==null || cacheAsin.getCapacity() < capacity) {
+            cacheAsin = new AsinCache(capacity);
+        }
     }
 
-    public static void setSinCache(SinCache cache) {
-        cacheSin = cache;
+    public static void setSinCapacity(int capacity) {
+        if (cacheSin==null || cacheSin.getCapacity() < capacity) {
+            cacheSin = new SinCache(capacity);
+        }
     }
 
-    public static void setSqrtCache(SqrtCache cache) {
-        cacheSqrt = cache;
+    public static void setSqrtCapacity(int capacity) {
+        if (cacheSqrt==null || cacheSqrt.getCapacity() < capacity) {
+            cacheSqrt = new SqrtCache(capacity, cacheSqrt==null? 1 : cacheSqrt.getMax());
+        }
+    }
+
+    public static void setSqrtMaximum(double max) {
+        if (max < 0) throw new IllegalArgumentException("maximum must be positive");
+        if (cacheSqrt==null || cacheSqrt.getMax() < max) {
+            cacheSqrt = new SqrtCache(cacheSqrt==null? 1 : cacheSqrt.getCapacity(), max);
+        }
     }
 
 }

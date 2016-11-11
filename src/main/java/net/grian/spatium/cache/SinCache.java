@@ -42,7 +42,7 @@ public class SinCache {
     /**
      * Returns the amount of cached sin values.
      */
-    public int size() {
+    public int getCapacity() {
         return size;
     }
 

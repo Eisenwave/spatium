@@ -32,7 +32,7 @@ public class AsinCache {
     }
 
 
-    public int getSize() {
+    public int getCapacity() {
         return size;
     }
 
