@@ -213,7 +213,7 @@ public interface Vector extends SpatiumObject {
      * @return the signed angle to the plane
      */
     public default float angleTo(Plane plane) {
-        return angleTo(plane.getNormalX(), plane.getNormalY(), plane.getNormalZ());
+        return angleTo(plane.getNormal());
     }
 
     /**
@@ -306,6 +306,22 @@ public interface Vector extends SpatiumObject {
                 Spatium.equals(getX(), v.getX()) &&
                 Spatium.equals(getY(), v.getY()) &&
                 Spatium.equals(getZ(), v.getZ());
+    }
+
+    /**
+     * Returns whether this vector is a multiple of the vector <b>v<b/>, meaning that:
+     * <blockquote>
+     *     <code>r * this = v</code>
+     * </blockquote>
+     *
+     * @param v the vector
+     * @return whether this vector is a multiple of v
+     */
+    public default boolean isMultipleOf(Vector v) {
+        float r = this.getX() / v.getX();
+        return
+                Spatium.equals(this.getY() / v.getY(), r) &&
+                Spatium.equals(this.getZ() / v.getZ(), r);
     }
 
     // SETTERS

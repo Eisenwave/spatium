@@ -1,10 +1,9 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.SphereImpl;
 
-public interface Sphere extends SpatiumObject {
+public interface Sphere extends Space {
 
     /**
      * Constructs a new sphere.
@@ -79,6 +78,18 @@ public interface Sphere extends SpatiumObject {
      */
     public default float getDiameter() {
         return getRadius() * 2;
+    }
+
+    @Override
+    public default float getVolume() {
+        float r = getRadius();
+        return (float) ( (4f / 3f) * Math.PI * r*r*r );
+    }
+
+    @Override
+    public default float getSurfaceArea() {
+        float r = getRadius();
+        return (float) ( 4 * Math.PI * r*r);
     }
 
     // CHECKERS

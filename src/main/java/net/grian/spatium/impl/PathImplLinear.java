@@ -15,7 +15,7 @@ public class PathImplLinear implements Path {
 
     @Override
     public Vector getPoint(float t) {
-        if (t < 0 || t > 1) throw new IllegalArgumentException("multiplier out of range ("+t+")");
+        t %= 1;
         if (points.length == 1) return getOrigin();
         if (points.length == 2) return points[0].midPoint(points[1]);
 

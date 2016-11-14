@@ -1,4 +1,5 @@
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo.Plane;
 import net.grian.spatium.geo.Vector;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.transform.Quaternion;
@@ -10,6 +11,7 @@ public class Main {
     public static void main(String[] args) {
         doMyHomework();
         doMyHomework2();
+        testPlanes();
         testMatrixSquare();
         testMatrixRotations();
         testMinecraftQuaternions();
@@ -95,6 +97,28 @@ public class Main {
         System.out.println("B x A = "+Matrix.product(b, a));
     }
 
+    public static void testPlanes() {
+        System.out.println("TESTING PLANES");
+
+        Plane plane = Plane.fromGeneral(5, 2, -9, 9);
+        System.out.println("(5x + 2y - 9z + 9 = 0) -> "+plane);
+        Vector point = Vector.fromXYZ(-1.8f, 0f, 0f);
+        System.out.println(plane+" contains "+point+" = "+plane.contains(point));
+
+        Plane min = Plane.fromGeneral(2, 2, 2, 6);
+        Vector o = Vector.fromXYZ(0, 0, 0);
+        Vector a = Vector.fromXYZ(3, 3, 3);
+        System.out.println("n = "+min.getNormal());
+        System.out.println("o = "+o);
+        System.out.println("dot of n and o = "+min.getNormal().dot(o));
+
+        System.out.println("d of min = "+min.getDepth());
+        System.out.println("l of n of min = "+min.getNormal().getLength());
+
+        System.out.println("distance of "+min+" and "+o+" = "+min.signedDistanceTo(o));
+        System.out.println("distance of "+min+" and "+a+" = "+min.signedDistanceTo(a));
+    }
+
     public static void testMatrixRotations() {
         System.out.println("TESTING MINECRAFT MATRIX ROTATIONS");
         Vector p = Vector.fromXYZ(0, 0, 1); //straight into z-direction (0 yaw, 0 pitch in Minecraft)
@@ -110,8 +134,10 @@ public class Main {
 
         Vector p = Vector.fromXYZ(0, 0, 1); //straight into z-direction (0 yaw, 0 pitch in Minecraft)
         Quaternion q = Quaternion.fromYawPitchRoll(45, 45, 0);
+        Vector result = p.clone();
+        Transformations.rotate(result, q);
 
-        System.out.println(p+" rotated by "+q+" = "+Transformations.rotate(p, q));
+        System.out.println(p+" rotated by "+q+" = "+result);
     }
 
     public static void testVectorYawPitchSetters() {
@@ -138,9 +164,15 @@ public class Main {
 
         System.out.println("p  = " + p);
         System.out.println("p' = p rotated "+theta+" degrees around axis "+axis);
-        System.out.println("p' = " + Transformations.rotate (p, axis, Spatium.radians(theta)));
-        System.out.println("p' = " + Transformations.rotate2(p, axis, Spatium.radians(theta)));
-        System.out.println("p' = " + Transformations.rotate3(p, axis, Spatium.radians(theta)));
+
+        Vector r1 = p.clone(), r2 = p.clone(), r3 = p.clone();
+        Transformations.rotate (r1, axis, Spatium.radians(theta));
+        Transformations.rotate2(r2, axis, Spatium.radians(theta));
+        Transformations.rotate3(r3, axis, Spatium.radians(theta));
+
+        System.out.println("p' = " + r1);
+        System.out.println("p' = " + r2);
+        System.out.println("p' = " + r3);
 
         int times = 1_000_000;
 

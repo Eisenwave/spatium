@@ -60,6 +60,22 @@ public class SphereImpl implements Sphere {
         return r*r;
     }
 
+    private final static float four_thirds_pi = (float) ((4d / 3d) * Math.PI);
+
+    @Override
+    public float getVolume() {
+        float r = getRadius();
+        return four_thirds_pi * r*r*r;
+    }
+
+    private final static float four_pi = (float) (4 * Math.PI);
+
+    @Override
+    public float getSurfaceArea() {
+        float r = getRadius();
+        return four_pi * r*r;
+    }
+
     // CHECKERS
 
     @Override

@@ -445,8 +445,8 @@ public interface Quaternion extends SpatiumObject, Transformation {
 
 
     @Override
-    public default Vector apply(Vector v) {
-        return Transformations.rotate(v, this);
+    public default void transform(Vector v) {
+        Transformations.rotate(v, this);
     }
 
     public abstract Quaternion clone();

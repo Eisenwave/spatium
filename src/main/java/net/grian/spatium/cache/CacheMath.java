@@ -1,5 +1,7 @@
 package net.grian.spatium.cache;
 
+import net.grian.spatium.Spatium;
+
 /**
  * <p>
  *     A utility class for performing expensive mathematical operations using lookup tables. The operations include, but
@@ -26,6 +28,11 @@ public final class CacheMath {
     private static AsinCache cacheAsin = null;
     private static SinCache cacheSin = null;
     private static SqrtCache cacheSqrt = null;
+    private static BinomCache cacheBinom = null;
+
+    public static int choose(int n, int k) {
+        return cacheBinom==null? Spatium.choose(n, k) : cacheBinom.choose(n, k);
+    }
 
     public static double asin(double radians) {
         return cacheAsin==null? Math.asin(radians) : cacheAsin.asin(radians);
@@ -55,19 +62,29 @@ public final class CacheMath {
         return cacheSqrt==null? Math.sqrt(number) : cacheSqrt.sqrt(number);
     }
 
+    public static void setBinomCapacity(int capacity) {
+        if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
+        if (cacheBinom==null || cacheBinom.getCapacity() < capacity) {
+            cacheBinom = new BinomCache(capacity);
+        }
+    }
+
     public static void setAsinCapacity(int capacity) {
+        if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
         if (cacheAsin==null || cacheAsin.getCapacity() < capacity) {
             cacheAsin = new AsinCache(capacity);
         }
     }
 
     public static void setSinCapacity(int capacity) {
+        if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
         if (cacheSin==null || cacheSin.getCapacity() < capacity) {
             cacheSin = new SinCache(capacity);
         }
     }
 
     public static void setSqrtCapacity(int capacity) {
+        if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
         if (cacheSqrt==null || cacheSqrt.getCapacity() < capacity) {
             cacheSqrt = new SqrtCache(capacity, cacheSqrt==null? 1 : cacheSqrt.getMax());
         }

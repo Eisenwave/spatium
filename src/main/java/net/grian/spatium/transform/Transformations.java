@@ -1,6 +1,7 @@
 package net.grian.spatium.transform;
 
 import net.grian.spatium.enums.Axis;
+import net.grian.spatium.geo.AxisAlignedBB;
 import net.grian.spatium.geo.Vector;
 
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Objects;
 /**
  * Provides methods for applying rotations, creating objects that represent rotations and more.
  */
+@SuppressWarnings("WeakerAccess")
 public final class Transformations {
 
     private Transformations() {}
@@ -19,14 +21,20 @@ public final class Transformations {
      * @param x the x-amount of the translation
      * @param y the y-amount of the translation
      * @param z the z-amount of the translation
-     * @return a new translated point
      */
-    public static Vector translate(Vector point, float x, float y, float z) {
-        return Vector.fromXYZ(
-                point.getX() + x,
-                point.getY() + y,
-                point.getZ() + z
-                );
+    public static void translate(Vector point, float x, float y, float z) {
+        point.add(x, y, z);
+    }
+
+    /**
+     * Translates a bounding box.
+     *
+     * @param x the x-amount of the translation
+     * @param y the y-amount of the translation
+     * @param z the z-amount of the translation
+     */
+    public static void translate(AxisAlignedBB box, float x, float y, float z) {
+        box.move(x, y, z);
     }
 
     /**
@@ -46,14 +54,20 @@ public final class Transformations {
      * @param y the y-coordinate of the anchor
      * @param z the z-coordinate of the anchor
      * @param factor the scale factor
-     * @return a new scaled vector
      */
-    public static Vector scale(Vector point, float x, float y, float z, float factor) {
-        return Vector.fromXYZ(
+    public static void scale(Vector point, float x, float y, float z, float factor) {
+        point.set(
                 x + (point.getX() - x) * factor,
                 y + (point.getY() - y) * factor,
                 z + (point.getZ() - z) * factor
         );
+    }
+
+    public static void scale(AxisAlignedBB box, float x, float y, float z, float factor) {
+        box
+                .move(-box.getMinX(), -box.getMinY(), -box.getMinZ())
+                .scale(factor)
+                .move(x, y, z);
     }
 
     /**
@@ -62,10 +76,9 @@ public final class Transformations {
      * @param point the point
      * @param anchor the scale anchor
      * @param factor the scale factor
-     * @return a new scaled point
      */
-    public static Vector scale(Vector point, Vector anchor, float factor) {
-        return scale(point, anchor.getX(), anchor.getY(), anchor.getZ(), factor);
+    public static void scale(Vector point, Vector anchor, float factor) {
+        scale(point, anchor.getX(), anchor.getY(), anchor.getZ(), factor);
     }
 
     /**
@@ -76,14 +89,9 @@ public final class Transformations {
      * @param y the y-coordinate of the anchor point
      * @param z the z-coordinate of the anchor point
      * @param yaw the yaw in degrees
-     * @return a new rotated point
      */
-    public static Vector rotateYaw(Vector point, float x, float y, float z, float yaw) {
-        Vector d = Vector.fromXYZ(
-                point.getX() - x,
-                point.getY() - y,
-                point.getZ() - z);
-        return d.setYaw(yaw).add(x, y, z);
+    public static void rotateYaw(Vector point, float x, float y, float z, float yaw) {
+        point.subtract(x, y, z).setYaw(yaw).add(x, y, z);
     }
 
     /**
@@ -94,14 +102,9 @@ public final class Transformations {
      * @param y the y-coordinate of the anchor point
      * @param z the z-coordinate of the anchor point
      * @param pitch the pitch in degrees
-     * @return a new rotated point
      */
-    public static Vector rotatePitch(Vector point, float x, float y, float z, float pitch) {
-        Vector d = Vector.fromXYZ(
-                point.getX() - x,
-                point.getY() - y,
-                point.getZ() - z);
-        return d.setPitch(pitch).add(x, y, z);
+    public static void rotatePitch(Vector point, float x, float y, float z, float pitch) {
+        point.subtract(x, y, z).setPitch(pitch).add(x, y, z);
     }
 
     /**
@@ -113,14 +116,9 @@ public final class Transformations {
      * @param z the z-coordinate of the anchor point
      * @param yaw the yaw in degrees
      * @param pitch the pitch in degrees
-     * @return a new rotated point
      */
-    public static Vector rotateYawPitch(Vector point, float x, float y, float z, float yaw, float pitch) {
-        Vector d = Vector.fromXYZ(
-                point.getX() - x,
-                point.getY() - y,
-                point.getZ() - z);
-        return d.setYawPitch(yaw, pitch).add(x, y, z);
+    public static void rotateYawPitch(Vector point, float x, float y, float z, float yaw, float pitch) {
+        point.subtract(x, y, z).setYawPitch(yaw, pitch).add(x, y, z);
     }
 
     /**
@@ -129,10 +127,9 @@ public final class Transformations {
      * @param point the point
      * @param anchor the anchor of the rotation
      * @param yaw the yaw in degrees
-     * @return a new rotated point
      */
-    public static Vector rotateYaw(Vector point, Vector anchor, float yaw) {
-        return rotateYaw(point, anchor.getX(), anchor.getY(), anchor.getZ(), yaw);
+    public static void rotateYaw(Vector point, Vector anchor, float yaw) {
+        rotateYaw(point, anchor.getX(), anchor.getY(), anchor.getZ(), yaw);
     }
 
     /**
@@ -141,10 +138,9 @@ public final class Transformations {
      * @param point the point
      * @param anchor the anchor of the rotation
      * @param pitch the pitch in degrees
-     * @return a new rotated point
      */
-    public static Vector rotatePitch(Vector point, Vector anchor, float pitch) {
-        return rotatePitch(point, anchor.getX(), anchor.getY(), anchor.getZ(), pitch);
+    public static void rotatePitch(Vector point, Vector anchor, float pitch) {
+        rotatePitch(point, anchor.getX(), anchor.getY(), anchor.getZ(), pitch);
     }
 
     /**
@@ -154,10 +150,9 @@ public final class Transformations {
      * @param anchor the anchor of the rotation
      * @param yaw the yaw in degrees
      * @param pitch the pitch in degrees
-     * @return a new rotated point
      */
-    public static Vector rotateYawPitch(Vector point, Vector anchor, float yaw, float pitch) {
-        return rotateYawPitch(point, anchor.getX(), anchor.getY(), anchor.getZ(), yaw, pitch);
+    public static void rotateYawPitch(Vector point, Vector anchor, float yaw, float pitch) {
+        rotateYawPitch(point, anchor.getX(), anchor.getY(), anchor.getZ(), yaw, pitch);
     }
 
     /**
@@ -167,10 +162,9 @@ public final class Transformations {
      * @param x the x-coordinate of the anchor
      * @param y the y-coordinate of the anchor
      * @param z the z-coordinate of the anchor
-     * @return a new mirrored point
      */
-    public static Vector mirror(Vector point, float x, float y, float z) {
-        return Vector.fromXYZ(
+    public static void mirror(Vector point, float x, float y, float z) {
+        point.set(
                 x - (point.getX() - x),
                 y - (point.getY() - y),
                 z - (point.getZ() - z)
@@ -182,10 +176,9 @@ public final class Transformations {
      *
      * @param point the point
      * @param anchor the anchor point
-     * @return a new mirrored point
      */
-    public static Vector mirror(Vector point, Vector anchor) {
-        return mirror(point, anchor.getX(), anchor.getY(), anchor.getZ());
+    public static void mirror(Vector point, Vector anchor) {
+        mirror(point, anchor.getX(), anchor.getY(), anchor.getZ());
     }
 
     /**
@@ -197,19 +190,14 @@ public final class Transformations {
      * @param point the point
      * @param axis the axis of mirroring
      * @param depth the mirroring offset of the axis
-     * @return a new mirrored point
      */
-    public static Vector mirror(Vector point, Axis axis, float depth) {
+    public static void mirror(Vector point, Axis axis, float depth) {
         Objects.requireNonNull(point);
         Objects.requireNonNull(axis);
         switch (axis) {
-            case X: return mirror(point, depth, point.getY(), point.getZ());
-            case Y: return mirror(point, point.getX(), depth, point.getZ());
-            case Z: return mirror(point, point.getX(), point.getY(), depth);
-            default: {
-                assert false : axis;
-                return null;
-            }
+            case X: mirror(point, depth, point.getY(), point.getZ()); break;
+            case Y: mirror(point, point.getX(), depth, point.getZ()); break;
+            case Z: mirror(point, point.getX(), point.getY(), depth); break;
         }
     }
 
@@ -218,19 +206,14 @@ public final class Transformations {
      *
      * @param point the point
      * @param axis the mirror axis
-     * @return a new mirrored point
      */
-    public static Vector mirror(Vector point, Axis axis) {
+    public static void mirror(Vector point, Axis axis) {
         Objects.requireNonNull(point);
         Objects.requireNonNull(axis);
         switch (axis) {
-            case X: return Vector.fromXYZ(-point.getX(),  point.getY(),  point.getZ());
-            case Y: return Vector.fromXYZ( point.getX(), -point.getY(),  point.getZ());
-            case Z: return Vector.fromXYZ( point.getX(),  point.getY(), -point.getZ());
-            default: {
-                assert false : axis;
-                return null;
-            }
+            case X: point.setX(-point.getX()); break;
+            case Y: point.setY(-point.getY()); break;
+            case Z: point.setZ(-point.getZ()); break;
         }
     }
 
@@ -247,10 +230,9 @@ public final class Transformations {
      * @param point the point to rotate
      * @param axis the axis around which the point is to be rotated (unit vector)
      * @param theta the angle of the rotation in radians
-     * @return a new rotated point
      */
-    public static Vector rotate(Vector point, Vector axis, float theta) {
-        return rotate(point, Quaternion.fromRotation(axis, theta));
+    public static void rotate(Vector point, Vector axis, float theta) {
+        rotate(point, Quaternion.fromRotation(axis, theta));
     }
 
     /**
@@ -258,13 +240,14 @@ public final class Transformations {
      *
      * @param point the point to rotate
      * @param q the rotation
-     * @return a new rotated point
      */
-    public static Vector rotate(Vector point, Quaternion q) {
-        return Quaternion
-                .product(q, Quaternion.fromVector(point))
-                .multiply(Quaternion.inverse(q))
-                .getVector();
+    public static void rotate(Vector point, Quaternion q) {
+        point.set(
+                Quaternion
+                 .product(q, Quaternion.fromVector(point))
+                 .multiply(Quaternion.inverse(q))
+                 .getVector()
+        );
     }
 
     /**
@@ -279,9 +262,8 @@ public final class Transformations {
      * @param point the point to rotate
      * @param axis the axis around which the point is to be rotated (unit vector)
      * @param theta the angle of the rotation in radians
-     * @return a new rotated point
      */
-    public static Vector rotate2(Vector point, Vector axis, float theta) {
+    public static void rotate2(Vector point, Vector axis, float theta) {
         Quaternion q = Quaternion.fromRotation(axis, theta);
 
         float
@@ -292,7 +274,7 @@ public final class Transformations {
                 xy = qx * y2,  xz = qx * z2,  yz = qy * z2,
                 wx = w  * x2,  wy = w  * y2,  wz = w  * z2;
 
-        return Vector.fromXYZ(
+        point.set(
                 px * (1 - (yy + zz)) + py * (xy - wz)       + pz * (xz + wy),
                 px * (xy + wz)       + py * (1 - (xx + zz)) + pz * (yz - wx),
                 px * (xz - wy)       + py * (yz + wx)       + pz * (1 - (xx + yy))
@@ -311,17 +293,17 @@ public final class Transformations {
      * @param point the point to rotate
      * @param axis the axis around which the point is to be rotated (unit vector)
      * @param theta the angle of the rotation in radians
-     * @return a new rotated point
      */
-    public static Vector rotate3(Vector point, Vector axis, float theta) {
+    public static void rotate3(Vector point, Vector axis, float theta) {
         Quaternion q = Quaternion.fromRotation(axis, theta);
-
         Vector qv = q.getVector();
         Vector t = qv.cross(point).multiply(2);
-        return t.clone()
-                .multiply(q.getW())
-                .add(point)
-                .add(qv.cross(t));
+        point.set(
+                t.clone()
+                        .multiply(q.getW())
+                        .add(point)
+                        .add(qv.cross(t))
+        );
     }
 
 }

@@ -34,12 +34,16 @@ public class PathImplCircle implements Path {
         this(sphere.getX(), sphere.getY(), sphere.getZ(), sphere.getRadius(), nx, ny, nz);
     }
 
+    public PathImplCircle(Vector center, float radius, Vector normal) {
+        this(center.getX(), center.getY(), center.getZ(), radius, normal);
+    }
+
     @Override
     public Vector getPoint(float t) {
         Vector p = getOrigin();
         Quaternion q = toRotation((float) (t * 0.5 * Math.PI));
-
-        return Transformations.rotate(p, q);
+        Transformations.rotate(p, q);
+        return p;
     }
 
     @Override

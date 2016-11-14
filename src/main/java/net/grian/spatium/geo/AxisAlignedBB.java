@@ -1,13 +1,12 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.AxisAlignedBBImpl;
 
 /**
  * An axis aligned bounding box, or the cubical space between two points.
  */
-public interface AxisAlignedBB extends SpatiumObject {
+public interface AxisAlignedBB extends Space {
 
     /**
      * Creates a new bounding box between two points.
@@ -104,13 +103,15 @@ public interface AxisAlignedBB extends SpatiumObject {
         return Vector.fromXYZ(getSizeX(), getSizeY(), getSizeZ());
     }
 
-    /**
-     * Returns the volume of the bounding box.
-     *
-     * @return the volume of the bounding box
-     */
+    @Override
     public default float getVolume() {
         return getSizeX() * getSizeY() * getSizeZ();
+    }
+
+    @Override
+    public default float getSurfaceArea() {
+        float x = getSizeX(), y = getSizeY(), z = getSizeZ();
+        return (x * y + x * z + y * z) * 2;
     }
 
     // CHECKERS
@@ -152,20 +153,74 @@ public interface AxisAlignedBB extends SpatiumObject {
 
     // SETTERS
 
+    /**
+     * Moves the bounding box by a given amount.
+     *
+     * @param x the amount of x-movement
+     * @param y the amount of y-movement
+     * @param z the amount of z-movement
+     * @return itself
+     */
     public abstract AxisAlignedBB move(float x, float y, float z);
 
+    /**
+     * Moves the bounding box by a given amount.
+     *
+     * @param v the movement
+     * @return itself
+     */
     public default AxisAlignedBB move(Vector v) {
         return move(v.getX(), v.getY(), v.getZ());
     }
 
+    /**
+     * Scales the bounding box around the origin.
+     *
+     * @param x the x-scale factor
+     * @param y the y-scale factor
+     * @param z the z-scale factor
+     * @return itself
+     */
     public abstract AxisAlignedBB scale(float x, float y, float z);
 
+    /**
+     * Scales the bounding box around the origin.
+     *
+     * @param v the scale factors
+     * @return itself
+     */
     public default AxisAlignedBB scale(Vector v) {
         return scale(v.getX(), v.getY(), v.getZ());
     }
 
+    /**
+     * Scales the bounding box around the origin.
+     *
+     * @param factor the scale factor
+     * @return itself
+     */
+    public default AxisAlignedBB scale(float factor) {
+        return scale(factor, factor, factor);
+    }
+
+    /**
+     * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,
+     * the minimum point stays untouched.
+     *
+     * @param x the x-growth
+     * @param y the y-growth
+     * @param z the z-growth
+     * @return itself
+     */
     public abstract AxisAlignedBB grow(float x, float y, float z);
 
+    /**
+     * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,
+     * the minimum point stays untouched.
+     *
+     * @param v the growth
+     * @return itself
+     */
     public default AxisAlignedBB grow(Vector v) {
         return grow(v.getX(), v.getY(), v.getZ());
     }

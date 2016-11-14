@@ -19,6 +19,16 @@ public class PlaneImpl implements Plane {
         this.zn = zn;
     }
 
+    public PlaneImpl(float a, float b, float c, float d) {
+        float p = d / (a + b + c);
+        this.xc = p;
+        this.yc = p;
+        this.zc = p;
+        this.xn = a;
+        this.yn = b;
+        this.zn = c;
+    }
+
     public PlaneImpl(PlaneImpl copyOf) {
         this.xc = copyOf.xc;
         this.yc = copyOf.yc;
@@ -41,43 +51,18 @@ public class PlaneImpl implements Plane {
     // GETTERS
 
     @Override
-    public float getCenterX() {
-        return xc;
-    }
-
-    @Override
-    public float getCenterY() {
-        return yc;
-    }
-
-    @Override
-    public float getCenterZ() {
-        return zc;
-    }
-
-    @Override
-    public float getNormalX() {
-        return xn;
-    }
-
-    @Override
-    public float getNormalY() {
-        return yn;
-    }
-
-    @Override
-    public float getNormalZ() {
-        return zn;
-    }
-
-    @Override
-    public Vector getCenter() {
+    public Vector getPoint() {
         return Vector.fromXYZ(xc, yc, zc);
     }
 
     @Override
     public Vector getNormal() {
         return Vector.fromXYZ(xn, yn, zn);
+    }
+
+    @Override
+    public float getDepth() {
+        return xn*xc + yn*yc + zn*zc;
     }
 
     // CHECKERS
@@ -89,13 +74,9 @@ public class PlaneImpl implements Plane {
 
     @Override
     public boolean contains(float x, float y, float z) {
-        float
-        dx = x - xc,
-        dy = y - yc,
-        dz = z - zc;
-
-        // dot product of normal vector and dist between center and point
-        return Spatium.equals(xn*dx + yn*dy + zn*dz, 0) ;
+        //if the dot product of a vector from the center of the plane to the point and the plane normal are
+        //orthogonal, the point lies in the plane
+        return Spatium.equals((x-xc)*xn + (y-yc)*yn + (z-zc)*zn, 0) ;
     }
 
     // GETTERS
@@ -123,4 +104,8 @@ public class PlaneImpl implements Plane {
         return new PlaneImpl(this);
     }
 
+    @Override
+    public String toString() {
+        return "("+xn+", "+yn+", "+zn+") * ((x, y, z) - ("+xc+", "+yc+", "+zc+"))";
+    }
 }

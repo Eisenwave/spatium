@@ -22,6 +22,20 @@ public interface Path extends SpatiumObject {
     }
 
     /**
+     * Creates a new circular path on a sphere with equal diameter as the sphere. This circular path is the
+     * intersection of the sphere and a plane represented by the given normal vector which intersects the origin of
+     * the sphere.
+     *
+     * @param center the center of the sphere
+     * @param radius the radius of the sphere
+     * @param normal the normal vector
+     * @return a new path
+     */
+    public static Path circle(Vector center, float radius, Vector normal) {
+        return new PathImplCircle(center, radius, normal);
+    }
+
+    /**
      * Creates a new linear path between two points.
      *
      * @param from the origin
@@ -54,7 +68,14 @@ public interface Path extends SpatiumObject {
     }
 
     /**
-     * Returns the point at a given path multiplier {@code t} between 0 and 1.
+     * <p>
+     *     Returns the point at a given path multiplier {@code t} between 0 and 1.
+     * </p>
+     * There is two different cases for method:
+     * <ul>
+     *     <li>should the path be finite, t is being wrapped around 0 and 1. For example: {@code -3.5 -> 0.5}</li>
+     *     <li>should the path be infinite, t can take on any value. Example: infinite line</li>
+     * </ul>
      *
      * @param t the path multiplier in range from 0 to 1
      * @return a new point on this path

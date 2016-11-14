@@ -1,13 +1,12 @@
 package net.grian.spatium.geo;
 
-import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.PlaneImpl;
 
 public interface Plane extends SpatiumObject {
 
     /**
-     * Constructs a new plane from a center point and a normal vector.
+     * Constructs a new plane from a center point and a normal vector. (point-normal form)
      *
      * @param xc the x of the center
      * @param yc the y of the center
@@ -17,7 +16,7 @@ public interface Plane extends SpatiumObject {
      * @param zn the z of the normal
      * @return a new plane
      */
-    public static Plane create(float xc, float yc, float zc, float xn, float yn, float zn) {
+    public static Plane fromPointNormal(float xc, float yc, float zc, float xn, float yn, float zn) {
         return new PlaneImpl(xc, yc, zc, xn, yn, zn);
     }
 
@@ -28,79 +27,73 @@ public interface Plane extends SpatiumObject {
      * @param normal the normal vector
      * @return a new plane
      */
-    public static Plane create(Vector center, Vector normal) {
+    public static Plane fromPointNormal(Vector center, Vector normal) {
         return new PlaneImpl(center, normal);
     }
 
     /**
-     * Constructs a new plane.
+     * Constructs a new plane using the general form (equation form):
+     * <blockquote>
+     *     <code>ax + by + cz = d</code>
+     * </blockquote>
      *
+     * @param a the x-coefficient
+     * @param b the y-coefficient
+     * @param c the z-coefficient
+     * @param d the depth
      * @return a new plane
      */
-    public static Plane create() {
-        return new PlaneImpl();
+    public static Plane fromGeneral(float a, float b, float c, float d) {
+        return new PlaneImpl(a, b, c, d);
     }
 
     // GETTERS
 
     /**
-     * Returns the x-coordinate of the center of the plane.
-     *
-     * @return the x-coordinate of the center of the plane
-     */
-    public abstract float getCenterX();
-
-    /**
-     * Returns the y-coordinate of the center of the plane.
-     *
-     * @return the y-coordinate of the center of the plane
-     */
-    public abstract float getCenterY();
-
-    /**
-     * Returns the z-coordinate of the center of the plane.
-     *
-     * @return the z-coordinate of the center of the plane
-     */
-    public abstract float getCenterZ();
-
-    /**
-     * Returns the x-coordinate of the normal vector of the plane.
-     *
-     * @return the x-coordinate of the normal vector of the plane
-     */
-    public abstract float getNormalX();
-
-    /**
-     * Returns the y-coordinate of the normal vector of the plane.
-     *
-     * @return the y-coordinate of the normal vector of the plane
-     */
-    public abstract float getNormalY();
-
-    /**
-     * Returns the z-coordinate of the normal vector of the plane.
-     *
-     * @return the z-coordinate of the normal vector of the plane
-     */
-    public abstract float getNormalZ();
-
-    /**
-     * Returns the center of the plane.
+     * Returns a point on the plane.
      *
      * @return the center of the plane
      */
-    public default Vector getCenter() {
-        return Vector.fromXYZ(getCenterX(), getCenterY(), getCenterZ());
-    }
+    public abstract Vector getPoint();
 
     /**
      * Returns the normal vector of the plane.
      *
      * @return the normal vector of the plane
      */
-    public default Vector getNormal() {
-        return Vector.fromXYZ(getNormalX(), getNormalY(), getNormalZ());
+    public abstract Vector getNormal();
+
+    /**
+     * Returns the depth <b>d</b> of the plane, as seen in the equation form:
+     * <blockquote>
+     *     <code>ax + by + cz = d</code>
+     * </blockquote>
+     *
+     * @return the depth of the plane
+     */
+    public abstract float getDepth();
+
+    /**
+     * Returns the signed distance between a point and this plane.
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @param z the z-coordinate of the point
+     * @return the distance between a point and this plane
+     */
+    public default float signedDistanceTo(float x, float y, float z) {
+        Vector n = getNormal();
+        return (n.dot(x, y, z) - getDepth()) / n.getLength();
+    }
+
+    /**
+     * Returns the signed distance between a point and this plane.
+     *
+     * @param point the point
+     * @return the distance between a point and this plane
+     */
+    public default float signedDistanceTo(Vector point) {
+        return signedDistanceTo(point.getX(), point.getY(), point.getZ());
     }
 
     // CHECKERS
@@ -113,12 +106,8 @@ public interface Plane extends SpatiumObject {
      */
     public default boolean equals(Plane plane) {
         return
-                Spatium.equals(this.getCenterX(), plane.getCenterX()) &&
-                Spatium.equals(this.getCenterY(), plane.getCenterY()) &&
-                Spatium.equals(this.getCenterZ(), plane.getCenterZ()) &&
-                Spatium.equals(this.getNormalX(), plane.getNormalX()) &&
-                Spatium.equals(this.getNormalY(), plane.getNormalY()) &&
-                Spatium.equals(this.getNormalZ(), plane.getNormalZ());
+                getPoint().equals(plane.getPoint()) &&
+                getNormal().equals(plane.getNormal());
     }
 
     /**

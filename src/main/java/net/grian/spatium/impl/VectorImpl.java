@@ -83,7 +83,7 @@ public class VectorImpl implements Vector {
 
     @Override
     public float dot(float x, float y, float z) {
-        return this.x * x + this.y * y + this.z + z;
+        return this.x*x + this.y*y + this.z*z;
     }
 
     @Override

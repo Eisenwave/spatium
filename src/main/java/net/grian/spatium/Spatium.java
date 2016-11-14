@@ -49,6 +49,28 @@ public class Spatium {
         return (float) Math.sqrt(x*x + y*y + z*z);
     }
 
+    public static int choose(int n, int k) {
+        if (n < 0) throw new IllegalArgumentException("n must be positive");
+        if (k < 0) throw new IllegalArgumentException("k must be positive");
+        if (n == 0 || n == k) return 1;
+        return internalChose(n, k);
+    }
+
+    private static int internalChose(int n, int k) {
+        int res = 1;
+
+        // Since C(n, k) = C(n, n-k)
+        if (k > n - k)
+            k = n - k;
+
+        for (int i = 0; i < k; i++) {
+            res *= (n - i);
+            res /= (i + 1);
+        }
+
+        return res;
+    }
+
     /**
      * Converts radians into degrees.
      *

@@ -94,6 +94,12 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
         return (xmax - xmin) * (ymax - ymin) * (zmax - zmin);
     }
 
+    @Override
+    public float getSurfaceArea() {
+        float a = xmax - xmin, b = ymax - ymin, c = zmax - zmin;
+        return (a * b + a * c + b * c) * 2;
+    }
+
     // SETTERS
 
     @Override
@@ -117,14 +123,31 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
 
     @Override
     public AxisAlignedBB grow(float x, float y, float z) {
-        Vector center = getCenter();
+        float
+                dx = getSizeX(),
+                dy = getSizeY(),
+                dz = getSizeZ();
 
-        xmin = center.getX() - x;
-        ymin = center.getY() - y;
-        zmin = center.getZ() - z;
-        xmax = center.getX() + x;
-        ymax = center.getY() + y;
-        zmax = center.getZ() + z;
+        if (-x < getSizeX()) {
+            xmax += x;
+        } else {
+            xmax = xmin;
+            xmin = xmin - dx - x;
+        }
+
+        if (-y < getSizeX()) {
+            ymax += y;
+        } else {
+            ymax = ymin;
+            ymin = ymin - dy - y;
+        }
+
+        if (-z < getSizeZ()) {
+            zmax += z;
+        } else {
+            zmax = zmin;
+            zmin = zmin - dz - z;
+        }
         return this;
     }
 

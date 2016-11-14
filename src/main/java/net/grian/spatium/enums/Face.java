@@ -34,10 +34,20 @@ public enum Face {
         return direction;
     }
 
+    /**
+     * Returns the axis of this direction.
+     *
+     * @return the axis of this direction
+     */
     public Axis axis() {
         return direction.axis();
     }
 
+    /**
+     * Returns the opposite face.
+     *
+     * @return the opposite face
+     */
     public Face opposite() {
         switch (this) {
         case UP: return DOWN;
@@ -49,4 +59,5 @@ public enum Face {
         default: return null;
         }
     }
+
 }

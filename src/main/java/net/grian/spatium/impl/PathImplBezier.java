@@ -16,7 +16,7 @@ public class PathImplBezier implements Path {
 
     @Override
     public Vector getPoint(float t) {
-        return Curves.bezier(t, points);
+        return Curves.bezier(t % 1, points);
     }
 
     @Override
