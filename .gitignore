@@ -1,5 +1,4 @@
 *.class
-!/worldedit-bukkit/src/main/resources/nmsblocks/*
 
 *.iml
 
