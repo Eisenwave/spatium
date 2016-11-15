@@ -51,6 +51,12 @@ public final class Spatium {
         return (float) Math.sqrt(x*x + y*y + z*z);
     }
 
+    /**
+     * Returns the binary coefficient of n and k or <i>n choose k</i>.
+     * @param n n
+     * @param k k
+     * @return n choose k
+     */
     public static int choose(int n, int k) {
         if (n < 0) throw new IllegalArgumentException("n must be positive");
         if (k < 0) throw new IllegalArgumentException("k must be positive");
