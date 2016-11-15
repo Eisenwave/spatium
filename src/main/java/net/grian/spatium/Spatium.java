@@ -2,7 +2,9 @@ package net.grian.spatium;
 
 import net.grian.spatium.geo.Vector;
 
-public class Spatium {
+public final class Spatium {
+
+    private Spatium() {}
 
     /**
      * <p>

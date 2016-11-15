@@ -1,19 +1,23 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.geo.OrientedBB;
+import net.grian.spatium.geo.Slab;
 import net.grian.spatium.geo.Vector;
 
 public class OrientedBBImpl implements OrientedBB {
 
     private float
-            x, y, z,
-            du, dv, dw,
-            ux, uy, uz,
-            vx, vy, vz,
-            wx, wy, wz;
+            cx, cy, cz, //center
+            du, dv, dw, //half-dimensions
+            ux, uy, uz, //local x-axis
+            vx, vy, vz, //local y-axis
+            wx, wy, wz; //local z-axis
 
-    public OrientedBBImpl(Vector origin, Vector u, Vector v, Vector w, float du, float dv, float dw) {
-        this.x = origin.getX(); this.y = origin.getY(); this.z = origin.getZ();
+    public OrientedBBImpl(Vector center, Vector u, Vector v, Vector w, float du, float dv, float dw) {
+        if (du < 0) throw new IllegalArgumentException("du must be positive");
+        if (dv < 0) throw new IllegalArgumentException("dv must be positive");
+        if (dw < 0) throw new IllegalArgumentException("dw must be positive");
+        this.cx = center.getX(); this.cy = center.getY(); this.cz = center.getZ();
         this.ux = u.getX(); this.uy = u.getY(); this.uz = u.getZ();
         this.vx = v.getX(); this.vy = v.getY(); this.vz = v.getZ();
         this.wx = w.getX(); this.wy = w.getY(); this.wz = w.getZ();
@@ -22,25 +26,25 @@ public class OrientedBBImpl implements OrientedBB {
 
     @Override
     public Vector getMin() {
-        return Vector.fromXYZ(x, y, z);
+        return Vector.fromXYZ(
+                cx - ux*du - vx*dv - wx*dw,
+                cy - uy*du - vy*dv - wy*dw,
+                cz - uz*du - vz*dv - wz*dw
+        );
     }
 
     @Override
     public Vector getMax() {
         return Vector.fromXYZ(
-                x + ux*du + vx*dv + wx*dw,
-                y + uy*du + vy*dv + wy*dw,
-                z + uz*du + vz*dv + wz*dw
+                cx + ux*du + vx*dv + wx*dw,
+                cy + uy*du + vy*dv + wy*dw,
+                cz + uz*du + vz*dv + wz*dw
         );
     }
 
     @Override
     public Vector getCenter() {
-        return Vector.fromXYZ(
-                x + (ux*du + vx*dv + wx*dw) * 0.5f,
-                y + (uy*du + vy*dv + wy*dw) * 0.5f,
-                z + (uz*du + vz*dv + wz*dw) * 0.5f
-        );
+        return Vector.fromXYZ(cx, cy, cz);
     }
 
     @Override
@@ -59,17 +63,38 @@ public class OrientedBBImpl implements OrientedBB {
     }
 
     @Override
+    public Slab getSlabU() {
+        Vector axis = getU();
+        float d = axis.dot(cx, cy, cz);
+        return Slab.create(axis, d - du, d + du);
+    }
+
+    @Override
+    public Slab getSlabV() {
+        Vector axis = getV();
+        float d = axis.dot(cx, cy, cz);
+        return Slab.create(axis, d - dv, d + dv);
+    }
+
+    @Override
+    public Slab getSlabW() {
+        Vector axis = getW();
+        float d = axis.dot(cx, cy, cz);
+        return Slab.create(axis, d - dw, d + dw);
+    }
+
+    @Override
     public float getSizeU() {
-        return du;
+        return du*2;
     }
 
     @Override
     public float getSizeV() {
-        return dv;
+        return dv*2;
     }
 
     @Override
     public float getSizeW() {
-        return dw;
+        return dw*2;
     }
 }

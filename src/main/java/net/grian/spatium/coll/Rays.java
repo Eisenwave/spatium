@@ -253,9 +253,31 @@ public final class Rays {
      *
      * @param ray the ray
      * @param box the bounding box
-     * @return where the ray and the plane collide or {@link Float#NaN}
+     * @return where the ray and the box collide or {@link Float#NaN}
      */
     public static float cast(Ray ray, AxisAlignedBB box) {
+        float[] entryExit = pierce(ray, box);
+        return entryExit==null? Float.NaN : entryExit[0];
+    }
+
+    /**
+     * <p>
+     *     Tests where a {@link Ray} and an {@link OrientedBB} collide.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     {@link Ray#setLength(float)}.
+     * </p>
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return where the ray and the box collide or {@link Float#NaN}
+     */
+    public static float cast(Ray ray, OrientedBB box) {
         float[] entryExit = pierce(ray, box);
         return entryExit==null? Float.NaN : entryExit[0];
     }
@@ -413,6 +435,47 @@ public final class Rays {
         if (tzmax < tmax) tmax = tzmax;
 
         return new float[] {tmin, tmax};
+    }
+
+    /**
+     * <p>
+     *     Tests where a {@link Ray} enters and exits an {@link OrientedBB}.
+     * </p>
+     * <p>
+     *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     {@link Ray#setLength(float)}.
+     * </p>
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return the entry and exit points of the ray or null
+     */
+    public static float[] pierce(Ray ray, OrientedBB box) {
+        //u bounds
+        float[] t = pierce(ray, box.getSlabU());
+        if (t == null) return null;
+
+        //v bounds
+        float[] tv = pierce(ray, box.getSlabV());
+        if (tv == null) return null;
+
+        if (t[0] > tv[1] || tv[0] > t[1]) return null;
+        if (tv[0] > t[0]) t[0] = tv[0];
+        if (tv[1] < t[1]) t[1] = tv[1];
+
+        //w bounds
+        float[] tw = pierce(ray, box.getSlabW());
+        if (tw == null) return null;
+
+        if (t[0] > tw[1] || tw[0] > t[1]) return null;
+        if (tw[0] > t[0]) t[0] = tw[0];
+        if (tw[1] < t[1]) t[1] = tw[1];
+
+        return t;
     }
 
 }

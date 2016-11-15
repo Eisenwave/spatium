@@ -6,6 +6,18 @@ import net.grian.spatium.impl.PlaneImpl;
 public interface Plane extends SpatiumObject {
 
     /**
+     * Constructs a new plane from a point on the plane and two vectors.
+     *
+     * @param point the point
+     * @param t the first vector
+     * @param r the second vector
+     * @return a new plane
+     */
+    public static Plane fromPointVectors(Vector point, Vector t, Vector r) {
+        return new PlaneImpl(point, t, r);
+    }
+
+    /**
      * Constructs a new plane from a center point and a normal vector. (point-normal form)
      *
      * @param xc the x of the center

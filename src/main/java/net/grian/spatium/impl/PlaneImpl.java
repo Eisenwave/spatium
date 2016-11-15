@@ -44,6 +44,10 @@ public class PlaneImpl implements Plane {
                 normal.getX(), normal.getY(), normal.getZ());
     }
 
+    public PlaneImpl(Vector point, Vector t, Vector r) {
+        this(point, t.cross(r));
+    }
+
     public PlaneImpl() {
         this(0, 0, 0, 0, 0, 0);
     }

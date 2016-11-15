@@ -1,6 +1,7 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.impl.SlabImpl;
 
 /**
  * <p>
@@ -16,6 +17,57 @@ import net.grian.spatium.Spatium;
  * </p>
  */
 public interface Slab {
+
+    /**
+     * Constructs a new slab from two plane equations (general form).
+     * <blockquote>
+     *         <code>ax + by + cz = d<sub>min</sub></code>
+     *     <br><code>ax + by + cz = d<sub>max</sub></code>
+     * </blockquote>
+     *
+     * @param a the x-coordinate of the normal vector
+     * @param b the y-coordinate of the normal vector
+     * @param c the z-coordinate of the normal vector
+     * @param dmin the minimum d value
+     * @param dmax the maximum d value
+     * @return a new slab
+     */
+    public static Slab create(float a, float b, float c, float dmin, float dmax) {
+        return new SlabImpl(a, b, c, dmin, dmax);
+    }
+
+    /**
+     * Constructs a new slab from two plane equations (general form).
+     * <blockquote>
+     *         <code>ax + by + cz = d<sub>min</sub></code>
+     *     <br><code>ax + by + cz = d<sub>max</sub></code>
+     * </blockquote>
+     *
+     * @param normal the normal vector (a, b, c)
+     * @param dmin the minimum d value
+     * @param dmax the maximum d value
+     * @return a new slab
+     */
+    public static Slab create(Vector normal, float dmin, float dmax) {
+        return new SlabImpl(normal.getX(), normal.getY(), normal.getZ(), dmin, dmax);
+    }
+
+    /**
+     * Constructs a slab from two points and a normal vector.
+     *
+     * @param p1 a point on the first plane
+     * @param p2 a point on the second plane
+     * @param normal the normal
+     * @return a new slab
+     */
+    public static Slab fromPointsNormal(Vector p1, Vector p2, Vector normal) {
+        float
+                xn = normal.getX(), yn = normal.getZ(), zn = normal.getZ(),
+                d1 = xn*p1.getX() + yn*p1.getY() + zn*p1.getZ(),
+                d2 = xn*p2.getX() + yn*p2.getY() + zn*p2.getZ();
+
+        return new SlabImpl(xn, yn, zn, Math.min(d1, d2), Math.max(d1, d2));
+    }
 
     //GETTERS
 
@@ -33,8 +85,13 @@ public interface Slab {
 
     public abstract float getMaxDepth();
 
+    /**
+     * Returns the thickness of the slab. This is the distance between the two planes which enclose the slab.
+     *
+     * @return the thickness of the slab
+     */
     public default float getThickness() {
-        return getMaxDepth() - getMinDepth();
+        return (getMaxDepth() - getMinDepth()) / getNormal().getLength();
     }
 
     //CHECKERS

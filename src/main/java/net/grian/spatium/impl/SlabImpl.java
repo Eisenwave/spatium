@@ -17,6 +17,10 @@ public class SlabImpl implements Slab {
         this.dmax = dmax;
     }
 
+    public SlabImpl(Vector normal, float dmin, float dmax) {
+        this(normal.getX(), normal.getY(), normal.getZ(), dmin, dmax);
+    }
+
     @Override
     public Vector getNormal() {
         return Vector.fromXYZ(x, y, z);
