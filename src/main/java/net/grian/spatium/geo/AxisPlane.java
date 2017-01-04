@@ -2,12 +2,25 @@ package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
-import net.grian.spatium.impl.PlaneImpl;
+import net.grian.spatium.impl.AxisPlaneImpl;
 
 /**
  * An axis aligned plane.
  */
-public interface AxisAlignedPlane {
+public interface AxisPlane extends Plane {
+
+    /**
+     * Creates a new plane, as seen in the general form:
+     * <blockquote>
+     *     <code>ax + by + cz = d</code>
+     * </blockquote>
+     * With <code>d</code> being the specified depth.
+     *
+     * @return a new axis plane
+     */
+    public static AxisPlane create(Axis axis, float depth) {
+        return new AxisPlaneImpl(axis, depth);
+    }
 
     //GETTERS
 
@@ -64,8 +77,26 @@ public interface AxisAlignedPlane {
 
     //CHECKERS
 
-    public default boolean equals(AxisAlignedPlane plane) {
+    public default boolean equals(AxisPlane plane) {
         return this.getAxis() == plane.getAxis() && this.getDepth() == plane.getDepth();
+    }
+
+    /**
+     * Returns whether this plane contains the point.
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @param z the z-coordinate of the point
+     * @return whether this plane contains the point
+     */
+    @Override
+    public default boolean contains(float x, float y, float z) {
+        switch (getAxis()) {
+            case X: return Spatium.equals(getDepth(), x);
+            case Y: return Spatium.equals(getDepth(), y);
+            case Z: return Spatium.equals(getDepth(), z);
+            default: throw new IllegalStateException("no axis");
+        }
     }
 
     /**
@@ -74,13 +105,9 @@ public interface AxisAlignedPlane {
      * @param point the point
      * @return whether this plane contains the point
      */
+    @Override
     public default boolean contains(Vector point) {
-        switch (getAxis()) {
-            case X: return Spatium.equals(getDepth(), point.getX());
-            case Y: return Spatium.equals(getDepth(), point.getY());
-            case Z: return Spatium.equals(getDepth(), point.getZ());
-            default: throw new IllegalStateException("no axis");
-        }
+        return contains(point.getX(), point.getY(), point.getZ());
     }
 
     //SETTERS
@@ -91,7 +118,7 @@ public interface AxisAlignedPlane {
      * @param axis the axis
      * @return itself
      */
-    public abstract AxisAlignedPlane setAxis(Axis axis);
+    public abstract AxisPlane setAxis(Axis axis);
 
     /**
      * Changes the depth <b>d</b> of the plane.
@@ -100,7 +127,22 @@ public interface AxisAlignedPlane {
      * @return itself
      * @see #getDepth()
      */
-    public abstract AxisAlignedPlane setDepth(float depth);
+    public abstract AxisPlane setDepth(float depth);
+
+    @Override
+    public default Plane setNormal(float x, float y, float z) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public default Plane setCenter(float x, float y, float z) {
+        switch (getAxis()) {
+            case X: return setDepth(x);
+            case Y: return setDepth(y);
+            case Z: return setDepth(z);
+            default: throw new IllegalStateException("no axis");
+        }
+    }
 
     //MISC
 
@@ -111,13 +153,13 @@ public interface AxisAlignedPlane {
      */
     public default Plane toPlane() {
         switch (getAxis()) {
-            case X: return new PlaneImpl(1, 0, 0, getDepth());
-            case Y: return new PlaneImpl(0, 1, 0, getDepth());
-            case Z: return new PlaneImpl(0, 0, 1, getDepth());
+            case X: return Plane.fromGeneral(1, 0, 0, getDepth());
+            case Y: return Plane.fromGeneral(0, 1, 0, getDepth());
+            case Z: return Plane.fromGeneral(0, 0, 1, getDepth());
             default: throw new IllegalStateException("no axis");
         }
     }
 
-    public abstract AxisAlignedPlane clone();
+    public abstract AxisPlane clone();
 
 }

@@ -1,6 +1,5 @@
 package net.grian.spatium.geo;
 
-
 import net.grian.spatium.impl.OrientedBBImpl;
 
 /**

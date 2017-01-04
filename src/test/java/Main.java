@@ -4,19 +4,36 @@ import net.grian.spatium.geo.Vector;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.transform.Quaternion;
 import net.grian.spatium.transform.Transformations;
+import net.grian.spatium.util.DiscreteMath;
 import net.grian.spatium.util.PrimMath;
 
 public class Main {
 
+    static int k;
+
     public static void main(String[] args) {
+        System.out.println(k+1);
         doMyHomework();
         doMyHomework2();
+        doMyHomework3();
+        doMyHomework4();
         testPlanes();
         testMatrixSquare();
         testMatrixRotations();
         testMinecraftQuaternions();
         testQuaternionRotations();
         testVectorYawPitchSetters();
+    }
+
+    public static void doMyHomework4() {
+        System.out.println("DOING HOMEWORK 4");
+        long[] nums = {20, 4, 9, 22, 13, 21, 12, 6};
+        for (long num : nums) {
+            double res1 = Math.pow(num, 13) % 33;
+            System.out.println(num+" ^ 13 (mod 33) = "+res1);
+            double res2 = Math.pow(res1, 17) % 33;
+            System.out.println(res1+" ^ 17 (mod 33) = "+res2);
+        }
     }
 
     public static void testMatrixSquare() {
@@ -95,6 +112,13 @@ public class Main {
 
         System.out.println("A x B = "+Matrix.product(a, b));
         System.out.println("B x A = "+Matrix.product(b, a));
+    }
+
+    public static void doMyHomework3() {
+        System.out.println("DOING HOMEWORK 3");
+        for (int i = 1; i<=100; i++)
+            if (DiscreteMath.divisorCount(i) == 5) System.out.println(i);
+
     }
 
     public static void testPlanes() {

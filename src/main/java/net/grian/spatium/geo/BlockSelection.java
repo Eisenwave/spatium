@@ -3,7 +3,7 @@ package net.grian.spatium.geo;
 import net.grian.spatium.impl.BlockSelectionImpl;
 import net.grian.spatium.util.PrimMath;
 
-public interface BlockSelection extends Iterable<BlockVector> {
+public interface BlockSelection extends Space, Iterable<BlockVector> {
 
     /**
      * Creates a new bounding box between two points.
@@ -139,12 +139,23 @@ public interface BlockSelection extends Iterable<BlockVector> {
     }
 
     /**
-     * Returns the volume of the bounding box.
+     * Returns the volume of the bounding box in blocks.
      *
-     * @return the volume of the bounding box
+     * @return the volume of the bounding box in blocks
      */
-    public default int getVolume() {
+    public default int getBlockCount() {
         return getSizeX() * getSizeY() * getSizeZ();
+    }
+
+    @Override
+    public default float getVolume() {
+        return getBlockCount();
+    }
+
+    @Override
+    public default float getSurfaceArea() {
+        int x = getSizeX(), y = getSizeY(), z = getSizeZ();
+        return (x * y + x * z + y * z) * 2;
     }
 
     // CHECKERS

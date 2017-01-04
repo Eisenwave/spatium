@@ -87,7 +87,7 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of two {@link AxisAlignedPlane}s in the form of a {@link Ray}.
+     * Returns the intersection of two {@link AxisPlane}s in the form of a {@link Ray}.
      * There is three possible scenarios:
      * <ul>
      *     <li>the planes are parallel thus there is no intersection, the result is null</li>
@@ -99,7 +99,7 @@ public final class Intersections {
      * @param b the second plane
      * @return the intersection of the planes or null
      */
-    public static Ray of(AxisAlignedPlane a, AxisAlignedPlane b) {
+    public static Ray of(AxisPlane a, AxisPlane b) {
         switch (a.getAxis()) {
             case X: switch (b.getAxis()) {
                 case X: return null;
@@ -153,13 +153,13 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of a {@link Ray} and an {@link AxisAlignedPlane} in the form of a point ({@link Vector}).
+     * Returns the intersection of a {@link Ray} and an {@link AxisPlane} in the form of a point ({@link Vector}).
      *
      * @param ray the ray
      * @param plane the plane
      * @return a new point of intersection
      */
-    public static Vector of(Ray ray, AxisAlignedPlane plane) {
+    public static Vector of(Ray ray, AxisPlane plane) {
         return ray.getPoint(Rays.cast(ray, plane));
     }
 
@@ -217,14 +217,14 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of an {@link AxisAlignedBB} and an {@link AxisAlignedPlane} in the form of a
+     * Returns the intersection of an {@link AxisAlignedBB} and an {@link AxisPlane} in the form of a
      * {@link Path} which represents the edge of the bounding box at the point of intersection.
      *
      * @param box the bounding box
      * @param plane the plane
      * @return a new linear path on the box or null
      */
-    public static Path of(AxisAlignedBB box, AxisAlignedPlane plane) {
+    public static Path of(AxisAlignedBB box, AxisPlane plane) {
         if (!Collisions.test(box, plane)) return null;
         float depth = plane.getDepth();
         Vector a, b, c, d;

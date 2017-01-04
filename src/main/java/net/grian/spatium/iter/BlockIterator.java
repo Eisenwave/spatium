@@ -15,7 +15,7 @@ public class BlockIterator implements Iterator<BlockVector> {
         this.x = blocks.getSizeX();
         this.y = blocks.getSizeY();
         this.z = blocks.getSizeZ();
-        this.limit = blocks.getVolume();
+        this.limit = blocks.getBlockCount();
     }
 
     @Override

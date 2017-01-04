@@ -102,13 +102,13 @@ public final class Collisions {
     }
 
 	/**
-	 * Returns whether two {@link AxisAlignedPlane}s collide/intersect.
+	 * Returns whether two {@link AxisPlane}s collide/intersect.
      *
 	 * @param a the first plane
  	 * @param b the second plane
 	 * @return whether the planes collide intersect
 	 */
-	public static boolean test(AxisAlignedPlane a, AxisAlignedPlane b) {
+	public static boolean test(AxisPlane a, AxisPlane b) {
 		return a.getAxis() != b.getAxis() || Spatium.equals(a.getDepth(), b.getDepth());
 	}
 
@@ -127,13 +127,13 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether an {@link AxisAlignedBB} and an {@link AxisAlignedPlane} collide.
+     * Tests whether an {@link AxisAlignedBB} and an {@link AxisPlane} collide.
      *
      * @param box the bounding box
      * @param plane the plane
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB box, AxisAlignedPlane plane) {
+    public static boolean test(AxisAlignedBB box, AxisPlane plane) {
         float d = plane.getDepth();
         switch (plane.getAxis()) {
             case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
@@ -156,13 +156,13 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether a {@link Sphere} and an {@link AxisAlignedPlane} collide.
+     * Tests whether a {@link Sphere} and an {@link AxisPlane} collide.
      *
      * @param sphere the sphere
      * @param plane the plane
      * @return whether the sphere and the plane collide
      */
-    public static boolean test(Sphere sphere, AxisAlignedPlane plane) {
+    public static boolean test(Sphere sphere, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return Math.abs(sphere.getX() - plane.getDepth()) <= sphere.getRadius();
             case Y: return Math.abs(sphere.getY() - plane.getDepth()) <= sphere.getRadius();
@@ -205,14 +205,14 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link AxisAlignedPlane} collide. This condition is fulfilled if either the
+     * Tests whether a {@link Ray} and a {@link AxisPlane} collide. This condition is fulfilled if either the
      * ray is not perpendicular to the plane or the ray lies within the plane.
      *
      * @param ray the ray
      * @param plane the plane
      * @return whether the ray and the plane collide
      */
-    public static boolean test(Ray ray, AxisAlignedPlane plane) {
+    public static boolean test(Ray ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return
                     !(Spatium.equals(ray.getDirY(), 0) &&  Spatium.equals(ray.getDirZ(), 0)) ||
@@ -280,14 +280,14 @@ public final class Collisions {
 	}
 
 	/**
-	 * Tests whether a {@link Triangle} and an {@link AxisAlignedPlane} collide. This operation is performed by
+	 * Tests whether a {@link Triangle} and an {@link AxisPlane} collide. This operation is performed by
 	 * checking if not all points of triangle are on the same side of the plane.
 	 *
 	 * @param triangle the triangle
 	 * @param plane the plane
 	 * @return whether the triangle and the plane collide
 	 */
-	public static boolean test(Triangle triangle, AxisAlignedPlane plane) {
+	public static boolean test(Triangle triangle, AxisPlane plane) {
 		switch (plane.getAxis()) {
 			case X: return !(
 					triangle.getA().getX() > plane.getDepth() ==

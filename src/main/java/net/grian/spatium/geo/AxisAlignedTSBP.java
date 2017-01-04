@@ -1,10 +1,11 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.enums.Direction;
 
-public interface AxisAlignedTSBP {
+public interface AxisAlignedTSBP extends SpatiumObject {
 
     // GETTERS
 

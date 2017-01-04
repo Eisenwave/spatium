@@ -1,23 +1,24 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.enums.Axis;
-import net.grian.spatium.geo.AxisAlignedPlane;
+import net.grian.spatium.geo.AxisPlane;
+import net.grian.spatium.geo.Plane;
 
-public class AxisAlignedPlaneImpl implements AxisAlignedPlane {
+public class AxisPlaneImpl implements AxisPlane {
 
     private Axis axis;
     private float depth;
 
-    public AxisAlignedPlaneImpl(Axis axis, float depth) {
+    public AxisPlaneImpl(Axis axis, float depth) {
         this.axis = axis;
         this.depth = depth;
     }
 
-    public AxisAlignedPlaneImpl(Axis axis) {
+    public AxisPlaneImpl(Axis axis) {
         this(axis, 0);
     }
 
-    public AxisAlignedPlaneImpl(AxisAlignedPlaneImpl copyOf) {
+    public AxisPlaneImpl(AxisPlaneImpl copyOf) {
         this.axis = copyOf.axis;
         this.depth = copyOf.depth;
     }
@@ -33,18 +34,18 @@ public class AxisAlignedPlaneImpl implements AxisAlignedPlane {
     }
 
     @Override
-    public AxisAlignedPlane setAxis(Axis axis) {
+    public AxisPlane setAxis(Axis axis) {
         return null;
     }
 
     @Override
-    public AxisAlignedPlane setDepth(float depth) {
+    public AxisPlane setDepth(float depth) {
         this.depth = depth;
         return this;
     }
 
     @Override
-    public AxisAlignedPlane clone() {
-        return new AxisAlignedPlaneImpl(this);
+    public AxisPlane clone() {
+        return new AxisPlaneImpl(this);
     }
 }

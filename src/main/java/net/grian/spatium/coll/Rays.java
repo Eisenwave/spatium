@@ -183,7 +183,7 @@ public final class Rays {
 
     /**
      * <p>
-     *     Tests where a {@link Ray} and an {@link AxisAlignedPlane} collide.
+     *     Tests where a {@link Ray} and an {@link AxisPlane} collide.
      * </p>
      * <p>
      *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
@@ -198,7 +198,7 @@ public final class Rays {
      * @param plane the plane
      * @return where the ray and the plane collide or {@link Float#NaN}
      */
-    public static float cast(Ray ray, AxisAlignedPlane plane) {
+    public static float cast(Ray ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: {
                 float t = (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
@@ -240,7 +240,7 @@ public final class Rays {
 
     /**
      * <p>
-     *     Tests where a {@link Ray} and an {@link AxisAlignedPlane} collide.
+     *     Tests where a {@link Ray} and an {@link AxisPlane} collide.
      * </p>
      * <p>
      *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
@@ -354,19 +354,51 @@ public final class Rays {
             return null;
 
         Vector origin = ray.getOrigin();
-        float
-                tmin, //signed distance from min plane to origin divided by denominator
-                tmax; //signed distance from max plane to origin divided by denominator
-        if (denominator > 0) {
-            tmin = normal.dot( slab.getMinPoint().subtract(origin) );
-            tmax = normal.dot( slab.getMaxPoint().subtract(origin) );
-        }
-        else {
-            tmax = normal.dot( slab.getMinPoint().subtract(origin) );
-            tmin = normal.dot( slab.getMaxPoint().subtract(origin) );
-        }
+        if (denominator > 0) return new float[] {
+                normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
+                normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
+        };
+        else return new float[]{
+                normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
+                normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
+        };
+    }
 
-        return new float[] {tmin / denominator, tmax / denominator};
+    /**
+     * <p>
+     *     Tests where a {@link Ray} enters and exits an {@link AxisSlab}.
+     * </p>
+     * <p>
+     *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     {@link Ray#setLength(float)}.
+     * </p>
+     *
+     * @param ray the ray
+     * @param slab the slab
+     * @return the entry and exit points of the ray or null
+     */
+    public static float[] pierce(Ray ray, AxisSlab slab) {
+        float d;
+        switch (slab.getAxis()) {
+            case X: d = ray.getDirX(); break;
+            case Y: d = ray.getDirY(); break;
+            case Z: d = ray.getDirZ(); break;
+            default: throw new IllegalStateException("slab has no axis");
+        }
+        if (Spatium.equals(d, 0)) return null;
+
+        if (d >= 0) return new float[] {
+                (slab.getMinDepth() - ray.getOriginX()) / d,
+                (slab.getMaxDepth() - ray.getOriginX()) / d
+        };
+        else return new float[]{
+                (slab.getMaxDepth() - ray.getOriginX()) / d,
+                (slab.getMinDepth() - ray.getOriginX()) / d
+        };
     }
 
     /**

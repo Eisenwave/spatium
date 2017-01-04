@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/spatium.iml" filepath="$PROJECT_DIR$/spatium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../VoxelVert/vv.iml" filepath="$PROJECT_DIR$/../VoxelVert/vv.iml" />
     </modules>
   </component>
 </project>

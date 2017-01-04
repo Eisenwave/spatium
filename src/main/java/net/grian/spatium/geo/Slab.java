@@ -119,8 +119,22 @@ public interface Slab {
 
     //SETTERS
 
+    /**
+     * Sets the normal of the slab to specified coordinates.
+     *
+     * @param x the x-coordinate of the normal
+     * @param y the y-coordinate of the normal
+     * @param z the z-coordinate of the normal
+     * @return itself
+     */
     public abstract Slab setNormal(float x, float y, float z);
 
+    /**
+     * Sets the normal of the slab to a specified vector.
+     *
+     * @param normal the normal vector
+     * @return itself
+     */
     public default Slab setNormal(Vector normal) {
         return setNormal(normal.getX(), normal.getY(), normal.getZ());
     }

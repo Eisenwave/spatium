@@ -1,13 +1,16 @@
 package net.grian.spatium.enums;
 
 /**
- * A face or side of a cube.
- * 
- * <br><br>This enum is specific to Minecraft space and for strictly
- * mathematical uses, its use is not recommended. Use {@link Direction} instead.
+ * <p>
+ *     A face or side of a cube.
+ * </p>
+ * <p>
+ *     This enum is specific to Minecraft space and for strictly mathematical uses, its use is not recommended.
+ *     Use {@link Direction} instead.
+ * </p>
  */
 public enum Face {
-    UP    (Direction.POSITIVE_Y),
+    UP    (Direction.POSITIVE_X),
     DOWN  (Direction.NEGATIVE_Y),
     NORTH (Direction.NEGATIVE_Z),
     SOUTH (Direction.POSITIVE_Z),
