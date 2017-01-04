@@ -22,7 +22,7 @@ public class SqrtCache {
         if (val < 0 || Double.isNaN(val)) return Double.NaN;
         if (Double.isInfinite(val)) return Double.POSITIVE_INFINITY;
         if (val == 0) return val;
-        if (val > max) return Math.sqrt(val);
+        if (val >= max) return Math.sqrt(val);
 
         return cache[(int)(val * multi)];
     }
