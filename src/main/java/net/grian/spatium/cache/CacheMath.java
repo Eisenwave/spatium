@@ -30,6 +30,8 @@ public final class CacheMath {
     private static SqrtCache cacheSqrt = null;
     private static BinomCache cacheBinom = null;
 
+    private static int sqrtPrecision = 0xFF;
+
     public static int choose(int n, int k) {
         return cacheBinom==null? Spatium.choose(n, k) : cacheBinom.choose(n, k);
     }
@@ -62,6 +64,22 @@ public final class CacheMath {
         return cacheSqrt==null? Math.sqrt(number) : cacheSqrt.sqrt(number);
     }
 
+    public static int getSqrtPrecision() {
+        return sqrtPrecision;
+    }
+
+    public static SqrtCache getCacheSqrt() {
+        return cacheSqrt;
+    }
+
+    public static AsinCache getCacheAsin() {
+        return cacheAsin;
+    }
+
+    public static SinCache getCacheSin() {
+        return cacheSin;
+    }
+
     public static void setBinomCapacity(int capacity) {
         if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
         if (cacheBinom==null || cacheBinom.getCapacity() < capacity) {
@@ -83,18 +101,29 @@ public final class CacheMath {
         }
     }
 
+    @Deprecated
     public static void setSqrtCapacity(int capacity) {
-        if (capacity < 0) throw new IllegalArgumentException("capacity must be positive");
-        if (cacheSqrt==null || cacheSqrt.getCapacity() < capacity) {
-            cacheSqrt = new SqrtCache(capacity, cacheSqrt==null? 1 : cacheSqrt.getMax());
-        }
+        if (capacity <= 0) throw new IllegalArgumentException("capacity must be at least 1");
+        if (cacheSqrt==null)
+            cacheSqrt = new SqrtCache(capacity, 1);
+        else if (cacheSqrt.getCapacity() < capacity)
+            cacheSqrt = new SqrtCache(capacity, cacheSqrt.getMax());
+    }
+
+    public static void setSqrtPrecision(int precision) {
+        if (precision <= 0) throw new IllegalArgumentException("precision must be at least 1");
+        if (cacheSqrt==null)
+            cacheSqrt = new SqrtCache((sqrtPrecision = precision), 1);
+        else if (sqrtPrecision < precision)
+            cacheSqrt = new SqrtCache((int) ((sqrtPrecision = precision) * cacheSqrt.getMax()), cacheSqrt.getMax());
     }
 
     public static void setSqrtMaximum(double max) {
         if (max < 0) throw new IllegalArgumentException("maximum must be positive");
-        if (cacheSqrt==null || cacheSqrt.getMax() < max) {
-            cacheSqrt = new SqrtCache(cacheSqrt==null? 1 : cacheSqrt.getCapacity(), max);
-        }
+        if (cacheSqrt==null)
+            cacheSqrt = new SqrtCache((int) (sqrtPrecision * max), max);
+        else if (cacheSqrt.getMax() < max)
+            cacheSqrt = new SqrtCache((int) (sqrtPrecision * max), max);
     }
 
 }
