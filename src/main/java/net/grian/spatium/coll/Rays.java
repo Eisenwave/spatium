@@ -510,4 +510,29 @@ public final class Rays {
         return t;
     }
 
+    /**
+     * Tests where a moving {@link AxisAlignedBB} enters and exits a static {@link AxisAlignedBB}.
+     *
+     * @param a the first, moving box
+     * @param motion the motion of the first bounding box
+     * @param b the second, static box
+     * @return the collision
+     */
+    public static RayPierceCollision<AxisAlignedBB> pierce(AxisAlignedBB a, Vector motion, AxisAlignedBB b) {
+        //minkowski sum of a rotated 180 degrees around origin (a') and b
+        AxisAlignedBB minkowski = AxisAlignedBB.fromPoints(
+                b.getMinX()-a.getMaxX(),
+                b.getMinY()-a.getMaxY(),
+                b.getMinZ()-a.getMaxZ(),
+                b.getMaxX()-a.getMinX(),
+                b.getMaxY()-a.getMinY(),
+                b.getMaxZ()-a.getMinZ());
+
+        Ray ray = Ray.fromOriginAndDirection(0, 0, 0, motion.getX(), motion.getY(), motion.getZ());
+        float[] pierce = pierce(ray, minkowski);
+        if (pierce == null) return new RayPierceCollision<>(ray, b);
+
+        return new RayPierceCollision<>(CollisionEngine.CollisionResult.POSITIVE, ray, b, pierce[0], pierce[1]);
+    }
+
 }

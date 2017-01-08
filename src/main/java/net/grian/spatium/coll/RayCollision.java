@@ -25,4 +25,5 @@ public class RayCollision<T> extends Collision<Ray, T> {
     public float getPoint() {
         return point;
     }
+
 }
