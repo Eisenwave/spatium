@@ -46,5 +46,4 @@ public final class IOMath {
         return (short) ( (bytes[1]&0xFF)<<8 | (bytes[0]&0xFF) );
     }
 
-
 }
