@@ -127,6 +127,12 @@ public class SphereImpl implements Sphere {
 
     // MISC
 
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+"{center="+getCenter()+",r="+getRadius()+"}";
+    }
+
     @Override
     public Sphere clone() {
         return new SphereImpl(this);

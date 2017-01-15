@@ -178,6 +178,12 @@ public class RayImpl implements Ray {
 
     // MISC
 
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+"{o="+getOrigin()+",d="+getDirection()+"}";
+    }
+
     @Override
     public RayImpl clone() {
         return new RayImpl(this);

@@ -186,6 +186,19 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
     }
 
     /**
+     * Returns whether this block selection contains another selection
+     *
+     * @param box the other selection
+     * @return whether this block selection contains the block
+     */
+    public default boolean contains(BlockSelection box) {
+        return
+                box.getMinX() >= this.getMinX() && box.getMaxX() <= this.getMaxX() &&
+                box.getMinY() >= this.getMinY() && box.getMaxY() <= this.getMaxY() &&
+                box.getMinZ() >= this.getMinZ() && box.getMaxZ() <= this.getMaxZ();
+    }
+
+    /**
      * Returns whether this block selection contains a block of given coordinates.
      *
      * @param block the block

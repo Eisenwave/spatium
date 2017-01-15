@@ -161,7 +161,7 @@ public class BlockVectorImpl implements BlockVector {
 
     @Override
     public String toString() {
-        return this.getClass().getName()+"["+x+","+y+","+z+"]";
+        return getClass().getSimpleName()+"["+x+","+y+","+z+"]";
     }
 
 }

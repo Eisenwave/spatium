@@ -241,7 +241,7 @@ public class VectorImpl implements Vector {
 
     @Override
     public String toString() {
-        return "("+x+", "+y+", "+z+")";
+        return getClass().getSimpleName()+"["+x+","+y+","+z+"]";
     }
 
     @Override

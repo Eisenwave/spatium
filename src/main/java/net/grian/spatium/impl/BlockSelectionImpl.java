@@ -117,6 +117,11 @@ public class BlockSelectionImpl implements BlockSelection {
     }
 
     @Override
+    public String toString() {
+        return getClass().getSimpleName()+"{min="+getMin()+",max="+getMax()+"}";
+    }
+
+    @Override
     public BlockSelection clone() {
         return new BlockSelectionImpl(this);
     }
