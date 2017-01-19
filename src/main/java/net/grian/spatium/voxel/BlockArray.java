@@ -184,23 +184,6 @@ public class BlockArray implements Bitmap3D, Serializable, Cloneable {
         return arrayLight[x][y][z];
     }
 
-    /**
-     * Returns the total amount of visible blocks in this array.
-     *
-     * @return the amount of blocks
-     */
-    public int size() {
-        final int limX = getSizeX(), limY = getSizeY(), limZ = getSizeZ();
-        int count = 0;
-
-        for (int x = 0; x<limX; x++)
-            for (int y = 0; y<limY; y++)
-                for (int z = 0; z<limZ; z++)
-                    if (contains(x,y,z)) count++;
-
-        return count;
-    }
-
     //CHECKERS
 
     /**
@@ -226,15 +209,16 @@ public class BlockArray implements Bitmap3D, Serializable, Cloneable {
     /**
      * Returns whether the array contains a non-air block at the given position.
      *
-     * @param x the x position
-     * @param y the y position
-     * @param z the z position
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
      * @return whether the array contains a block
      */
     @Override
     public boolean contains(int x, int y, int z) {
         return getId(x, y, z) != 0;
     }
+
 
     /**
      * Returns whether the array contains a non-air block at the given position.

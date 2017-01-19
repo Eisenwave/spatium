@@ -76,6 +76,11 @@ public class ByteBitmap3D implements Bitmap3D, Serializable, Cloneable {
     }
 
     @Override
+    public String toString() {
+        return ByteBitmap3D.class.getSimpleName()+"{x="+getSizeX()+",y="+getSizeY()+",z="+getSizeZ()+"}";
+    }
+
+    @Override
     public ByteBitmap3D clone() {
         return new ByteBitmap3D(this);
     }

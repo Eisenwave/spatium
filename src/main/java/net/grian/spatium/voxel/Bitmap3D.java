@@ -63,4 +63,21 @@ public interface Bitmap3D {
         return contains(pos.getX(), pos.getY(), pos.getZ());
     }
 
+    /**
+     * Returns the total amount of elements in this bitmap.
+     *
+     * @return the total amount of elements in this bitmap
+     */
+    default int size() {
+        final int limX = getSizeX(), limY = getSizeY(), limZ = getSizeZ();
+        int count = 0;
+
+        for (int x = 0; x<limX; x++)
+            for (int y = 0; y<limY; y++)
+                for (int z = 0; z<limZ; z++)
+                    if (contains(x, y, z)) count++;
+
+        return count;
+    }
+
 }

@@ -1,6 +1,6 @@
 package net.grian.spatium.voxel;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("unused")
 public class BlockKey {
 
     public final static BlockKey

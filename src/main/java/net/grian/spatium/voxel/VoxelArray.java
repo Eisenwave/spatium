@@ -1,6 +1,5 @@
 package net.grian.spatium.voxel;
 
-import com.sun.istack.internal.Nullable;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
@@ -135,7 +134,6 @@ public class VoxelArray implements Bitmap3D, Cloneable, Serializable, Iterable<V
      * @param z the z-coordinate
      * @return the voxel at the specified coordinates
      */
-    @Nullable
     public Voxel getVoxel(int x, int y, int z) {
         return ColorMath.isVisible(getRGB(x, y, z))? new Voxel(x, y, z) : null;
     }
