@@ -17,7 +17,7 @@ public final class PrimMath {
 	}
 	
 	public static int floorAsInt(float f) {
-		return (f % 1 == 0) ? (int)f : (f < 0) ? (int)--f : (int)f;
+		return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
 	}
 	
 	public static int floorAsInt(double d) {
@@ -534,7 +534,7 @@ public final class PrimMath {
 	}
 	
 	//// CLAMP ////
-	public static long clampLong(long min, long val, long max) {
+	public static long clamp(long min, long val, long max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -543,7 +543,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static int clampInt(int min, int val, int max) {
+	public static int clamp(int min, int val, int max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -552,7 +552,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static short clampShort(short min, short val, short max) {
+	public static short clamp(short min, short val, short max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -561,7 +561,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static byte clampByte(byte min, byte val, byte max) {
+	public static byte clamp(byte min, byte val, byte max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -570,7 +570,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static double clampDouble(double min, double val, double max) {
+	public static double clamp(double min, double val, double max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -579,7 +579,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static float clampFloat(float min, float val, float max) {
+	public static float clamp(float min, float val, float max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -588,7 +588,7 @@ public final class PrimMath {
 						val;
 	}
 	
-	public static char clampChar(char min, char val, char max) {
+	public static char clamp(char min, char val, char max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		return
@@ -596,5 +596,92 @@ public final class PrimMath {
 					(val > max) ? max :
 						val;
 	}
+
+	//MAX
+
+    public static long max(long a, long b) {
+        return a>b? a : b;
+    }
+
+    public static int max(int a, int b) {
+        return a>b? a : b;
+    }
+
+    public static double max(double a, double b) {
+        return a>b? a : b;
+    }
+
+    public static float max(float a, float b) {
+        return a>b? a : b;
+    }
+
+    //TRIPPLE MAX
+
+    public static int max(int a, int b, int c) {
+        return max(a, max(b, c));
+    }
+
+    //VARARGS MAX
+
+    public static long max(long... nums) {
+        long max = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > max) max = nums[i];
+        return max;
+    }
+
+    public static int max(int... nums) {
+        int max = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > max) max = nums[i];
+        return max;
+    }
+
+    public static double max(double... nums) {
+        double max = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > max) max = nums[i];
+        return max;
+    }
+
+    public static float max(float... nums) {
+        float max = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > max) max = nums[i];
+        return max;
+    }
+
+    //MIN
+
+    public static long min(long a, long b) {
+        return a<b? a : b;
+    }
+
+    public static int min(int a, int b) {
+        return a<b? a : b;
+    }
+
+    public static double min(double a, double b) {
+        return a<b? a : b;
+    }
+
+    public static float min(float a, float b) {
+        return a<b? a : b;
+    }
+
+    //TRIPPLE MIN
+
+    public static int min(int a, int b, int c) {
+        return min(a, min(b, c));
+    }
+
+    //VARARGS MIN
+
+    public static int min(int... nums) {
+        int min = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] < min) min = nums[i];
+        return min;
+    }
 
 }

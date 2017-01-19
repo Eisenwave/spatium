@@ -528,7 +528,7 @@ public final class Rays {
                 b.getMaxY()-a.getMinY(),
                 b.getMaxZ()-a.getMinZ());
 
-        Ray ray = Ray.fromOriginAndDirection(0, 0, 0, motion.getX(), motion.getY(), motion.getZ());
+        Ray ray = Ray.fromOD(0, 0, 0, motion.getX(), motion.getY(), motion.getZ());
         float[] pierce = pierce(ray, minkowski);
         if (pierce == null) return new RayPierceCollision<>(ray, b);
 

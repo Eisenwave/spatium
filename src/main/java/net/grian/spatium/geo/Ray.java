@@ -2,6 +2,7 @@ package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.RayImpl;
+import net.grian.spatium.iter.BlockIntervalIterator;
 import net.grian.spatium.iter.IntervalIterator;
 
 import java.util.Iterator;
@@ -22,7 +23,7 @@ public interface Ray extends Path {
      * @param zd the z-coordinate of the direction
      * @return a new ray
      */
-    public static Ray fromOriginAndDirection(float xo, float yo, float zo, float xd, float yd, float zd) {
+    public static Ray fromOD(float xo, float yo, float zo, float xd, float yd, float zd) {
         return new RayImpl(xo, yo, zo, xd, yd, zd);
     }
 
@@ -33,7 +34,7 @@ public interface Ray extends Path {
      * @param dir the direction
      * @return a new ray
      */
-    public static Ray fromOriginAndDirection(Vector origin, Vector dir) {
+    public static Ray fromOD(Vector origin, Vector dir) {
         return new RayImpl(origin, dir);
     }
 
@@ -273,6 +274,28 @@ public interface Ray extends Path {
      */
     public default Iterator<Vector> intervalIterator(float interval) {
         return new IntervalIterator(this, interval);
+    }
+
+    /**
+     * <p>
+     *     Returns a new interval iterator for this ray. This iterator will return all points in a given interval that
+     *     are on a ray.
+     * </p>
+     * <p>
+     *     For example, a ray with length 1 will produce an iterator that iterates over precisely 3 points if the
+     *     interval is 0.5 (or 0.4).
+     * </p>
+     * <p>
+     *     To get an iterator that iterates over a specified amount of points {@code x}, make use of
+     *     <blockquote>
+     *         {@code intervalIterator( getLength() / (x - 1) )}
+     *     </blockquote>
+     * </p>
+     *
+     * @return a new interval iterator
+     */
+    public default Iterator<BlockVector> blockIntervalIterator() {
+        return new BlockIntervalIterator(this);
     }
 
     /**

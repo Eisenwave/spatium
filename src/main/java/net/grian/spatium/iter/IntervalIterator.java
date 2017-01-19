@@ -32,4 +32,5 @@ public class IntervalIterator implements Iterator<Vector> {
         i--; x += xi; y += yi; z += zi;
         return result;
     }
+
 }

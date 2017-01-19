@@ -492,7 +492,7 @@ public final class Strings {
 		String[] lines = new String[parts];
 		for (int i = 0; i<lines.length; i++) {
 			int min = i*length;
-			int max = PrimMath.clampInt(0, (i+1)*length, str.length());
+			int max = PrimMath.clamp(0, (i+1)*length, str.length());
 			lines[i] = str.substring(min, max);
 		}
 		

@@ -2,6 +2,7 @@ package net.grian.spatium.geo;
 
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.BlockVectorImpl;
+import net.grian.spatium.util.PrimMath;
 
 public interface BlockVector extends SpatiumObject {
 
@@ -11,6 +12,10 @@ public interface BlockVector extends SpatiumObject {
 
     public static BlockVector fromXYZ(int x, int y, int z) {
         return new BlockVectorImpl(x, y, z);
+    }
+
+    public static BlockVector fromXYZ(float x, float y, float z) {
+        return fromXYZ(PrimMath.floorAsInt(x), PrimMath.floorAsInt(y), PrimMath.floorAsInt(z));
     }
 
     public static BlockVector fromVector(Vector vector) {

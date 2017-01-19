@@ -100,6 +100,13 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
         return (a * b + a * c + b * c) * 2;
     }
 
+    // CHECKERS
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AxisAlignedBB && equals((AxisAlignedBB) obj);
+    }
+
     // SETTERS
 
     @Override
@@ -168,6 +175,12 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     // MISC
+
+
+    @Override
+    public String toString() {
+        return AxisAlignedBBImpl.class.getSimpleName()+"{min="+getMin()+",max="+getMax()+"}";
+    }
 
     @Override
     public AxisAlignedBBImpl clone() {

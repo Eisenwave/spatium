@@ -151,7 +151,7 @@ public final class Collisions {
      * @return whether the sphere and the plane collide
      */
 	public static boolean test(Sphere sphere, Plane plane) {
-        Ray sphereToPlane = Ray.fromOriginAndDirection(sphere.getCenter(), plane.getNormal().multiply(-1));
+        Ray sphereToPlane = Ray.fromOD(sphere.getCenter(), plane.getNormal().multiply(-1));
         return sphereToPlane.getLengthSquared() <= sphere.getRadiusSquared();
     }
 

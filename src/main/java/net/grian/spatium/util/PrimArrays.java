@@ -867,7 +867,7 @@ public final class PrimArrays {
 		List<byte[]> splits = new ArrayList<>(count);
 		for (int i = 0; i<count; i++) {
 			int min = i*length;
-			int max = PrimMath.clampInt(0, (i+1)*length-1, array.length-1);
+			int max = PrimMath.clamp(0, (i+1)*length-1, array.length-1);
 			splits.set(i, subArray(array, min, max));
 		}
 		

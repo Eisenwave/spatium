@@ -81,7 +81,7 @@ public final class Intersections {
             /* notice the mutation of bc and ldir, which does not matter though since the result is being returned at
             this point */
             Vector origin = bc.add(ldir.multiply(t));
-            return Ray.fromOriginAndDirection(origin, direction);
+            return Ray.fromOD(origin, direction);
         }
         else return null;
     }
@@ -103,19 +103,19 @@ public final class Intersections {
         switch (a.getAxis()) {
             case X: switch (b.getAxis()) {
                 case X: return null;
-                case Y: return Ray.fromOriginAndDirection(a.getDepth(), b.getDepth(), 0, 0, 0, 1);
-                case Z: return Ray.fromOriginAndDirection(a.getDepth(), 0, b.getDepth(), 0, 1, 0);
+                case Y: return Ray.fromOD(a.getDepth(), b.getDepth(), 0, 0, 0, 1);
+                case Z: return Ray.fromOD(a.getDepth(), 0, b.getDepth(), 0, 1, 0);
                 default: throw new IllegalArgumentException("b has no axis");
             }
             case Y: switch (b.getAxis()) {
-                case X: return Ray.fromOriginAndDirection(b.getDepth(), a.getDepth(), 0, 0, 0, 1);
+                case X: return Ray.fromOD(b.getDepth(), a.getDepth(), 0, 0, 0, 1);
                 case Y: return null;
-                case Z: return Ray.fromOriginAndDirection(0, a.getDepth(), b.getDepth(), 1, 0, 0);
+                case Z: return Ray.fromOD(0, a.getDepth(), b.getDepth(), 1, 0, 0);
                 default: throw new IllegalArgumentException("b has no axis");
             }
             case Z: switch (b.getAxis()) {
-                case X: return Ray.fromOriginAndDirection(b.getDepth(), 0, a.getDepth(), 0, 1, 0);
-                case Y: return Ray.fromOriginAndDirection(0, b.getDepth(), a.getDepth(), 0, 0, 1);
+                case X: return Ray.fromOD(b.getDepth(), 0, a.getDepth(), 0, 1, 0);
+                case Y: return Ray.fromOD(0, b.getDepth(), a.getDepth(), 0, 0, 1);
                 case Z: return null;
                 default: throw new IllegalArgumentException("b has no axis");
             }
@@ -208,7 +208,7 @@ public final class Intersections {
      */
     public static Path of(Sphere sphere, Plane plane) {
         Vector sc = sphere.getCenter();
-        Ray sphereToPlane = Ray.fromOriginAndDirection(sc, plane.getNormal().multiply(-1));
+        Ray sphereToPlane = Ray.fromOD(sc, plane.getNormal().multiply(-1));
         if (sphereToPlane.getLengthSquared() > sphere.getRadiusSquared()) return null;
 
         Vector center = sphereToPlane.getPoint(Rays.cast(sphereToPlane, plane));
