@@ -3,7 +3,7 @@ package net.grian.spatium.function;
 import java.util.Objects;
 
 @FunctionalInterface
-public interface TriIntConsumer {
+public interface Int3Consumer {
 
     void accept(int x, int y, int z);
 
@@ -16,7 +16,7 @@ public interface TriIntConsumer {
         accept(x.intValue(), y.intValue(), z.intValue());
     }
 
-    default TriIntConsumer andThen(TriIntConsumer action) {
+    default Int3Consumer andThen(Int3Consumer action) {
         Objects.requireNonNull(action);
         return (x, y, z) -> {this.accept(x, y, z); action.accept(x, y, z);};
     }

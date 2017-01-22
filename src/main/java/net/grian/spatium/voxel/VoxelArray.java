@@ -173,17 +173,56 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
     }
 
     /**
+     * <p>
+     *    Returns a bit field representing the visibility of each side of the voxel.
+     * </p>
+     * <p>
+     *     A face is always visible if there is no voxel covering that face. This also applies if the voxel face can
+     *     not be covered by another voxel due to the array containing it ending at the face.
+     * </p>
+     * <p>
+     *     The ordinal of the {@link Direction} represents the index of the bit which can 0 (covered) or 1 (visible).
+     *     Checking which side is visible can be done with the formulas:
+     *     <ul>
+     *         <li><code>value >> ordinal & 1 == 1</code></li>
+     *         <li><code>value & 1 << ordinal != 0</code></li>
+     *     </ul>
+     * </p>
+     * <p>
+     *     If the returned byte is exactly 0, the voxel is covered from every side, if it is {@code 0b00111111}
+     *     the voxel is visible from every side.
+     * </p>
+     *
+     * @return a bitmap representing which faces are visible
+     */
+    public byte getVisibilityMap(int x, int y, int z) {
+        byte result = 0;
+
+        if (x==0 || !contains(x-1, y, z)) result |= (1 << Direction.NEGATIVE_X.ordinal());
+        if (y==0 || !contains(x, y-1, z)) result |= (1 << Direction.NEGATIVE_Y.ordinal());
+        if (z==0 || !contains(x, y, z-1)) result |= (1 << Direction.NEGATIVE_Z.ordinal());
+
+        if (x==sizeX-1 || !contains(x+1, y, z)) result |= (1 << Direction.POSITIVE_X.ordinal());
+        if (y==sizeY-1 || !contains(x, y+1, z)) result |= (1 << Direction.POSITIVE_Y.ordinal());
+        if (z==sizeZ-1 || !contains(x, y, z+1)) result |= (1 << Direction.POSITIVE_Z.ordinal());
+
+        return result;
+    }
+
+    /**
      * Returns the total amount of visible voxels in this array.
      *
      * @return the amount of voxels
      */
+    @SuppressWarnings("Duplicates")
+    @Override
     public int size() {
         int count = 0;
 
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
                 for (int z = 0; z<sizeZ; z++)
-                    if (ColorMath.isVisible(getRGB(x, y, z))) count++;
+                    if (contains(x, y, z)) count++;
 
         return count;
     }
@@ -558,17 +597,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
          * @return a bitmap representing which faces are visible
          */
         public byte getVisibilityMap() {
-            byte result = 0;
-
-            if (x==0 || !VoxelArray.this.contains(x-1, y, z)) result |= Direction.NEGATIVE_X.ordinal();
-            if (y==0 || !VoxelArray.this.contains(x, y-1, z)) result |= Direction.NEGATIVE_Y.ordinal();
-            if (z==0 || !VoxelArray.this.contains(x, y, z-1)) result |= Direction.NEGATIVE_Z.ordinal();
-
-            if (x==sizeX-1 || !VoxelArray.this.contains(x+1, y, z)) result |= Direction.POSITIVE_X.ordinal();
-            if (y==sizeY-1 || !VoxelArray.this.contains(x, y+1, z)) result |= Direction.POSITIVE_Y.ordinal();
-            if (z==sizeZ-1 || !VoxelArray.this.contains(x, y, z+1)) result |= Direction.POSITIVE_Z.ordinal();
-
-            return result;
+            return VoxelArray.this.getVisibilityMap(x, y, z);
         }
 
         @Override

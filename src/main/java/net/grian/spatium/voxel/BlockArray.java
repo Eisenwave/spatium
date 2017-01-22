@@ -1,6 +1,6 @@
 package net.grian.spatium.voxel;
 
-import net.grian.spatium.function.TriIntConsumer;
+import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
 
@@ -303,7 +303,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
 
     //MISC
 
-    public void forEachPos(TriIntConsumer action) {
+    public void forEachPos(Int3Consumer action) {
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
                 for (int z = 0; z<sizeZ; z++)

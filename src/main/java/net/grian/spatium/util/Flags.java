@@ -172,4 +172,40 @@ public final class Flags {
         return flags ^ 1 << index;
     }
 
+    public static int bitSum(long number) {
+        int result = 0;
+        for (int i = 0; i<Long.SIZE; i++)
+            if (((number >> i) & 1) == 1)
+                result++;
+
+        return result;
+    }
+
+    public static int bitSum(int number) {
+        int result = 0;
+        for (int i = 0; i<Integer.SIZE; i++)
+            if (((number >> i) & 1) == 1)
+                result++;
+
+        return result;
+    }
+
+    public static int bitSum(short number) {
+        int result = 0;
+        for (int i = 0; i<Short.SIZE; i++)
+            if (((number >> i) & 1) == 1)
+                result++;
+
+        return result;
+    }
+
+    public static int bitSum(byte number) {
+        int result = 0;
+        for (int i = 0; i<Byte.SIZE; i++)
+            if (((number >> i) & 1) == 1)
+                result++;
+
+        return result;
+    }
+
 }

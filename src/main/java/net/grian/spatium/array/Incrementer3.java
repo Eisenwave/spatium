@@ -2,6 +2,15 @@ package net.grian.spatium.array;
 
 import java.util.NoSuchElementException;
 
+/**
+ * <p>
+ *     Utility class for counting from <code>(0, 0, 0)</code> to <code>(x-1, y-1, z-1)</code>.
+ * </p>
+ * <p>
+ *     This class was designed to ease creating iterators for multi-dimensional arrays but may be used for other
+ *     purposes.
+ * </p>
+ */
 public class Incrementer3 {
 
     private final int limX, limY, limZ;

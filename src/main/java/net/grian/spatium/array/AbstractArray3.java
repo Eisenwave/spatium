@@ -1,6 +1,6 @@
 package net.grian.spatium.array;
 
-import net.grian.spatium.function.TriIntConsumer;
+import net.grian.spatium.function.Int3Consumer;
 
 import java.io.Serializable;
 
@@ -58,7 +58,7 @@ public abstract class AbstractArray3 implements Serializable {
      *
      * @param action the operation to perform
      */
-    public void forEachIndex(TriIntConsumer action) {
+    public void forEachIndex(Int3Consumer action) {
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
                 for (int z = 0; z<sizeZ; z++)

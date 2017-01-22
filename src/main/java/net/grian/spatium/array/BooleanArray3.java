@@ -13,8 +13,7 @@ public class BooleanArray3 extends AbstractArray3 implements BitArray3, Iterable
 
     public BooleanArray3(int x, int y, int z) {
         super(x, y, z);
-        if (x == 0 || y == 0 || z == 0) throw new IllegalArgumentException("size 0 voxel array");
-        final int lengthY = PrimMath.floorAsInt((float) y/Byte.SIZE);
+        final int lengthY = PrimMath.ceilAsInt((float) y/Byte.SIZE);
         this.content = new byte[x][lengthY][z];
     }
 
@@ -31,7 +30,7 @@ public class BooleanArray3 extends AbstractArray3 implements BitArray3, Iterable
     }
 
     public boolean get(int x, int y, int z) {
-        return (content[x][y/Byte.SIZE][z] >> (y%Byte.SIZE)) == 1;
+        return ((content[x][y/Byte.SIZE][z] >> (y%Byte.SIZE)) & 1) == 1;
     }
 
     public void set(int x, int y, int z, boolean value) {

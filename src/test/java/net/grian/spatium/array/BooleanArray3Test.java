@@ -1,12 +1,11 @@
-package net.grian.spatium.voxel;
+package net.grian.spatium.array;
 
-import net.grian.spatium.array.BooleanArray3;
 import net.grian.spatium.geo.BlockVector;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ByteBitField3DTest {
+public class BooleanArray3Test {
 
     @Test
     public void enable() throws Exception {
@@ -28,6 +27,17 @@ public class ByteBitField3DTest {
 
         map.disable(pos);
         assertFalse(map.contains(pos));
+    }
+
+    @Test
+    public void fullToggle() throws Exception {
+        BooleanArray3 array = new BooleanArray3(32, 32, 32);
+
+        array.forEachIndex(array::enable);
+        assertEquals(array.getVolume(), array.size());
+
+        array.forEachIndex(array::disable);
+        assertEquals(0, array.size());
     }
 
 }

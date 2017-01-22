@@ -28,7 +28,7 @@ public interface RGBValue {
      * @return the alpha value
      */
     public default int getAlpha() {
-        return getRGB() >> 24;
+        return getRGB() >> 24 & 0xFF;
     }
 
     /**

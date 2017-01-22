@@ -35,8 +35,12 @@ public final class ColorMath {
         return a<<24 | r<<16 | g<<8 | b;
     }
 
-    private static int fromRGB(float r, float g, float b, float a) {
+    public static int fromRGB(float r, float g, float b, float a) {
         return fromRGB((int) (r*255), (int) (g*255), (int) (b*255), (int) (a*255));
+    }
+
+    public static int fromRGB(float r, float g, float b) {
+        return fromRGB(r, g, b, 1);
     }
 
     public static int fromRGB(int r, int g, int b) {

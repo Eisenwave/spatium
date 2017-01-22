@@ -1,6 +1,6 @@
 package net.grian.spatium.array;
 
-import net.grian.spatium.function.BiIntConsumer;
+import net.grian.spatium.function.Int2Consumer;
 
 import java.io.Serializable;
 
@@ -47,7 +47,7 @@ public class AbstractArray2 implements Serializable {
      *
      * @param action the operation to perform
      */
-    public void forEachIndex(BiIntConsumer action) {
+    public void forEachIndex(Int2Consumer action) {
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
                 action.accept(x, y);

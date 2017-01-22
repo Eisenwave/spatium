@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 @FunctionalInterface
-public interface BiIntConsumer extends BiConsumer<Integer, Integer> {
+public interface Int2Consumer extends BiConsumer<Integer, Integer> {
 
     /**
      * Performs this operation on the given argument.
@@ -22,7 +22,7 @@ public interface BiIntConsumer extends BiConsumer<Integer, Integer> {
         accept(x.intValue(), y.intValue());
     }
 
-    default BiIntConsumer andThen(BiIntConsumer action) {
+    default Int2Consumer andThen(Int2Consumer action) {
         Objects.requireNonNull(action);
         return (x, y) -> {this.accept(x, y); action.accept(x, y);};
     }
