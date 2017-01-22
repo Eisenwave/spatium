@@ -2,7 +2,7 @@ package net.grian.spatium.voxel;
 
 import net.grian.spatium.geo.BlockVector;
 
-public interface Bitmap3D {
+public interface BitField3D {
 
     /**
      * Returns the dimension on the x-axis.
@@ -44,7 +44,7 @@ public interface Bitmap3D {
     }
 
     /**
-     * Checks whether the bitmap contains an element at the given position.
+     * Checks whether the field contains an element at the given position.
      *
      * @param x the x-coordinate
      * @param y the y-coordinate
@@ -54,7 +54,7 @@ public interface Bitmap3D {
     boolean contains(int x, int y, int z);
 
     /**
-     * Checks whether the bitmap contains an element at the given position.
+     * Checks whether the field contains an element at the given position.
      *
      * @param pos the position
      * @return whether there is an element

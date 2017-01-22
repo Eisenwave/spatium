@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ByteBitmap3DTest {
+public class ByteBitField3DTest {
 
     @Test
     public void enable() throws Exception {
-        ByteBitmap3D map = new ByteBitmap3D(10, 20, 30);
+        ByteBitField3D map = new ByteBitField3D(10, 20, 30);
         BlockVector pos = BlockVector.fromXYZ(7, 13, 23);
 
         map.enable(pos);
@@ -19,7 +19,7 @@ public class ByteBitmap3DTest {
 
     @Test
     public void disable() throws Exception {
-        ByteBitmap3D map = new ByteBitmap3D(10, 20, 30);
+        ByteBitField3D map = new ByteBitField3D(10, 20, 30);
         BlockVector pos = BlockVector.fromXYZ(7, 13, 23);
 
         map.enable(pos);

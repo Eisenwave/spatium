@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-public class VoxelArray implements Bitmap3D, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
+public class VoxelArray implements BitField3D, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
 
     private final int[][][] voxels;
 

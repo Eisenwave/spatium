@@ -1,5 +1,7 @@
 package net.grian.spatium.enums;
 
+import net.grian.spatium.MinecraftSpecific;
+
 @SuppressWarnings("Duplicates")
 public enum CardinalDirection {
     NORTH (180, Face.NORTH),
@@ -25,6 +27,7 @@ public enum CardinalDirection {
      * </ul>
      * @return the angle in degrees
      */
+    @MinecraftSpecific
     public float angle() {
         return angle;
     }

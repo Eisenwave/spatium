@@ -1,11 +1,12 @@
 package net.grian.spatium.voxel;
 
+import net.grian.spatium.function.TriIntConsumer;
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
 
 import java.io.Serializable;
 
-public class BlockArray implements Bitmap3D, Serializable, Cloneable {
+public class BlockArray implements BitField3D, Serializable, Cloneable {
 
     /** store block biomes */
     public final static int
@@ -147,13 +148,33 @@ public class BlockArray implements Bitmap3D, Serializable, Cloneable {
     /**
      * Returns the block id at the specified position.
      *
+     * @param pos the position
+     * @return the block id at the specified position
+     */
+    public short getId(BlockVector pos) {
+        return getId(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    /**
+     * Returns the block data at the specified position.
+     *
      * @param x the x position
      * @param y the y position
      * @param z the z position
-     * @return the block id at the specified position
+     * @return the block data at the specified position
      */
     public byte getData(int x, int y, int z) {
         return arrayData[x][y][z];
+    }
+
+    /**
+     * Returns the block data at the specified position.
+     *
+     * @param pos the position
+     * @return the block data at the specified position
+     */
+    public byte getData(BlockVector pos) {
+        return getData(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
@@ -282,6 +303,13 @@ public class BlockArray implements Bitmap3D, Serializable, Cloneable {
 
     //MISC
 
+    public void forEachPos(TriIntConsumer action) {
+        for (int x = 0; x<sizeX; x++)
+            for (int y = 0; y<sizeY; y++)
+                for (int z = 0; z<sizeZ; z++)
+                    action.accept(x, y, z);
+    }
+
     @Override
     public String toString() {
         return BlockArray.class.getSimpleName()+
@@ -309,9 +337,7 @@ public class BlockArray implements Bitmap3D, Serializable, Cloneable {
         for (int x = 0; x<limX; x++)
             for (int y = 0; y<limY; y++)
                 for (int z = 0; z<limZ; z++)
-                    if (
-                            this.getId(x,y,z) != array.getId(x,y,z) ||
-                            this.getData(x,y,z) != array.getData(x,y,z))
+                    if (this.getId(x,y,z) != array.getId(x,y,z) || this.getData(x,y,z) != array.getData(x,y,z))
                         return false;
 
         return true;

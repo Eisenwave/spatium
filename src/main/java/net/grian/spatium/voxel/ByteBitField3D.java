@@ -5,13 +5,13 @@ import net.grian.spatium.util.PrimMath;
 
 import java.io.Serializable;
 
-public class ByteBitmap3D implements Bitmap3D, Serializable, Cloneable {
+public class ByteBitField3D implements BitField3D, Serializable, Cloneable {
 
     private final byte[][][] content;
 
     private final int sizeX, sizeY, sizeZ;
 
-    public ByteBitmap3D(int x, int y, int z) {
+    public ByteBitField3D(int x, int y, int z) {
         if (x == 0 || y == 0 || z == 0) throw new IllegalArgumentException("size 0 voxel array");
         final int lengthY = PrimMath.floorAsInt((float) y/Byte.SIZE);
         this.content = new byte[x][lengthY][z];
@@ -21,7 +21,7 @@ public class ByteBitmap3D implements Bitmap3D, Serializable, Cloneable {
     }
 
     @SuppressWarnings("ManualArrayCopy")
-    public ByteBitmap3D(ByteBitmap3D copyOf) {
+    public ByteBitField3D(ByteBitField3D copyOf) {
         final int lengthY = copyOf.content[0].length;
         this.content = new byte[copyOf.content.length][lengthY][copyOf.content[0][0].length];
         this.sizeX = copyOf.getSizeX();
@@ -32,7 +32,7 @@ public class ByteBitmap3D implements Bitmap3D, Serializable, Cloneable {
             this.content[x][y][z] = copyOf.content[x][y][z];
     }
 
-    public ByteBitmap3D(Bitmap3D copyOf) {
+    public ByteBitField3D(BitField3D copyOf) {
         this(copyOf.getSizeX(), copyOf.getSizeY(), copyOf.getSizeZ());
 
         for (int x = 0; x<sizeX; x++) for (int y = 0; y<sizeY; y++) for (int z = 0; z<sizeZ; z++)
@@ -77,12 +77,12 @@ public class ByteBitmap3D implements Bitmap3D, Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return ByteBitmap3D.class.getSimpleName()+"{x="+getSizeX()+",y="+getSizeY()+",z="+getSizeZ()+"}";
+        return ByteBitField3D.class.getSimpleName()+"{x="+getSizeX()+",y="+getSizeY()+",z="+getSizeZ()+"}";
     }
 
     @Override
-    public ByteBitmap3D clone() {
-        return new ByteBitmap3D(this);
+    public ByteBitField3D clone() {
+        return new ByteBitField3D(this);
     }
 
 }
