@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-public class VoxelArray implements BitField3D, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
+public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
 
     private final int[][][] voxels;
 
@@ -536,7 +536,7 @@ public class VoxelArray implements BitField3D, Cloneable, Serializable, Iterable
 
         /**
          * <p>
-         *    Returns a map representing the visibility of each side of the voxel.
+         *    Returns a bit field representing the visibility of each side of the voxel.
          * </p>
          * <p>
          *     A face is always visible if there is no voxel covering that face. This also applies if the voxel face can
@@ -557,7 +557,7 @@ public class VoxelArray implements BitField3D, Cloneable, Serializable, Iterable
          *
          * @return a bitmap representing which faces are visible
          */
-        public byte getFaceVisibility() {
+        public byte getVisibilityMap() {
             byte result = 0;
 
             if (x==0 || !VoxelArray.this.contains(x-1, y, z)) result |= Direction.NEGATIVE_X.ordinal();

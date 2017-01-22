@@ -1,5 +1,6 @@
 package net.grian.spatium.voxel;
 
+import net.grian.spatium.array.BooleanArray3;
 import net.grian.spatium.geo.BlockVector;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class ByteBitField3DTest {
 
     @Test
     public void enable() throws Exception {
-        ByteBitField3D map = new ByteBitField3D(10, 20, 30);
+        BooleanArray3 map = new BooleanArray3(10, 20, 30);
         BlockVector pos = BlockVector.fromXYZ(7, 13, 23);
 
         map.enable(pos);
@@ -19,7 +20,7 @@ public class ByteBitField3DTest {
 
     @Test
     public void disable() throws Exception {
-        ByteBitField3D map = new ByteBitField3D(10, 20, 30);
+        BooleanArray3 map = new BooleanArray3(10, 20, 30);
         BlockVector pos = BlockVector.fromXYZ(7, 13, 23);
 
         map.enable(pos);

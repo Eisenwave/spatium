@@ -4,14 +4,14 @@ import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-public class Array3<T> extends AbstractArray3 implements Iterable<T> {
+public class Array2<T> extends AbstractArray2 implements Iterable<T> {
 
-    private final T[][][] content;
+    private final T[][] content;
 
     @SuppressWarnings("unchecked")
-    public Array3(int x, int y, int z, Class<T> component) {
-        super(x, y, z);
-        content = (T[][][]) Array.newInstance(component, x, y, z);
+    public Array2(int x, int y, Class<T> component) {
+        super(x, y);
+        content = (T[][]) Array.newInstance(component, x, y);
     }
 
     /**
@@ -19,11 +19,10 @@ public class Array3<T> extends AbstractArray3 implements Iterable<T> {
      *
      * @param x the x-coordinate
      * @param y the y-coordinate
-     * @param z the z-coordinate
      * @return the element at the coordinates
      */
-    public T get(int x, int y, int z) {
-        return content[x][y][z];
+    public T get(int x, int y) {
+        return content[x][y];
     }
 
     /**
@@ -31,31 +30,29 @@ public class Array3<T> extends AbstractArray3 implements Iterable<T> {
      *
      * @param x the x-coordinate
      * @param y the y-coordinate
-     * @param z the z-coordinate
      * @param value the new value
      */
-    public void set(int x, int y, int z, T value) {
-        content[x][y][z] = value;
+    public void set(int x, int y, T value) {
+        content[x][y] = value;
     }
 
     @Override
     public void forEach(Consumer<? super T> action) {
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
-                for (int z = 0; z<sizeZ; z++)
-                    action.accept(get(x, y, z));
+                action.accept(get(x, y));
     }
 
     @Override
-    public ArrayIterator3 iterator() {
-        return new ArrayIterator3();
+    public ArrayIterator2 iterator() {
+        return new ArrayIterator2();
     }
 
-    private final class ArrayIterator3 implements Iterator<T> {
+    private final class ArrayIterator2 implements Iterator<T> {
 
-        private final Incrementer3 incrementer = new Incrementer3(sizeX, sizeY, sizeZ);
+        private final Incrementer2 incrementer = new Incrementer2(sizeX, sizeY);
 
-        private ArrayIterator3() {}
+        private ArrayIterator2() {}
 
         @Override
         public boolean hasNext() {
@@ -65,7 +62,7 @@ public class Array3<T> extends AbstractArray3 implements Iterable<T> {
         @Override
         public T next() {
             int[] pos = incrementer.current();
-            T result = get(pos[0], pos[1], pos[2]);
+            T result = get(pos[0], pos[1]);
             incrementer.increment();
 
             return result;

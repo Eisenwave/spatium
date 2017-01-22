@@ -1,20 +1,18 @@
 package net.grian.spatium.array;
 
-import net.grian.spatium.function.TriIntConsumer;
+import net.grian.spatium.function.BiIntConsumer;
 
 import java.io.Serializable;
 
-public abstract class AbstractArray3 implements Serializable {
+public class AbstractArray2 implements Serializable {
 
-    protected final int sizeX, sizeY, sizeZ;
+    protected final int sizeX, sizeY;
 
-    protected AbstractArray3(int sizeX, int sizeY, int sizeZ) {
+    protected AbstractArray2(int sizeX, int sizeY) {
         if (sizeX < 0) throw new NegativeArraySizeException("x: "+sizeX);
         if (sizeY < 0) throw new NegativeArraySizeException("y: "+sizeY);
-        if (sizeZ < 0) throw new NegativeArraySizeException("z: "+sizeZ);
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.sizeZ = sizeZ;
     }
 
     /**
@@ -36,21 +34,12 @@ public abstract class AbstractArray3 implements Serializable {
     }
 
     /**
-     * Returns the size of the array in its third dimension.
-     *
-     * @return the 3rd dimension size of the array
-     */
-    public int getSizeZ() {
-        return sizeZ;
-    }
-
-    /**
      * Returns the product of all sizes which is equivalent to the total array length.
      *
      * @return the array length
      */
     public int getLength() {
-        return sizeX * sizeY * sizeZ;
+        return sizeX * sizeY;
     }
 
     /**
@@ -58,11 +47,10 @@ public abstract class AbstractArray3 implements Serializable {
      *
      * @param action the operation to perform
      */
-    public void forEachIndex(TriIntConsumer action) {
+    public void forEachIndex(BiIntConsumer action) {
         for (int x = 0; x<sizeX; x++)
             for (int y = 0; y<sizeY; y++)
-                for (int z = 0; z<sizeZ; z++)
-                    action.accept(x, y, z);
+                action.accept(x, y);
     }
 
 }

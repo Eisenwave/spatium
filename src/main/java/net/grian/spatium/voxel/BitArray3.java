@@ -2,7 +2,7 @@ package net.grian.spatium.voxel;
 
 import net.grian.spatium.geo.BlockVector;
 
-public interface BitField3D {
+public interface BitArray3 {
 
     /**
      * Returns the dimension on the x-axis.

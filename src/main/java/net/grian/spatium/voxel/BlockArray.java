@@ -6,7 +6,7 @@ import net.grian.spatium.geo.BlockVector;
 
 import java.io.Serializable;
 
-public class BlockArray implements BitField3D, Serializable, Cloneable {
+public class BlockArray implements BitArray3, Serializable, Cloneable {
 
     /** store block biomes */
     public final static int
