@@ -10,7 +10,7 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean> {
 
     public BooleanArray2(int x, int y) {
         super(x, y);
-        final int lengthY = PrimMath.floorAsInt((float) y/Byte.SIZE);
+        final int lengthY = PrimMath.floor((float) y/Byte.SIZE);
         this.content = new byte[x][lengthY];
     }
 

@@ -220,7 +220,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
      * @return whether this bounding box contains a point of given coordinates
      */
     public default boolean contains(float x, float y, float z) {
-        return contains(PrimMath.floorAsInt(x), PrimMath.floorAsInt(y), PrimMath.floorAsInt(z));
+        return contains(PrimMath.floor(x), PrimMath.floor(y), PrimMath.floor(z));
     }
 
     /**

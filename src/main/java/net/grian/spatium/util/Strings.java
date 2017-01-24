@@ -15,8 +15,7 @@ public final class Strings {
 	public static String[] append(String[] tail, String head) {
 		String[] result = new String[tail.length + 1];
 		result[tail.length] = head;
-		for (int i = 0; i<tail.length; i++)
-			result[i] = tail[i];
+		System.arraycopy(tail, 0, result, 0, tail.length);
 		
 		return result;
 	}
@@ -24,8 +23,7 @@ public final class Strings {
 	public static String[] append(String tail, String... head) {
 		String[] result = new String[head.length + 1];
 		result[0] = tail;
-		for (int i = 0; i<head.length; i++)
-			result[i+1] = head[i];
+		System.arraycopy(head, 0, result, 1, head.length);
 		
 		return result;
 	}
@@ -332,7 +330,7 @@ public final class Strings {
 	}
 	
 	public static boolean startsWithLetter(String str) {
-		return str.isEmpty()? false : Character.isAlphabetic(str.toCharArray()[0]);
+		return !str.isEmpty() && Character.isAlphabetic(str.toCharArray()[0]);
 	}
 	
 	/**
@@ -488,7 +486,7 @@ public final class Strings {
 	}
 	
 	public static String[] split(String str, int length) {
-		int parts = PrimMath.ceilAsInt((float)str.length() / length);
+		int parts = PrimMath.ceil((float)str.length() / length);
 		String[] lines = new String[parts];
 		for (int i = 0; i<lines.length; i++) {
 			int min = i*length;

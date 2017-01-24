@@ -7,7 +7,7 @@ public final class PrimMath {
 	
 	private PrimMath() {}
 	
-	//// FLOOR ////
+	//// ROUND ////
     public static long floor(double d) {
         return (long) ( (d % 1 == 0)? d : (d < 0) ? --d : d );
     }
@@ -16,27 +16,6 @@ public final class PrimMath {
         return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
     }
 
-    @Deprecated
-	public static long floorAsLong(float f) {
-		return (f % 1 == 0) ? (long)f : (f < 0) ? (long)--f : (long)f;
-	}
-
-    @Deprecated
-	public static long floorAsLong(double d) {
-		return (d % 1 == 0) ? (long)d : (d < 0) ? (long)--d : (long)d;
-	}
-
-	@Deprecated
-	public static int floorAsInt(float f) {
-		return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
-	}
-
-    @Deprecated
-	public static int floorAsInt(double d) {
-		return (d % 1 == 0) ? (int)d : (d < 0) ? (int)--d : (int)d;
-	}
-	
-	//// CEIL ////
     public static long ceil(double d) {
         return (long) ( (d % 1 == 0)? d : (d < 0) ? d : ++d );
     }
@@ -45,27 +24,6 @@ public final class PrimMath {
         return (int) ( (f % 1 == 0)? f : (f < 0)? f : ++f );
     }
 
-    @Deprecated
-	public static long ceilAsLong(float f) {
-		return (f % 1 == 0) ? (long)f : (f < 0) ? (long)f : (long)++f;
-	}
-
-    @Deprecated
-	public static long ceilAsLong(double d) {
-		return (d % 1 == 0) ? (long)d : (d < 0) ? (long)d : (long)++d;
-	}
-
-    @Deprecated
-	public static int ceilAsInt(float f) {
-		return (f % 1 == 0) ? (int)f : (f < 0) ? (int)f : (int)++f;
-	}
-
-    @Deprecated
-	public static int ceilAsInt(double d) {
-		return (d % 1 == 0) ? (int)d : (d < 0) ? (int)d : (int)++d;
-	}
-	
-	//// ROUND ////
     public static long round(double d) {
         return (long) ( (d < 0) ? (d-0.5F) : (d+0.5F) );
     }
@@ -74,26 +32,6 @@ public final class PrimMath {
         return (int) ( (f < 0) ? (f-0.5F) : (f+0.5F) );
     }
 
-    @Deprecated
-	public static long roundAsLong(float f) {
-		return (f < 0) ? (long) (f-0.5f) : (long) (f+0.5f);
-	}
-
-    @Deprecated
-	public static long roundAsLong(double d) {
-		return (d < 0) ? (long) (d-0.5d) : (long) (d+0.5d);
-	}
-
-    @Deprecated
-	public static int roundAsInt(float f) {
-		return (f < 0) ? (int) (f-0.5f) : (int) (f+0.5f);
-	}
-
-    @Deprecated
-	public static int roundAsInt(double d) {
-		return (d < 0) ? (int) (d-0.5d) : (int) (d+0.5d);
-	}
-	
 	//// AVERAGE ////
 	public static long average(long...array) {
 		return sum(array) / array.length;

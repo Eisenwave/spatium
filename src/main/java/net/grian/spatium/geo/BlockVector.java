@@ -15,7 +15,7 @@ public interface BlockVector extends SpatiumObject {
     }
 
     public static BlockVector fromXYZ(float x, float y, float z) {
-        return fromXYZ(PrimMath.floorAsInt(x), PrimMath.floorAsInt(y), PrimMath.floorAsInt(z));
+        return fromXYZ(PrimMath.floor(x), PrimMath.floor(y), PrimMath.floor(z));
     }
 
     public static BlockVector fromVector(Vector vector) {

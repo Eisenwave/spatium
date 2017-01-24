@@ -13,7 +13,7 @@ public class BooleanArray3 extends AbstractArray3 implements BitArray3, Iterable
 
     public BooleanArray3(int x, int y, int z) {
         super(x, y, z);
-        final int lengthY = PrimMath.ceilAsInt((float) y/Byte.SIZE);
+        final int lengthY = PrimMath.ceil((float) y/Byte.SIZE);
         this.content = new byte[x][lengthY][z];
     }
 

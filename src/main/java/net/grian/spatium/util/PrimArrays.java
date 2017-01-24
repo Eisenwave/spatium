@@ -863,7 +863,7 @@ public final class PrimArrays {
 	}
 	
 	public static List<byte[]> split(byte[] array, int length) {
-		int count = PrimMath.ceilAsInt((float)array.length / length);
+		int count = PrimMath.ceil((float)array.length / length);
 		List<byte[]> splits = new ArrayList<>(count);
 		for (int i = 0; i<count; i++) {
 			int min = i*length;
