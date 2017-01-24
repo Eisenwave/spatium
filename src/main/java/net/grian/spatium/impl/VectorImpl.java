@@ -75,7 +75,7 @@ public class VectorImpl implements Vector {
      * {@link Math#hypot(double, double)}, preventing a possible overflow.
      * Use {@link #getLength()} for performance reasons instead when there is
      * no such possibility.
-     * @return the length of the vector
+     * @return the hypot of the vector
      */
     public float getLengthSafe() {
         return (float) Math.hypot(Math.hypot(x, y), z);

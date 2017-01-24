@@ -103,7 +103,7 @@ public interface Sphere extends Space {
      * @return whether this sphere contains the point
      */
     public default boolean contains(float x, float y, float z) {
-        return Spatium.length(x-getX(), y-getY(), z-getZ()) <= getRadius();
+        return Spatium.hypot(x-getX(), y-getY(), z-getZ()) <= getRadius();
     }
 
     /**

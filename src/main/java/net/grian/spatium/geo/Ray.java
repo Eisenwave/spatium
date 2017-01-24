@@ -48,7 +48,22 @@ public interface Ray extends Path {
      * @return a new ray
      */
     public static Ray between(Vector from, Vector to) {
-        return new RayImpl(from, Vector.between(from, to));
+        return fromOD(from, Vector.between(from, to));
+    }
+
+    /**
+     * Creates a new ray between two points.
+     *
+     * @param ox the origin x
+     * @param oy the origin x
+     * @param oz the origin x
+     * @param tx the target x
+     * @param ty the target x
+     * @param tz the target x
+     * @return a new ray
+     */
+    public static Ray between(float ox, float oy, float oz, float tx, float ty, float tz) {
+        return fromOD(ox, oy, oz, tx-ox, ty-oy, tz-oz);
     }
 
     // GETTERS
@@ -96,16 +111,16 @@ public interface Ray extends Path {
     public abstract float getDirZ();
 
     /**
-     * Returns the length of this ray.
+     * Returns the hypot of this ray.
      *
-     * @return the length of this ray
+     * @return the hypot of this ray
      */
     public abstract float getLength();
 
     /**
-     * Returns the squared length of this ray.
+     * Returns the squared hypot of this ray.
      *
-     * @return the squared length of this ray
+     * @return the squared hypot of this ray
      */
     public abstract float getLengthSquared();
 
@@ -139,7 +154,7 @@ public interface Ray extends Path {
 
     /**
      * Returns the closest point on this ray to another ray. Note that this
-     * point can be further away from the origin of the ray than the length
+     * point can be further away from the origin of the ray than the hypot
      * of the ray, the ray is treated as if it were infinitely long.
      *
      * @param point the point
@@ -244,9 +259,9 @@ public interface Ray extends Path {
     public abstract Ray setDirection(float x, float y, float z);
 
     /**
-     * Sets the length of the ray to a given length.
+     * Sets the hypot of the ray to a given hypot.
      *
-     * @param t the new length
+     * @param t the new hypot
      * @return itself
      */
     public abstract Ray setLength(float t);
@@ -259,7 +274,7 @@ public interface Ray extends Path {
      *     are on a ray.
      * </p>
      * <p>
-     *     For example, a ray with length 1 will produce an iterator that iterates over precisely 3 points if the
+     *     For example, a ray with hypot 1 will produce an iterator that iterates over precisely 3 points if the
      *     interval is 0.5 (or 0.4).
      * </p>
      * <p>
@@ -282,7 +297,7 @@ public interface Ray extends Path {
      *     are on a ray.
      * </p>
      * <p>
-     *     For example, a ray with length 1 will produce an iterator that iterates over precisely 3 points if the
+     *     For example, a ray with hypot 1 will produce an iterator that iterates over precisely 3 points if the
      *     interval is 0.5 (or 0.4).
      * </p>
      * <p>

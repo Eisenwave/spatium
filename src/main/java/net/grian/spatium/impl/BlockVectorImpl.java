@@ -20,9 +20,9 @@ public class BlockVectorImpl implements BlockVector {
     }
 
     public BlockVectorImpl(Vector v) {
-        this.x = PrimMath.floorAsInt(v.getX());
-        this.y = PrimMath.floorAsInt(v.getY());
-        this.z = PrimMath.floorAsInt(v.getZ());
+        this.x = PrimMath.floor(v.getX());
+        this.y = PrimMath.floor(v.getY());
+        this.z = PrimMath.floor(v.getZ());
     }
 
     public BlockVectorImpl() {

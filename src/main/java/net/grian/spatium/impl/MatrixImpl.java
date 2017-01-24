@@ -1,6 +1,7 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.matrix.MatrixDimensionsException;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 import net.grian.spatium.util.PrimArrays;
 import net.grian.spatium.util.Strings;
@@ -65,6 +66,41 @@ public class MatrixImpl implements Matrix {
     @Override
     public int getColumns() {
         return columns;
+    }
+
+    @Override
+    public float getDeterminant() {
+        if (rows != columns)
+            throw new MatrixDimensionsException("matrix must be square matrix");
+
+        return internalDeterminant(this, rows);
+    }
+
+    private static float internalDeterminant(Matrix matrix, int n) {
+        if (n == 1) return matrix.get(0,0);
+        if (n == 2) return matrix.get(0,0)*matrix.get(1,1) - matrix.get(0,1)*matrix.get(1,0);
+
+        Matrix temp = Matrix.create(n, n);
+        float result = 0;
+
+        for (int p = 0; p < n; p++) {
+            int h = 0, k = 0;
+
+            for (int i = 1; i < n; i++) for (int j = 0; j < n; j++) {
+                if(j==p) continue;
+
+                temp.set(h, k, matrix.get(i, j));
+
+                if(++k == n-1) {
+                    h++;
+                    k = 0;
+                }
+
+                result += matrix.get(0, p) * Math.pow(-1, p) * internalDeterminant(temp, n-1);
+            }
+        }
+
+        return result;
     }
 
     // SETTERS

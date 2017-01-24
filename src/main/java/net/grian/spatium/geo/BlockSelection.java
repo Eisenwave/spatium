@@ -1,7 +1,10 @@
 package net.grian.spatium.geo;
 
+import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.impl.BlockSelectionImpl;
 import net.grian.spatium.util.PrimMath;
+
+import java.util.function.Consumer;
 
 public interface BlockSelection extends Space, Iterable<BlockVector> {
 
@@ -265,6 +268,30 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
     }
 
     // MISC
+
+    /**
+     * Performs an operation for every block in this selection.
+     *
+     * @param action the operation to perform
+     */
+    @Override
+    public default void forEach(Consumer<? super BlockVector> action) {
+        forEach((x, y, z) -> action.accept(BlockVector.fromXYZ(x, y, z)));
+    }
+
+    /**
+     * Performs an operation for every block in this selection.
+     *
+     * @param action the operation to perform
+     */
+    public default void forEach(Int3Consumer action) {
+        final int limX = getMaxX(), limY = getMaxY(), limZ = getMaxZ();
+
+        for (int x = getMinX(); x<limX; x++)
+            for (int y = getMinY(); y<limY; y++)
+                for (int z = getMinZ(); z<limZ; z++)
+                    action.accept(x, y, z);
+    }
 
     /**
      * Converts this block selection into an axis aligned bounding box which will surround the selection.

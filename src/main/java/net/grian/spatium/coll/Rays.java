@@ -22,7 +22,7 @@ public final class Rays {
      * <br><br>The returned value is a multiplier for the directional vector of
      * the ray at which the ray and the other object collide with each other.
      *
-     * <br><br>The point of the collision can be obtained by setting the length
+     * <br><br>The point of the collision can be obtained by setting the hypot
      * of the first ray to that multiplier using {@link Ray#setLength(float)}.
      *
      * @param a the first ray
@@ -56,7 +56,7 @@ public final class Rays {
      * <br><br>The returned value is a multiplier for the directional vector of
      * the ray at which the ray and the other object collide with each other.
      *
-     * <br><br>The point of the collision can be obtained by setting the length
+     * <br><br>The point of the collision can be obtained by setting the hypot
      * of the first ray to that multiplier using {@link Ray#setLength(float)}.
      *
      * @param ray the ray
@@ -73,7 +73,7 @@ public final class Rays {
      * <br><br>The returned value is a multiplier for the directional vector of
      * the ray at which the ray and the other object collide with each other.
      *
-     * <br><br>The point of the collision can be obtained by setting the length
+     * <br><br>The point of the collision can be obtained by setting the hypot
      * of the first ray to that multiplier using {@link Ray#setLength(float)}.
      *
      * @param ray the ray
@@ -159,7 +159,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -190,7 +190,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -225,7 +225,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -247,7 +247,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -269,7 +269,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -291,7 +291,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to that multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      * Source:<a href="https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm">
@@ -339,7 +339,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -373,7 +373,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -410,7 +410,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *
@@ -478,7 +478,7 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the length of the first ray to a multiplier using
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(float)}.
      * </p>
      *

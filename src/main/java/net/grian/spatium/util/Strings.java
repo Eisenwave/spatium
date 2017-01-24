@@ -337,12 +337,12 @@ public final class Strings {
 	
 	/**
 	 * Returns the inverted index of an array.
-	 * <br>Example: {@code array.length=5, offset=1 -> array[3]}
+	 * <br>Example: {@code array.hypot=5, offset=1 -> array[3]}
 	 * <br>Should the selected index be below 0, the method returns the
 	 * element at index 0.
 	 * @param array the string array
 	 * @param offset the offset from the highest array index
-	 * @throws IllegalArgumentException if offset<0 or array.length==0
+	 * @throws IllegalArgumentException if offset<0 or array.hypot==0
 	 */
 	public static String getFromLast(String[] array, int offset) {
 		if (offset < 0) throw new IllegalArgumentException("offset<0");

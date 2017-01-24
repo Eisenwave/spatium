@@ -1,6 +1,6 @@
 package net.grian.spatium.enums;
 
-import net.grian.spatium.MinecraftSpecific;
+import net.grian.spatium.anno.MinecraftSpecific;
 
 @SuppressWarnings("Duplicates")
 public enum CardinalDirection {
@@ -51,7 +51,7 @@ public enum CardinalDirection {
         case NORTH: return EAST;
         case SOUTH: return WEST;
         case WEST: return NORTH;
-        default: return null;
+        default: throw new AssertionError(this);
         }
     }
 
@@ -65,7 +65,17 @@ public enum CardinalDirection {
         case NORTH: return WEST;
         case SOUTH: return EAST;
         case WEST: return SOUTH;
-        default: return null;
+        default: throw new AssertionError(this);
+        }
+    }
+
+    public CardinalDirection rotate(CardinalRotation rotation) {
+        switch (rotation) {
+            case R0: return this;
+            case R90: return left();
+            case R180: return opposite();
+            case R270: return right();
+            default: throw new AssertionError(rotation);
         }
     }
 
@@ -79,7 +89,7 @@ public enum CardinalDirection {
         case NORTH: return SOUTH;
         case SOUTH: return NORTH;
         case WEST: return EAST;
-        default: return null;
+        default: throw new AssertionError(this);
         }
     }
 

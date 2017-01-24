@@ -195,7 +195,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
      *
      * @return a bitmap representing which faces are visible
      */
-    public byte getVisibilityMap(int x, int y, int z) {
+    public byte getVisibilityMask(int x, int y, int z) {
         byte result = 0;
 
         if (x==0 || !contains(x-1, y, z)) result |= (1 << Direction.NEGATIVE_X.ordinal());
@@ -597,7 +597,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
          * @return a bitmap representing which faces are visible
          */
         public byte getVisibilityMap() {
-            return VoxelArray.this.getVisibilityMap(x, y, z);
+            return VoxelArray.this.getVisibilityMask(x, y, z);
         }
 
         @Override

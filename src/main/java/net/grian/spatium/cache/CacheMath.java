@@ -18,12 +18,19 @@ import net.grian.spatium.Spatium;
  *     are being used instead, in no situation is an exception thrown.
  * </p>
  */
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 public final class CacheMath {
 
     private CacheMath() {}
 
-    private final static double TO_RADIANS = Math.PI / 180;
+    public final static float
+            GOLDEN = 1.618033988749894848204586834365638117720309179805762862135F,
+            SQRT_2 = (float) Math.sqrt(2),
+            SQRT_3 = (float) Math.sqrt(3),
+            SQRT_HALF = (float) Math.sqrt(1 / 2F),
+            CBRT_THIRD = (float) Math.cbrt(1 / 3F);
+
+    public final static double TO_RADIANS = Math.PI / 180;
 
     private static AsinCache cacheAsin = null;
     private static SinCache cacheSin = null;

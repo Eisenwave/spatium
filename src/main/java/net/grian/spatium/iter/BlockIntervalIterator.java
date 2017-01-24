@@ -5,63 +5,106 @@ import net.grian.spatium.geo.Ray;
 import net.grian.spatium.util.PrimMath;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class BlockIntervalIterator implements Iterator<BlockVector> {
 
-    private float x, y, z, xi, yi, zi;
-    private int i;
+    private final int dx, dy, dz, ix, iy, iz, dmax;
+    private final Runnable increment;
+
+    private int x, y, z, i, err0, err1;
 
     public BlockIntervalIterator(Ray ray) {
-        final float dx = ray.getDirX(), dy = ray.getDirY(), dz = ray.getDirZ(), length = ray.getLength();
-        double diagonality = diagonality(dx, dy, dz);
-        float t = (float) (diagonality / length);
+        BlockVector origin = ray.getOrigin().toBlockVector(), end = ray.getEnd().toBlockVector();
+        int
+                x0 = origin.getX(), y0 = origin.getY(), z0 = origin.getZ(),
+                x1 = end.getX(),    y1 = end.getY(),    z1 = end.getZ();
 
-        this.x = ray.getOriginX();
-        this.y = ray.getOriginY();
-        this.z = ray.getOriginZ();
-        this.xi = t * dx;
-        this.yi = t * dy;
-        this.zi = t * dz;
+        this.dx = Math.abs(x1 - x0);
+        this.dy = Math.abs(y1 - y0);
+        this.dz = Math.abs(z1 - z0);
+        this.dmax = PrimMath.max(dx, dy, dz);
 
-        this.i = (int) (ray.getLength() / diagonality) + 1;
+        this.err0 = dmax / 2;
+        this.err1 = err0;
+
+        this.x = x0;
+        this.y = y0;
+        this.z = z0;
+
+        this.ix = x0 < x1? 1 : -1;
+        this.iy = y0 < y1? 1 : -1;
+        this.iz = z0 < z1? 1 : -1;
+
+        if (dx == dmax)      increment = this::incrementLeadX;
+        else if (dy == dmax) increment = this::incrementLeadY;
+        else                 increment = this::incrementLeadZ;
     }
 
     @Override
     public boolean hasNext() {
-        return i >= 0;
+        return i <= dmax;
     }
 
     @Override
     public BlockVector next() {
+        if (i++ > dmax) throw new NoSuchElementException();
+
         BlockVector result = BlockVector.fromXYZ(x, y, z);
-        i--; x += xi; y += yi; z += zi;
+        increment.run();
         return result;
     }
 
-    private static double diagonality(float x, float y, float z) {
-        float t = 1 / absmax(x, y, z);
-        return Math.sqrt(t*t * (x*x + y+y + z*z));
+    private void incrementLeadX() {
+        x += ix;
+
+        err0 -= dy;
+        if (err0 < 0) {
+            err0 += dx;
+            y += iy;
+        }
+
+        err1 -= dz;
+        if (err1 < 0) {
+            err1 += dx;
+            z += iz;
+        }
     }
 
-    private static double diagonality(float x, float y) {
-        float t = 1 / absmax(x, y);
-        return Math.sqrt(t*t * (x*x + y+y));
+    private void incrementLeadY() {
+        y += iy;
+
+        err0 -= dx;
+        if (err0 < 0) {
+            err0 += dy;
+            x += ix;
+        }
+
+        err1 -= dz;
+        if (err1 < 0) {
+            err1 += dy;
+            z += iz;
+        }
     }
 
-    private static float absmax(float a, float b) {
-        return PrimMath.max(Math.abs(a), Math.abs(b));
+    private void incrementLeadZ() {
+        z += iz;
+
+        err0 -= dy;
+        if (err0 < 0) {
+            err0 += dz;
+            y += iy;
+        }
+
+        err1 -= dx;
+        if (err1 < 0) {
+            err1 += dz;
+            x += ix;
+        }
     }
 
-    private static float absmax(float a, float b, float c) {
-        return absmax(a, absmax(b, c));
-    }
-
-    private static float absmin(float a, float b) {
-        return PrimMath.min(Math.abs(a), Math.abs(b));
-    }
-
-    private static float absmin(float a, float b, float c) {
-        return absmin(a, absmin(b, c));
+    private BlockVector currentBlock() {
+        return BlockVector.fromXYZ(x, y, z);
     }
 
 }

@@ -1,11 +1,13 @@
 package net.grian.spatium.voxel;
 
+import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
 
 import java.io.Serializable;
 
+@MinecraftSpecific
 public class BlockArray implements BitArray3, Serializable, Cloneable {
 
     /** store block biomes */

@@ -242,8 +242,8 @@ public final class PrimArrays {
 
 	/*
 	public static <T extends Cloneable> T[] deepClone(T[] array) {
-		T[] result = newInstance(array.getClass().getComponentType(), array.length);
-		for (int i = 0; i<array.length; i++)
+		T[] result = newInstance(array.getClass().getComponentType(), array.hypot);
+		for (int i = 0; i<array.hypot; i++)
 			result[i] = array[i].clone();System.
 		return result;
 	}

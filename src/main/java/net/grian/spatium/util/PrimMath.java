@@ -8,230 +8,192 @@ public final class PrimMath {
 	private PrimMath() {}
 	
 	//// FLOOR ////
+    public static long floor(double d) {
+        return (long) ( (d % 1 == 0)? d : (d < 0) ? --d : d );
+    }
+
+    public static int floor(float f) {
+        return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
+    }
+
+    @Deprecated
 	public static long floorAsLong(float f) {
 		return (f % 1 == 0) ? (long)f : (f < 0) ? (long)--f : (long)f;
 	}
-	
+
+    @Deprecated
 	public static long floorAsLong(double d) {
 		return (d % 1 == 0) ? (long)d : (d < 0) ? (long)--d : (long)d;
 	}
-	
+
+	@Deprecated
 	public static int floorAsInt(float f) {
 		return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
 	}
-	
+
+    @Deprecated
 	public static int floorAsInt(double d) {
 		return (d % 1 == 0) ? (int)d : (d < 0) ? (int)--d : (int)d;
 	}
 	
-	public static short floorAsShort(float f) {
-		return (f % 1 == 0) ? (short)f : (f < 0) ? (short)--f : (short)f;
-	}
-	
-	public static short floorAsShort(double d) {
-		return (d % 1 == 0) ? (short)d : (d < 0) ? (short)--d : (short)d;
-	}
-
-	public static byte floorAsByte(float f) {
-		return (f % 1 == 0) ? (byte)f : (f < 0) ? (byte)--f : (byte)f;
-	}
-	
-	public static byte floorAsByte(double d) {
-		return (d % 1 == 0) ? (byte)d : (d < 0) ? (byte)--d : (byte)d;
-	}
-	
 	//// CEIL ////
+    public static long ceil(double d) {
+        return (long) ( (d % 1 == 0)? d : (d < 0) ? d : ++d );
+    }
+
+    public static int ceil(float f) {
+        return (int) ( (f % 1 == 0)? f : (f < 0)? f : ++f );
+    }
+
+    @Deprecated
 	public static long ceilAsLong(float f) {
 		return (f % 1 == 0) ? (long)f : (f < 0) ? (long)f : (long)++f;
 	}
-	
+
+    @Deprecated
 	public static long ceilAsLong(double d) {
 		return (d % 1 == 0) ? (long)d : (d < 0) ? (long)d : (long)++d;
 	}
-	
+
+    @Deprecated
 	public static int ceilAsInt(float f) {
 		return (f % 1 == 0) ? (int)f : (f < 0) ? (int)f : (int)++f;
 	}
-	
+
+    @Deprecated
 	public static int ceilAsInt(double d) {
 		return (d % 1 == 0) ? (int)d : (d < 0) ? (int)d : (int)++d;
 	}
 	
-	public static short ceilAsShort(float f) {
-		return (f % 1 == 0) ? (short)f : (f < 0) ? (short)f : (short)++f;
-	}
-	
-	public static short ceilAsShort(double d) {
-		return (d % 1 == 0) ? (short)d : (d < 0) ? (short)d : (short)++d;
-	}
-	
-	public static byte ceilAsByte(float f) {
-		return (f % 1 == 0) ? (byte)f : (f < 0) ? (byte)f : (byte)++f;
-	}
-	
-	public static byte ceilAsByte(double d) {
-		return (d % 1 == 0) ? (byte)d : (d < 0) ? (byte)d : (byte)++d;
-	}
-	
 	//// ROUND ////
+    public static long round(double d) {
+        return (long) ( (d < 0) ? (d-0.5F) : (d+0.5F) );
+    }
+
+    public static int round(float f) {
+        return (int) ( (f < 0) ? (f-0.5F) : (f+0.5F) );
+    }
+
+    @Deprecated
 	public static long roundAsLong(float f) {
 		return (f < 0) ? (long) (f-0.5f) : (long) (f+0.5f);
 	}
-	
+
+    @Deprecated
 	public static long roundAsLong(double d) {
 		return (d < 0) ? (long) (d-0.5d) : (long) (d+0.5d);
 	}
-	
+
+    @Deprecated
 	public static int roundAsInt(float f) {
 		return (f < 0) ? (int) (f-0.5f) : (int) (f+0.5f);
 	}
-	
+
+    @Deprecated
 	public static int roundAsInt(double d) {
 		return (d < 0) ? (int) (d-0.5d) : (int) (d+0.5d);
 	}
 	
-	public static short roundAsShort(float f) {
-		return (f < 0) ? (short) (f-0.5f) : (short) (f+0.5f);
-	}
-	
-	public static short roundAsShort(double d) {
-		return (d < 0) ? (short) (d-0.5d) : (short) (d+0.5d);
-	}
-	
-	public static byte roundAsByte(float f) {
-		return (f < 0) ? (byte) (f-0.5f) : (byte) (f+0.5f);
-	}
-	
-	public static byte roundAsByte(double d) {
-		return (d < 0) ? (byte) (d-0.5d) : (byte) (d+0.5d);
-	}
-	
 	//// AVERAGE ////
-	public static long averageLong(long...array) {
-		return sumAsLong(array) / array.length;
+	public static long average(long...array) {
+		return sum(array) / array.length;
 	}
 	
-	public static int averageInt(int...array) {
-		return (int) (sumAsLong(array) / array.length);
+	public static int average(int...array) {
+		return (int) (sum(array) / array.length);
 	}
 	
-	public static short averageShort(short...array) {
-		return (short) (sumAsInt(array) / array.length);
+	public static short average(short...array) {
+		return (short) (sum(array) / array.length);
 	}
 	
-	public static byte averageByte(byte...array) {
-		return (byte) (sumAsInt(array) / array.length);
-	}
-	
-	//// MIN ////
-	public static long minLong(long a, long b) {
-		return a<=b? a : b;
-	}
-	
-	public static int minInt(int a, int b) {
-		return a<=b? a : b;
-	}
-	
-	public static short minShort(short a, short b) {
-		return a<=b? a : b;
-	}
-	
-	//// MAX ////
-	public static long maxLong(long a, long b) {
-		return a>=b? a : b;
-	}
-	
-	public static int maxInt(int a, int b) {
-		return a>=b? a : b;
-	}
-	
-	public static short maxShort(short a, short b) {
-		return a>=b? a : b;
-	}
+	public static byte average(byte...array) {
+        return (byte) (sum(array) / array.length);
+    }
+
+    public static double average(double...array) {
+        return sum(array) / array.length;
+    }
+
+    public static float average(float...array) {
+        return (float) (sum(array) / array.length);
+    }
+
+    //SIGNUM
+    public static int signum(long x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
+
+    public static int signum(int x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
+
+    public static int signum(short x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
+
+    public static int signum(byte x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
+
+    public static int signum(double x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
+
+    public static int signum(float x) {
+        if (x==0) return 0;
+        return x > 0? 1 : -1;
+    }
 	
 	//// SUM ////
-	public static long sumAsLong(long...array) {
+	public static long sum(long...array) {
 		long sum = 0;
 		for (long val : array) sum += val;
 		return sum;
 	}
 	
-	public static long sumAsLong(int...array) {
-		long sum = 0;
-		for (int val : array) sum += val;
-		return sum;
-	}
-	
-	public static long sumAsLong(short...array) {
-		long sum = 0;
-		for (short val : array) sum += val;
-		return sum;
-	}
-	
-	public static long sumAsLong(byte...array) {
-		long sum = 0;
-		for (byte val : array) sum += val;
-		return sum;
-	}
-	
-	public static int sumAsInt(int...array) {
+	public static long sum(int...array) {
 		int sum = 0;
 		for (int val : array) sum += val;
 		return sum;
 	}
 	
-	public static int sumAsInt(short...array) {
-		int sum = 0;
-		for (short val : array) sum += val;
-		return sum;
-	}
-	
-	public static int sumAsInt(byte...array) {
-		int sum = 0;
-		for (byte val : array) sum += val;
-		return sum;
-	}
-	
-	public static short sumAsShort(short...array) {
+	public static int sum(short...array) {
 		short sum = 0;
 		for (short val : array) sum += val;
 		return sum;
 	}
 	
-	public static short sumAsShort(byte...array) {
+	public static int sum(byte...array) {
 		short sum = 0;
 		for (byte val : array) sum += val;
 		return sum;
 	}
 	
-	public static double sumAsDouble(double...array) {
+	public static double sum(double...array) {
 		double sum = 0;
 		for (double val : array) sum += val;
 		return sum;
 	}
 	
-	public static double sumAsDouble(float...array) {
-		double sum = 0;
-		for (float val : array) sum += val;
-		return sum;
-	}
-	
-	public static float sumAsFloat(float...array) {
+	public static double sum(float...array) {
 		float sum = 0;
 		for (float val : array) sum += val;
 		return sum;
 	}
-	
-	private static Random RNG;
-
-    private static synchronized Random initRNG() {
-        Random rnd = RNG;
-        return (rnd == null) ? (RNG = new Random()) : rnd;
+    
+    private static class RNGHolder {
+        private final static Random RNG = new Random();
     }
 	
 	//// RANDOM ////
 	public static long randomLong(long max) {
-		return (long) (initRNG().nextDouble() * max);
+		return (long) (RNGHolder.RNG.nextDouble() * max);
 	}
 	
 	public static long randomLong(long min, long max) {
@@ -240,7 +202,7 @@ public final class PrimMath {
 	}
 	
 	public static int randomInt(int max) {
-		return (int) (initRNG().nextDouble() * max);
+		return (int) (RNGHolder.RNG.nextDouble() * max);
 	}
 	
 	public static int randomInt(int min, int max) {
@@ -249,7 +211,7 @@ public final class PrimMath {
 	}
 	
 	public static char randomChar(char max) {
-		return (char) (initRNG().nextDouble() * max);
+		return (char) (RNGHolder.RNG.nextDouble() * max);
 	}
 	
 	public static char randomChar(char min, char max) {
@@ -258,7 +220,7 @@ public final class PrimMath {
 	}
 	
 	public static short randomShort(short max) {
-		return (short) (initRNG().nextDouble() * max);
+		return (short) (RNGHolder.RNG.nextDouble() * max);
 	}
 	
 	public static short randomShort(short min, short max) {
@@ -267,7 +229,7 @@ public final class PrimMath {
 	}
 	
 	public static byte randomByte(byte max) {
-		return (byte) (initRNG().nextDouble() * max);
+		return (byte) (RNGHolder.RNG.nextDouble() * max);
 	}
 	
 	public static byte randomByte(byte min, byte max) {
@@ -276,7 +238,7 @@ public final class PrimMath {
 	}
 	
 	public static double randomDouble(double max) {
-		return initRNG().nextDouble() * max;
+		return RNGHolder.RNG.nextDouble() * max;
 	}
 	
 	public static double randomDouble(double min, double max) {
@@ -285,7 +247,7 @@ public final class PrimMath {
 	}
 	
 	public static double randomGaussian(double max) {
-		return initRNG().nextGaussian() * max;
+		return RNGHolder.RNG.nextGaussian() * max;
 	}
 	
 	public static double randomGaussian(double min, double max) {
@@ -294,7 +256,7 @@ public final class PrimMath {
 	}
 	
 	public static float randomFloat(float max) {
-		return initRNG().nextFloat() * max;
+		return RNGHolder.RNG.nextFloat() * max;
 	}
 	
 	public static float randomFloat(float min, float max) {
@@ -333,7 +295,7 @@ public final class PrimMath {
 	 * @param max the maximum of the range
 	 * @throws IllegalArgumentException if min > max
 	 */
-	public static long wrapLong(long val, long min, long max) {
+	public static long wrap(long val, long min, long max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		final long size = max - min + 1;
@@ -379,7 +341,7 @@ public final class PrimMath {
 	 * @param max the maximum of the range
 	 * @throws IllegalArgumentException if min > max
 	 */
-	public static int wrapInt(int val, int min, int max) {
+	public static int wrap(int val, int min, int max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		final int size = max - min + 1;
@@ -425,7 +387,7 @@ public final class PrimMath {
 	 * @param max the maximum of the range
 	 * @throws IllegalArgumentException if min > max
 	 */
-	public static char wrapChar(char val, char min, char max) {
+	public static char wrap(char val, char min, char max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		final char size = (char) (max - min + 1);
@@ -471,7 +433,7 @@ public final class PrimMath {
 	 * @param max the maximum of the range
 	 * @throws IllegalArgumentException if min > max
 	 */
-	public static short wrapShort(short val, short min, short max) {
+	public static short wrap(short val, short min, short max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		final short size = (short) (max - min + 1);
@@ -517,7 +479,7 @@ public final class PrimMath {
 	 * @param max the maximum of the range
 	 * @throws IllegalArgumentException if min > max
 	 */
-	public static byte wrapByte(byte val, byte min, byte max) {
+	public static byte wrap(byte val, byte min, byte max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
 		final byte size = (byte) (max - min + 1);
@@ -587,15 +549,6 @@ public final class PrimMath {
 					(val > max) ? max :
 						val;
 	}
-	
-	public static char clamp(char min, char val, char max) {
-		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
-	}
 
 	//MAX
 
@@ -604,6 +557,14 @@ public final class PrimMath {
     }
 
     public static int max(int a, int b) {
+        return a>b? a : b;
+    }
+
+    public static short max(short a, short b) {
+        return a>b? a : b;
+    }
+
+    public static byte max(byte a, byte b) {
         return a>b? a : b;
     }
 
@@ -617,13 +578,38 @@ public final class PrimMath {
 
     //TRIPPLE MAX
 
+    public static long max(long a, long b, long c) {
+        return max(a, max(b, c));
+    }
+
     public static int max(int a, int b, int c) {
+        return max(a, max(b, c));
+    }
+
+    public static short max(short a, short b, short c) {
+        return max(a, max(b, c));
+    }
+
+    public static byte max(byte a, byte b, byte c) {
+        return max(a, max(b, c));
+    }
+
+    public static double max(double a, double b, double c) {
+        return max(a, max(b, c));
+    }
+
+    public static float max(float a, float b, float c) {
         return max(a, max(b, c));
     }
 
     //VARARGS MAX
 
     public static long max(long... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return max(nums[0], nums[1]);
+        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
+        
         long max = nums[0];
         for (int i = 1; i<nums.length; i++)
             if (nums[i] > max) max = nums[i];
@@ -631,6 +617,11 @@ public final class PrimMath {
     }
 
     public static int max(int... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return max(nums[0], nums[1]);
+        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
+        
         int max = nums[0];
         for (int i = 1; i<nums.length; i++)
             if (nums[i] > max) max = nums[i];
@@ -638,6 +629,11 @@ public final class PrimMath {
     }
 
     public static double max(double... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return max(nums[0], nums[1]);
+        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
+        
         double max = nums[0];
         for (int i = 1; i<nums.length; i++)
             if (nums[i] > max) max = nums[i];
@@ -645,6 +641,11 @@ public final class PrimMath {
     }
 
     public static float max(float... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return max(nums[0], nums[1]);
+        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
+        
         float max = nums[0];
         for (int i = 1; i<nums.length; i++)
             if (nums[i] > max) max = nums[i];
@@ -654,33 +655,102 @@ public final class PrimMath {
     //MIN
 
     public static long min(long a, long b) {
-        return a<b? a : b;
+        return a>b? a : b;
     }
 
     public static int min(int a, int b) {
-        return a<b? a : b;
+        return a>b? a : b;
+    }
+
+    public static short min(short a, short b) {
+        return a>b? a : b;
+    }
+
+    public static byte min(byte a, byte b) {
+        return a>b? a : b;
     }
 
     public static double min(double a, double b) {
-        return a<b? a : b;
+        return a>b? a : b;
     }
 
     public static float min(float a, float b) {
-        return a<b? a : b;
+        return a>b? a : b;
     }
 
     //TRIPPLE MIN
+
+    public static long min(long a, long b, long c) {
+        return min(a, min(b, c));
+    }
 
     public static int min(int a, int b, int c) {
         return min(a, min(b, c));
     }
 
+    public static short min(short a, short b, short c) {
+        return min(a, min(b, c));
+    }
+
+    public static byte min(byte a, byte b, byte c) {
+        return min(a, min(b, c));
+    }
+
+    public static double min(double a, double b, double c) {
+        return min(a, min(b, c));
+    }
+
+    public static float min(float a, float b, float c) {
+        return min(a, min(b, c));
+    }
+
     //VARARGS MIN
 
+    public static long min(long... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return min(nums[0], nums[1]);
+        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
+
+        long min = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > min) min = nums[i];
+        return min;
+    }
+
     public static int min(int... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return min(nums[0], nums[1]);
+        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
+
         int min = nums[0];
         for (int i = 1; i<nums.length; i++)
-            if (nums[i] < min) min = nums[i];
+            if (nums[i] > min) min = nums[i];
+        return min;
+    }
+
+    public static double min(double... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return min(nums[0], nums[1]);
+        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
+
+        double min = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > min) min = nums[i];
+        return min;
+    }
+
+    public static float min(float... nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return min(nums[0], nums[1]);
+        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
+
+        float min = nums[0];
+        for (int i = 1; i<nums.length; i++)
+            if (nums[i] > min) min = nums[i];
         return min;
     }
 

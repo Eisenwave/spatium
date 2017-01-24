@@ -1,4 +1,4 @@
-package net.grian.spatium;
+package net.grian.spatium.anno;
 
 import net.grian.spatium.geo.Vector;
 
@@ -23,5 +23,5 @@ import java.lang.annotation.Target;
  * </p>
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.METHOD)
+@Target(value = {ElementType.METHOD, ElementType.PACKAGE, ElementType.TYPE})
 public @interface MinecraftSpecific {}

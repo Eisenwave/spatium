@@ -45,9 +45,9 @@ public abstract class AbstractArray3 implements Serializable {
     }
 
     /**
-     * Returns the product of all sizes which is equivalent to the total array length.
+     * Returns the product of all sizes which is equivalent to the total array hypot.
      *
-     * @return the array length
+     * @return the array hypot
      */
     public int getLength() {
         return sizeX * sizeY * sizeZ;

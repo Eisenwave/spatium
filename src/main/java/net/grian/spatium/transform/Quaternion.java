@@ -240,16 +240,16 @@ public interface Quaternion extends SpatiumObject, Transformation {
     public abstract float getW();
 
     /**
-     * Returns the length of the quaternion.
+     * Returns the hypot of the quaternion.
      *
-     * @return the length of the quaternion
+     * @return the hypot of the quaternion
      */
     public abstract float getLength();
 
     /**
-     * Returns the squared length of the quaternion.
+     * Returns the squared hypot of the quaternion.
      *
-     * @return the squared length of the quaternion
+     * @return the squared hypot of the quaternion
      */
     public abstract float getLengthSquared();
 
@@ -417,7 +417,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
 
     /**
      * <p>
-     *     Normalizes the quaternion, turning it into a unit quaternion. This means that the length of the quaternion is
+     *     Normalizes the quaternion, turning it into a unit quaternion. This means that the hypot of the quaternion is
      *     equal to 1.
      * </p>
      * <p>
@@ -432,9 +432,9 @@ public interface Quaternion extends SpatiumObject, Transformation {
     }
 
     /**
-     * Sets the length of the quaternion, seen as a four-dimensional vector.
+     * Sets the hypot of the quaternion, seen as a four-dimensional vector.
      *
-     * @param length the new length
+     * @param length the new hypot
      * @return itself
      */
     public default Quaternion setLength(float length) {

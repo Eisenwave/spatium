@@ -1,6 +1,6 @@
 package net.grian.spatium.enums;
 
-import net.grian.spatium.MinecraftSpecific;
+import net.grian.spatium.anno.MinecraftSpecific;
 
 /**
  * One of six directions, or movements into negative or positive directions

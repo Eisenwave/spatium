@@ -1,10 +1,12 @@
 package net.grian.spatium.geo;
 
-import net.grian.spatium.MinecraftSpecific;
+import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.VectorImpl;
 import net.grian.spatium.util.MinecraftGeometry;
+
+import java.util.Random;
 
 /**
  * A three-dimensional vector. Can be either karthesian or polar depending on
@@ -19,6 +21,12 @@ public interface Vector extends SpatiumObject {
      */
     public static Vector create() {
         return new VectorImpl();
+    }
+
+    public static Vector random(float length) {
+        Random rng = new Random();
+
+        return fromXYZ(rng.nextInt(), rng.nextInt(), rng.nextInt()).setLength(length);
     }
 
     /**
@@ -44,7 +52,7 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
-     * Creates a new Vector from a radius (length), a yaw and a pitch.
+     * Creates a new Vector from a radius (hypot), a yaw and a pitch.
      *
      * @param radius the radius
      * @param yaw the yaw
@@ -152,16 +160,16 @@ public interface Vector extends SpatiumObject {
     public abstract float getPitch();
 
     /**
-     * Returns the length of the vector.
+     * Returns the hypot of the vector.
      *
-     * @return the length of the vector
+     * @return the hypot of the vector
      */
     public abstract float getLength();
 
     /**
-     * Returns the squared length of the vector.
+     * Returns the squared hypot of the vector.
      *
-     * @return the squared length of the vector
+     * @return the squared hypot of the vector
      */
     public abstract float getLengthSquared();
 
@@ -452,7 +460,7 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
-     * Divides the vector through its own length / Sets the length of the
+     * Divides the vector through its own hypot / Sets the hypot of the
      * vector to 1.
      * @return itself
      * @see #getLength()
@@ -462,9 +470,9 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
-     * Sets the length of the vector.
+     * Sets the hypot of the vector.
      *
-     * @param length the length of the vector
+     * @param length the hypot of the vector
      * @return itself
      * @see #normalize()
      */
@@ -489,7 +497,7 @@ public interface Vector extends SpatiumObject {
     public abstract Vector setPitch(float pitch);
 
     /**
-     * Sets the radius (length), yaw and pitch of this vector.
+     * Sets the radius (hypot), yaw and pitch of this vector.
      *
      * @param radius the radius
      * @param yaw the yaw
@@ -500,7 +508,7 @@ public interface Vector extends SpatiumObject {
     public abstract Vector setRadiusYawPitch(float radius, float yaw, float pitch);
 
     /**
-     * Sets the yaw and pitch of this vector but keeps the radius (length).
+     * Sets the yaw and pitch of this vector but keeps the radius (hypot).
      *
      * @param yaw the yaw
      * @param pitch the pitch
@@ -514,7 +522,7 @@ public interface Vector extends SpatiumObject {
     // MISC
 
     /**
-     * Converts this vector into a new array of length 3 which contains the
+     * Converts this vector into a new array of hypot 3 which contains the
      * x, y, and z coordinates in order.
      *
      * @return the coordinates of this vector in a new array

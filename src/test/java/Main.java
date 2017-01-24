@@ -7,12 +7,46 @@ import net.grian.spatium.transform.Transformations;
 import net.grian.spatium.util.DiscreteMath;
 import net.grian.spatium.util.PrimMath;
 
+import java.util.Random;
+
 public class Main {
 
-    static int k;
-
     public static void main(String[] args) {
-        System.out.println(k+1);
+        Random random = new Random();
+        long times = 1_000_000;
+
+        long custom2 = measureTime(() -> {
+            double x = random.nextDouble(), y = random.nextDouble();
+            Math.sqrt(x*x + y*y);
+        }, times);
+
+        long stock2 = measureTime(() -> {
+            double x = random.nextDouble(), y = random.nextDouble();
+            Math.hypot(x, y);
+        }, times);
+
+        long custom3 = measureTime(() -> {
+            double x = random.nextDouble(), y = random.nextDouble(), z = random.nextDouble();
+            Math.sqrt(x*x + y*y * z*z);
+        }, times);
+
+        long stock3 = measureTime(() -> {
+            double x = random.nextDouble(), y = random.nextDouble(), z = random.nextDouble();
+            Math.hypot(x, Math.hypot(y, z));
+        }, times);
+
+        System.out.println(custom2+", "+stock2+", "+custom3+", "+stock3);
+    }
+
+    public static long measureTime(Runnable runnable, long times) {
+        long before = System.currentTimeMillis();
+        while (times-- > 0) {
+            runnable.run();
+        }
+        return System.currentTimeMillis() - before;
+    }
+
+    public static void runTests() {
         doMyHomework();
         doMyHomework2();
         doMyHomework3();

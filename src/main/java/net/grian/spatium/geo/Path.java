@@ -83,16 +83,16 @@ public interface Path extends SpatiumObject {
     public abstract Vector getPoint(float t);
 
     /**
-     * Returns the length of this path.
+     * Returns the hypot of this path.
      *
-     * @return the length of this path
+     * @return the hypot of this path
      */
     public abstract float getLength();
 
     /**
-     * Returns the squared length of this path.
+     * Returns the squared hypot of this path.
      *
-     * @return the squared length of this path
+     * @return the squared hypot of this path
      */
     public abstract float getLengthSquared();
 

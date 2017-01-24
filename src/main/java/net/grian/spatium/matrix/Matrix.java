@@ -1,6 +1,6 @@
 package net.grian.spatium.matrix;
 
-import net.grian.spatium.MinecraftSpecific;
+import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo.Vector;
 import net.grian.spatium.impl.MatrixImpl;
@@ -27,12 +27,12 @@ public interface Matrix {
      * @param a the first matrix
      * @param b the second matrix
      * @return the sum of the matrices
-     * @throws IncompatibleMatrixException if the matrices are not equal in
+     * @throws MatrixDimensionsException if the matrices are not equal in
      * size
      */
     public static Matrix sum(Matrix a, Matrix b) {
         if (!a.equalSize(b))
-            throw new IncompatibleMatrixException(a, b);
+            throw new MatrixDimensionsException(a, b);
 
         final int row = a.getRows(), col = a.getColumns();
         float[] result = new float[row * col];
@@ -69,12 +69,12 @@ public interface Matrix {
      * @param a the first matrix
      * @param b the second matrix
      * @return the product of the matrices
-     * @throws IncompatibleMatrixException if the rows of the first matrix do
+     * @throws MatrixDimensionsException if the rows of the first matrix do
      * not equal the columns of the second matrix
      */
     public static Matrix product(Matrix a, Matrix b) {
         if (a.getColumns() != b.getRows())
-            throw new IncompatibleMatrixException(a, b);
+            throw new MatrixDimensionsException(a, b);
 
         final int
         arow = a.getRows(), acol = a.getColumns(),
@@ -343,13 +343,13 @@ public interface Matrix {
      *   and the column index {@code (j)}.
      * </blockquote>
      * Should the provided array not meet the size requirements
-     * {@code length = rows * columns}, the matrix can not be created.
+     * {@code hypot = rows * columns}, the matrix can not be created.
      *
      * @param rows the amount of rows of the matrix (> 0)
      * @param columns the amount of columns of the matrix (> 0)
      * @param content the content to fill the matrix with
      * @return a new matrix
-     * @throws IllegalMatrixSizeException if the content array's length is not
+     * @throws IllegalMatrixSizeException if the content array's hypot is not
      * equal to {@code rows * columns}
      */
     public static Matrix create(int rows, int columns, float... content) {
@@ -367,6 +367,21 @@ public interface Matrix {
      */
     public static Matrix create(int rows, int columns) {
         return new MatrixImpl(rows, columns);
+    }
+
+    /**
+     * Creates a new n*n identity matrix.
+     *
+     * @param n the amount of rows and columns of the matrix (> 0)
+     * @return a new matrix
+     * @throws IllegalMatrixSizeException if either the amount of rows or the
+     * amount of columns <= 0
+     */
+    public static Matrix identity(int n) {
+        float[] value = new float[n * n];
+        for (int i = 0; i<n; i++)
+            value[i + i*n] = 1;
+        return new MatrixImpl(n, n, value);
     }
 
     // GETTERS
@@ -408,11 +423,26 @@ public interface Matrix {
      */
     public abstract int getColumns();
 
+    /**
+     * Returns the determinant of this matrix.
+     *
+     * @return the determinant of this matrix
+     */
+    public abstract float getDeterminant();
+
     // CHECKERS
 
     /**
-     * Returns whether this matrix is equal to another matrix. This condition
-     * is fulfilled if the matrices are equal in size and equal in all values.
+     * <p>
+     *     Returns whether this matrix is equal to another matrix.
+     * </p>
+     * <p>
+     *     Two matrices A<sup>m*n</sup>, B<sup>m*n</sup> are equal if:
+     * </p>
+     * <blockquote>
+     *     <code>A<sub>ij</sub> == B<sub>ij</sub> (0 <= i < n) (0 <= j < n)</code>
+     * </blockquote>
+     *
      * @param matrix the matrix
      * @return whether this matrix is equal to another matrix
      */
