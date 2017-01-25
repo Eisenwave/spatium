@@ -41,7 +41,7 @@ public final class Collisions {
 	 * @return whether the points collide
 	 */
 	public static boolean test(Plane a, Plane b) {
-		float dot = Math.abs(a.getNormal().normalize().dot(b.getNormal().normalize()));
+		double dot = Math.abs(a.getNormal().normalize().dot(b.getNormal().normalize()));
 		return Spatium.equals(dot, 1);
 	}
 
@@ -122,7 +122,7 @@ public final class Collisions {
      * @return whether the box and the sphere collide
      */
     public static boolean test(AxisAlignedBB box, Sphere sphere) {
-        float d = Rays.cast(Ray.between(sphere.getCenter(), box.getCenter()), box);
+        double d = Rays.cast(Ray.between(sphere.getCenter(), box.getCenter()), box);
         return d * d < sphere.getRadiusSquared();
     }
 
@@ -134,7 +134,7 @@ public final class Collisions {
      * @return whether the box and the sphere collide
      */
     public static boolean test(AxisAlignedBB box, AxisPlane plane) {
-        float d = plane.getDepth();
+        double d = plane.getDepth();
         switch (plane.getAxis()) {
             case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
             case Y: return (box.getMinY() <= d) != (box.getMaxY() <= d);
@@ -179,7 +179,7 @@ public final class Collisions {
      * @return whether the rays collide
      */
     public static boolean test(Ray a, Ray b) {
-        return Float.isNaN(Rays.cast(a, b));
+        return Double.isFinite(Rays.cast(a, b));
     }
 
 	/**
@@ -201,7 +201,7 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray ray, Plane plane) {
-        return Float.isNaN(Rays.cast(ray, plane));
+        return Double.isFinite(Rays.cast(ray, plane));
     }
 
     /**
@@ -235,7 +235,7 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray ray, Sphere sphere) {
-        return Float.isNaN(Rays.cast(ray, sphere));
+        return Double.isFinite(Rays.cast(ray, sphere));
     }
 
 	/**
@@ -247,7 +247,7 @@ public final class Collisions {
 	 * @return whether the ray and the box collide
 	 */
 	public static boolean test(Ray ray, AxisAlignedBB box) {
-		return Float.isNaN(Rays.cast(ray, box));
+		return Double.isFinite(Rays.cast(ray, box));
 	}
 
 	/**

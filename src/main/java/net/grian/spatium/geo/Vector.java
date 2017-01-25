@@ -4,7 +4,6 @@ import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.VectorImpl;
-import net.grian.spatium.util.MinecraftGeometry;
 
 import java.util.Random;
 
@@ -23,10 +22,15 @@ public interface Vector extends SpatiumObject {
         return new VectorImpl();
     }
 
-    public static Vector random(float length) {
+    public static Vector random(double length) {
         Random rng = new Random();
+        double
+                x = rng.nextDouble(),
+                y = rng.nextDouble(),
+                z = rng.nextDouble(),
+                multi = length / Math.sqrt(x*x + y*y + z*z);
 
-        return fromXYZ(rng.nextInt(), rng.nextInt(), rng.nextInt()).setLength(length);
+        return fromXYZ(x*multi, y*multi, z*multi);
     }
 
     /**
@@ -37,7 +41,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return a new Vector
      */
-    public static Vector fromXYZ(float x, float y, float z) {
+    public static Vector fromXYZ(double x, double y, double z) {
         return new VectorImpl(x, y, z);
     }
 
@@ -59,8 +63,8 @@ public interface Vector extends SpatiumObject {
      * @param pitch the pitch
      * @return a new Vector
      */
-    public static Vector fromRadiusYawPitch(float radius, float yaw, float pitch) {
-        return MinecraftGeometry.vectorFromYawPitchDeg(yaw, pitch).setLength(radius);
+    public static Vector fromRadiusYawPitch(double radius, double yaw, double pitch) {
+        return fromYawPitch(yaw, pitch).setLength(radius);
     }
 
     /**
@@ -70,8 +74,13 @@ public interface Vector extends SpatiumObject {
      * @param pitch the pitch
      * @return a new Vector
      */
-    public static Vector fromYawPitch(float yaw, float pitch) {
-        return MinecraftGeometry.vectorFromYawPitchDeg(yaw, pitch);
+    public static Vector fromYawPitch(double yaw, double pitch) {
+        double
+		x = Math.sin(-yaw),
+		y = Math.tan(-pitch),
+		z = Math.cos(yaw);
+
+        return fromXYZ(x, y, z);
     }
 
     /**
@@ -100,7 +109,7 @@ public interface Vector extends SpatiumObject {
         if (vectors.length == 0) throw new IllegalArgumentException("no vectors given");
         if (vectors.length == 1) return vectors[0].clone();
 
-        float x = 0, y = 0, z = 0;
+        double x = 0, y = 0, z = 0;
         for (Vector v : vectors) {
             x += v.getX();
             y += v.getY();
@@ -127,21 +136,21 @@ public interface Vector extends SpatiumObject {
      * Returns the x of the vector.
      * @return the x of the vector
      */
-    public abstract float getX();
+    public abstract double getX();
 
     /**
      * Returns the y of the vector.
      *
      * @return the y of the vector
      */
-    public abstract float getY();
+    public abstract double getY();
 
     /**
      * Returns the z of the vector.
      *
      * @return the z of the vector
      */
-    public abstract float getZ();
+    public abstract double getZ();
 
     /**
      * Returns the yaw of the vector in degrees.
@@ -149,7 +158,7 @@ public interface Vector extends SpatiumObject {
      * @return the yaw of the vector
      */
     @MinecraftSpecific
-    public abstract float getYaw();
+    public abstract double getYaw();
 
     /**
      * Returns the pitch of the vector.
@@ -157,21 +166,21 @@ public interface Vector extends SpatiumObject {
      * @return the pitch of the vector
      */
     @MinecraftSpecific
-    public abstract float getPitch();
+    public abstract double getPitch();
 
     /**
      * Returns the hypot of the vector.
      *
      * @return the hypot of the vector
      */
-    public abstract float getLength();
+    public abstract double getLength();
 
     /**
      * Returns the squared hypot of the vector.
      *
      * @return the squared hypot of the vector
      */
-    public abstract float getLengthSquared();
+    public abstract double getLengthSquared();
 
     /**
      * Returns the distance between this vector and a point.
@@ -181,7 +190,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return the distance to the point
      */
-    public abstract float distanceTo(float x, float y, float z);
+    public abstract double distanceTo(double x, double y, double z);
 
     /**
      * Returns the distance between this vector and a point.
@@ -189,7 +198,7 @@ public interface Vector extends SpatiumObject {
      * @param point the point
      * @return the distance to the point
      */
-    public default float distanceTo(Vector point) {
+    public default double distanceTo(Vector point) {
         return distanceTo(point.getX(), point.getY(), point.getZ());
     }
 
@@ -201,7 +210,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return the signed angle to another vector
      */
-    public abstract float angleTo(float x, float y, float z);
+    public abstract double angleTo(double x, double y, double z);
 
     /**
      * Returns the signed angle between this vector and another vector.
@@ -209,7 +218,7 @@ public interface Vector extends SpatiumObject {
      * @param v the vector
      * @return the signed angle to another vector
      */
-    public default float angleTo(Vector v) {
+    public default double angleTo(Vector v) {
         return angleTo(v.getX(), v.getY(), v.getZ());
     }
 
@@ -220,7 +229,7 @@ public interface Vector extends SpatiumObject {
      * @param plane the plane
      * @return the signed angle to the plane
      */
-    public default float angleTo(Plane plane) {
+    public default double angleTo(Plane plane) {
         return angleTo(plane.getNormal());
     }
 
@@ -238,9 +247,9 @@ public interface Vector extends SpatiumObject {
      * @return a point between this and another point
      * @throws IllegalArgumentException if t is smaller than 0 or larger than 1
      */
-    public default Vector midPoint(Vector point, float t) {
+    public default Vector midPoint(Vector point, double t) {
         if (t < 0 || t > 1) throw new IllegalArgumentException("weight out of range ("+t+")");
-        float k = 1-t;
+        double k = 1-t;
         return Vector.fromXYZ(
                 (this.getX() * k) + (point.getX() * t),
                 (this.getX() * k) + (point.getY() * t),
@@ -252,7 +261,7 @@ public interface Vector extends SpatiumObject {
      *
      * @param point the point
      * @return the middle-point to another point
-     * @see #midPoint(Vector, float)
+     * @see #midPoint(Vector, double)
      */
     public default Vector midPoint(Vector point) {
         return midPoint(point, 0.5f);
@@ -266,7 +275,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z coordinate of the vector
      * @return the dot-product of this and another vector
      */
-    public abstract float dot(float x, float y, float z);
+    public abstract double dot(double x, double y, double z);
 
     /**
      * Returns the dot-product of this and another vector.
@@ -274,7 +283,7 @@ public interface Vector extends SpatiumObject {
      * @param v the vector
      * @return the dot-product of this and another vector
      */
-    public default float dot(Vector v) {
+    public default double dot(Vector v) {
         return dot(v.getX(), v.getY(), v.getZ());
     }
 
@@ -286,7 +295,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z coordinate of the vector
      * @return the cross-product of this and another vector
      */
-    public abstract Vector cross(float x, float y, float z);
+    public abstract Vector cross(double x, double y, double z);
 
     /**
      * Returns the cross-product of this and another vector.
@@ -303,7 +312,7 @@ public interface Vector extends SpatiumObject {
     /**
      * Returns whether this vector equals another vector.
      *
-     * <br><br>The margin for floating point inaccuracies is
+     * <br><br>The margin for doubleing point inaccuracies is
      * {@link Spatium#EPSILON}
      *
      * @param v the vector
@@ -326,7 +335,7 @@ public interface Vector extends SpatiumObject {
      * @return whether this vector is a multiple of v
      */
     public default boolean isMultipleOf(Vector v) {
-        float r = this.getX() / v.getX();
+        double r = this.getX() / v.getX();
         return
                 Spatium.equals(this.getY() / v.getY(), r) &&
                 Spatium.equals(this.getZ() / v.getZ(), r);
@@ -342,7 +351,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return itself
      */
-    public abstract Vector set(float x, float y, float z);
+    public abstract Vector set(double x, double y, double z);
 
     /**
      * Sets the coordinates of this vector to the coordinates of another vector.
@@ -360,7 +369,7 @@ public interface Vector extends SpatiumObject {
      * @param x the x of the vector
      * @return itself
      */
-    public abstract Vector setX(float x);
+    public abstract Vector setX(double x);
 
     /**
      * Sets the y of the vector.
@@ -368,7 +377,7 @@ public interface Vector extends SpatiumObject {
      * @param y the y of the vector
      * @return itself
      */
-    public abstract Vector setY(float y);
+    public abstract Vector setY(double y);
 
     /**
      * Sets the z of the vector.
@@ -376,7 +385,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z of the vector
      * @return itself
      */
-    public abstract Vector setZ(float z);
+    public abstract Vector setZ(double z);
 
     // OPERATIONS
 
@@ -388,7 +397,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return itself
      */
-    public abstract Vector add(float x, float y, float z);
+    public abstract Vector add(double x, double y, double z);
 
     /**
      * Adds another vector to this vector.
@@ -408,7 +417,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z-coordinate
      * @return itself
      */
-    public abstract Vector subtract(float x, float y, float z);
+    public abstract Vector subtract(double x, double y, double z);
 
     /**
      * Subtracts another vector from this vector.
@@ -428,14 +437,14 @@ public interface Vector extends SpatiumObject {
      * @param z the z factor
      * @return itself
      */
-    public abstract Vector multiply(float x, float y, float z);
+    public abstract Vector multiply(double x, double y, double z);
 
     /**
      * Scales this vector by a factor.
      * @param factor the factor
      * @return itself
      */
-    public default Vector multiply(float factor) {
+    public default Vector multiply(double factor) {
         return multiply(factor, factor, factor);
     }
 
@@ -447,7 +456,7 @@ public interface Vector extends SpatiumObject {
      * @param z the z divisor
      * @return itself
      */
-    public abstract Vector divide(float x, float y, float z);
+    public abstract Vector divide(double x, double y, double z);
 
     /**
      * Divides this vector by a divisor.
@@ -455,7 +464,7 @@ public interface Vector extends SpatiumObject {
      * @param divisor the divisor
      * @return itself
      */
-    public default Vector divide(float divisor) {
+    public default Vector divide(double divisor) {
         return divide(divisor, divisor, divisor);
     }
 
@@ -476,7 +485,7 @@ public interface Vector extends SpatiumObject {
      * @return itself
      * @see #normalize()
      */
-    public abstract Vector setLength(float length);
+    public abstract Vector setLength(double length);
 
     /**
      * Sets the yaw of this vector.
@@ -485,7 +494,7 @@ public interface Vector extends SpatiumObject {
      * @return itself
      */
     @MinecraftSpecific
-    public abstract Vector setYaw(float yaw);
+    public abstract Vector setYaw(double yaw);
 
     /**
      * Sets the pitch of this vector.
@@ -494,7 +503,7 @@ public interface Vector extends SpatiumObject {
      * @return itself
      */
     @MinecraftSpecific
-    public abstract Vector setPitch(float pitch);
+    public abstract Vector setPitch(double pitch);
 
     /**
      * Sets the radius (hypot), yaw and pitch of this vector.
@@ -505,7 +514,7 @@ public interface Vector extends SpatiumObject {
      * @return itself
      */
     @MinecraftSpecific
-    public abstract Vector setRadiusYawPitch(float radius, float yaw, float pitch);
+    public abstract Vector setRadiusYawPitch(double radius, double yaw, double pitch);
 
     /**
      * Sets the yaw and pitch of this vector but keeps the radius (hypot).
@@ -515,7 +524,7 @@ public interface Vector extends SpatiumObject {
      * @return itself
      */
     @MinecraftSpecific
-    public default Vector setYawPitch(float yaw, float pitch) {
+    public default Vector setYawPitch(double yaw, double pitch) {
         return setRadiusYawPitch(getLength(), yaw, pitch);
     }
 
@@ -527,8 +536,8 @@ public interface Vector extends SpatiumObject {
      *
      * @return the coordinates of this vector in a new array
      */
-    public default float[] toArray() {
-        return new float[] {getX(), getY(), getZ()};
+    public default double[] toArray() {
+        return new double[] {getX(), getY(), getZ()};
     }
 
     /**

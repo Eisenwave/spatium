@@ -8,9 +8,9 @@ public class PlaneImpl implements Plane {
 
     private static final long serialVersionUID = 196722359952800225L;
 
-    private float xc, yc, zc, xn, yn, zn;
+    private double xc, yc, zc, xn, yn, zn;
 
-    public PlaneImpl(float xc, float yc, float zc, float xn, float yn, float zn) {
+    public PlaneImpl(double xc, double yc, double zc, double xn, double yn, double zn) {
         this.xc = xc;
         this.yc = yc;
         this.zc = zc;
@@ -19,8 +19,8 @@ public class PlaneImpl implements Plane {
         this.zn = zn;
     }
 
-    public PlaneImpl(float a, float b, float c, float d) {
-        float p = d / (a + b + c);
+    public PlaneImpl(double a, double b, double c, double d) {
+        double p = d / (a + b + c);
         this.xc = p;
         this.yc = p;
         this.zc = p;
@@ -65,7 +65,7 @@ public class PlaneImpl implements Plane {
     }
 
     @Override
-    public float getDepth() {
+    public double getDepth() {
         return xn*xc + yn*yc + zn*zc;
     }
 
@@ -77,7 +77,7 @@ public class PlaneImpl implements Plane {
     }
 
     @Override
-    public boolean contains(float x, float y, float z) {
+    public boolean contains(double x, double y, double z) {
         //if the dot product of a vector from the center of the plane to the point and the plane normal are
         //orthogonal, the point lies in the plane
         return Spatium.equals((x-xc)*xn + (y-yc)*yn + (z-zc)*zn, 0) ;
@@ -86,7 +86,7 @@ public class PlaneImpl implements Plane {
     // GETTERS
 
     @Override
-    public Plane setCenter(float x, float y, float z) {
+    public Plane setCenter(double x, double y, double z) {
         this.xc = x;
         this.yc = y;
         this.zc = z;
@@ -94,7 +94,7 @@ public class PlaneImpl implements Plane {
     }
 
     @Override
-    public Plane setNormal(float x, float y, float z) {
+    public Plane setNormal(double x, double y, double z) {
         this.xn = x;
         this.yn = y;
         this.zn = z;

@@ -8,9 +8,9 @@ public class ComplexImplEuler implements EulerComplex {
 
     private static final long serialVersionUID = -3477899621141300107L;
 
-    private float r, phi;
+    private double r, phi;
 
-    public ComplexImplEuler(float r, float phi) {
+    public ComplexImplEuler(double r, double phi) {
         this.r = r;
         this.phi = phi;
     }
@@ -28,27 +28,27 @@ public class ComplexImplEuler implements EulerComplex {
     // GETTERS
 
     @Override
-    public float getReal() {
-        return (float) (r * Math.acos(phi));
+    public double getReal() {
+        return r * Math.acos(phi);
     }
 
     @Override
-    public float getImaginary() {
-        return (float) (r * Math.asin(phi));
+    public double getImaginary() {
+        return r * Math.asin(phi);
     }
 
     @Override
-    public float getRadius() {
+    public double getRadius() {
         return r;
     }
 
     @Override
-    public float getRadiusSquared() {
+    public double getRadiusSquared() {
         return r * r;
     }
 
     @Override
-    public float getAngle() {
+    public double getAngle() {
         return phi;
     }
 
@@ -62,7 +62,7 @@ public class ComplexImplEuler implements EulerComplex {
     // SETTERS
 
     @Override
-    public EulerComplex setReal(float a) {
+    public EulerComplex setReal(double a) {
         CartesianComplex z = toCartesian().setReal(a);
         this.r = z.getRadius();
         this.phi = z.getAngle();
@@ -70,7 +70,7 @@ public class ComplexImplEuler implements EulerComplex {
     }
 
     @Override
-    public EulerComplex setImaginary(float b) {
+    public EulerComplex setImaginary(double b) {
         CartesianComplex z = toCartesian().setImaginary(b);
         this.r = z.getRadius();
         this.phi = z.getAngle();
@@ -78,13 +78,13 @@ public class ComplexImplEuler implements EulerComplex {
     }
 
     @Override
-    public EulerComplex setRadius(float r) {
+    public EulerComplex setRadius(double r) {
         this.r = r;
         return this;
     }
 
     @Override
-    public EulerComplex setAngle(float phi) {
+    public EulerComplex setAngle(double phi) {
         this.phi = phi;
         return this;
     }
@@ -103,7 +103,7 @@ public class ComplexImplEuler implements EulerComplex {
     }
 
     @Override
-    public EulerComplex multiply(float factor) {
+    public EulerComplex multiply(double factor) {
         this.r *= factor;
         return this;
     }
@@ -116,7 +116,7 @@ public class ComplexImplEuler implements EulerComplex {
     }
 
     @Override
-    public EulerComplex divide(float divisor) {
+    public EulerComplex divide(double divisor) {
         this.r /= divisor;
         return this;
     }

@@ -20,9 +20,9 @@ public class BlockVectorImpl implements BlockVector {
     }
 
     public BlockVectorImpl(Vector v) {
-        this.x = PrimMath.floor(v.getX());
-        this.y = PrimMath.floor(v.getY());
-        this.z = PrimMath.floor(v.getZ());
+        this.x = (int) PrimMath.floor(v.getX());
+        this.y = (int) PrimMath.floor(v.getY());
+        this.z = (int) PrimMath.floor(v.getZ());
     }
 
     public BlockVectorImpl() {
@@ -101,7 +101,7 @@ public class BlockVectorImpl implements BlockVector {
     }
 
     @Override
-    public BlockVectorImpl multiply(float x, float y, float z) {
+    public BlockVectorImpl multiply(double x, double y, double z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
@@ -117,7 +117,7 @@ public class BlockVectorImpl implements BlockVector {
     }
 
     @Override
-    public BlockVectorImpl divide(float x, float y, float z) {
+    public BlockVectorImpl divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;

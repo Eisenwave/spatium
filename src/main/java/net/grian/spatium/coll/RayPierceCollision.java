@@ -4,16 +4,16 @@ import net.grian.spatium.geo.Ray;
 
 public class RayPierceCollision<T> extends Collision<Ray, T> {
 
-    private final float entry, exit;
+    private final double entry, exit;
 
-    public RayPierceCollision(CollisionEngine.CollisionResult result, Ray ray, T target, float entry, float exit) {
+    public RayPierceCollision(CollisionEngine.CollisionResult result, Ray ray, T target, double entry, double exit) {
         super(result, ray, target);
         this.entry = entry;
         this.exit = exit;
     }
 
     public RayPierceCollision(Ray ray, T target) {
-        this(CollisionEngine.CollisionResult.NEGATIVE, ray, target, Float.NaN, Float.NaN);
+        this(CollisionEngine.CollisionResult.NEGATIVE, ray, target, Double.NaN, Double.NaN);
     }
 
     /**
@@ -21,7 +21,7 @@ public class RayPierceCollision<T> extends Collision<Ray, T> {
      *
      * @return the ray entry point
      */
-    public float getEntryPoint() {
+    public double getEntryPoint() {
         return entry;
     }
 
@@ -30,7 +30,7 @@ public class RayPierceCollision<T> extends Collision<Ray, T> {
      *
      * @return the ray exit point
      */
-    public float getExitPoint() {
+    public double getExitPoint() {
         return exit;
     }
 

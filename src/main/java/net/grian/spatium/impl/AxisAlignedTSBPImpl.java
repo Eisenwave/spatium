@@ -14,7 +14,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     private Direction dir;
 
     /** The offset from the origin on the axis of the plane. */
-    private float wmin, hmin, wmax, hmax, d;
+    private double wmin, hmin, wmax, hmax, d;
 
     /**
      * Constructs a new 3D rectangle using the direction the rectangle is
@@ -32,7 +32,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
      * @param d the depth of the rectangle, aka. its coordinate on the axis
      * of the direction
      */
-    public AxisAlignedTSBPImpl(Direction dir, float wa, float ha, float wb, float hb, float d) {
+    public AxisAlignedTSBPImpl(Direction dir, double wa, double ha, double wb, double hb, double d) {
         this.wmin = Math.min(wa, wb);
         this.hmin = Math.min(ha, hb);
         this.wmax = Math.max(wa, wb);
@@ -52,7 +52,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     // GETTERS
 
     @Override
-    public float getMinX() {
+    public double getMinX() {
         switch (dir) {
         case POSITIVE_X: return -d;
         case NEGATIVE_X: return  d;
@@ -63,12 +63,12 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z:
         case NEGATIVE_Z: return wmax;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMinY() {
+    public double getMinY() {
         switch (dir) {
         case POSITIVE_X:
         case NEGATIVE_X: return hmin;
@@ -79,12 +79,12 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z:
         case NEGATIVE_Z: return hmin;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMinZ() {
+    public double getMinZ() {
         switch (dir) {
         case POSITIVE_X:
         case NEGATIVE_X: return wmin;
@@ -95,12 +95,12 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z: return -d;
         case NEGATIVE_Z: return  d;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMaxX() {
+    public double getMaxX() {
         switch (dir) {
         case POSITIVE_X: return  d;
         case NEGATIVE_X: return -d;
@@ -111,12 +111,12 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z:
         case NEGATIVE_Z: return wmin;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMaxY() {
+    public double getMaxY() {
         switch (dir) {
         case POSITIVE_X:
         case NEGATIVE_X: return hmax;
@@ -127,12 +127,12 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z:
         case NEGATIVE_Z: return hmax;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMaxZ() {
+    public double getMaxZ() {
         switch (dir) {
         case POSITIVE_X:
         case NEGATIVE_X: return wmax;
@@ -143,42 +143,42 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
         case POSITIVE_Z: return  d;
         case NEGATIVE_Z: return -d;
 
-        default: return Float.NaN;
+        default: return Double.NaN;
         }
     }
 
     @Override
-    public float getMinWidth() {
+    public double getMinWidth() {
         return wmin;
     }
 
     @Override
-    public float getMinHeight() {
+    public double getMinHeight() {
         return hmin;
     }
 
     @Override
-    public float getMaxWidth() {
+    public double getMaxWidth() {
         return wmax;
     }
 
     @Override
-    public float getMaxHeight() {
+    public double getMaxHeight() {
         return hmax;
     }
 
     @Override
-    public float getWidth() {
+    public double getWidth() {
         return wmax - wmin;
     }
 
     @Override
-    public float getHeight() {
+    public double getHeight() {
         return hmax - hmin;
     }
 
     @Override
-    public float getDepth() {
+    public double getDepth() {
         return this.d;
     }
 
@@ -197,7 +197,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     // CHECKERS
 
     @Override
-    public boolean contains(float x, float y, float z) {
+    public boolean contains(double x, double y, double z) {
         switch (getAxis()) {
         case X: return
                 Spatium.equals(d, x) &&
@@ -269,7 +269,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     // SETTERS
 
     @Override
-    public AxisAlignedTSBP move(float x, float y, float z) {
+    public AxisAlignedTSBP move(double x, double y, double z) {
         boolean positive = dir.direction() == AxisDirection.POSITIVE;
 
         switch (getAxis()) {
@@ -308,7 +308,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     }
 
     @Override
-    public AxisAlignedTSBP setDepth(float d) {
+    public AxisAlignedTSBP setDepth(double d) {
         this.d = d;
         return this;
     }

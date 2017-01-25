@@ -7,9 +7,9 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
 
     private static final long serialVersionUID = -1954142561482825366L;
 
-    private float xmin, ymin, zmin, xmax, ymax, zmax;
+    private double xmin, ymin, zmin, xmax, ymax, zmax;
 
-    public AxisAlignedBBImpl(float xa, float ya, float za, float xb, float yb, float zb) {
+    public AxisAlignedBBImpl(double xa, double ya, double za, double xb, double yb, double zb) {
         this.xmin = Math.min(xa, xb);
         this.ymin = Math.min(ya, yb);
         this.zmin = Math.min(za, zb);
@@ -30,47 +30,47 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     // GETTERS
 
     @Override
-    public float getMinX() {
+    public double getMinX() {
         return xmin;
     }
 
     @Override
-    public float getMinY() {
+    public double getMinY() {
         return ymin;
     }
 
     @Override
-    public float getMinZ() {
+    public double getMinZ() {
         return zmin;
     }
 
     @Override
-    public float getMaxX() {
+    public double getMaxX() {
         return xmax;
     }
 
     @Override
-    public float getMaxY() {
+    public double getMaxY() {
         return ymax;
     }
 
     @Override
-    public float getMaxZ() {
+    public double getMaxZ() {
         return zmax;
     }
 
     @Override
-    public float getSizeX() {
+    public double getSizeX() {
         return xmax - xmin;
     }
 
     @Override
-    public float getSizeY() {
+    public double getSizeY() {
         return ymax - ymin;
     }
 
     @Override
-    public float getSizeZ() {
+    public double getSizeZ() {
         return zmax - zmin;
     }
 
@@ -90,13 +90,13 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     @Override
-    public float getVolume() {
+    public double getVolume() {
         return (xmax - xmin) * (ymax - ymin) * (zmax - zmin);
     }
 
     @Override
-    public float getSurfaceArea() {
-        float a = xmax - xmin, b = ymax - ymin, c = zmax - zmin;
+    public double getSurfaceArea() {
+        double a = xmax - xmin, b = ymax - ymin, c = zmax - zmin;
         return (a * b + a * c + b * c) * 2;
     }
 
@@ -110,7 +110,7 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     // SETTERS
 
     @Override
-    public AxisAlignedBB move(float x, float y, float z) {
+    public AxisAlignedBB move(double x, double y, double z) {
         xmin += x; xmax += x;
         ymin += y; ymax += y;
         zmin += z; zmax += z;
@@ -118,7 +118,7 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     @Override
-    public AxisAlignedBB scale(float x, float y, float z) {
+    public AxisAlignedBB scale(double x, double y, double z) {
         xmin = x>0 ? this.xmin*x : this.xmax*x;
         ymin = y>0 ? this.ymin*y : this.ymax*y;
         zmin = z>0 ? this.zmin*z : this.zmax*z;
@@ -129,8 +129,8 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     @Override
-    public AxisAlignedBB grow(float x, float y, float z) {
-        float
+    public AxisAlignedBB grow(double x, double y, double z) {
+        double
                 dx = getSizeX(),
                 dy = getSizeY(),
                 dz = getSizeZ();
@@ -167,7 +167,7 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     @Override
-    public boolean contains(float x, float y, float z)  {
+    public boolean contains(double x, double y, double z)  {
         return
                 x >= xmin && x <= xmax &&
                 y >= ymin && y <= ymax &&

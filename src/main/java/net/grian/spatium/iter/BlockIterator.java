@@ -1,31 +1,28 @@
 package net.grian.spatium.iter;
 
+import net.grian.spatium.array.Incrementer3;
 import net.grian.spatium.geo.BlockSelection;
 import net.grian.spatium.geo.BlockVector;
-import net.grian.spatium.util.ArrayMath;
 
 import java.util.Iterator;
 
 public class BlockIterator implements Iterator<BlockVector> {
 
-    private int i = 0, x, y, z;
-    private final int limit;
+    private final Incrementer3 increment;
 
     public BlockIterator(BlockSelection blocks) {
-        this.x = blocks.getSizeX();
-        this.y = blocks.getSizeY();
-        this.z = blocks.getSizeZ();
-        this.limit = blocks.getBlockCount();
+        this.increment = new Incrementer3(blocks.getSizeX(), blocks.getSizeY(), blocks.getSizeZ());
     }
 
     @Override
     public boolean hasNext() {
-        return i < limit;
+        return increment.canIncrement();
     }
 
     @Override
     public BlockVector next() {
-        int[] block = ArrayMath.indexToCoords3D(i++, x, y, z);
+        int[] block = increment.current();
+        increment.increment();
         return BlockVector.fromXYZ(block[0], block[1], block[2]);
     }
 }

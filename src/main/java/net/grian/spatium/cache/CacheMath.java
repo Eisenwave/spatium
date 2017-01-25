@@ -23,12 +23,15 @@ public final class CacheMath {
 
     private CacheMath() {}
 
-    public final static float
+    public final static double
             GOLDEN = 1.618033988749894848204586834365638117720309179805762862135F,
-            SQRT_2 = (float) Math.sqrt(2),
-            SQRT_3 = (float) Math.sqrt(3),
-            SQRT_HALF = (float) Math.sqrt(1 / 2F),
-            CBRT_THIRD = (float) Math.cbrt(1 / 3F);
+            TAU = Math.PI * 2,
+            SQRT_2 = Math.sqrt(2),
+            SQRT_3 = Math.sqrt(3),
+            HALF_SQRT_2 = Math.sqrt(2) / 2,
+            THIRD_SQRT_3 = Math.sqrt(3) / 3,
+            SQRT_HALF = Math.sqrt(1 / 2F),
+            CBRT_THIRD = Math.cbrt(1 / 3F);
 
     public final static double TO_RADIANS = Math.PI / 180;
 

@@ -7,10 +7,10 @@ import java.util.Iterator;
 
 public class IntervalIterator implements Iterator<Vector> {
 
-    private float x, y, z, xi, yi, zi;
+    private double x, y, z, xi, yi, zi;
     private int i;
 
-    public IntervalIterator(Ray ray, float interval) {
+    public IntervalIterator(Ray ray, double interval) {
         this.x = ray.getOriginX();
         this.y = ray.getOriginY();
         this.z = ray.getOriginZ();

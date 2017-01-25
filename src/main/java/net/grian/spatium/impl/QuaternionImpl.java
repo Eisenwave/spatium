@@ -7,16 +7,16 @@ import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
 public class QuaternionImpl implements Quaternion {
 
-    private float x, y, z, w;
+    private double x, y, z, w;
 
-    public QuaternionImpl(float x, float y, float z, float w) {
+    public QuaternionImpl(double x, double y, double z, double w) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.w = w;
     }
 
-    public QuaternionImpl(Vector vector, float scale) {
+    public QuaternionImpl(Vector vector, double scale) {
         this.x = vector.getX();
         this.y = vector.getY();
         this.z = vector.getZ();
@@ -30,37 +30,37 @@ public class QuaternionImpl implements Quaternion {
     // GETTERS
 
     @Override
-    public float getX() {
+    public double getX() {
         return x;
     }
 
     @Override
-    public float getY() {
+    public double getY() {
         return y;
     }
 
     @Override
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
     @Override
-    public float getW() {
+    public double getW() {
         return w;
     }
 
     @Override
-    public float getLength() {
-        return (float) Math.sqrt(x * x + y * y + z * z + w * w);
+    public double getLength() {
+        return Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
     @Override
-    public float getLengthSquared() {
+    public double getLengthSquared() {
         return x * x + y * y + z * z + w * w;
     }
 
     @Override
-    public float dot(Quaternion q) {
+    public double dot(Quaternion q) {
         return x * q.getX() + y * q.getY() + z * q.getZ() + w * q.getW();
     }
 
@@ -74,7 +74,7 @@ public class QuaternionImpl implements Quaternion {
 
     @Override
     public Quaternion invert() {
-        float t = 1 / getLengthSquared();
+        double t = 1 / getLengthSquared();
         if (t != 0) {
             this.x *= -t;
             this.y *= -t;
@@ -85,7 +85,7 @@ public class QuaternionImpl implements Quaternion {
     }
 
     @Override
-    public float get(int index) {
+    public double get(int index) {
         switch (index) {
             case 0: return x;
             case 1: return y;
@@ -106,31 +106,31 @@ public class QuaternionImpl implements Quaternion {
 
 
     @Override
-    public Quaternion setX(float x) {
+    public Quaternion setX(double x) {
         this.x = x;
         return this;
     }
 
     @Override
-    public Quaternion setY(float y) {
+    public Quaternion setY(double y) {
         this.y = y;
         return this;
     }
 
     @Override
-    public Quaternion setZ(float z) {
+    public Quaternion setZ(double z) {
         this.z = z;
         return this;
     }
 
     @Override
-    public Quaternion setW(float w) {
+    public Quaternion setW(double w) {
         this.w = w;
         return this;
     }
 
     @Override
-    public Quaternion set(float x, float y, float z, float w) {
+    public Quaternion set(double x, double y, double z, double w) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -157,7 +157,7 @@ public class QuaternionImpl implements Quaternion {
     }
 
     @Override
-    public Quaternion multiply(float scale) {
+    public Quaternion multiply(double scale) {
         this.x *= scale;
         this.y *= scale;
         this.z *= scale;
@@ -167,7 +167,7 @@ public class QuaternionImpl implements Quaternion {
 
     @Override
     public Quaternion multiply(Quaternion q) {
-        float
+        double
                 lx = x,        ly = y,        lz = z,        lw = w,
                 rx = q.getX(), ry = q.getY(), rz = q.getZ(), rw = q.getW();
 
@@ -179,7 +179,7 @@ public class QuaternionImpl implements Quaternion {
     }
 
     @Override
-    public Quaternion divide(float divisor) {
+    public Quaternion divide(double divisor) {
         this.x /= divisor;
         this.y /= divisor;
         this.z /= divisor;

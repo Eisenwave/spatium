@@ -6,9 +6,9 @@ import net.grian.spatium.geo.Vector;
 
 public class SlabImpl implements Slab {
 
-    private float x, y, z, dmin, dmax;
+    private double x, y, z, dmin, dmax;
 
-    public SlabImpl(float x, float y, float z, float dmin, float dmax) {
+    public SlabImpl(double x, double y, double z, double dmin, double dmax) {
         if (dmin > dmax) throw new IllegalArgumentException("dmin > dmax");
         this.x = x;
         this.y = y;
@@ -17,7 +17,7 @@ public class SlabImpl implements Slab {
         this.dmax = dmax;
     }
 
-    public SlabImpl(Vector normal, float dmin, float dmax) {
+    public SlabImpl(Vector normal, double dmin, double dmax) {
         this(normal.getX(), normal.getY(), normal.getZ(), dmin, dmax);
     }
 
@@ -38,28 +38,28 @@ public class SlabImpl implements Slab {
 
     @Override
     public Vector getMinPoint() {
-        float p = dmin / (x + y + z);
+        double p = dmin / (x + y + z);
         return Vector.fromXYZ(p, p, p);
     }
 
     @Override
     public Vector getMaxPoint() {
-        float p = dmax / (x + y + z);
+        double p = dmax / (x + y + z);
         return Vector.fromXYZ(p, p, p);
     }
 
     @Override
-    public float getMinDepth() {
+    public double getMinDepth() {
         return dmin;
     }
 
     @Override
-    public float getMaxDepth() {
+    public double getMaxDepth() {
         return dmax;
     }
 
     @Override
-    public Slab setNormal(float x, float y, float z) {
+    public Slab setNormal(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -67,27 +67,27 @@ public class SlabImpl implements Slab {
     }
 
     @Override
-    public Slab setMinDepth(float depth) {
+    public Slab setMinDepth(double depth) {
         if (depth > dmax) throw new IllegalArgumentException("depth > max depth");
         this.dmin = depth;
         return this;
     }
 
     @Override
-    public Slab setMaxDepth(float depth) {
+    public Slab setMaxDepth(double depth) {
         if (depth < dmin) throw new IllegalArgumentException("depth < min depth");
         return this;
     }
 
     @Override
-    public Slab push(float depth) {
+    public Slab push(double depth) {
         dmin += depth;
         dmax += depth;
         return this;
     }
 
     @Override
-    public Slab pull(float depth) {
+    public Slab pull(double depth) {
         dmin -= depth;
         dmax -= depth;
         return this;

@@ -15,13 +15,13 @@ public class PathImplBezier implements Path {
     }
 
     @Override
-    public Vector getPoint(float t) {
+    public Vector getPoint(double t) {
         return Curves.bezier(t % 1, points);
     }
 
     @Override
-    public float getLength() {
-        float result = 0;
+    public double getLength() {
+        double result = 0;
         for (int i = 1; i<points.length; i++)
             result += points[i].distanceTo(points[i-1]);
 
@@ -34,8 +34,8 @@ public class PathImplBezier implements Path {
     }
 
     @Override
-    public float getLengthSquared() {
-        float l = getLength();
+    public double getLengthSquared() {
+        double l = getLength();
         return l*l;
     }
 }

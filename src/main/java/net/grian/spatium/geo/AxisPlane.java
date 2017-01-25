@@ -18,7 +18,7 @@ public interface AxisPlane extends Plane {
      *
      * @return a new axis plane
      */
-    public static AxisPlane create(Axis axis, float depth) {
+    public static AxisPlane create(Axis axis, double depth) {
         return new AxisPlaneImpl(axis, depth);
     }
 
@@ -44,7 +44,7 @@ public interface AxisPlane extends Plane {
      *
      * @return the depth of the plane
      */
-    public abstract float getDepth();
+    public abstract double getDepth();
 
     /**
      * Returns a point on the plane.
@@ -90,7 +90,7 @@ public interface AxisPlane extends Plane {
      * @return whether this plane contains the point
      */
     @Override
-    public default boolean contains(float x, float y, float z) {
+    public default boolean contains(double x, double y, double z) {
         switch (getAxis()) {
             case X: return Spatium.equals(getDepth(), x);
             case Y: return Spatium.equals(getDepth(), y);
@@ -127,15 +127,15 @@ public interface AxisPlane extends Plane {
      * @return itself
      * @see #getDepth()
      */
-    public abstract AxisPlane setDepth(float depth);
+    public abstract AxisPlane setDepth(double depth);
 
     @Override
-    public default Plane setNormal(float x, float y, float z) {
+    public default Plane setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public default Plane setCenter(float x, float y, float z) {
+    public default Plane setCenter(double x, double y, double z) {
         switch (getAxis()) {
             case X: return setDepth(x);
             case Y: return setDepth(y);

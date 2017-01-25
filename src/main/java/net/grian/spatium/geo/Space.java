@@ -12,13 +12,13 @@ public interface Space extends SpatiumObject {
      *
      * @return the volume of this space
      */
-    public abstract float getVolume();
+    public abstract double getVolume();
 
     /**
      * Returns the surface area of this space.
      *
      * @return the surface area of this space
      */
-    public abstract float getSurfaceArea();
+    public abstract double getSurfaceArea();
 
 }

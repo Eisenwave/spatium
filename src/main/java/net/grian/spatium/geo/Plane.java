@@ -28,7 +28,7 @@ public interface Plane extends SpatiumObject {
      * @param zn the z of the normal
      * @return a new plane
      */
-    public static Plane fromPointNormal(float xc, float yc, float zc, float xn, float yn, float zn) {
+    public static Plane fromPointNormal(double xc, double yc, double zc, double xn, double yn, double zn) {
         return new PlaneImpl(xc, yc, zc, xn, yn, zn);
     }
 
@@ -55,7 +55,7 @@ public interface Plane extends SpatiumObject {
      * @param d the depth
      * @return a new plane
      */
-    public static Plane fromGeneral(float a, float b, float c, float d) {
+    public static Plane fromGeneral(double a, double b, double c, double d) {
         return new PlaneImpl(a, b, c, d);
     }
 
@@ -83,7 +83,7 @@ public interface Plane extends SpatiumObject {
      *
      * @return the depth of the plane
      */
-    public abstract float getDepth();
+    public abstract double getDepth();
 
     /**
      * Returns the signed distance between a point and this plane.
@@ -93,7 +93,7 @@ public interface Plane extends SpatiumObject {
      * @param z the z-coordinate of the point
      * @return the distance between a point and this plane
      */
-    public default float signedDistanceTo(float x, float y, float z) {
+    public default double signedDistanceTo(double x, double y, double z) {
         Vector n = getNormal();
         return (n.dot(x, y, z) - getDepth()) / n.getLength();
     }
@@ -104,7 +104,7 @@ public interface Plane extends SpatiumObject {
      * @param point the point
      * @return the distance between a point and this plane
      */
-    public default float signedDistanceTo(Vector point) {
+    public default double signedDistanceTo(Vector point) {
         return signedDistanceTo(point.getX(), point.getY(), point.getZ());
     }
 
@@ -130,7 +130,7 @@ public interface Plane extends SpatiumObject {
      * @param z the z-coordinate of the point
      * @return whether this plane contains the point
      */
-    public abstract boolean contains(float x, float y, float z);
+    public abstract boolean contains(double x, double y, double z);
 
     /**
      * Returns whether this plane contains a given point.
@@ -152,7 +152,7 @@ public interface Plane extends SpatiumObject {
      * @param z the z-coordinate of the point
      * @return itself
      */
-    public abstract Plane setCenter(float x, float y, float z);
+    public abstract Plane setCenter(double x, double y, double z);
 
     /**
      * Sets the center of this plane to a given point.
@@ -172,7 +172,7 @@ public interface Plane extends SpatiumObject {
      * @param z the z-coordinate of the vector
      * @return itself
      */
-    public abstract Plane setNormal(float x, float y, float z);
+    public abstract Plane setNormal(double x, double y, double z);
 
     /**
      * Sets the normal of this plane to a given vector.

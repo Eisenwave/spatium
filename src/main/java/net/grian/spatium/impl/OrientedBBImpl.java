@@ -6,14 +6,14 @@ import net.grian.spatium.geo.Vector;
 
 public class OrientedBBImpl implements OrientedBB {
 
-    private float
+    private double
             cx, cy, cz, //center
             du, dv, dw, //half-dimensions
             ux, uy, uz, //local x-axis
             vx, vy, vz, //local y-axis
             wx, wy, wz; //local z-axis
 
-    public OrientedBBImpl(Vector center, Vector u, Vector v, Vector w, float du, float dv, float dw) {
+    public OrientedBBImpl(Vector center, Vector u, Vector v, Vector w, double du, double dv, double dw) {
         if (du < 0) throw new IllegalArgumentException("du must be positive");
         if (dv < 0) throw new IllegalArgumentException("dv must be positive");
         if (dw < 0) throw new IllegalArgumentException("dw must be positive");
@@ -65,36 +65,36 @@ public class OrientedBBImpl implements OrientedBB {
     @Override
     public Slab getSlabU() {
         Vector axis = getU();
-        float d = axis.dot(cx, cy, cz);
+        double d = axis.dot(cx, cy, cz);
         return Slab.create(axis, d - du, d + du);
     }
 
     @Override
     public Slab getSlabV() {
         Vector axis = getV();
-        float d = axis.dot(cx, cy, cz);
+        double d = axis.dot(cx, cy, cz);
         return Slab.create(axis, d - dv, d + dv);
     }
 
     @Override
     public Slab getSlabW() {
         Vector axis = getW();
-        float d = axis.dot(cx, cy, cz);
+        double d = axis.dot(cx, cy, cz);
         return Slab.create(axis, d - dw, d + dw);
     }
 
     @Override
-    public float getSizeU() {
+    public double getSizeU() {
         return du*2;
     }
 
     @Override
-    public float getSizeV() {
+    public double getSizeV() {
         return dv*2;
     }
 
     @Override
-    public float getSizeW() {
+    public double getSizeW() {
         return dw*2;
     }
 }

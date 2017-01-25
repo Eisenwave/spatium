@@ -21,11 +21,11 @@ public final class Spatium {
      *
      * @see #equals(float, float)
      */
-    public final static float EPSILON = 1E-5f;
+    public final static double EPSILON = 1E-5;
 
-    private final static float
-            DEG_TO_RAD = (float) (Math.PI / 180),
-            RAD_TO_DEG = (float) (180 / Math.PI);
+    private final static double
+            DEG_TO_RAD = Math.PI / 180,
+            RAD_TO_DEG = 180 / Math.PI;
 
     /**
      * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
@@ -52,19 +52,43 @@ public final class Spatium {
     }
 
     /**
+     * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     *
+     * @param a the first number
+     * @param b the second number
+     * @return whether the numbers are roughly the same
+     */
+    public static boolean equals(double a, double b) {
+        return Math.abs(a - b) < EPSILON;
+    }
+
+    /**
+     * Checks whether the difference between three numbers {@code a,b,c} is smaller than the maximum precision
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     *
+     * @param a the first number
+     * @param b the second number
+     * @return whether the numbers are roughly the same
+     */
+    public static boolean equals(double a, double b, double c) {
+        return equals(a, b) && equals(b, c);
+    }
+
+    /**
      * Checks whether the difference between several numbers is smaller than the maximum precision
      * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
      *
      * @param numbers the numbers
      * @return whether the numbers are roughly the same
      */
-    public static boolean equals(float... numbers) {
+    public static boolean equals(double... numbers) {
         if (numbers.length == 0) return false;
         if (numbers.length == 1) return true;
         if (numbers.length == 2) return equals(numbers[0], numbers[1]);
         if (numbers.length == 3) return equals(numbers[0], numbers[1], numbers[2]);
 
-        float first = numbers[0];
+        double first = numbers[0];
         for (int i = 1; i<numbers.length; i++)
             if (!Spatium.equals(first, numbers[i])) return false;
 
@@ -92,6 +116,27 @@ public final class Spatium {
             lengthSquared += x * x;
 
         return (float) Math.sqrt(lengthSquared);
+    }
+
+    public static double hypot(double x, double y) {
+        return Math.sqrt(x*x + y*y);
+    }
+
+    public static double hypot(double x, double y, double z) {
+        return Math.sqrt(x*x + y*y + z*z);
+    }
+
+    public static double hypot(double... coords) {
+        if (coords.length == 0) return 0;
+        if (coords.length == 1) return coords[0];
+        if (coords.length == 2) return hypot(coords[0], coords[1]);
+        if (coords.length == 3) return hypot(coords[0], coords[1], coords[2]);
+
+        double lengthSquared = 0;
+        for (double x : coords)
+            lengthSquared += x * x;
+
+        return Math.sqrt(lengthSquared);
     }
 
     /**
@@ -128,7 +173,7 @@ public final class Spatium {
      * @param radians the angle in radians
      * @return the angle in degrees
      */
-    public static float degrees(float radians) {
+    public static double degrees(double radians) {
         return RAD_TO_DEG * radians;
     }
 
@@ -138,7 +183,7 @@ public final class Spatium {
      * @param degrees the angle in degrees
      * @return the angle in radians
      */
-    public static float radians(float degrees) {
+    public static double radians(double degrees) {
         return DEG_TO_RAD * degrees;
     }
 

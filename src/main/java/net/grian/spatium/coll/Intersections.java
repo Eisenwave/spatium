@@ -75,9 +75,9 @@ public final class Intersections {
                 direction = an.cross(bn),
                 ldir = bn.cross(direction);
 
-        float denominator = an.dot(ldir);
+        double denominator = an.dot(ldir);
         if (Math.abs(denominator) > Spatium.EPSILON) {
-            float t = an.dot( ac.subtract(bc) ) / denominator;
+            double t = an.dot( ac.subtract(bc) ) / denominator;
             /* notice the mutation of bc and ldir, which does not matter though since the result is being returned at
             this point */
             Vector origin = bc.add(ldir.multiply(t));
@@ -212,7 +212,7 @@ public final class Intersections {
         if (sphereToPlane.getLengthSquared() > sphere.getRadiusSquared()) return null;
 
         Vector center = sphereToPlane.getPoint(Rays.cast(sphereToPlane, plane));
-        float radius = (float) Math.cos(center.distanceTo(sc));
+        double radius = Math.cos(center.distanceTo(sc));
         return Path.circle(center, radius, plane.getNormal());
     }
 
@@ -226,7 +226,7 @@ public final class Intersections {
      */
     public static Path of(AxisAlignedBB box, AxisPlane plane) {
         if (!Collisions.test(box, plane)) return null;
-        float depth = plane.getDepth();
+        double depth = plane.getDepth();
         Vector a, b, c, d;
         switch (plane.getAxis()) {
             case X: {
@@ -275,15 +275,15 @@ public final class Intersections {
                 rayAB = Ray.between(triangle.getA(), triangle.getB()),
                 rayAC = Ray.between(triangle.getA(), triangle.getC()),
                 rayBC = Ray.between(triangle.getB(), triangle.getC());
-        float
+        double
                 castAB = Rays.cast(rayAB, plane),
                 castAC = Rays.cast(rayAC, plane),
                 castBC = Rays.cast(rayBC, plane);
 
         Vector  //3 points of ray intersections with plane
-                ab = ( Float.isFinite(castAB) && castAB > 0 && castAB < 1 )? rayAB.getPoint(castAB) : null,
-                ac = ( Float.isFinite(castAC) && castAC > 0 && castAC < 1 )? rayAB.getPoint(castAC) : null,
-                bc = ( Float.isFinite(castBC) && castBC > 0 && castBC < 1 )? rayAB.getPoint(castBC) : null;
+                ab = ( Double.isFinite(castAB) && castAB > 0 && castAB < 1 )? rayAB.getPoint(castAB) : null,
+                ac = ( Double.isFinite(castAC) && castAC > 0 && castAC < 1 )? rayAB.getPoint(castAC) : null,
+                bc = ( Double.isFinite(castBC) && castBC > 0 && castBC < 1 )? rayAB.getPoint(castBC) : null;
 
         if (ab == null)
             return ac == null || bc == null? null : new Vector[] {ac, bc};

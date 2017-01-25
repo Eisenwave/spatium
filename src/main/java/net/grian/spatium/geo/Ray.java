@@ -23,7 +23,7 @@ public interface Ray extends Path {
      * @param zd the z-coordinate of the direction
      * @return a new ray
      */
-    public static Ray fromOD(float xo, float yo, float zo, float xd, float yd, float zd) {
+    public static Ray fromOD(double xo, double yo, double zo, double xd, double yd, double zd) {
         return new RayImpl(xo, yo, zo, xd, yd, zd);
     }
 
@@ -62,7 +62,7 @@ public interface Ray extends Path {
      * @param tz the target x
      * @return a new ray
      */
-    public static Ray between(float ox, float oy, float oz, float tx, float ty, float tz) {
+    public static Ray between(double ox, double oy, double oz, double tx, double ty, double tz) {
         return fromOD(ox, oy, oz, tx-ox, ty-oy, tz-oz);
     }
 
@@ -73,56 +73,56 @@ public interface Ray extends Path {
      *
      * @return the x-coordinate of the origin of this ray
      */
-    public abstract float getOriginX();
+    public abstract double getOriginX();
 
     /**
      * Returns the y-coordinate of the origin of this ray.
      *
      * @return the y-coordinate of the origin of this ray
      */
-    public abstract float getOriginY();
+    public abstract double getOriginY();
 
     /**
      * Returns the z-coordinate of the origin of this ray.
      *
      * @return the z-coordinate of the origin of this ray
      */
-    public abstract float getOriginZ();
+    public abstract double getOriginZ();
 
     /**
      * Returns the x-coordinate of the direction of this ray.
      *
      * @return the x-coordinate of the direction of this ray
      */
-    public abstract float getDirX();
+    public abstract double getDirX();
 
     /**
      * Returns the y-coordinate of the direction of this ray.
      *
      * @return the y-coordinate of the direction of this ray
      */
-    public abstract float getDirY();
+    public abstract double getDirY();
 
     /**
      * Returns the z-coordinate of the direction of this ray.
      *
      * @return the z-coordinate of the direction of this ray
      */
-    public abstract float getDirZ();
+    public abstract double getDirZ();
 
     /**
      * Returns the hypot of this ray.
      *
      * @return the hypot of this ray
      */
-    public abstract float getLength();
+    public abstract double getLength();
 
     /**
      * Returns the squared hypot of this ray.
      *
      * @return the squared hypot of this ray
      */
-    public abstract float getLengthSquared();
+    public abstract double getLengthSquared();
 
     /**
      * Returns the origin of this ray in a new vector.
@@ -177,7 +177,7 @@ public interface Ray extends Path {
      * @param z the z-coordinate of the point
      * @return whether the ray is equal to the given point at any point
      */
-    public abstract boolean contains(float x, float y, float z);
+    public abstract boolean contains(double x, double y, double z);
 
     /**
      * Returns whether the ray is equal to the given point at any point.
@@ -195,17 +195,17 @@ public interface Ray extends Path {
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @param z the z-coordinate of the point
-     * @return the ray multiplier or {@link Float#NaN} if there is no collision
+     * @return the ray multiplier or {@link Double#NaN} if there is no collision
      */
-    public abstract float containsAt(float x, float y, float z);
+    public abstract double containsAt(double x, double y, double z);
 
     /**
      * Tests at which point of the ray the ray collides with another point.
      *
      * @param point the point
-     * @return the ray multiplier or {@link Float#NaN} if there is no collision
+     * @return the ray multiplier or {@link Double#NaN} if there is no collision
      */
-    public default float containsAt(Vector point) {
+    public default double containsAt(Vector point) {
         return containsAt(point.getX(), point.getY(), point.getZ());
     }
 
@@ -236,7 +236,7 @@ public interface Ray extends Path {
      * @param z the z-coordinate of the point
      * @return itself
      */
-    public abstract Ray setOrigin(float x, float y, float z);
+    public abstract Ray setOrigin(double x, double y, double z);
 
     /**
      * Sets the origin of the ray to a given point.
@@ -256,7 +256,7 @@ public interface Ray extends Path {
      * @param z the z-coordinate of the vector
      * @return itself
      */
-    public abstract Ray setDirection(float x, float y, float z);
+    public abstract Ray setDirection(double x, double y, double z);
 
     /**
      * Sets the hypot of the ray to a given hypot.
@@ -264,7 +264,7 @@ public interface Ray extends Path {
      * @param t the new hypot
      * @return itself
      */
-    public abstract Ray setLength(float t);
+    public abstract Ray setLength(double t);
 
     // MISC
 
@@ -287,7 +287,7 @@ public interface Ray extends Path {
      * @param interval the interval of iteration
      * @return a new interval iterator
      */
-    public default Iterator<Vector> intervalIterator(float interval) {
+    public default Iterator<Vector> intervalIterator(double interval) {
         return new IntervalIterator(this, interval);
     }
 

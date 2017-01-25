@@ -7,9 +7,9 @@ public class SphereImpl implements Sphere {
 
     private static final long serialVersionUID = 9087738324681226586L;
 
-    private float x, y, z, r;
+    private double x, y, z, r;
 
-    public SphereImpl(float x, float y, float z, float r) {
+    public SphereImpl(double x, double y, double z, double r) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -24,24 +24,24 @@ public class SphereImpl implements Sphere {
         this(sphere.x, sphere.y, sphere.z, sphere.r);
     }
 
-    public SphereImpl(Vector center, float r) {
+    public SphereImpl(Vector center, double r) {
         this(center.getX(), center.getY(), center.getZ(), r);
     }
 
     // GETTERS
 
     @Override
-    public float getX() {
+    public double getX() {
         return x;
     }
 
     @Override
-    public float getY() {
+    public double getY() {
         return y;
     }
 
     @Override
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
@@ -51,36 +51,36 @@ public class SphereImpl implements Sphere {
     }
 
     @Override
-    public float getRadius() {
+    public double getRadius() {
         return r;
     }
 
     @Override
-    public float getRadiusSquared() {
+    public double getRadiusSquared() {
         return r*r;
     }
 
-    private final static float four_thirds_pi = (float) ((4d / 3d) * Math.PI);
+    private final static double four_thirds_pi = (double) ((4d / 3d) * Math.PI);
 
     @Override
-    public float getVolume() {
-        float r = getRadius();
+    public double getVolume() {
+        double r = getRadius();
         return four_thirds_pi * r*r*r;
     }
 
-    private final static float four_pi = (float) (4 * Math.PI);
+    private final static double four_pi = (double) (4 * Math.PI);
 
     @Override
-    public float getSurfaceArea() {
-        float r = getRadius();
+    public double getSurfaceArea() {
+        double r = getRadius();
         return four_pi * r*r;
     }
 
     // CHECKERS
 
     @Override
-    public boolean contains(float x, float y, float z) {
-        float
+    public boolean contains(double x, double y, double z) {
+        double
         xd = this.x - x,
         yd = this.y - y,
         zd = this.z - z;
@@ -96,7 +96,7 @@ public class SphereImpl implements Sphere {
     // SETTERS
 
     @Override
-    public Sphere setCenter(float x, float y, float z) {
+    public Sphere setCenter(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -104,14 +104,14 @@ public class SphereImpl implements Sphere {
     }
 
     @Override
-    public Sphere scale(float factor) {
+    public Sphere scale(double factor) {
         if (factor < 0) throw new IllegalArgumentException("factor < 0");
         this.r *= factor;
         return this;
     }
 
     @Override
-    public Sphere move(float x, float y, float z) {
+    public Sphere move(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -119,7 +119,7 @@ public class SphereImpl implements Sphere {
     }
 
     @Override
-    public Sphere setRadius(float radius) {
+    public Sphere setRadius(double radius) {
         if (radius < 0) throw new IllegalArgumentException("radius < 0");
         this.r = radius;
         return this;

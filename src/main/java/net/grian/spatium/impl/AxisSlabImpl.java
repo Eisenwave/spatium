@@ -7,9 +7,9 @@ public class AxisSlabImpl implements AxisSlab {
 
     private Axis axis;
 
-    private float min, max;
+    private double min, max;
 
-    public AxisSlabImpl(Axis axis, float min, float max) {
+    public AxisSlabImpl(Axis axis, double min, double max) {
         this.axis = axis;
         this.min = min;
         this.max = max;
@@ -51,17 +51,17 @@ public class AxisSlabImpl implements AxisSlab {
     }
 
     @Override
-    public float getMinDepth() {
+    public double getMinDepth() {
         return min;
     }
 
     @Override
-    public float getMaxDepth() {
+    public double getMaxDepth() {
         return max;
     }
 
     @Override
-    public Slab setMinDepth(float depth) {
+    public Slab setMinDepth(double depth) {
         if (depth > max) {
             min = max;
             max = depth;
@@ -72,7 +72,7 @@ public class AxisSlabImpl implements AxisSlab {
     }
 
     @Override
-    public Slab setMaxDepth(float depth) {
+    public Slab setMaxDepth(double depth) {
         if (depth < min) {
             max = min;
             min = depth;
@@ -83,14 +83,14 @@ public class AxisSlabImpl implements AxisSlab {
     }
 
     @Override
-    public AxisSlab push(float depth) {
+    public AxisSlab push(double depth) {
         min += depth;
         max += depth;
         return this;
     }
 
     @Override
-    public AxisSlab pull(float depth) {
+    public AxisSlab pull(double depth) {
         min += depth;
         max += depth;
         return this;

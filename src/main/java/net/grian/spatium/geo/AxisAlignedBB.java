@@ -19,7 +19,7 @@ public interface AxisAlignedBB extends Space {
      * @param zb the z of the second point
      * @return a new bounding box
      */
-    public static AxisAlignedBB fromPoints(float xa, float ya, float za, float xb, float yb, float zb) {
+    public static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
         return new AxisAlignedBBImpl(xa, ya, za, xb, yb, zb);
     }
 
@@ -31,7 +31,7 @@ public interface AxisAlignedBB extends Space {
      * @param size the size of the cube
      * @return a new axis aligned bounding box
      */
-    public static AxisAlignedBB createCube(Vector center, float size) {
+    public static AxisAlignedBB createCube(Vector center, double size) {
         return new AxisAlignedBBImpl(
                 center.getX() - size,
                 center.getY() - size,
@@ -55,27 +55,27 @@ public interface AxisAlignedBB extends Space {
 
     // GETTERS
 
-    public abstract float getMinX();
+    public abstract double getMinX();
 
-    public abstract float getMinY();
+    public abstract double getMinY();
 
-    public abstract float getMinZ();
+    public abstract double getMinZ();
 
-    public abstract float getMaxX();
+    public abstract double getMaxX();
 
-    public abstract float getMaxY();
+    public abstract double getMaxY();
 
-    public abstract float getMaxZ();
+    public abstract double getMaxZ();
 
-    public default float getSizeX() {
+    public default double getSizeX() {
         return getMaxX() - getMinX();
     }
 
-    public default float getSizeY() {
+    public default double getSizeY() {
         return getMaxY() - getMinY();
     }
 
-    public default float getSizeZ() {
+    public default double getSizeZ() {
         return getMaxZ() - getMinZ();
     }
 
@@ -104,13 +104,13 @@ public interface AxisAlignedBB extends Space {
     }
 
     @Override
-    public default float getVolume() {
+    public default double getVolume() {
         return getSizeX() * getSizeY() * getSizeZ();
     }
 
     @Override
-    public default float getSurfaceArea() {
-        float x = getSizeX(), y = getSizeY(), z = getSizeZ();
+    public default double getSurfaceArea() {
+        double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
 
@@ -134,7 +134,7 @@ public interface AxisAlignedBB extends Space {
      * @param z the z-coordinate
      * @return whether this bounding box contains a point of given coordinates
      */
-    public default boolean contains(float x, float y, float z) {
+    public default boolean contains(double x, double y, double z) {
         return
                 x >= getMinX() && x <= getMaxX() &&
                 y >= getMinY() && y <= getMaxY() &&
@@ -161,7 +161,7 @@ public interface AxisAlignedBB extends Space {
      * @param z the amount of z-movement
      * @return itself
      */
-    public abstract AxisAlignedBB move(float x, float y, float z);
+    public abstract AxisAlignedBB move(double x, double y, double z);
 
     /**
      * Moves the bounding box by a given amount.
@@ -181,7 +181,7 @@ public interface AxisAlignedBB extends Space {
      * @param z the z-scale factor
      * @return itself
      */
-    public abstract AxisAlignedBB scale(float x, float y, float z);
+    public abstract AxisAlignedBB scale(double x, double y, double z);
 
     /**
      * Scales the bounding box around the origin.
@@ -199,7 +199,7 @@ public interface AxisAlignedBB extends Space {
      * @param factor the scale factor
      * @return itself
      */
-    public default AxisAlignedBB scale(float factor) {
+    public default AxisAlignedBB scale(double factor) {
         return scale(factor, factor, factor);
     }
 
@@ -212,7 +212,7 @@ public interface AxisAlignedBB extends Space {
      * @param z the z-growth
      * @return itself
      */
-    public abstract AxisAlignedBB grow(float x, float y, float z);
+    public abstract AxisAlignedBB grow(double x, double y, double z);
 
     /**
      * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,

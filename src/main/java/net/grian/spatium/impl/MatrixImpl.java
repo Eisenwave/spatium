@@ -9,9 +9,9 @@ import net.grian.spatium.util.Strings;
 public class MatrixImpl implements Matrix {
 
     private final int rows, columns;
-    private final float[] content;
+    private final double[] content;
 
-    public MatrixImpl(int rows, int columns, float[] content) {
+    public MatrixImpl(int rows, int columns, double[] content) {
         this.rows = rows;
         this.columns = columns;
         this.content = PrimArrays.clone(content);
@@ -20,7 +20,7 @@ public class MatrixImpl implements Matrix {
     public MatrixImpl(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.content = new float[rows * columns];
+        this.content = new double[rows * columns];
     }
 
     public MatrixImpl(MatrixImpl copyOf) {
@@ -30,17 +30,17 @@ public class MatrixImpl implements Matrix {
     // GETTERS
 
     @Override
-    public float get(int row, int col) {
+    public double get(int row, int col) {
         validate(row, col);
 
         return content[row*columns + col];
     }
 
     @Override
-    public float[] getRow(int row) {
+    public double[] getRow(int row) {
         validateRow(row);
 
-        float[] result = new float[columns];
+        double[] result = new double[columns];
         for (int i = 0; i<columns; i++)
             result[i] = get(row, i);
 
@@ -48,10 +48,10 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public float[] getColumn(int col) {
+    public double[] getColumn(int col) {
         validateCol(col);
 
-        float[] result = new float[rows];
+        double[] result = new double[rows];
         for (int i = 0; i<rows; i++)
             result[i] = get(i, col);
 
@@ -69,19 +69,19 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public float getDeterminant() {
+    public double getDeterminant() {
         if (rows != columns)
             throw new MatrixDimensionsException("matrix must be square matrix");
 
         return internalDeterminant(this, rows);
     }
 
-    private static float internalDeterminant(Matrix matrix, int n) {
+    private static double internalDeterminant(Matrix matrix, int n) {
         if (n == 1) return matrix.get(0,0);
         if (n == 2) return matrix.get(0,0)*matrix.get(1,1) - matrix.get(0,1)*matrix.get(1,0);
 
         Matrix temp = Matrix.create(n, n);
-        float result = 0;
+        double result = 0;
 
         for (int p = 0; p < n; p++) {
             int h = 0, k = 0;
@@ -106,7 +106,7 @@ public class MatrixImpl implements Matrix {
     // SETTERS
 
     @Override
-    public Matrix set(int row, int col, float value) {
+    public Matrix set(int row, int col, double value) {
         validate(row, col);
 
         content[row*columns + col] = value;
@@ -114,7 +114,7 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public Matrix scale(float factor) {
+    public Matrix scale(double factor) {
         for (int i = 0; i<rows; i++)
             for (int j = 0; j<columns; j++)
                 content[i * j*rows] *= factor;

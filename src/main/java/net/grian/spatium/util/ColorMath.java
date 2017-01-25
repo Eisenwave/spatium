@@ -20,6 +20,7 @@ public final class ColorMath {
     SOLID_MAGENTA = SOLID_RED  | SOLID_BLUE,
     SOLID_WHITE = SOLID_RED | SOLID_GREEN | SOLID_BLUE,
     DEBUG1 = SOLID_MAGENTA,
+    DEBUG2 = SOLID_CYAN,
     DEFAULT_TINT = 0xFF_8DB360;
 
     private ColorMath() {}

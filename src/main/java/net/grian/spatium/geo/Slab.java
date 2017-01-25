@@ -32,7 +32,7 @@ public interface Slab {
      * @param dmax the maximum d value
      * @return a new slab
      */
-    public static Slab create(float a, float b, float c, float dmin, float dmax) {
+    public static Slab create(double a, double b, double c, double dmin, double dmax) {
         return new SlabImpl(a, b, c, dmin, dmax);
     }
 
@@ -48,7 +48,7 @@ public interface Slab {
      * @param dmax the maximum d value
      * @return a new slab
      */
-    public static Slab create(Vector normal, float dmin, float dmax) {
+    public static Slab create(Vector normal, double dmin, double dmax) {
         return new SlabImpl(normal.getX(), normal.getY(), normal.getZ(), dmin, dmax);
     }
 
@@ -61,7 +61,7 @@ public interface Slab {
      * @return a new slab
      */
     public static Slab fromPointsNormal(Vector p1, Vector p2, Vector normal) {
-        float
+        double
                 xn = normal.getX(), yn = normal.getZ(), zn = normal.getZ(),
                 d1 = xn*p1.getX() + yn*p1.getY() + zn*p1.getZ(),
                 d2 = xn*p2.getX() + yn*p2.getY() + zn*p2.getZ();
@@ -81,16 +81,16 @@ public interface Slab {
 
     public abstract Vector getMaxPoint();
 
-    public abstract float getMinDepth();
+    public abstract double getMinDepth();
 
-    public abstract float getMaxDepth();
+    public abstract double getMaxDepth();
 
     /**
      * Returns the thickness of the slab. This is the distance between the two planes which enclose the slab.
      *
      * @return the thickness of the slab
      */
-    public default float getThickness() {
+    public default double getThickness() {
         return (getMaxDepth() - getMinDepth()) / getNormal().getLength();
     }
 
@@ -103,10 +103,10 @@ public interface Slab {
                 Spatium.equals(this.getMaxDepth(), slab.getMaxDepth());
     }
 
-    public default boolean contains(float x, float y, float z) {
+    public default boolean contains(double x, double y, double z) {
         Vector n = getNormal();
-        float invLength = 1 / n.getLength();
-        float dot = n.dot(x, y, z);
+        double invLength = 1 / n.getLength();
+        double dot = n.dot(x, y, z);
 
         return
                 (dot - getMinDepth()) * invLength >= 0 &&  //signed distance to min plane positive or 0
@@ -127,7 +127,7 @@ public interface Slab {
      * @param z the z-coordinate of the normal
      * @return itself
      */
-    public abstract Slab setNormal(float x, float y, float z);
+    public abstract Slab setNormal(double x, double y, double z);
 
     /**
      * Sets the normal of the slab to a specified vector.
@@ -139,9 +139,9 @@ public interface Slab {
         return setNormal(normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public abstract Slab setMinDepth(float depth);
+    public abstract Slab setMinDepth(double depth);
 
-    public abstract Slab setMaxDepth(float depth);
+    public abstract Slab setMaxDepth(double depth);
 
     /**
      * Moves the slab into the direction of its normal vector.
@@ -149,7 +149,7 @@ public interface Slab {
      * @param depth the additional depth
      * @return itself
      */
-    public abstract Slab push(float depth);
+    public abstract Slab push(double depth);
 
     /**
      * Moves the slab into the opposite direction of its normal vector.
@@ -157,6 +157,6 @@ public interface Slab {
      * @param depth the additional depth
      * @return itself
      */
-    public abstract Slab pull(float depth);
+    public abstract Slab pull(double depth);
 
 }

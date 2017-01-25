@@ -8,9 +8,9 @@ public class RayImpl implements Ray {
 
     private static final long serialVersionUID = -7636360491121122898L;
 
-    private float xo, yo, zo, xd, yd, zd;
+    private double xo, yo, zo, xd, yd, zd;
 
-    public RayImpl(float xo, float yo, float zo, float xd, float yd, float zd) {
+    public RayImpl(double xo, double yo, double zo, double xd, double yd, double zd) {
         this.xo = xo;
         this.yo = yo;
         this.zo = zo;
@@ -35,42 +35,42 @@ public class RayImpl implements Ray {
     // GETTERS
 
     @Override
-    public float getOriginX() {
+    public double getOriginX() {
         return xo;
     }
 
     @Override
-    public float getOriginY() {
+    public double getOriginY() {
         return yo;
     }
 
     @Override
-    public float getOriginZ() {
+    public double getOriginZ() {
         return zo;
     }
 
     @Override
-    public float getDirX() {
+    public double getDirX() {
         return xd;
     }
 
     @Override
-    public float getDirY() {
+    public double getDirY() {
         return yd;
     }
 
     @Override
-    public float getDirZ() {
+    public double getDirZ() {
         return zd;
     }
 
     @Override
-    public float getLength() {
-        return (float) Math.sqrt(xd*xd + yd*yd + zd*zd);
+    public double getLength() {
+        return Math.sqrt(xd*xd + yd*yd + zd*zd);
     }
 
     @Override
-    public float getLengthSquared() {
+    public double getLengthSquared() {
         return xd*xd + yd*yd + zd*zd;
     }
 
@@ -90,7 +90,7 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public Vector getPoint(float t) {
+    public Vector getPoint(double t) {
         return Vector.fromXYZ(
                 xo + xd * t,
                 yo + yd * t,
@@ -101,7 +101,7 @@ public class RayImpl implements Ray {
     @Override
     public Vector closestPointTo(Vector point) {
         Vector dir = getDirection();
-        float factor = dir.dot(point) / dir.dot(dir);
+        double factor = dir.dot(point) / dir.dot(dir);
 
         return Vector.fromXYZ(
                 this.xo + this.xd * factor,
@@ -112,7 +112,7 @@ public class RayImpl implements Ray {
     // SETTERS
 
     @Override
-    public Ray setOrigin(float x, float y, float z) {
+    public Ray setOrigin(double x, double y, double z) {
         this.xo = x;
         this.yo = y;
         this.zo = z;
@@ -120,7 +120,7 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public Ray setDirection(float x, float y, float z) {
+    public Ray setDirection(double x, double y, double z) {
         this.xd = x;
         this.yd = y;
         this.zd = z;
@@ -128,8 +128,8 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public Ray setLength(float t) {
-        float m = t / getLength();
+    public Ray setLength(double t) {
+        double m = t / getLength();
         this.xd *= m;
         this.yd *= m;
         this.zd *= m;
@@ -144,8 +144,8 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public boolean contains(float x, float y, float z) {
-        float t = (x - this.xo) / this.xd;
+    public boolean contains(double x, double y, double z) {
+        double t = (x - this.xo) / this.xd;
 
         return
                 Spatium.equals(t, (y - this.yo) / this.yd) &&
@@ -153,8 +153,8 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public float containsAt(float x, float y, float z) {
-        float t = (x - this.xo) / this.xd;
+    public double containsAt(double x, double y, double z) {
+        double t = (x - this.xo) / this.xd;
 
         if (
                 Spatium.equals(t, (y - this.yo) / this.yd) &&
@@ -162,7 +162,7 @@ public class RayImpl implements Ray {
             return t;
 
         else
-            return Float.NaN;
+            return Double.NaN;
     }
 
     @Override

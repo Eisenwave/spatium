@@ -21,28 +21,28 @@ public interface EulerComplex extends Complex {
     // SETTERS
 
     @Override
-    public abstract EulerComplex setReal(float a);
+    public abstract EulerComplex setReal(double a);
 
     @Override
-    public abstract EulerComplex setImaginary(float b);
+    public abstract EulerComplex setImaginary(double b);
 
     @Override
-    public abstract EulerComplex setRadius(float r);
+    public abstract EulerComplex setRadius(double r);
 
     @Override
-    public abstract EulerComplex setAngle(float phi);
+    public abstract EulerComplex setAngle(double phi);
 
     @Override
     public abstract EulerComplex square();
 
     @Override
-    public abstract EulerComplex multiply(float factor);
+    public abstract EulerComplex multiply(double factor);
 
     @Override
     public abstract EulerComplex multiply(Complex z);
 
     @Override
-    public abstract EulerComplex divide(float factor);
+    public abstract EulerComplex divide(double factor);
 
     @Override
     public abstract EulerComplex divide(Complex z);

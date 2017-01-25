@@ -21,28 +21,28 @@ public interface CartesianComplex extends Complex {
     // SETTERS
 
     @Override
-    public abstract CartesianComplex setReal(float a);
+    public abstract CartesianComplex setReal(double a);
 
     @Override
-    public abstract CartesianComplex setImaginary(float b);
+    public abstract CartesianComplex setImaginary(double b);
 
     @Override
-    public abstract CartesianComplex setRadius(float r);
+    public abstract CartesianComplex setRadius(double r);
 
     @Override
-    public abstract CartesianComplex setAngle(float phi);
+    public abstract CartesianComplex setAngle(double phi);
 
     @Override
     public abstract CartesianComplex square();
 
     @Override
-    public abstract CartesianComplex multiply(float factor);
+    public abstract CartesianComplex multiply(double factor);
 
     @Override
     public abstract CartesianComplex multiply(Complex z);
 
     @Override
-    public abstract CartesianComplex divide(float factor);
+    public abstract CartesianComplex divide(double factor);
 
     @Override
     public abstract CartesianComplex divide(Complex z);

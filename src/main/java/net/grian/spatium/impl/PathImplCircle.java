@@ -1,5 +1,6 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo.Path;
 import net.grian.spatium.geo.Sphere;
 import net.grian.spatium.geo.Vector;
@@ -8,12 +9,12 @@ import net.grian.spatium.transform.Transformations;
 
 public class PathImplCircle implements Path {
 
-    private final float ox, oy, oz, r, nx, ny, nz;
+    private final double cx, cy, cz, r, nx, ny, nz;
 
-    public PathImplCircle(float ox, float oy, float oz, float r, float nx, float ny, float nz) {
-        this.ox = ox;
-        this.oy = oy;
-        this.oz = oz;
+    public PathImplCircle(double ox, double oy, double oz, double r, double nx, double ny, double nz) {
+        this.cx = ox;
+        this.cy = oy;
+        this.cz = oz;
         this.r = r;
         this.nx = nx;
         this.ny = ny;
@@ -26,32 +27,38 @@ public class PathImplCircle implements Path {
                 normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public PathImplCircle(float ox, float oy, float oz, float r, Vector normal) {
+    public PathImplCircle(double ox, double oy, double oz, double r, Vector normal) {
         this(ox, oy, oz, r, normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public PathImplCircle(Sphere sphere, float nx, float ny, float nz) {
+    public PathImplCircle(Sphere sphere, double nx, double ny, double nz) {
         this(sphere.getX(), sphere.getY(), sphere.getZ(), sphere.getRadius(), nx, ny, nz);
     }
 
-    public PathImplCircle(Vector center, float radius, Vector normal) {
+    public PathImplCircle(Vector center, double radius, Vector normal) {
         this(center.getX(), center.getY(), center.getZ(), radius, normal);
     }
 
     @Override
-    public Vector getPoint(float t) {
-        Vector p = getOrigin();
-        Quaternion q = toRotation((float) (t * 0.5 * Math.PI));
+    public Vector getPoint(double t) {
+        Vector p = getRelativeOrigin();
+        Quaternion q = toRotation(t * CacheMath.TAU);
         Transformations.rotate(p, q);
-        return p;
+        //System.out.println("t="+t+" ("+ Spatium.degrees(t*CacheMath.TAU)+") -> "+p);
+        return p.add(cx, cy, cz);
     }
 
     @Override
     public Vector getOrigin() {
-        return Vector.fromXYZ(
-                ox + nx * r,
-                oy + ny * r,
-                oz + nz * r);
+        return getCenter().add(getRelativeOrigin());
+    }
+
+    public Vector getCenter() {
+        return Vector.fromXYZ(cx, cy, cz);
+    }
+
+    public Vector getRelativeOrigin() {
+        return Vector.fromXYZ(nx, 0, -1/nz).setLength(r);
     }
 
     @Override
@@ -60,18 +67,18 @@ public class PathImplCircle implements Path {
     }
 
     @Override
-    public float getLength() {
+    public double getLength() {
         return r;
     }
 
     @Override
-    public float getLengthSquared() {
+    public double getLengthSquared() {
         return r * r;
     }
 
     @Override
     public Vector[] getControlPoints() {
-        return new Vector[] {Vector.fromXYZ(ox, oy, oz)};
+        return new Vector[] {Vector.fromXYZ(cx, cy, cz)};
     }
 
     /**
@@ -90,7 +97,7 @@ public class PathImplCircle implements Path {
      * @param theta the angle in radians
      * @return a new rotation
      */
-    public Quaternion toRotation(float theta) {
+    public Quaternion toRotation(double theta) {
         return Quaternion.fromRotation(nx, ny, nz, theta);
     }
 

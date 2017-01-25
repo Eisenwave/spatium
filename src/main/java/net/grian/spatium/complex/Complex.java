@@ -21,7 +21,7 @@ public interface Complex extends SpatiumObject {
      * @param b the imaginary part
      * @return a new complex number
      */
-    public static CartesianComplex newCartesian(float a, float b) {
+    public static CartesianComplex newCartesian(double a, double b) {
         return new ComplexImplCartesian(a, b);
     }
 
@@ -35,7 +35,7 @@ public interface Complex extends SpatiumObject {
      * @param phi the angle
      * @return a new complex number
      */
-    public static EulerComplex newEuler(float r, float phi) {
+    public static EulerComplex newEuler(double r, double phi) {
         return new ComplexImplEuler(r, phi);
     }
 
@@ -46,35 +46,35 @@ public interface Complex extends SpatiumObject {
      *
      * @return the real part
      */
-    public abstract float getReal();
+    public abstract double getReal();
 
     /**
      * Returns the imaginary part of this complex number.
      *
      * @return the imaginary part
      */
-    public abstract float getImaginary();
+    public abstract double getImaginary();
 
     /**
      * Returns the angle {@code phi} of this complex number.
      *
      * @return the angle
      */
-    public abstract float getAngle();
+    public abstract double getAngle();
 
     /**
      * Returns the radius of this complex number.
      *
      * @return the radius
      */
-    public abstract float getRadius();
+    public abstract double getRadius();
 
     /**
      * Returns the squared radius of this complex number.
      *
      * @return the squared radius
      */
-    public abstract float getRadiusSquared();
+    public abstract double getRadiusSquared();
 
     // CHECKERS
 
@@ -95,7 +95,7 @@ public interface Complex extends SpatiumObject {
      * @param re the value
      * @return itself
      */
-    public abstract Complex setReal(float re);
+    public abstract Complex setReal(double re);
 
     /**
      * Sets the imaginary part of the complex number to a new value.
@@ -103,7 +103,7 @@ public interface Complex extends SpatiumObject {
      * @param im the value
      * @return itself
      */
-    public abstract Complex setImaginary(float im);
+    public abstract Complex setImaginary(double im);
 
     /**
      * Sets the radius of the complex number to a new value.
@@ -111,7 +111,7 @@ public interface Complex extends SpatiumObject {
      * @param r the radius
      * @return itself
      */
-    public abstract Complex setRadius(float r);
+    public abstract Complex setRadius(double r);
 
     /**
      * Sets the angle {@code phi} of the complex number to a new value.
@@ -119,7 +119,7 @@ public interface Complex extends SpatiumObject {
      * @param phi the angle
      * @return itself
      */
-    public abstract Complex setAngle(float phi);
+    public abstract Complex setAngle(double phi);
 
     /**
      * Inverts the imaginary part of the complex number.
@@ -141,7 +141,7 @@ public interface Complex extends SpatiumObject {
      * @param factor the factor
      * @return itself
      */
-    public abstract Complex multiply(float factor);
+    public abstract Complex multiply(double factor);
 
     /**
      * Multiplies the complex number with another complex number.
@@ -157,7 +157,7 @@ public interface Complex extends SpatiumObject {
      * @param divisor the divisor
      * @return itself
      */
-    public abstract Complex divide(float divisor);
+    public abstract Complex divide(double divisor);
 
     /**
      * Divides the complex number by another complex number.

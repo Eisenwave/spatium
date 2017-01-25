@@ -11,7 +11,7 @@ import net.grian.spatium.impl.MatrixImpl;
  *     only to an extent.
  * </p>
  * <p>
- *     The content of the matrix can be modified using {@link #set(int, int, float)} and retrieved using
+ *     The content of the matrix can be modified using {@link #set(int, int, double)} and retrieved using
  *     {@link #get(int, int)}, however the size of the matrix is final and can not be changed.
  * </p>
  * <p>
@@ -35,7 +35,7 @@ public interface Matrix {
             throw new MatrixDimensionsException(a, b);
 
         final int row = a.getRows(), col = a.getColumns();
-        float[] result = new float[row * col];
+        double[] result = new double[row * col];
 
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
@@ -79,7 +79,7 @@ public interface Matrix {
         final int
         arow = a.getRows(), acol = a.getColumns(),
         brow = b.getRows(), bcol = b.getColumns();
-        float[] result = new float[arow * bcol];
+        double[] result = new double[arow * bcol];
 
         /* outer loop for acquiring the position (i, j) in the product matrix */
         for (int i = 0; i < arow; i++) for (int j = 0; j < bcol; j++) {
@@ -160,7 +160,7 @@ public interface Matrix {
         brow = arow + row,
         bcol = acol + col;
 
-        float[] content = new float[brow * bcol];
+        double[] content = new double[brow * bcol];
 
         for (int i = 0; i < arow && i < brow; i++) for (int j = 0; j < acol && i < bcol; j++) {
             final int index = i * bcol + j;
@@ -197,8 +197,8 @@ public interface Matrix {
      * @param y the y scale
      * @return a new scaling matrix
      */
-    public static Matrix fromScale(float x, float y) {
-        float[] content = new float[4];
+    public static Matrix fromScale(double x, double y) {
+        double[] content = new double[4];
         content[0] = x;
         content[3] = y;
 
@@ -213,8 +213,8 @@ public interface Matrix {
      * @param z the scale on the z-axis
      * @return a new scaling matrix
      */
-    public static Matrix fromScale(float x, float y, float z) {
-        float[] content = new float[9];
+    public static Matrix fromScale(double x, double y, double z) {
+        double[] content = new double[9];
         content[0] = x;
         content[4] = y;
         content[8] = z;
@@ -228,11 +228,11 @@ public interface Matrix {
      * @param coords the coordinates
      * @return a new scaling matrix
      */
-    public static Matrix fromScale(float... coords) {
+    public static Matrix fromScale(double... coords) {
         if (coords.length == 0) throw new IllegalMatrixSizeException("no coordinates given");
 
         final int size = coords.length;
-        float[] content = new float[size * size];
+        double[] content = new double[size * size];
 
         //noinspection ManualArrayCopy
         for (int i = 0; i<size; i++)
@@ -248,12 +248,12 @@ public interface Matrix {
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromYaw(float yaw) {
-        float theta = Spatium.radians(yaw);
+    public static Matrix fromYaw(double yaw) {
+        double theta = Spatium.radians(yaw);
         return Matrix.create(3, 3,
-                (float)-Math.cos(theta), 0, (float)-Math.sin(theta),
-                                      0, 1, 0,
-                (float) Math.sin(theta), 0, (float)-Math.cos(theta));
+                -Math.cos(theta), 0, -Math.sin(theta),
+                               0, 1, 0,
+                 Math.sin(theta), 0, -Math.cos(theta));
     }
 
     /**
@@ -263,12 +263,12 @@ public interface Matrix {
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromPitch(float pitch) {
-        float phi = Spatium.radians(pitch);
+    public static Matrix fromPitch(double pitch) {
+        double phi = Spatium.radians(pitch);
         return Matrix.create(3, 3,
-                (float)-Math.cos(phi), (float) Math.sin(phi), 0,
-                (float)-Math.sin(phi), (float)-Math.cos(phi), 0,
-                0,                     0,                     1);
+                -Math.cos(phi),  Math.sin(phi), 0,
+                -Math.sin(phi), -Math.cos(phi), 0,
+                0,              0,              1);
     }
 
     /**
@@ -278,12 +278,12 @@ public interface Matrix {
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromRoll(float roll) {
-        float psi = Spatium.radians(roll);
+    public static Matrix fromRoll(double roll) {
+        double psi = Spatium.radians(roll);
         return Matrix.create(3, 3,
                 1, 0, 0,
-                0, (float)-Math.cos(psi), (float) Math.sin(psi),
-                0, (float)-Math.sin(psi), (float)-Math.cos(psi));
+                0, -Math.cos(psi), Math.sin(psi),
+                0, -Math.sin(psi), -Math.cos(psi));
     }
 
     /**
@@ -304,21 +304,21 @@ public interface Matrix {
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromYawPitchRoll(float yaw, float pitch, float roll) {
-        float theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
+    public static Matrix fromYawPitchRoll(double yaw, double pitch, double roll) {
+        double theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
         return Matrix.create(3, 3,
                 //first row
-                (float) (Math.cos(theta) * Math.cos(phi)),
+                Math.cos(theta) * Math.cos(phi),
                 0,
                 0,
                 //second row
-                (float) (Math.sin(theta) * Math.cos(phi)),
+                Math.sin(theta) * Math.cos(phi),
                 0,
                 0,
                 //third row
-                (float) Math.sin(phi),
-                (float)-(Math.cos(phi) * Math.sin(psi)),
-                (float) (Math.cos(phi) * Math.cos(psi))
+                Math.sin(phi),
+                -(Math.cos(phi) * Math.sin(psi)),
+                Math.cos(phi) * Math.cos(psi)
                 );//TODO Complete yaw, pitch, roll matrix
     }
 
@@ -352,7 +352,7 @@ public interface Matrix {
      * @throws IllegalMatrixSizeException if the content array's hypot is not
      * equal to {@code rows * columns}
      */
-    public static Matrix create(int rows, int columns, float... content) {
+    public static Matrix create(int rows, int columns, double... content) {
         return new MatrixImpl(rows, columns, content);
     }
 
@@ -378,7 +378,7 @@ public interface Matrix {
      * amount of columns <= 0
      */
     public static Matrix identity(int n) {
-        float[] value = new float[n * n];
+        double[] value = new double[n * n];
         for (int i = 0; i<n; i++)
             value[i + i*n] = 1;
         return new MatrixImpl(n, n, value);
@@ -393,7 +393,7 @@ public interface Matrix {
      * @param col the column index
      * @return the value at the specified row and column
      */
-    public abstract float get(int row, int col);
+    public abstract double get(int row, int col);
 
     /**
      * Returns an array containing all values at the specified row index.
@@ -401,7 +401,7 @@ public interface Matrix {
      * @param row the row index
      * @return all values at the specified row index
      */
-    public abstract float[] getRow(int row);
+    public abstract double[] getRow(int row);
 
     /**
      * Returns an array containing all values at the specified column index.
@@ -409,7 +409,7 @@ public interface Matrix {
      * @param col the column index
      * @return all values at the specified column index
      */
-    public abstract float[] getColumn(int col);
+    public abstract double[] getColumn(int col);
 
     /**
      * Returns the amount of rows of this matrix.
@@ -428,7 +428,7 @@ public interface Matrix {
      *
      * @return the determinant of this matrix
      */
-    public abstract float getDeterminant();
+    public abstract double getDeterminant();
 
     // CHECKERS
 
@@ -480,7 +480,7 @@ public interface Matrix {
      * @param value the value
      * @return itself
      */
-    public abstract Matrix set(int row, int col, float value);
+    public abstract Matrix set(int row, int col, double value);
 
     /**
      * Scales the matrix by a factor.
@@ -488,7 +488,7 @@ public interface Matrix {
      * @param factor the factor
      * @return itself
      */
-    public abstract Matrix scale(float factor);
+    public abstract Matrix scale(double factor);
 
     // MISC
 

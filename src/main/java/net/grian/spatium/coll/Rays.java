@@ -23,13 +23,13 @@ public final class Rays {
      * the ray at which the ray and the other object collide with each other.
      *
      * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(float)}.
+     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
      *
      * @param a the first ray
      * @param b the second ray
-     * @return the ray multiplier or {@link Float#NaN}
+     * @return the ray multiplier or {@link Double#NaN}
      */
-    public static float cast(Ray a, Ray b) {
+    public static double cast(Ray a, Ray b) {
         Vector
                 dirA = a.getDirection(),
                 dirB = b.getDirection(),
@@ -37,7 +37,7 @@ public final class Rays {
                 crossAB = dirA.cross(dirB),
                 crossCB = dirC.cross(dirB);
 
-        float
+        double
                 absPlanarFactor = Math.abs(dirC.dot(crossAB)),
                 sqrLength = crossAB.getLengthSquared();
 
@@ -46,7 +46,7 @@ public final class Rays {
             return crossCB.dot(crossAB) / sqrLength;
         }
         else {
-            return Float.NaN;
+            return Double.NaN;
         }
     }
 
@@ -57,13 +57,13 @@ public final class Rays {
      * the ray at which the ray and the other object collide with each other.
      *
      * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(float)}.
+     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
      *
      * @param ray the ray
      * @param point the point
-     * @return where the ray and the point collide or {@link Float#NaN}
+     * @return where the ray and the point collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, Vector point) {
+    public static double cast(Ray ray, Vector point) {
         return ray.containsAt(point);
     }
 
@@ -74,80 +74,67 @@ public final class Rays {
      * the ray at which the ray and the other object collide with each other.
      *
      * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(float)}.
+     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
      *
      * @param ray the ray
      * @param sphere the sphere
-     * @return where the ray and the point collide or {@link Float#NaN}
+     * @return where the ray and the point collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, Sphere sphere) {
-        Vector
-                origin         = ray.getOrigin(),
-                direction      = ray.getDirection(),
-                center         = sphere.getCenter(),
-                originToCenter = Vector.between(origin, center);
+    public static double cast(Ray ray, Sphere sphere) {
+        return 0;
 
-        float radius = sphere.getRadius();
+        /*
+        Vector center_origin = ray.getOrigin().subtract(sphere.getCenter());
+        double radiusSquared = sphere.getRadiusSquared();
 
-        //ray not pointing towards sphere center
-        if (direction.dot(originToCenter) <= 0) {
-
-            float l = originToCenter.getLength();
-
-            //ray origin is outside sphere
-            if (l > radius)
-                return Float.NaN;
-
-                //ray origin is on the edge of sphere
-            else if (Spatium.equals(l, radius))
-                return 0;
-
-                //ray origin is inside sphere
-            else {
-                Vector base = ray.closestPointTo(originToCenter);
-
-                float
-                        lengthCenterBase = Vector.between(center, base).getLength(),
-                        lengthOriginBase = Vector.between(origin, base).getLength(),
-                        dist = (float) Math.sqrt(radius * radius + lengthCenterBase * lengthOriginBase);
-
-                return dist - lengthOriginBase;
-            }
-
+        //ray origin inside sphere
+        if(center_origin.dot(center_origin) <= radiusSquared) {
+            return 0;
         }
 
-        //ray pointing towards sphere center
-        else {
-            Vector base = ray.closestPointTo(originToCenter);
-            Vector baseToCenter = Vector.between(base, center);
-
-            float l = baseToCenter.getLength();
-
-            //no intersection
-            if (l > radius) return Float.NaN;
-
-                //one point intersection
-            else if (Spatium.equals(l, sphere.getRadius())) return base.distanceTo(origin);
-
-                //two point intersection
-            else {
-                float
-                        lengthCenterBase = Vector.between(center, base).getLength(),
-                        lengthOriginBase = Vector.between(origin, base).getLength(),
-                        dist = (float) Math.sqrt(sphere.getRadiusSquared() + lengthCenterBase * lengthOriginBase),
-                        t;
-
-                //origin outside sphere
-                if (originToCenter.getLength() > radius)
-                    t = lengthOriginBase - dist;
-
-                    // origin is inside sphere
-                else
-                    t = lengthOriginBase + dist;
-
-                return t;
+        else if(center_origin.dot(ray.getDirection()) <= 0) {
+            Vector v = center_origin.subtract()projection(CA,d)
+            double vSquared = v.dot(v);
+            if(vSquared <= radiusSquared){
+                collisionPoint = C + v - multiply(normalize(d), Math.sqrt(rSquared-vSquared))
+            }
+            else{
+                collisionPoint = none
             }
         }
+        
+        else return Double.NaN;
+
+        /*
+        //input
+        vector A the ray origin
+        vector d the ray direction
+        vector C the sphere center
+        double r the sphere radius
+        //end of input
+
+        vector collisionPoint
+        vector v
+        vector CA = A-C
+        double rSquared = r*r
+        double vSquared
+        if(dotProduct(CA,CA) <= rSquared){
+            collisionPoint = A
+        }
+        else if(dotProduct(CA,d) <= 0){
+            v = CA - projection(CA,d)
+            vSquared = dotProduct(v,v)
+            if(vSquared <= rSquared){
+                collisionPoint = C + v - multiply(normalize(d),squareRoot(rSquared-vSquared))
+            }
+            else{
+                collisionPoint = none
+            }
+        }
+        else{
+            collisionPoint = none
+        }
+        */
     }
 
     /**
@@ -160,20 +147,20 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param plane the plane
-     * @return where the ray and the plane collide or {@link Float#NaN}
+     * @return where the ray and the plane collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, Plane plane) {
-        float numerator, denominator;
+    public static double cast(Ray ray, Plane plane) {
+        double numerator, denominator;
         Vector normal = plane.getNormal().normalize();
 
         denominator = normal.dot( ray.getDirection().normalize() );
         if (Spatium.equals(denominator, 0)) //ray and plane are parallel
-            return Float.NaN;
+            return Double.NaN;
 
         //calculate the distance between the linePoint and the line-plane intersection point
         numerator = normal.dot( plane.getPoint().subtract(ray.getOrigin()) );
@@ -191,26 +178,26 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param plane the plane
-     * @return where the ray and the plane collide or {@link Float#NaN}
+     * @return where the ray and the plane collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, AxisPlane plane) {
+    public static double cast(Ray ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: {
-                float t = (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
-                return Float.isFinite(t)? t : Float.NaN;
+                double t = (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
+                return Double.isFinite(t)? t : Double.NaN;
             }
             case Y: {
-                float t = (ray.getOriginY() - plane.getDepth()) / ray.getDirY();
-                return Float.isFinite(t)? t : Float.NaN;
+                double t = (ray.getOriginY() - plane.getDepth()) / ray.getDirY();
+                return Double.isFinite(t)? t : Double.NaN;
             }
             case Z: {
-                float t = (ray.getOriginZ() - plane.getDepth()) / ray.getDirZ();
-                return Float.isFinite(t)? t : Float.NaN;
+                double t = (ray.getOriginZ() - plane.getDepth()) / ray.getDirZ();
+                return Double.isFinite(t)? t : Double.NaN;
             }
             default: throw new IllegalArgumentException("plane has no axis");
         }
@@ -226,16 +213,16 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param slab the slab
-     * @return where the ray and the plane collide or {@link Float#NaN}
+     * @return where the ray and the plane collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, Slab slab) {
-        float[] entryExit = pierce(ray, slab);
-        return entryExit==null? Float.NaN : entryExit[0];
+    public static double cast(Ray ray, Slab slab) {
+        double[] entryExit = pierce(ray, slab);
+        return entryExit==null? Double.NaN : entryExit[0];
     }
 
     /**
@@ -248,16 +235,16 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
-     * @return where the ray and the box collide or {@link Float#NaN}
+     * @return where the ray and the box collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, AxisAlignedBB box) {
-        float[] entryExit = pierce(ray, box);
-        return entryExit==null? Float.NaN : entryExit[0];
+    public static double cast(Ray ray, AxisAlignedBB box) {
+        double[] entryExit = pierce(ray, box);
+        return entryExit==null? Double.NaN : entryExit[0];
     }
 
     /**
@@ -270,16 +257,16 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
-     * @return where the ray and the box collide or {@link Float#NaN}
+     * @return where the ray and the box collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, OrientedBB box) {
-        float[] entryExit = pierce(ray, box);
-        return entryExit==null? Float.NaN : entryExit[0];
+    public static double cast(Ray ray, OrientedBB box) {
+        double[] entryExit = pierce(ray, box);
+        return entryExit==null? Double.NaN : entryExit[0];
     }
 
     /**
@@ -292,40 +279,40 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      * Source:<a href="https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm">
      * Möller–Trumbore intersection algorithm</a>
      *
      * @param ray the ray
      * @param triangle the triangle
-     * @return where the box and the point collide or {@link Float#NaN}
+     * @return where the box and the point collide or {@link Double#NaN}
      */
-    public static float cast(Ray ray, Triangle triangle) {
+    public static double cast(Ray ray, Triangle triangle) {
         Vector
                 o = ray.getOrigin(), d = ray.getDirection(),
                 a = triangle.getA(), b = triangle.getB(), c = triangle.getC(),
                 ab = Vector.between(a, b), ac = Vector.between(a, c),
                 normal1 = d.cross(ab);
 
-        float det = ab.dot(normal1);
+        double det = ab.dot(normal1);
         //ray is parallel to triangle
-        if (Spatium.equals(det, 0)) return Float.NaN;
-        float invDet = 1 / det;
+        if (Spatium.equals(det, 0)) return Double.NaN;
+        double invDet = 1 / det;
 
         Vector ao = Vector.between(o, a);
-        float u = ao.dot(normal1) * invDet;
+        double u = ao.dot(normal1) * invDet;
         //intersection lies outside the triangle
-        if (u < 0 || u > 1) return Float.NaN;
+        if (u < 0 || u > 1) return Double.NaN;
 
         Vector normal2 = ao.cross(ab);
-        float v = d.dot(normal2) * invDet;
+        double v = d.dot(normal2) * invDet;
         //intersection lies outside the triangle
-        if (v < 0 || v > 1) return Float.NaN;
+        if (v < 0 || v > 1) return Double.NaN;
 
-        float t = ac.dot(normal2) * invDet;
+        double t = ac.dot(normal2) * invDet;
 
-        return t>Spatium.EPSILON? t : Float.NaN;
+        return t>Spatium.EPSILON? t : Double.NaN;
     }
 
     //RAY PIERCES
@@ -340,25 +327,25 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param slab the slab
      * @return the entry and exit points of the ray or null
      */
-    public static float[] pierce(Ray ray, Slab slab) {
+    public static double[] pierce(Ray ray, Slab slab) {
         Vector normal = slab.getNormal().normalize();
-        float denominator = normal.dot( ray.getDirection().normalize() );
+        double denominator = normal.dot( ray.getDirection().normalize() );
         if (Spatium.equals(denominator, 0)) //ray and plane are parallel
             return null;
 
         Vector origin = ray.getOrigin();
-        if (denominator > 0) return new float[] {
+        if (denominator > 0) return new double[] {
                 normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
                 normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
         };
-        else return new float[]{
+        else return new double[]{
                 normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
                 normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
         };
@@ -374,15 +361,15 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param slab the slab
      * @return the entry and exit points of the ray or null
      */
-    public static float[] pierce(Ray ray, AxisSlab slab) {
-        float d;
+    public static double[] pierce(Ray ray, AxisSlab slab) {
+        double d;
         switch (slab.getAxis()) {
             case X: d = ray.getDirX(); break;
             case Y: d = ray.getDirY(); break;
@@ -391,11 +378,11 @@ public final class Rays {
         }
         if (Spatium.equals(d, 0)) return null;
 
-        if (d >= 0) return new float[] {
+        if (d >= 0) return new double[] {
                 (slab.getMinDepth() - ray.getOriginX()) / d,
                 (slab.getMaxDepth() - ray.getOriginX()) / d
         };
-        else return new float[]{
+        else return new double[]{
                 (slab.getMaxDepth() - ray.getOriginX()) / d,
                 (slab.getMinDepth() - ray.getOriginX()) / d
         };
@@ -411,19 +398,19 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
      * @return the entry and exit points of the ray or null
      */
-    public static float[] pierce(Ray ray, AxisAlignedBB box) {
+    public static double[] pierce(Ray ray, AxisAlignedBB box) {
 
-        float tmin, tmax, tymin, tymax, tzmin, tzmax;
+        double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
         //x bounds
-        float divx = 1 / ray.getDirX();
+        double divx = 1 / ray.getDirX();
         if (divx >= 0) {
             tmin = (box.getMinX() - ray.getOriginX()) * divx;
             tmax = (box.getMaxX() - ray.getOriginX()) * divx;
@@ -434,7 +421,7 @@ public final class Rays {
         }
 
         //y bounds
-        float divy = 1 / ray.getDirY();
+        double divy = 1 / ray.getDirY();
         if (divy >= 0) {
             tymin = (box.getMinY() - ray.getOriginY()) * divy;
             tymax = (box.getMaxY() - ray.getOriginY()) * divy;
@@ -451,7 +438,7 @@ public final class Rays {
         if (tymax < tmax) tmax = tymax;
 
         //z bounds
-        float divz = 1 / ray.getDirZ();
+        double divz = 1 / ray.getDirZ();
         if (divz >= 0) {
             tzmin = (box.getMinZ() - ray.getOriginZ()) * divz;
             tzmax = (box.getMaxZ() - ray.getOriginZ()) * divz;
@@ -466,7 +453,7 @@ public final class Rays {
         if (tzmin > tmin) tmin = tzmin;
         if (tzmax < tmax) tmax = tzmax;
 
-        return new float[] {tmin, tmax};
+        return new double[] {tmin, tmax};
     }
 
     /**
@@ -479,20 +466,20 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray#setLength(float)}.
+     *     {@link Ray#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
      * @return the entry and exit points of the ray or null
      */
-    public static float[] pierce(Ray ray, OrientedBB box) {
+    public static double[] pierce(Ray ray, OrientedBB box) {
         //u bounds
-        float[] t = pierce(ray, box.getSlabU());
+        double[] t = pierce(ray, box.getSlabU());
         if (t == null) return null;
 
         //v bounds
-        float[] tv = pierce(ray, box.getSlabV());
+        double[] tv = pierce(ray, box.getSlabV());
         if (tv == null) return null;
 
         if (t[0] > tv[1] || tv[0] > t[1]) return null;
@@ -500,7 +487,7 @@ public final class Rays {
         if (tv[1] < t[1]) t[1] = tv[1];
 
         //w bounds
-        float[] tw = pierce(ray, box.getSlabW());
+        double[] tw = pierce(ray, box.getSlabW());
         if (tw == null) return null;
 
         if (t[0] > tw[1] || tw[0] > t[1]) return null;
@@ -529,7 +516,7 @@ public final class Rays {
                 b.getMaxZ()-a.getMinZ());
 
         Ray ray = Ray.fromOD(0, 0, 0, motion.getX(), motion.getY(), motion.getZ());
-        float[] pierce = pierce(ray, minkowski);
+        double[] pierce = pierce(ray, minkowski);
         if (pierce == null) return new RayPierceCollision<>(ray, b);
 
         return new RayPierceCollision<>(CollisionEngine.CollisionResult.POSITIVE, ray, b, pierce[0], pierce[1]);

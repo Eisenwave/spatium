@@ -21,7 +21,7 @@ public interface Sphere extends Space {
      * @param radius the radius
      * @return a new sphere
      */
-    public static Sphere fromCenterAndRadius(Vector center, float radius) {
+    public static Sphere fromCenterAndRadius(Vector center, double radius) {
         return new SphereImpl(center, radius);
     }
 
@@ -32,21 +32,21 @@ public interface Sphere extends Space {
      *
      * @return the x-coordinate of the center of this sphere
      */
-    public abstract float getX();
+    public abstract double getX();
 
     /**
      * Returns the y-coordinate of the center of this sphere.
      *
      * @return the y-coordinate of the center of this sphere
      */
-    public abstract float getY();
+    public abstract double getY();
 
     /**
      * Returns the z-coordinate of the center of this sphere.
      *
      * @return the z-coordinate of the center of this sphere
      */
-    public abstract float getZ();
+    public abstract double getZ();
 
     /**
      * Returns the center of this sphere.
@@ -62,34 +62,34 @@ public interface Sphere extends Space {
      *
      * @return the radius of this sphere
      */
-    public abstract float getRadius();
+    public abstract double getRadius();
 
     /**
      * Returns the squared radius of this sphere.
      *
      * @return the squared radius of this sphere
      */
-    public abstract float getRadiusSquared();
+    public abstract double getRadiusSquared();
 
     /**
      * Returns the diameter of this sphere.
      *
      * @return the diameter of this sphere
      */
-    public default float getDiameter() {
+    public default double getDiameter() {
         return getRadius() * 2;
     }
 
     @Override
-    public default float getVolume() {
-        float r = getRadius();
-        return (float) ( (4f / 3f) * Math.PI * r*r*r );
+    public default double getVolume() {
+        double r = getRadius();
+        return (4f / 3f) * Math.PI * r*r*r;
     }
 
     @Override
-    public default float getSurfaceArea() {
-        float r = getRadius();
-        return (float) ( 4 * Math.PI * r*r);
+    public default double getSurfaceArea() {
+        double r = getRadius();
+        return 4 * Math.PI * r*r;
     }
 
     // CHECKERS
@@ -102,7 +102,7 @@ public interface Sphere extends Space {
      * @param z the z-coordinate of the point
      * @return whether this sphere contains the point
      */
-    public default boolean contains(float x, float y, float z) {
+    public default boolean contains(double x, double y, double z) {
         return Spatium.hypot(x-getX(), y-getY(), z-getZ()) <= getRadius();
     }
 
@@ -132,13 +132,13 @@ public interface Sphere extends Space {
 
     // SETTERS
 
-    public abstract Sphere setCenter(float x, float y, float z);
+    public abstract Sphere setCenter(double x, double y, double z);
 
     public default Sphere setCenter(Vector center) {
         return setCenter(center.getX(), center.getY(), center.getZ());
     }
 
-    public abstract Sphere move(float x, float y, float z);
+    public abstract Sphere move(double x, double y, double z);
 
     public default Sphere move(Vector center) {
         return move(center.getX(), center.getY(), center.getZ());
@@ -151,7 +151,7 @@ public interface Sphere extends Space {
      * @param factor the factor
      * @return itself
      */
-    public abstract Sphere scale(float factor);
+    public abstract Sphere scale(double factor);
 
     /**
      * Sets the radius of the sphere.
@@ -159,7 +159,7 @@ public interface Sphere extends Space {
      * @param r new the radius
      * @return itself
      */
-    public abstract Sphere setRadius(float r);
+    public abstract Sphere setRadius(double r);
 
     /**
      * Sets the diameter of the sphere.
@@ -167,7 +167,7 @@ public interface Sphere extends Space {
      * @param d new the diameter
      * @return itself
      */
-    public default Sphere setDiameter(float d) {
+    public default Sphere setDiameter(double d) {
         return setRadius(d * 0.5f);
     }
 

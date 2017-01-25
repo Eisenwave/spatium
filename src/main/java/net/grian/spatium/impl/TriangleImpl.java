@@ -5,9 +5,9 @@ import net.grian.spatium.geo.Vector;
 
 public class TriangleImpl implements Triangle {
 
-    private float ax, ay, az, bx, by, bz, cx, cy, cz;
+    private double ax, ay, az, bx, by, bz, cx, cy, cz;
 
-    public TriangleImpl(float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz) {
+    public TriangleImpl(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz) {
         this.ax = ax;
         this.ay = ay;
         this.az = az;
@@ -86,7 +86,7 @@ public class TriangleImpl implements Triangle {
     }
 
     @Override
-    public Triangle move(float x, float y, float z) {
+    public Triangle move(double x, double y, double z) {
         ax += x; ay += y; az += z;
         bx += x; by += y; az += z;
         cx += x; cy += y; cz += z;
@@ -94,7 +94,7 @@ public class TriangleImpl implements Triangle {
     }
 
     @Override
-    public Triangle scale(float x, float y, float z) {
+    public Triangle scale(double x, double y, double z) {
         ax *= x; ay *= y; az *= z;
         bx *= x; by *= y; az *= z;
         cx *= x; cy *= y; cz *= z;

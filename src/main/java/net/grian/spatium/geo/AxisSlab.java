@@ -5,7 +5,7 @@ import net.grian.spatium.impl.AxisSlabImpl;
 
 public interface AxisSlab extends Slab {
 
-    public static AxisSlab create(Axis axis, float min, float max) {
+    public static AxisSlab create(Axis axis, double min, double max) {
         return new AxisSlabImpl(axis, min, max);
     }
 
@@ -23,7 +23,7 @@ public interface AxisSlab extends Slab {
     public abstract AxisPlane getMax();
 
     @Override
-    public default Slab setNormal(float x, float y, float z) {
+    public default Slab setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();
     }
 
@@ -34,7 +34,7 @@ public interface AxisSlab extends Slab {
      * @return itself
      */
     @Override
-    public abstract AxisSlab push(float depth);
+    public abstract AxisSlab push(double depth);
 
     /**
      * Moves the slab negatively on its axis.
@@ -43,6 +43,6 @@ public interface AxisSlab extends Slab {
      * @return itself
      */
     @Override
-    public abstract AxisSlab pull(float depth);
+    public abstract AxisSlab pull(double depth);
 
 }

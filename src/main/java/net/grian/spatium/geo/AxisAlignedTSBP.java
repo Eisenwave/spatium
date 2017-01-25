@@ -15,17 +15,17 @@ public interface AxisAlignedTSBP extends SpatiumObject {
         return getDirection().axis();
     }
 
-    float getMinX();
+    double getMinX();
 
-    float getMinY();
+    double getMinY();
 
-    float getMinZ();
+    double getMinZ();
 
-    float getMaxX();
+    double getMaxX();
 
-    float getMaxY();
+    double getMaxY();
 
-    float getMaxZ();
+    double getMaxZ();
 
     default Vector getMin() {
         return Vector.fromXYZ(getMinX(), getMinY(), getMinZ());
@@ -39,13 +39,13 @@ public interface AxisAlignedTSBP extends SpatiumObject {
         return null;
     }
 
-    float getMinWidth();
+    double getMinWidth();
 
-    float getMinHeight();
+    double getMinHeight();
 
-    float getMaxWidth();
+    double getMaxWidth();
 
-    float getMaxHeight();
+    double getMaxHeight();
 
     /**
      * Returns the depth of the plane in the direction it is in. For instance,
@@ -53,19 +53,19 @@ public interface AxisAlignedTSBP extends SpatiumObject {
      * {@link Direction#NEGATIVE_Z} would have a depth of {@code 5}
      * @return the depth of the plane
      */
-    public abstract float getDepth();
+    public abstract double getDepth();
 
     /**
      * Returns the width of the plane.
      * @return the width of the plane.
      */
-    public abstract float getWidth();
+    public abstract double getWidth();
 
     /**
      * Returns the surface area of one side of the plane.
      * @return the area of the plane
      */
-    public default float getArea() {
+    public default double getArea() {
         return getWidth() * getHeight();
     }
 
@@ -73,11 +73,11 @@ public interface AxisAlignedTSBP extends SpatiumObject {
      * Returns the height of the plane.
      * @return the height of the plane.
      */
-    public abstract float getHeight();
+    public abstract double getHeight();
 
     // CHECKERS
 
-    public abstract boolean contains(float x, float y, float z);
+    public abstract boolean contains(double x, double y, double z);
 
     public default boolean contains(Vector point) {
         return contains(point.getX(), point.getY(), point.getZ());
@@ -93,13 +93,13 @@ public interface AxisAlignedTSBP extends SpatiumObject {
 
     // SETTERS
 
-    public abstract AxisAlignedTSBP move(float x, float y, float z);
+    public abstract AxisAlignedTSBP move(double x, double y, double z);
 
     public default AxisAlignedTSBP move(Vector v) {
         return move(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract AxisAlignedTSBP setDepth(float d);
+    public abstract AxisAlignedTSBP setDepth(double d);
 
     /**
      * Inverts the direction and the depth of the plane.

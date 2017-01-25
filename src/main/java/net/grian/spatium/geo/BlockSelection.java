@@ -151,12 +151,12 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
     }
 
     @Override
-    public default float getVolume() {
+    public default double getVolume() {
         return getBlockCount();
     }
 
     @Override
-    public default float getSurfaceArea() {
+    public default double getSurfaceArea() {
         int x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
@@ -219,8 +219,8 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
      * @param z the z-coordinate
      * @return whether this bounding box contains a point of given coordinates
      */
-    public default boolean contains(float x, float y, float z) {
-        return contains(PrimMath.floor(x), PrimMath.floor(y), PrimMath.floor(z));
+    public default boolean contains(double x, double y, double z) {
+        return contains((int) PrimMath.floor(x), (int) PrimMath.floor(y), (int) PrimMath.floor(z));
     }
 
     /**

@@ -9,10 +9,10 @@ public enum CardinalDirection {
     SOUTH (  0, Face.SOUTH),
     WEST  ( 90, Face.WEST);
 
-    private final float angle;
+    private final int angle;
     private final Face face;
 
-    CardinalDirection(float angle, Face face) {
+    CardinalDirection(int angle, Face face) {
         this.angle = angle;
         this.face = face;
     }
@@ -28,7 +28,7 @@ public enum CardinalDirection {
      * @return the angle in degrees
      */
     @MinecraftSpecific
-    public float angle() {
+    public int angle() {
         return angle;
     }
 

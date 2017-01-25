@@ -14,15 +14,15 @@ public class PathImplLinear implements Path {
     }
 
     @Override
-    public Vector getPoint(float t) {
+    public Vector getPoint(double t) {
         t %= 1;
         if (points.length == 1) return getOrigin();
         if (points.length == 2) return points[0].midPoint(points[1]);
 
-        float[] lengths = new float[points.length-1];
+        double[] lengths = new double[points.length-1];
         for (int i = 1; i<=points.length; i++)
             lengths[i] = points[i].distanceTo(points[i-1]);
-        PrimArrays.normalize(lengths);
+        setTotalLength(lengths, 1);
 
         for (int i = 0; i<lengths.length; i++)
             if (t >= lengths[i]) return points[i].clone();
@@ -30,15 +30,29 @@ public class PathImplLinear implements Path {
         return getEnd();
     }
 
-    @Override
-    public float getLength() {
-        return (float) Math.sqrt(getLengthSquared());
+    private static void setTotalLength(double[] numbers, double length) {
+        double factor = length / sum(numbers);
+        for (int i = 0; i<numbers.length; i++)
+            numbers[i] *= factor;
+    }
+
+    private static double sum(double[] numbers) {
+        int result = 0;
+        for (double number : numbers)
+            result += number;
+
+        return result;
     }
 
     @Override
-    public float getLengthSquared() {
-        float result = 0;
-        for (int i = 1; i<=points.length; i++)
+    public double getLength() {
+        return Math.sqrt(getLengthSquared());
+    }
+
+    @Override
+    public double getLengthSquared() {
+        double result = 0;
+        for (int i = 1; i<points.length; i++)
             result += points[i].distanceTo(points[i-1]);
 
         return result;

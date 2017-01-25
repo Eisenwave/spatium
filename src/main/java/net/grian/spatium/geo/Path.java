@@ -31,7 +31,7 @@ public interface Path extends SpatiumObject {
      * @param normal the normal vector
      * @return a new path
      */
-    public static Path circle(Vector center, float radius, Vector normal) {
+    public static Path circle(Vector center, double radius, Vector normal) {
         return new PathImplCircle(center, radius, normal);
     }
 
@@ -80,21 +80,21 @@ public interface Path extends SpatiumObject {
      * @param t the path multiplier in range from 0 to 1
      * @return a new point on this path
      */
-    public abstract Vector getPoint(float t);
+    public abstract Vector getPoint(double t);
 
     /**
      * Returns the hypot of this path.
      *
      * @return the hypot of this path
      */
-    public abstract float getLength();
+    public abstract double getLength();
 
     /**
      * Returns the squared hypot of this path.
      *
      * @return the squared hypot of this path
      */
-    public abstract float getLengthSquared();
+    public abstract double getLengthSquared();
 
     /**
      * Returns whether this path is closed. This is equivalent to checking whether the origin of the path is the
@@ -169,7 +169,7 @@ public interface Path extends SpatiumObject {
         if (amount == 2) return new Vector[] {getOrigin(), getEnd()};
         if (amount == 3) return new Vector[] {getOrigin(), getMidPoint(), getEnd()};
 
-        final float t = amount - 1, interval = getLengthSquared() / t * t;
+        final double t = amount - 1, interval = getLengthSquared() / t * t;
         Vector[] result = new Vector[amount];
         for (int i = 0; i<result.length; i++)
             result[i] = getPoint(i * interval);

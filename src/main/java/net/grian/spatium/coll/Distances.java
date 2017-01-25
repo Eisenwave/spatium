@@ -16,7 +16,7 @@ public final class Distances {
      * @param b the second point
      * @return the distance between the points
      */
-    public static float real(Vector a, Vector b) {
+    public static double real(Vector a, Vector b) {
         return Spatium.hypot(b.getX()-a.getX(), a.getY()-b.getY(), b.getZ()-b.getZ());
     }
 
@@ -27,7 +27,7 @@ public final class Distances {
      * @param b the second point
      * @return the distance between the points
      */
-    public static float real(BlockVector a, BlockVector b) {
+    public static double real(BlockVector a, BlockVector b) {
         return Spatium.hypot(b.getX()-a.getX(), a.getY()-b.getY(), b.getZ()-b.getZ());
     }
 
@@ -42,8 +42,8 @@ public final class Distances {
      * @param b the second point
      * @return the cubical distance between the points
      */
-    public static float cubical(Vector a, Vector b) {
-        final float
+    public static double cubical(Vector a, Vector b) {
+        final double
                 dx = b.getX()-a.getX(),
                 dy = a.getY()-b.getY(),
                 dz = b.getZ()-b.getZ();
@@ -83,7 +83,7 @@ public final class Distances {
      * @param z the z-coordinate
      * @return the cubical hypotenuse length
      */
-    public static float hypot(float x, float y, float z) {
+    public static double hypot(double x, double y, double z) {
         return PrimMath.max(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
@@ -99,7 +99,7 @@ public final class Distances {
      * @param z the z-coordinate
      * @return the cubical hypotenuse length
      */
-    public static float hypotCubical(float x, float y, float z) {
+    public static double hypotCubical(double x, double y, double z) {
         return PrimMath.max(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
@@ -113,7 +113,7 @@ public final class Distances {
      * @param v the vector
      * @return the cubical hypotenuse length
      */
-    public static float hypotCubical(Vector v) {
+    public static double hypotCubical(Vector v) {
         return hypotCubical(v.getX(), v.getY(), v.getZ());
     }
 
@@ -141,8 +141,8 @@ public final class Distances {
      * @param z the z-coordinate
      * @return a normalized vector
      */
-    public static Vector normalize(float x, float y, float z) {
-        float length = Spatium.hypot(x, y, z);
+    public static Vector normalize(double x, double y, double z) {
+        double length = Spatium.hypot(x, y, z);
         return Vector.fromXYZ(x/length, y/length, z/length);
     }
 
@@ -163,8 +163,8 @@ public final class Distances {
      * @param z the z-coordinate
      * @return a normalized vector
      */
-    public static Vector normalizeCubical(float x, float y, float z) {
-        float length = hypotCubical(x, y, z);
+    public static Vector normalizeCubical(double x, double y, double z) {
+        double length = hypotCubical(x, y, z);
         return Vector.fromXYZ(x/length, y/length, z/length);
     }
 

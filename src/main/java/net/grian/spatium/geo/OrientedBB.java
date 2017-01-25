@@ -19,7 +19,7 @@ public interface OrientedBB extends Space {
      * @param dw the half-size on the w-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB construct(Vector center, Vector u, Vector v, Vector w, float du, float dv, float dw) {
+    public static OrientedBB construct(Vector center, Vector u, Vector v, Vector w, double du, double dv, double dw) {
         return new OrientedBBImpl(center, u, v, w, du, dv, dw);
     }
 
@@ -73,24 +73,24 @@ public interface OrientedBB extends Space {
 
     public abstract Slab getSlabW();
 
-    public abstract float getSizeU();
+    public abstract double getSizeU();
 
-    public abstract float getSizeV();
+    public abstract double getSizeV();
 
-    public abstract float getSizeW();
+    public abstract double getSizeW();
 
-    public default float[] getDimensions() {
-        return new float[] {getSizeU(), getSizeV(), getSizeW()};
+    public default double[] getDimensions() {
+        return new double[] {getSizeU(), getSizeV(), getSizeW()};
     }
 
     @Override
-    public default float getVolume() {
+    public default double getVolume() {
         return getSizeU() * getSizeV() * getSizeW();
     }
 
     @Override
-    public default float getSurfaceArea() {
-        float x = getSizeU(), y = getSizeV(), z = getSizeW();
+    public default double getSurfaceArea() {
+        double x = getSizeU(), y = getSizeV(), z = getSizeW();
         return (x * y + x * z + y * z) * 2;
     }
 

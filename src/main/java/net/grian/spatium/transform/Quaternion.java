@@ -2,6 +2,7 @@ package net.grian.spatium.transform;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
+import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.geo.Vector;
 import net.grian.spatium.impl.QuaternionImpl;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
@@ -27,7 +28,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param w the scale
      * @return a new quaternion
      */
-    public static Quaternion fromXYZW(float x, float y, float z, float w) {
+    public static Quaternion fromXYZW(double x, double y, double z, double w) {
         return new QuaternionImpl(x, y, z, w);
     }
 
@@ -39,7 +40,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param w the scale
      * @return a new quaternion
      */
-    public static Quaternion fromXYZW(Vector vector, float w) {
+    public static Quaternion fromXYZW(Vector vector, double w) {
         return new QuaternionImpl(vector, w);
     }
 
@@ -49,7 +50,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      *     quaternion will be equal to the vector's coordinates.
      * </p>
      * <p>
-     *     This operation is equivalent to calling {@link #fromXYZW(Vector, float)}. With the parameters {@code vector}
+     *     This operation is equivalent to calling {@link #fromXYZW(Vector, double)}. With the parameters {@code vector}
      *     and {@code 0}.
      * </p>
      * <br><u>Do not use this method unless you really know what you're doing.</u>
@@ -69,17 +70,17 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param z the rotation around the z-axis in radians
      * @return a new quaternion
      */
-    public static Quaternion fromEulerRad(float x, float y, float z) {
-        float
+    public static Quaternion fromEulerRad(double x, double y, double z) {
+        double
                 halfYaw = x * 0.5f,
                 halfPitch = y * 0.5f,
                 halfRoll = z * 0.5f,
-                sinYaw   = (float) Math.sin(halfYaw),
-                cosYaw   = (float) Math.cos(halfYaw),
-                sinPitch = (float) Math.sin(halfPitch),
-                cosPitch = (float) Math.cos(halfPitch),
-                sinRoll  = (float) Math.sin(halfRoll),
-                cosRoll  = (float) Math.cos(halfRoll);
+                sinYaw   = Math.sin(halfYaw),
+                cosYaw   = Math.cos(halfYaw),
+                sinPitch = Math.sin(halfPitch),
+                cosPitch = Math.cos(halfPitch),
+                sinRoll  = Math.sin(halfRoll),
+                cosRoll  = Math.cos(halfRoll);
 
         return fromXYZW(
                 cosYaw * cosPitch * cosRoll + sinYaw * sinPitch * sinRoll,
@@ -97,7 +98,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param z the rotation around the z-axis in degrees
      * @return a new quaternion
      */
-    public static Quaternion fromEulerDeg(float x, float y, float z) {
+    public static Quaternion fromEulerDeg(double x, double y, double z) {
         return fromEulerRad(Spatium.radians(x), Spatium.radians(y), Spatium.radians(z));
     }
 
@@ -109,8 +110,9 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param roll the roll
      * @return a new quaternion
      */
-    public static Quaternion fromYawPitchRoll(float yaw, float pitch, float roll) {
-        return fromEulerDeg(-pitch, -yaw, -roll);
+    @MinecraftSpecific
+    public static Quaternion fromYawPitchRoll(double yaw, double pitch, double roll) {
+        return fromEulerDeg(pitch, yaw, roll);
     }
 
     /**
@@ -120,11 +122,11 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param theta the angle of rotation in radians
      * @return a new quaternion
      */
-    public static Quaternion fromRotation(Vector axis, float theta) {
-        float halfTheta = theta * 0.5f;
+    public static Quaternion fromRotation(Vector axis, double theta) {
+        double halfTheta = theta * 0.5f;
         return fromXYZW(
-                axis.clone().multiply((float) Math.sin(halfTheta)),
-                (float) Math.cos(halfTheta));
+                axis.clone().multiply(Math.sin(halfTheta)),
+                Math.cos(halfTheta));
     }
 
     /**
@@ -136,11 +138,11 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param theta the angle of rotation in radians
      * @return a new quaternion
      */
-    public static Quaternion fromRotation(float ax, float ay, float az, float theta) {
-        float
+    public static Quaternion fromRotation(double ax, double ay, double az, double theta) {
+        double
                 halfTheta = theta * 0.5f,
-                t = (float) Math.sin(halfTheta),
-                w = (float) Math.cos(halfTheta);
+                t = Math.sin(halfTheta),
+                w = Math.cos(halfTheta);
 
         return fromXYZW(ax * t, ay * t, az * t, w);
     }
@@ -160,7 +162,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @return a new quaternion (rotation)
      */
     public static Quaternion product(Quaternion a, Quaternion b) {
-        float
+        double
                 lx = a.getX(), ly = a.getY(), lz = a.getZ(), lw = a.getW(),
                 rx = b.getX(), ry = b.getY(), rz = b.getZ(), rw = b.getW();
 
@@ -191,7 +193,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @return the inverse of the quaternion
      */
     public static Quaternion inverse(Quaternion q) {
-        float t = 1 / q.getLengthSquared();
+        double t = 1 / q.getLengthSquared();
         return Quaternion.fromXYZW(
             q.getX() * -t,
             q.getY() * -t,
@@ -216,42 +218,42 @@ public interface Quaternion extends SpatiumObject, Transformation {
      *
      * @return the x of the quaternion
      */
-    public abstract float getX();
+    public abstract double getX();
 
     /**
      * Returns the y-coordinate of the quaternion vector.
      *
      * @return the y of the quaternion
      */
-    public abstract float getY();
+    public abstract double getY();
 
     /**
      * Returns the z-coordinate of the quaternion vector.
      *
      * @return the z of the quaternion
      */
-    public abstract float getZ();
+    public abstract double getZ();
 
     /**
      * Returns the real part of the quaternion, also known as the scale.
      *
      * @return the real part of the quaternion
      */
-    public abstract float getW();
+    public abstract double getW();
 
     /**
      * Returns the hypot of the quaternion.
      *
      * @return the hypot of the quaternion
      */
-    public abstract float getLength();
+    public abstract double getLength();
 
     /**
      * Returns the squared hypot of the quaternion.
      *
      * @return the squared hypot of the quaternion
      */
-    public abstract float getLengthSquared();
+    public abstract double getLengthSquared();
 
     /**
      * Returns the vector of this quaternion.
@@ -268,7 +270,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param index the index
      * @return the quaternion's first to fourth number
      */
-    public default float get(int index) {
+    public default double get(int index) {
         switch (index) {
             case 0: return getX();
             case 1: return getY();
@@ -284,7 +286,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param q the quaternion
      * @return the dot product
      */
-    public abstract float dot(Quaternion q);
+    public abstract double dot(Quaternion q);
 
     // CHECKERS
 
@@ -298,15 +300,15 @@ public interface Quaternion extends SpatiumObject, Transformation {
 
     // SETTERS
 
-    public abstract Quaternion setX(float x);
+    public abstract Quaternion setX(double x);
 
-    public abstract Quaternion setY(float y);
+    public abstract Quaternion setY(double y);
 
-    public abstract Quaternion setZ(float z);
+    public abstract Quaternion setZ(double z);
 
-    public abstract Quaternion setW(float w);
+    public abstract Quaternion setW(double w);
 
-    public abstract Quaternion set(float x, float y, float z, float w);
+    public abstract Quaternion set(double x, double y, double z, double w);
 
     /**
      * Changes the angle of this quaternion.
@@ -314,8 +316,8 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param theta the angle in radians
      * @return itself
      */
-    public default Quaternion setAngle(float theta) {
-        return setW( (float) Math.cos(theta / 2) );
+    public default Quaternion setAngle(double theta) {
+        return setW(Math.cos(theta / 2));
     }
 
     /**
@@ -374,7 +376,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param scale the scale
      * @return itself
      */
-    public abstract Quaternion multiply(float scale);
+    public abstract Quaternion multiply(double scale);
 
     /**
      * <p>
@@ -397,7 +399,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param divisor the divisor
      * @return itself
      */
-    public abstract Quaternion divide(float divisor);
+    public abstract Quaternion divide(double divisor);
 
     /**
      * Subtracts a quaternion from this quaternion.
@@ -437,7 +439,7 @@ public interface Quaternion extends SpatiumObject, Transformation {
      * @param length the new hypot
      * @return itself
      */
-    public default Quaternion setLength(float length) {
+    public default Quaternion setLength(double length) {
         return multiply(length / getLength());
     }
 

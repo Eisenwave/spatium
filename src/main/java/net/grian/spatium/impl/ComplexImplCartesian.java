@@ -10,9 +10,9 @@ public class ComplexImplCartesian implements CartesianComplex {
 
     private static final long serialVersionUID = 3260061277385578522L;
 
-    private float a, b;
+    private double a, b;
 
-    public ComplexImplCartesian(float real, float imaginary) {
+    public ComplexImplCartesian(double real, double imaginary) {
         this.a = real;
         this.b = imaginary;
     }
@@ -28,27 +28,27 @@ public class ComplexImplCartesian implements CartesianComplex {
     // GETTERS
 
     @Override
-    public float getReal() {
+    public double getReal() {
         return a;
     }
 
     @Override
-    public float getImaginary() {
+    public double getImaginary() {
         return b;
     }
 
     @Override
-    public float getAngle() {
-        return (float) Math.atan2(a, b);
+    public double getAngle() {
+        return Math.atan2(a, b);
     }
 
     @Override
-    public float getRadius() {
-        return (float) Math.hypot(a, b);
+    public double getRadius() {
+        return Math.hypot(a, b);
     }
 
     @Override
-    public float getRadiusSquared() {
+    public double getRadiusSquared() {
         return a*a + b*b;
     }
 
@@ -62,32 +62,32 @@ public class ComplexImplCartesian implements CartesianComplex {
     // SETTERS
 
     @Override
-    public CartesianComplex setReal(float a) {
+    public CartesianComplex setReal(double a) {
         this.a = a;
         return this;
     }
 
     @Override
-    public CartesianComplex setImaginary(float b) {
+    public CartesianComplex setImaginary(double b) {
         this.b = b;
         return this;
     }
 
     @Override
-    public CartesianComplex setRadius(float r) {
-        float factor = r / getRadius();
+    public CartesianComplex setRadius(double r) {
+        double factor = r / getRadius();
         this.a *= factor;
         this.b *= factor;
         return this;
     }
 
     @Override
-    public CartesianComplex setAngle(float phi) {
+    public CartesianComplex setAngle(double phi) {
         phi += getAngle();
-        float r = getRadius();
+        double r = getRadius();
 
-        this.a = (float) Math.acos(phi) * r;
-        this.b = (float) Math.asin(phi) * r;
+        this.a = Math.acos(phi) * r;
+        this.b = Math.asin(phi) * r;
         return this;
     }
 
@@ -105,7 +105,7 @@ public class ComplexImplCartesian implements CartesianComplex {
     }
 
     @Override
-    public CartesianComplex multiply(float factor) {
+    public CartesianComplex multiply(double factor) {
         this.a *= factor;
         this.b *= factor;
         return this;
@@ -119,7 +119,7 @@ public class ComplexImplCartesian implements CartesianComplex {
     }
 
     @Override
-    public CartesianComplex divide(float divisor) {
+    public CartesianComplex divide(double divisor) {
         this.a /= divisor;
         this.b /= divisor;
         return this;
@@ -127,10 +127,10 @@ public class ComplexImplCartesian implements CartesianComplex {
 
     @Override
     public CartesianComplex divide(Complex z) {
-        float
+        double
         za = z.getReal(),
         zb = z.getImaginary(),
-        denom = (float) Math.hypot(za, zb);
+        denom = Math.hypot(za, zb);
 
         this.a = (this.a * za + this.b * zb) / denom;
         this.b = (this.b * za - this.a * zb) / denom;
@@ -146,7 +146,7 @@ public class ComplexImplCartesian implements CartesianComplex {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new float[] {a, b});
+        return Arrays.hashCode(new double[] {a, b});
     }
 
     @Override

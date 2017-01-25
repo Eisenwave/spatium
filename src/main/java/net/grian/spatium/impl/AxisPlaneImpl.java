@@ -2,14 +2,13 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.geo.AxisPlane;
-import net.grian.spatium.geo.Plane;
 
 public class AxisPlaneImpl implements AxisPlane {
 
     private Axis axis;
-    private float depth;
+    private double depth;
 
-    public AxisPlaneImpl(Axis axis, float depth) {
+    public AxisPlaneImpl(Axis axis, double depth) {
         this.axis = axis;
         this.depth = depth;
     }
@@ -29,7 +28,7 @@ public class AxisPlaneImpl implements AxisPlane {
     }
 
     @Override
-    public float getDepth() {
+    public double getDepth() {
         return depth;
     }
 
@@ -39,7 +38,7 @@ public class AxisPlaneImpl implements AxisPlane {
     }
 
     @Override
-    public AxisPlane setDepth(float depth) {
+    public AxisPlane setDepth(double depth) {
         this.depth = depth;
         return this;
     }

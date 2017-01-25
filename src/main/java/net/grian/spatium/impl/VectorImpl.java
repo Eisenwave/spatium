@@ -10,9 +10,9 @@ public class VectorImpl implements Vector {
 
     private static final long serialVersionUID = 6745733279751595544L;
 
-    private float x, y, z;
+    private double x, y, z;
 
-    public VectorImpl(float x, float y, float z) {
+    public VectorImpl(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -31,42 +31,43 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public float getX() {
+    public double getX() {
         return x;
     }
 
     @Override
-    public float getY() {
+    public double getY() {
         return y;
     }
 
     @Override
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @Override
-    public float getYaw() {
-        return Spatium.degrees( (float)-Math.atan2(x, z) );
+    public double getYaw() {
+        return Spatium.degrees(-Math.atan2(x, z));
     }
 
     @Override
-    public float getPitch() {
-        return Spatium.degrees( (float) Math.atan(y / Math.sqrt(x*x + z*z)) );
+    public double getPitch() {
+        return Spatium.degrees(Math.atan(y / Math.sqrt(x*x + z*z)));
     }
 
     @Override
-    public float angleTo(Vector vector) {
-        return (float) Math.acos( dot(vector) / this.getLength() * vector.getLength() );
+    public double angleTo(Vector vector) {
+        return Math.acos( dot(vector) / this.getLength() * vector.getLength() );
     }
 
     @Override
-    public float getLength() {
-        return (float) Math.sqrt(x*x + y*y + z*z);
+    public double getLength() {
+        return Math.sqrt(x*x + y*y + z*z);
     }
 
     @Override
-    public float getLengthSquared() {
+    public double getLengthSquared() {
         return x*x + y*y + z*z;
     }
 
@@ -77,17 +78,17 @@ public class VectorImpl implements Vector {
      * no such possibility.
      * @return the hypot of the vector
      */
-    public float getLengthSafe() {
-        return (float) Math.hypot(Math.hypot(x, y), z);
+    public double getLengthSafe() {
+        return Math.hypot(Math.hypot(x, y), z);
     }
 
     @Override
-    public float dot(float x, float y, float z) {
+    public double dot(double x, double y, double z) {
         return this.x*x + this.y*y + this.z*z;
     }
 
     @Override
-    public Vector cross(float x, float y, float z) {
+    public Vector cross(double x, double y, double z) {
         return new VectorImpl(
                 (this.y * z - this.z * y),
                 (this.z * x - this.x * z),
@@ -96,22 +97,22 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public float distanceTo(float x, float y, float z) {
-        float
+    public double distanceTo(double x, double y, double z) {
+        double
         dx = this.x - x,
         dy = this.y - y,
         dz = this.z - z;
 
-        return (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+        return Math.sqrt(dx*dx + dy*dy + dz*dz);
     }
 
     @Override
-    public float angleTo(float x, float y, float z) {
-        return (float) Math.acos( dot(x, y, z) / (this.getLength() * Math.sqrt(x*x + y*y + z*z)));
+    public double angleTo(double x, double y, double z) {
+        return Math.acos( dot(x, y, z) / (this.getLength() * Math.sqrt(x*x + y*y + z*z)));
     }
 
     @Override
-    public Vector midPoint(Vector v, float t) {
+    public Vector midPoint(Vector v, double t) {
         return new VectorImpl(
                 this.getX() + (v.getX() - this.getX()) * t,
                 this.getX() + (v.getY() - this.getY()) * t,
@@ -121,7 +122,7 @@ public class VectorImpl implements Vector {
     // SETTERS
 
     @Override
-    public Vector set(float x, float y, float z) {
+    public Vector set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -129,59 +130,59 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector setX(float x) {
+    public Vector setX(double x) {
         this.x = x;
         return this;
     }
 
     @Override
-    public Vector setY(float y) {
+    public Vector setY(double y) {
         this.y = y;
         return this;
     }
 
     @Override
-    public Vector setZ(float z) {
+    public Vector setZ(double z) {
         this.z = z;
         return this;
     }
 
     @Override
-    public Vector setYaw(float yaw) {
+    public Vector setYaw(double yaw) {
         double
         yaw2 = Math.toRadians(yaw),
         r = getLength();
 
-        this.x = (float) (Math.sin(-yaw2) * r);
-        this.z = (float) (Math.cos( yaw2) * r);
+        this.x = Math.sin(-yaw2) * r;
+        this.z = Math.cos( yaw2) * r;
         return this;
     }
 
     @Override
-    public Vector setPitch(float pitch) {
+    public Vector setPitch(double pitch) {
         double
         pitch2 = -Math.toRadians(pitch),
         r = getLength();
 
-        this.y = (float) (Math.tan(pitch2) * r);
+        this.y = Math.tan(pitch2) * r;
         return this;
     }
 
     @Override
-    public Vector setRadiusYawPitch(float radius, float yaw, float pitch) {
+    public Vector setRadiusYawPitch(double radius, double yaw, double pitch) {
         double
         r = radius * getLength(),
         y = Math.toRadians(yaw),
         p = -Math.toRadians(pitch);
 
-        this.x = (float) (Math.sin(-y) * r);
-        this.y = (float) (Math.tan( p) * r);
-        this.z = (float) (Math.cos( y) * r);
+        this.x = Math.sin(-y) * r;
+        this.y = Math.tan( p) * r;
+        this.z = Math.cos( y) * r;
         return this;
     }
 
     @Override
-    public Vector add(float x, float y, float z) {
+    public Vector add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -189,7 +190,7 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector subtract(float x, float y, float z) {
+    public Vector subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
@@ -197,7 +198,7 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector multiply(float x, float y, float z) {
+    public Vector multiply(double x, double y, double z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
@@ -205,12 +206,7 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector multiply(float x) {
-        return multiply(x, x, x);
-    }
-
-    @Override
-    public Vector divide(float x, float y, float z) {
+    public Vector divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;
@@ -218,13 +214,8 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector divide(float x) {
-        return divide(x, x, x);
-    }
-
-    @Override
-    public Vector setLength(float length) {
-        float n = length / getLength();
+    public Vector setLength(double length) {
+        double n = length / getLength();
         x *= n;
         y *= n;
         z *= n;
@@ -245,8 +236,8 @@ public class VectorImpl implements Vector {
     }
 
     @Override
-    public float[] toArray() {
-        return new float[] {x, y, z};
+    public double[] toArray() {
+        return new double[] {x, y, z};
     }
 
     @Override

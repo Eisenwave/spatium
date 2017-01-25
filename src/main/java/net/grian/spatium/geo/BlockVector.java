@@ -14,8 +14,8 @@ public interface BlockVector extends SpatiumObject {
         return new BlockVectorImpl(x, y, z);
     }
 
-    public static BlockVector fromXYZ(float x, float y, float z) {
-        return fromXYZ(PrimMath.floor(x), PrimMath.floor(y), PrimMath.floor(z));
+    public static BlockVector fromXYZ(double x, double y, double z) {
+        return fromXYZ((int) PrimMath.floor(x), (int) PrimMath.floor(y), (int) PrimMath.floor(z));
     }
 
     public static BlockVector fromVector(Vector vector) {
@@ -81,9 +81,9 @@ public interface BlockVector extends SpatiumObject {
         return multiply(factor, factor, factor);
     }
 
-    public abstract BlockVector multiply(float x, float y, float z);
+    public abstract BlockVector multiply(double x, double y, double z);
 
-    public default BlockVector multiply(float factor) {
+    public default BlockVector multiply(double factor) {
         return multiply(factor, factor, factor);
     }
 
@@ -93,9 +93,9 @@ public interface BlockVector extends SpatiumObject {
         return divide(factor, factor, factor);
     }
 
-    public abstract BlockVector divide(float x, float y, float z);
+    public abstract BlockVector divide(double x, double y, double z);
 
-    public default BlockVector divide(float divisor) {
+    public default BlockVector divide(double divisor) {
         return divide(divisor, divisor, divisor);
     }
 

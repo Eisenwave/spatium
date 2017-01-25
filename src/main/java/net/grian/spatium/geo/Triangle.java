@@ -60,7 +60,7 @@ public interface Triangle {
                 ab = Vector.between(a, getB()),
                 ap = Vector.between(a, point);
 
-        float
+        double
                 ac_ac = ac.dot(ac),
                 ac_ab = ac.dot(ab),
                 ac_ap = ac.dot(ap),
@@ -81,7 +81,7 @@ public interface Triangle {
 
     public abstract Triangle setC(Vector point);
 
-    public default Triangle setCenter(float x, float y, float z) {
+    public default Triangle setCenter(double x, double y, double z) {
         Vector p = getCenter();
         return move(x - p.getX(), y - p.getY(), z - p.getZ());
     }
@@ -90,15 +90,15 @@ public interface Triangle {
         return move(point.subtract(getCenter()));
     }
 
-    public abstract Triangle move(float x, float y, float z);
+    public abstract Triangle move(double x, double y, double z);
 
     public default Triangle move(Vector v) {
         return move(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract Triangle scale(float x, float y, float z);
+    public abstract Triangle scale(double x, double y, double z);
 
-    public default Triangle scale(float factor) {
+    public default Triangle scale(double factor) {
         return scale(factor, factor, factor);
     }
 
