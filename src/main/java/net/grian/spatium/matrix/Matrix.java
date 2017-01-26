@@ -21,6 +21,203 @@ import net.grian.spatium.impl.MatrixImpl;
  */
 public interface Matrix {
 
+    //"CONSTRUCTORS"
+
+    /**
+     * Creates a new matrix with specified content. Note that the input content
+     * is being interpreted depending on the given rows and columns.
+     *
+     * <br><br>For example, a 3x3 matrix will be filled in the following way:
+     * <blockquote>
+     *   {@code [(0,0) (0,1) (0,2) (1,0) (1,1) (1,2) (2,0) (2,1) (2,2)]}
+     *   <br>when the indices {@code (i,j)} represent the row index {@code (i)}
+     *   and the column index {@code (j)}.
+     * </blockquote>
+     * Should the provided array not meet the size requirements
+     * {@code hypot = rows * columns}, the matrix can not be created.
+     *
+     * @param rows the amount of rows of the matrix (> 0)
+     * @param columns the amount of columns of the matrix (> 0)
+     * @param content the content to fill the matrix with
+     * @return a new matrix
+     * @throws IllegalMatrixSizeException if the content array's hypot is not
+     * equal to {@code rows * columns}
+     */
+    public static Matrix create(int rows, int columns, double... content) {
+        return new MatrixImpl(rows, columns, content);
+    }
+
+    /**
+     * Creates a new empty matrix.
+     *
+     * @param rows the amount of rows of the matrix (> 0)
+     * @param columns the amount of columns of the matrix (> 0)
+     * @return a new matrix
+     * @throws IllegalMatrixSizeException if either the amount of rows or the
+     * amount of columns <= 0
+     */
+    public static Matrix create(int rows, int columns) {
+        return new MatrixImpl(rows, columns);
+    }
+
+    /**
+     * Creates a new n*n identity matrix.
+     *
+     * @param n the amount of rows and columns of the matrix (> 0)
+     * @return a new matrix
+     * @throws IllegalMatrixSizeException if either the amount of rows or the
+     * amount of columns <= 0
+     */
+    public static Matrix identity(int n) {
+        double[] value = new double[n * n];
+        for (int i = 0; i<n; i++)
+            value[i + i*n] = 1;
+        return new MatrixImpl(n, n, value);
+    }
+
+    /**
+     * Returns a 3x3 rotation matrix from a yaw. Yaw is a clockwise rotation around the y-axis.
+     *
+     * @param yaw the yaw in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromYaw(double yaw) {
+        double theta = Spatium.radians(yaw);
+        return Matrix.create(3, 3,
+                -Math.cos(theta), 0, -Math.sin(theta),
+                0, 1, 0,
+                Math.sin(theta), 0, -Math.cos(theta));
+    }
+
+    /**
+     * Returns a 3x3 rotation matrix from a pitch. Pitch is a clockwise rotation around the x-axis.
+     *
+     * @param pitch the pitch in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromPitch(double pitch) {
+        double phi = Spatium.radians(pitch);
+        return Matrix.create(3, 3,
+                -Math.cos(phi),  Math.sin(phi), 0,
+                -Math.sin(phi), -Math.cos(phi), 0,
+                0,              0,              1);
+    }
+
+    /**
+     * Returns a 3x3 rotation matrix from a roll. Roll is a clockwise rotation around the z-axis.
+     *
+     * @param roll the roll in degrees
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromRoll(double roll) {
+        double psi = Spatium.radians(roll);
+        return Matrix.create(3, 3,
+                1, 0, 0,
+                0, -Math.cos(psi), Math.sin(psi),
+                0, -Math.sin(psi), -Math.cos(psi));
+    }
+
+    /**
+     * <p>
+     *     Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll. Note that first roll, then pitch and then
+     *     yaw are being applied.
+     * </p>
+     * The result of this rotation will be the following:
+     * <ol>
+     *     <li>roll (clockwise rotation around z-axis) applied
+     *     <li>pitch (clockwise rotation around x-axis) applied
+     *     <li>yaw (clockwise rotation around y-axis) applied
+     * </ol>
+     *
+     * @param yaw the yaw of the rotation
+     * @param pitch the pitch of the rotation
+     * @param roll the roll of the rotation
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromYawPitchRoll(double yaw, double pitch, double roll) {
+        double theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
+        return Matrix.create(3, 3,
+                //first row
+                Math.cos(theta) * Math.cos(phi),
+                0,
+                0,
+                //second row
+                Math.sin(theta) * Math.cos(phi),
+                0,
+                0,
+                //third row
+                Math.sin(phi),
+                -(Math.cos(phi) * Math.sin(psi)),
+                Math.cos(phi) * Math.cos(psi)
+        );//TODO Complete yaw, pitch, roll matrix
+    }
+
+    /**
+     * Creates a 2x2 scaling matrix for x and y coordinates.
+     *
+     * @param x the x scale
+     * @param y the y scale
+     * @return a new scaling matrix
+     */
+    public static Matrix fromScale(double x, double y) {
+        return create(2, 2,
+                x, 0,
+                0, y);
+    }
+
+    /**
+     * Creates a 3x3 scaling matrix for x, y and z coordinates.
+     *
+     * @param x the scale on the x-axis
+     * @param y the scale on the y-axis
+     * @param z the scale on the z-axis
+     * @return a new scaling matrix
+     */
+    public static Matrix fromScale(double x, double y, double z) {
+        return create(3, 3,
+                x, 0, 0,
+                0, y, 0,
+                0, 0, z);
+    }
+
+    /**
+     * Creates a n x n scaling matrix for varying coordinates.
+     *
+     * @param coords the coordinates
+     * @return a new scaling matrix
+     */
+    public static Matrix fromScale(double... coords) {
+        if (coords.length == 0) throw new IllegalMatrixSizeException("no coordinates given");
+
+        final int size = coords.length;
+        double[] content = new double[size * size];
+
+        //noinspection ManualArrayCopy
+        for (int i = 0; i<size; i++)
+            content[i * size + i] = coords[i];
+
+        return Matrix.create(size, size, content);
+    }
+
+    /**
+     * Creates a new 3x1 (single column) matrix from a Vector.
+     *
+     * @param v the vector
+     * @return a new matrix
+     */
+    public static Matrix fromVector(Vector v) {
+        return create(3, 1,
+                v.getX(),
+                v.getY(),
+                v.getZ());
+    }
+
+    //OPERATIONS
+
     /**
      * Adds another matrix to this matrix.
      *
@@ -39,7 +236,7 @@ public interface Matrix {
 
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
-                result[i + j*row] = a.get(row, col) + b.get(row, col);
+                result[i*col + j] = a.get(row, col) + b.get(row, col);
 
         return create(row, col, result);
     }
@@ -112,8 +309,17 @@ public interface Matrix {
         if (matrices.length == 1) return matrices[0].clone();
         if (matrices.length == 2) return product(matrices[0], matrices[1]);
 
-        Matrix result = matrices[0];
-        for (int i = 1; i<matrices.length; i++)
+        if (matrices.length > 8) {
+            Matrix first = matrices[0].clone();
+            Matrix result = product(matrices[0], matrices[1]);
+            if (first.equals(result)) return first;
+
+            for (int i = 2; i<matrices.length; i++)
+                result = product(result, matrices[i]);
+        }
+
+        Matrix result = product(matrices[0], matrices[1]);
+        for (int i = 2; i<matrices.length; i++)
             result = product(result, matrices[i]);
 
         return result;
@@ -137,6 +343,34 @@ public interface Matrix {
      */
     public static Matrix cube(Matrix matrix) {
         return Matrix.product(Matrix.product(matrix, matrix), matrix);
+    }
+
+    /**
+     * Returns the matrix to a given power.
+     *
+     * @param matrix the matrix
+     * @return the matrix to a given power
+     * @throws MatrixException if the power is negative or <code>power == 0 & rows != columns</code>
+     */
+    public static Matrix pow(Matrix matrix, int power) {
+        if (power < 0)
+            throw new MatrixException("power must be positive");
+        if (power == 0) {
+            int m = matrix.getRows(), n = matrix.getColumns();
+            if (m != n) throw new MatrixDimensionsException("can not take 0th power of "+m+" x "+n+" matrix");
+            return identity(n);
+        }
+        if (power == 1) return matrix;
+        if (power == 2) return square(matrix);
+        if (power == 3) return cube(matrix);
+
+        Matrix result = square(matrix);
+        if (result.equals(matrix)) return matrix;
+
+        for (int i = 1; i<power; i++)
+            result = product(result, matrix);
+
+        return result;
     }
 
     /**
@@ -188,200 +422,6 @@ public interface Matrix {
             result.set(j, i, matrix.get(i, j));
 
         return result;
-    }
-
-    /**
-     * Creates a 2x2 scaling matrix for x and y coordinates.
-     *
-     * @param x the x scale
-     * @param y the y scale
-     * @return a new scaling matrix
-     */
-    public static Matrix fromScale(double x, double y) {
-        double[] content = new double[4];
-        content[0] = x;
-        content[3] = y;
-
-        return create(2, 2, content);
-    }
-
-    /**
-     * Creates a 3x3 scaling matrix for x, y and z coordinates.
-     *
-     * @param x the scale on the x-axis
-     * @param y the scale on the y-axis
-     * @param z the scale on the z-axis
-     * @return a new scaling matrix
-     */
-    public static Matrix fromScale(double x, double y, double z) {
-        double[] content = new double[9];
-        content[0] = x;
-        content[4] = y;
-        content[8] = z;
-
-        return create(3, 3, content);
-    }
-
-    /**
-     * Creates a n x n scaling matrix for varying coordinates.
-     *
-     * @param coords the coordinates
-     * @return a new scaling matrix
-     */
-    public static Matrix fromScale(double... coords) {
-        if (coords.length == 0) throw new IllegalMatrixSizeException("no coordinates given");
-
-        final int size = coords.length;
-        double[] content = new double[size * size];
-
-        //noinspection ManualArrayCopy
-        for (int i = 0; i<size; i++)
-            content[i * size + i] = coords[i];
-
-        return Matrix.create(size, size, content);
-    }
-
-    /**
-     * Returns a 3x3 rotation matrix from a yaw. Yaw is a clockwise rotation around the y-axis.
-     *
-     * @param yaw the yaw in degrees
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromYaw(double yaw) {
-        double theta = Spatium.radians(yaw);
-        return Matrix.create(3, 3,
-                -Math.cos(theta), 0, -Math.sin(theta),
-                               0, 1, 0,
-                 Math.sin(theta), 0, -Math.cos(theta));
-    }
-
-    /**
-     * Returns a 3x3 rotation matrix from a pitch. Pitch is a clockwise rotation around the x-axis.
-     *
-     * @param pitch the pitch in degrees
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromPitch(double pitch) {
-        double phi = Spatium.radians(pitch);
-        return Matrix.create(3, 3,
-                -Math.cos(phi),  Math.sin(phi), 0,
-                -Math.sin(phi), -Math.cos(phi), 0,
-                0,              0,              1);
-    }
-
-    /**
-     * Returns a 3x3 rotation matrix from a roll. Roll is a clockwise rotation around the z-axis.
-     *
-     * @param roll the roll in degrees
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromRoll(double roll) {
-        double psi = Spatium.radians(roll);
-        return Matrix.create(3, 3,
-                1, 0, 0,
-                0, -Math.cos(psi), Math.sin(psi),
-                0, -Math.sin(psi), -Math.cos(psi));
-    }
-
-    /**
-     * <p>
-     *     Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll. Note that first roll, then pitch and then
-     *     yaw are being applied.
-     * </p>
-     * The result of this rotation will be the following:
-     * <ol>
-     *     <li>roll (clockwise rotation around z-axis) applied
-     *     <li>pitch (clockwise rotation around x-axis) applied
-     *     <li>yaw (clockwise rotation around y-axis) applied
-     * </ol>
-     *
-     * @param yaw the yaw of the rotation
-     * @param pitch the pitch of the rotation
-     * @param roll the roll of the rotation
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromYawPitchRoll(double yaw, double pitch, double roll) {
-        double theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
-        return Matrix.create(3, 3,
-                //first row
-                Math.cos(theta) * Math.cos(phi),
-                0,
-                0,
-                //second row
-                Math.sin(theta) * Math.cos(phi),
-                0,
-                0,
-                //third row
-                Math.sin(phi),
-                -(Math.cos(phi) * Math.sin(psi)),
-                Math.cos(phi) * Math.cos(psi)
-                );//TODO Complete yaw, pitch, roll matrix
-    }
-
-    /**
-     * Creates a new 3x1 (single column) matrix from a Vector.
-     *
-     * @param v the vector
-     * @return a new matrix
-     */
-    public static Matrix fromVector(Vector v) {
-        return create(3, 1, v.getX(), v.getY(), v.getZ());
-    }
-
-    /**
-     * Creates a new matrix with specified content. Note that the input content
-     * is being interpreted depending on the given rows and columns.
-     *
-     * <br><br>For example, a 3x3 matrix will be filled in the following way:
-     * <blockquote>
-     *   {@code [(0,0) (0,1) (0,2) (1,0) (1,1) (1,2) (2,0) (2,1) (2,2)]}
-     *   <br>when the indices {@code (i,j)} represent the row index {@code (i)}
-     *   and the column index {@code (j)}.
-     * </blockquote>
-     * Should the provided array not meet the size requirements
-     * {@code hypot = rows * columns}, the matrix can not be created.
-     *
-     * @param rows the amount of rows of the matrix (> 0)
-     * @param columns the amount of columns of the matrix (> 0)
-     * @param content the content to fill the matrix with
-     * @return a new matrix
-     * @throws IllegalMatrixSizeException if the content array's hypot is not
-     * equal to {@code rows * columns}
-     */
-    public static Matrix create(int rows, int columns, double... content) {
-        return new MatrixImpl(rows, columns, content);
-    }
-
-    /**
-     * Creates a new empty matrix.
-     *
-     * @param rows the amount of rows of the matrix (> 0)
-     * @param columns the amount of columns of the matrix (> 0)
-     * @return a new matrix
-     * @throws IllegalMatrixSizeException if either the amount of rows or the
-     * amount of columns <= 0
-     */
-    public static Matrix create(int rows, int columns) {
-        return new MatrixImpl(rows, columns);
-    }
-
-    /**
-     * Creates a new n*n identity matrix.
-     *
-     * @param n the amount of rows and columns of the matrix (> 0)
-     * @return a new matrix
-     * @throws IllegalMatrixSizeException if either the amount of rows or the
-     * amount of columns <= 0
-     */
-    public static Matrix identity(int n) {
-        double[] value = new double[n * n];
-        for (int i = 0; i<n; i++)
-            value[i + i*n] = 1;
-        return new MatrixImpl(n, n, value);
     }
 
     // GETTERS
@@ -475,12 +515,41 @@ public interface Matrix {
     /**
      * Sets the value at a specified row and column index to a specified value.
      *
-     * @param row the row index
-     * @param col the column index
+     * @param i the row index
+     * @param j the column index
      * @param value the value
      * @return itself
      */
-    public abstract Matrix set(int row, int col, double value);
+    public abstract Matrix set(int i, int j, double value);
+
+    /**
+     * Swaps two values in the matrix.
+     *
+     * @param i0 the old row index
+     * @param j0 the old column index
+     * @param i1 the new row index
+     * @param j1 the new column index
+     * @return itself
+     */
+    public abstract Matrix swap(int i0, int j0, int i1, int j1);
+
+    /**
+     * Swaps two rows in the matrix.
+     *
+     * @param i0 the old row index
+     * @param i1 the new row index
+     * @return itself
+     */
+    public abstract Matrix swapRows(int i0, int i1);
+
+    /**
+     * Swaps two columns in the matrix.
+     *
+     * @param j0 the old column index
+     * @param j1 the new column index
+     * @return itself
+     */
+    public abstract Matrix swapColumns(int j0, int j1);
 
     /**
      * Scales the matrix by a factor.
