@@ -104,6 +104,42 @@ public class MatrixTest {
     }
 
     @Test
+    public void swap() throws Exception {
+        Matrix actual = Matrix.create(3, 3,
+                1, 2, 3,
+                4, 5, 6,
+                7, 8, 9);
+
+        actual.swap(1, 1, 1, 1);
+        actual.swap(1, 0, 0, 1);
+        actual.swap(2, 0, 0, 2);
+
+        Matrix expected = Matrix.create(3, 3,
+                1, 4, 7,
+                2, 5, 6,
+                3, 8, 9);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void transpose() throws Exception {
+        Matrix actual = Matrix.create(4, 4,
+                1, 2, 3, 4,
+                1, 4, 9, 16,
+                1, 8, 27, 64,
+                1, 16, 81, 256);
+
+        Matrix expected = Matrix.create(4, 4,
+                1, 1, 1, 1,
+                2, 4, 8, 16,
+                3, 9, 27, 81,
+                4, 16, 64, 256);
+
+        assertEquals(expected, actual.transpose());
+    }
+
+    @Test
     public void getDeterminant() throws Exception {
         {
             boolean failed = false;
@@ -140,6 +176,40 @@ public class MatrixTest {
                     1, 16, 81, 256);
             assertEquals(288, matrix.getDeterminant(), Spatium.EPSILON);
         }
+    }
+
+    @Test
+    public void getCofactors() throws Exception {
+        Matrix matrix = Matrix.create(4, 4,
+                1, 2, 3, 4,
+                1, 4, 9, 16,
+                1, 8, 27, 64,
+                1, 16, 81, 256);
+
+        Matrix cofactors = Matrix.create(4, 4,
+                1152, -864, 384, -72,
+                -1248, 1368, -672, 132,
+                432, -576, 336, -72,
+                -48, 72, -48, 12);
+
+        assertEquals(cofactors, matrix.getCofactors());
+    }
+
+    @Test
+    public void getInverse() throws Exception {
+        Matrix matrix = Matrix.create(4, 4,
+                1, 2, 3, 4,
+                1, 4, 9, 16,
+                1, 8, 27, 64,
+                1, 16, 81, 256);
+
+        Matrix inverse = Matrix.create(4, 4,
+                 96, -104,  36, -4,
+                -72,  114, -48,  6,
+                 32,  -56,  28, -4,
+                 -6,   11,  -6,  1).scale(1 / 24D);
+
+        assertEquals(inverse, matrix.getInverse());
     }
 
 }

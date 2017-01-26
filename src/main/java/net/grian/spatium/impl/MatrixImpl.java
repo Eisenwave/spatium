@@ -11,7 +11,9 @@ public class MatrixImpl implements Matrix {
     private final int rows, columns;
     private final double[] content;
 
-    public MatrixImpl(int rows, int columns, double[] content) {
+    public MatrixImpl(int rows, int columns, double... content) {
+        if (rows * columns != content.length)
+            throw new MatrixDimensionsException("content must be "+rows+"x"+columns+" long");
         this.rows = rows;
         this.columns = columns;
         this.content = PrimArrays.clone(content);
@@ -32,8 +34,18 @@ public class MatrixImpl implements Matrix {
     @Override
     public double get(int i, int j) {
         validate(i, j);
+        return uget(i, j);
+    }
 
-        return content[indexOf(i, j)];
+    /**
+     * "Unvalidated" or "unchecked" getter.
+     *
+     * @param i the row index
+     * @param j the column index
+     * @return the value at the indices
+     */
+    public double uget(int i, int j) {
+        return content[i*columns + j];
     }
 
     private int indexOf(int i, int j) {
@@ -46,7 +58,7 @@ public class MatrixImpl implements Matrix {
 
         double[] result = new double[columns];
         for (int j = 0; j<columns; j++)
-            result[j] = content[indexOf(i, j)];
+            result[j] = uget(i, j);
 
         return result;
     }
@@ -57,7 +69,7 @@ public class MatrixImpl implements Matrix {
 
         double[] result = new double[rows];
         for (int i = 0; i<rows; i++)
-            result[i] = content[indexOf(i, j)];
+            result[i] = uget(i, j);
 
         return result;
     }
@@ -76,47 +88,131 @@ public class MatrixImpl implements Matrix {
     public double getDeterminant() {
         if (rows != columns)
             throw new MatrixDimensionsException("matrix must be square matrix");
-
-        if (rows == 1) return content[0];
-        if (rows == 2) return content[0]*content[3] - content[1]*content[2];
-
-        return internalDeterminant(this, rows);
+        return uncheckedDeterminant();
     }
 
-    private static double internalDeterminant(Matrix matrix, int n) {
-        if (n == 3) return internalDeterminant3(matrix);
+    /**
+     * Returns the determinant without checking whether the matrix is square.
+     *
+     * @return the determinant without square-matrix validation
+     */
+    private double uncheckedDeterminant() {
+        if (rows == 1) return uget(0, 0);
+        if (rows == 2) return determinant2();
+        if (rows == 3) return determinant3();
+        return determinantRecursive();
+    }
 
-        Matrix temp = Matrix.create(n, n);
+    /**
+     * Special case formula for 2x2 matrices. (Using <a href="https://en.wikipedia.org/wiki/Cramer%27s_rule">Cramer's
+     * Rule</a>)
+     *
+     * @return the determinant of the matrix
+     */
+    private double determinant2() {
+        return uget(0, 0)*uget(1, 1) - uget(0, 1)*uget(1, 0);
+    }
+
+    /**
+     * Special case formula for 3x3 matrices. (Using <a href="https://en.wikipedia.org/wiki/Cramer%27s_rule">Cramer's
+     * Rule</a>)
+     *
+     * @return the determinant of the matrix
+     */
+    private double determinant3() {
+        return
+          uget(0,0)*uget(1,1)*uget(2,2)
+        + uget(0,1)*uget(1,2)*uget(2,0)
+        + uget(0,2)*uget(1,0)*uget(2,1)
+        - uget(0,2)*uget(1,1)*uget(2,0)
+        - uget(0,0)*uget(1,2)*uget(2,1)
+        - uget(0,1)*uget(1,0)*uget(2,2);
+    }
+
+    private double determinantRecursive() {
+        if (rows == 3) return determinant3();
+
+        //Temporary matrix to paste the cofactors in to avoid constructing new matrix for every cofactor
+        MatrixImpl canvas = new MatrixImpl(rows-1, rows-1);
         double result = 0;
 
-        for (int p = 0; p < n; p++) {
-            int h = 0, k = 0;
+        for (int i = 0; i<columns; i++) {
+            pasteWithoutRowCol(canvas, i, 0);
 
-            for (int i = 1; i < n; i++) for (int j = 0; j < n; j++) {
-                if(j==p) continue;
-
-                temp.set(h, k, matrix.get(i, j));
-
-                if(++k == n-1) {
-                    h++;
-                    k = 0;
-                }
-            }
-
-            result += matrix.get(0, p) * minusOnePow(p) * internalDeterminant(temp, n-1);
+            result += uget(i, 0) * minusOnePow(i) * canvas.determinantRecursive();
         }
 
         return result;
     }
 
-    private static double internalDeterminant3(Matrix m) {
-        return
-                  m.get(0,0)*m.get(1,1)*m.get(2,2)
-                + m.get(0,1)*m.get(1,2)*m.get(2,0)
-                + m.get(0,2)*m.get(1,0)*m.get(2,1)
-                - m.get(0,2)*m.get(1,1)*m.get(2,0)
-                - m.get(0,0)*m.get(1,2)*m.get(2,1)
-                - m.get(0,1)*m.get(1,0)*m.get(2,2);
+    @Override
+    public MatrixImpl getCofactors() {
+        if (rows != columns)
+            throw new MatrixDimensionsException("matrix must be square matrix");
+        if (rows == 1) return new MatrixImpl(1, 1, uget(0, 0));
+        if (rows == 2) return cofactors2();
+
+        MatrixImpl result = new MatrixImpl(rows, columns);
+        //Temporary matrix to paste the cofactors in to avoid constructing new matrix for every cofactor
+        MatrixImpl canvas = new MatrixImpl(rows-1, columns-1);
+
+        for (int i = 0; i<rows; i++) for (int j = 0; j<columns; j++) {
+            pasteWithoutRowCol(canvas, i, j);
+            double cofactor = minusOnePow(i+j) * canvas.uncheckedDeterminant();
+
+            result.set(i, j, cofactor);
+        }
+
+        return result;
+    }
+
+    @Override
+    public MatrixImpl getAdjugate() {
+        return getCofactors().transpose();
+    }
+
+    @Override
+    public MatrixImpl getInverse() {
+        MatrixImpl adj = getAdjugate();
+        //determinant can be obtained faster since adjugate already contains all necessary information
+        double det = 0;
+        for (int i = 0; i<rows; i++)
+            det += adj.get(i, 0) * uget(0, i);
+
+        return adj.scale(1 / det);
+    }
+
+    private MatrixImpl cofactors2() {
+        return new MatrixImpl(2, 2,
+                 uget(1, 1), -uget(1, 0),
+                -uget(0, 1),  uget(0, 0));
+    }
+
+    /**
+     * Pastes new values into the matrix for each (i, j) where:
+     * <blockquote>
+     *     <code>i == row || j == col</code>
+     * </blockquote>
+     *
+     * @param matrix the matrix to contain the values
+     * @param row the row index
+     * @param col the column index
+     */
+    @SuppressWarnings("ConstantConditions")
+    private void pasteWithoutRowCol(MatrixImpl matrix, int row, int col) {
+        final int m = rows-1;
+
+        int x = 0, y = 0;
+        for (int i = 0; i<rows; i++) for (int j = 0; j<columns; j++) {
+            if (i == row || j == col) continue;
+
+            matrix.set(x, y, uget(i, j));
+
+            if(++x == m) {
+                y++;
+                x = 0;
+            }
+        }
     }
 
     /**
@@ -132,26 +228,41 @@ public class MatrixImpl implements Matrix {
     // SETTERS
 
     @Override
-    public Matrix set(int i, int j, double value) {
+    public MatrixImpl set(int i, int j, double value) {
         validate(i, j);
-
-        content[indexOf(i, j)] = value;
+        uset(i, j, value);
         return this;
     }
 
+    /**
+     * "Unvalidated" or "unchecked" setter.
+     *
+     * @param i the row index
+     * @param j the column index
+     * @param value the value to set
+     */
+    private void uset(int i, int j, double value) {
+        content[i*columns + j] = value;
+    }
+
     @Override
-    public Matrix swap(int i0, int j0, int i1, int j1) {
+    public MatrixImpl swap(int i0, int j0, int i1, int j1) {
         validate(i0, j0);
         validate(i1, j1);
-
-        double swap = get(i1, j1);
-        this.set(i1, i1, get(i0, j0));
-        this.set(i0, j0, swap);
+        uswap(i0, j0, i1, j1);
         return this;
     }
 
+    private void uswap(int i0, int j0, int i1, int j1) {
+        final int from = indexOf(i0, j0), to = indexOf(i1, j1);
+        
+        double swap = content[to];
+        content[to] = content[from];
+        content[from] = swap;
+    }
+
     @Override
-    public Matrix swapRows(int i0, int i1) {
+    public MatrixImpl swapRows(int i0, int i1) {
         validateRow(i0);
         validateRow(i1);
 
@@ -166,7 +277,7 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public Matrix swapColumns(int j0, int j1) {
+    public MatrixImpl swapColumns(int j0, int j1) {
         validateCol(j0);
         validateCol(j1);
 
@@ -181,7 +292,16 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public Matrix scale(double factor) {
+    public MatrixImpl transpose() {
+        for (int i = 1; i<rows; i++)
+            for (int j = 0; j<=i; j++) {
+                uswap(i, j, j, i);
+            }
+        return this;
+    }
+
+    @Override
+    public MatrixImpl scale(double factor) {
         for (int k = 0; k<content.length; k++)
             content[k] *= factor;
         return this;
@@ -190,7 +310,12 @@ public class MatrixImpl implements Matrix {
     // MISC
 
     @Override
-    public Matrix clone() {
+    public boolean equals(Object obj) {
+        return obj instanceof Matrix && equals((Matrix) obj);
+    }
+
+    @Override
+    public MatrixImpl clone() {
         return new MatrixImpl(this);
     }
 
@@ -207,21 +332,21 @@ public class MatrixImpl implements Matrix {
 
     private void validateCol(int col) {
         if (col < 0)
-            throw new MatrixIndexOutOfBoundsException("col "+col+" < 0");
+            throw new MatrixIndexOutOfBoundsException("j="+col+" < 0");
         if (col >= columns)
-            throw new MatrixIndexOutOfBoundsException("col "+col+" >= "+columns+" columns");
+            throw new MatrixIndexOutOfBoundsException("j="+col+" >= "+columns+" columns");
     }
 
     private void validateRow(int row) {
         if (row < 0)
-            throw new MatrixIndexOutOfBoundsException("row "+row+" < 0");
+            throw new MatrixIndexOutOfBoundsException("i="+row+" < 0");
         if (row >= rows)
-            throw new MatrixIndexOutOfBoundsException("row "+row+" >= "+rows+" rows");
+            throw new MatrixIndexOutOfBoundsException("i="+row+" >= "+rows+" rows");
     }
 
     private void validate(int row, int col) {
         if (row < 0 || row >= rows)
-            throw new MatrixIndexOutOfBoundsException("row "+row+" < 0 or >= "+rows);
+            throw new MatrixIndexOutOfBoundsException("row  "+row+" < 0 or >= "+rows);
         if (col < 0 || col >= columns)
             throw new MatrixIndexOutOfBoundsException("col "+col+" < 0 or >= "+columns);
     }

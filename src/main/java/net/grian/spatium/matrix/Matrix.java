@@ -470,6 +470,27 @@ public interface Matrix {
      */
     public abstract double getDeterminant();
 
+    /**
+     * Returns a matrix of equal size containing the cofactors of this matrix.
+     *
+     * @return the cofactors of this matrix
+     */
+    public abstract Matrix getCofactors();
+
+    /**
+     * Returns the adjugate matrix of this matrix.
+     *
+     * @return the adjugate matrix
+     */
+    public abstract Matrix getAdjugate();
+
+    /**
+     * Returns the inverse matrix of this matrix.
+     *
+     * @return the adjugate matrix
+     */
+    public abstract Matrix getInverse();
+
     // CHECKERS
 
     /**
@@ -487,11 +508,11 @@ public interface Matrix {
      * @return whether this matrix is equal to another matrix
      */
     public default boolean equals(Matrix matrix) {
-        final int row = getRows(), col = getColumns();
-        if (row != matrix.getRows() || col != matrix.getColumns())
+        final int rows = getRows(), cols = getColumns();
+        if (rows != matrix.getRows() || cols != matrix.getColumns())
             return false;
 
-        for (int i = 0; i<row; i++) for (int j = 0; j<col; j++)
+        for (int i = 0; i<rows; i++) for (int j = 0; j<cols; j++)
             if (!Spatium.equals(this.get(i, j), matrix.get(i, j)))
                 return false;
 
@@ -550,6 +571,13 @@ public interface Matrix {
      * @return itself
      */
     public abstract Matrix swapColumns(int j0, int j1);
+
+    /**
+     * Transposes the matrix.
+     *
+     * @return itself
+     */
+    public abstract Matrix transpose();
 
     /**
      * Scales the matrix by a factor.
