@@ -44,20 +44,12 @@ public interface AxisPlane extends Plane {
      *
      * @return the depth of the plane
      */
+    @Override
     public abstract double getDepth();
 
-    /**
-     * Returns a point on the plane.
-     *
-     * @return a point on the plane
-     */
+    @Override
     public default Vector getPoint() {
-        switch (getAxis()) {
-            case X: return Vector.fromXYZ(getDepth(), 0, 0);
-            case Y: return Vector.fromXYZ(0, getDepth(), 0);
-            case Z: return Vector.fromXYZ(0, 0, getDepth());
-            default: throw new IllegalStateException("no axis");
-        }
+        return getNormal().multiply(getDepth());
     }
 
     /**
@@ -66,19 +58,15 @@ public interface AxisPlane extends Plane {
      *
      * @return the normal vector of the plane
      */
+    @Override
     public default Vector getNormal() {
-        switch (getAxis()) {
-            case X: return Vector.fromXYZ(1, 0, 0);
-            case Y: return Vector.fromXYZ(0, 1, 0);
-            case Z: return Vector.fromXYZ(0, 0, 1);
-            default: throw new IllegalStateException("no axis");
-        }
+        return getAxis().vector();
     }
 
     //CHECKERS
 
     public default boolean equals(AxisPlane plane) {
-        return this.getAxis() == plane.getAxis() && this.getDepth() == plane.getDepth();
+        return this.getAxis() == plane.getAxis() && Spatium.equals(this.getDepth(), plane.getDepth());
     }
 
     /**

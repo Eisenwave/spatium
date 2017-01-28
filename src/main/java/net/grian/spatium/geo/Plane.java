@@ -86,7 +86,20 @@ public interface Plane extends SpatiumObject {
     public abstract double getDepth();
 
     /**
-     * Returns the signed distance between a point and this plane.
+     * <p>
+     *     Returns the signed distance between a point and this plane.
+     * </p>
+     * <p>
+     *     The sign is the result of a dot product between the plane normal and the x, y, z coordinates. Should the
+     *     x, y, z coordinates lie on the positive side of the plane so will the distance be positive.
+     * </p>
+     * <p>
+     *     Examples are:
+     *     <ul>
+     *         <li><code><b>(x = 0)</b> & <b>(2,0,0)</b> -> +2</code></li>
+     *         <li><code><b>(x = 4)</b> & <b>(1,0,0)</b> -> -3</code></li>
+     *     </ul>
+     * </p>
      *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
@@ -99,7 +112,20 @@ public interface Plane extends SpatiumObject {
     }
 
     /**
-     * Returns the signed distance between a point and this plane.
+     * <p>
+     *     Returns the signed distance between a point and this plane.
+     * </p>
+     * <p>
+     *     The sign is the result of a dot product between the plane normal and the x, y, z coordinates. Should the
+     *     x, y, z coordinates lie on the positive side of the plane so will the distance be positive.
+     * </p>
+     * <p>
+     *     Examples are:
+     *     <ul>
+     *         <li><code><b>(x = 0)</b> & <b>(2,0,0)</b> -> +2</code></li>
+     *         <li><code><b>(x = 4)</b> & <b>(1,0,0)</b> -> -3</code></li>
+     *     </ul>
+     * </p>
      *
      * @param point the point
      * @return the distance between a point and this plane

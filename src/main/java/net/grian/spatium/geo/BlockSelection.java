@@ -6,6 +6,8 @@ import net.grian.spatium.util.PrimMath;
 
 import java.util.function.Consumer;
 
+import static net.grian.spatium.util.PrimMath.*;
+
 public interface BlockSelection extends Space, Iterable<BlockVector> {
 
     /**
@@ -38,8 +40,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
                 center.getZ() - size,
                 center.getX() + size,
                 center.getY() + size,
-                center.getZ() + size
-        );
+                center.getZ() + size);
     }
 
     /**
@@ -189,10 +190,10 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
     }
 
     /**
-     * Returns whether this block selection contains another selection
+     * Returns whether this block selection is equal to or contains another selection.
      *
      * @param box the other selection
-     * @return whether this block selection contains the block
+     * @return whether this block selection contains another
      */
     public default boolean contains(BlockSelection box) {
         return
@@ -220,7 +221,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector> {
      * @return whether this bounding box contains a point of given coordinates
      */
     public default boolean contains(double x, double y, double z) {
-        return contains((int) PrimMath.floor(x), (int) PrimMath.floor(y), (int) PrimMath.floor(z));
+        return contains((int) floor(x), (int) floor(y), (int) floor(z));
     }
 
     /**

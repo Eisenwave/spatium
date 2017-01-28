@@ -11,10 +11,19 @@ public enum CardinalDirection {
 
     private final int angle;
     private final Face face;
+    private final Direction direction;
+    private CardinalDirection opposite;
+    static {
+        NORTH.opposite = SOUTH;
+        EAST.opposite = WEST;
+        SOUTH.opposite = NORTH;
+        WEST.opposite = EAST;
+    }
 
     CardinalDirection(int angle, Face face) {
         this.angle = angle;
         this.face = face;
+        this.direction = face.direction();
     }
 
     /**
@@ -30,6 +39,17 @@ public enum CardinalDirection {
     @MinecraftSpecific
     public int angle() {
         return angle;
+    }
+
+    /**
+     * Returns the direction of this cardinal direction.
+     *
+     * @return this direction
+     * @see Face#direction()
+     */
+    @MinecraftSpecific
+    public Direction direction() {
+        return direction;
     }
 
     /**
@@ -61,10 +81,10 @@ public enum CardinalDirection {
      */
     public CardinalDirection left() {
         switch (this) {
-        case EAST: return NORTH;
-        case NORTH: return WEST;
-        case SOUTH: return EAST;
-        case WEST: return SOUTH;
+            case EAST: return NORTH;
+            case NORTH: return WEST;
+            case SOUTH: return EAST;
+            case WEST: return SOUTH;
         default: throw new AssertionError(this);
         }
     }
@@ -84,13 +104,7 @@ public enum CardinalDirection {
      * <br>Example: <b>NORTH -> SOUTH
      */
     public CardinalDirection opposite() {
-        switch (this) {
-        case EAST: return WEST;
-        case NORTH: return SOUTH;
-        case SOUTH: return NORTH;
-        case WEST: return EAST;
-        default: throw new AssertionError(this);
-        }
+        return opposite;
     }
 
     public static CardinalDirection fromInitials(String initial) {

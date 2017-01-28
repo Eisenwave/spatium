@@ -1,6 +1,7 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.coll.Projections;
 import net.grian.spatium.impl.RayImpl;
 import net.grian.spatium.iter.BlockIntervalIterator;
 import net.grian.spatium.iter.IntervalIterator;
@@ -111,16 +112,16 @@ public interface Ray extends Path {
     public abstract double getDirZ();
 
     /**
-     * Returns the hypot of this ray.
+     * Returns the length of this ray.
      *
-     * @return the hypot of this ray
+     * @return the length of this ray
      */
     public abstract double getLength();
 
     /**
-     * Returns the squared hypot of this ray.
+     * Returns the squared length of this ray.
      *
-     * @return the squared hypot of this ray
+     * @return the squared length of this ray
      */
     public abstract double getLengthSquared();
 
@@ -157,10 +158,14 @@ public interface Ray extends Path {
      * point can be further away from the origin of the ray than the hypot
      * of the ray, the ray is treated as if it were infinitely long.
      *
+     * @deprecated use {@link Projections#pointOnRay(Ray, Vector)}
      * @param point the point
      * @return the closest point on this ray to another point
      */
-    public abstract Vector closestPointTo(Vector point);
+    @Deprecated
+    public default Vector closestPointTo(Vector point) {
+        return getPoint(Projections.pointOnRay(this, point));
+    }
 
     @Override
     public default Vector[] getControlPoints() {
@@ -249,7 +254,7 @@ public interface Ray extends Path {
     }
 
     /**
-     * Sets the direction of the ray to a given vector.
+     * Sets the direction of this ray to a given vector.
      *
      * @param x the x-coordinate of the vector
      * @param y the y-coordinate of the vector
@@ -259,12 +264,16 @@ public interface Ray extends Path {
     public abstract Ray setDirection(double x, double y, double z);
 
     /**
-     * Sets the hypot of the ray to a given hypot.
+     * Sets the length of this ray to a given length.
      *
      * @param t the new hypot
      * @return itself
      */
     public abstract Ray setLength(double t);
+
+    public default Ray normalize() {
+        return setLength(1);
+    }
 
     // MISC
 
@@ -319,6 +328,7 @@ public interface Ray extends Path {
      * @param amount the amount
      * @return an array containing points on this ray
      */
+    @Override
     public default Vector[] getPoints(int amount) {
         if (amount < 0) throw new IllegalArgumentException("amount < 0");
         if (amount == 0) return new Vector[0];

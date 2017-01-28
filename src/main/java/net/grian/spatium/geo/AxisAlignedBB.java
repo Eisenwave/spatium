@@ -1,7 +1,12 @@
 package net.grian.spatium.geo;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBBImpl;
+import net.grian.spatium.util.PrimMath;
+
+import static net.grian.spatium.util.PrimMath.*;
+import static net.grian.spatium.enums.Direction.*;
 
 /**
  * An axis aligned bounding box, or the cubical space between two points.
@@ -112,6 +117,27 @@ public interface AxisAlignedBB extends Space {
     public default double getSurfaceArea() {
         double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
+    }
+
+    public default Direction getClosestSide(Vector point) {
+        Vector center = getCenter();
+        final double
+                x = point.getX() - center.getX(),
+                y = point.getY() - center.getY(),
+                z = point.getZ() - center.getZ();
+
+        if (abs(x) < abs(y)) {
+            if (abs(x) < abs(z))
+                return x>=0? POSITIVE_X : NEGATIVE_X;
+            else
+                return z>=0? POSITIVE_Z : NEGATIVE_Z;
+        }
+        else {
+            if (abs(y) < abs(z))
+                return y>=0? POSITIVE_Y : NEGATIVE_Y;
+            else
+                return z>=0? POSITIVE_Z : NEGATIVE_Z;
+        }
     }
 
     // CHECKERS

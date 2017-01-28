@@ -25,6 +25,19 @@ public interface Sphere extends Space {
         return new SphereImpl(center, radius);
     }
 
+    /**
+     * Constructs a new sphere from a center and a radius.
+     *
+     * @param x the center x
+     * @param y the center y
+     * @param z the center z
+     * @param radius the radius
+     * @return a new sphere
+     */
+    public static Sphere fromCenterAndRadius(double x, double y, double z, double radius) {
+        return new SphereImpl(x, y, z, radius);
+    }
+
     // GETTERS
 
     /**
@@ -138,14 +151,28 @@ public interface Sphere extends Space {
         return setCenter(center.getX(), center.getY(), center.getZ());
     }
 
+    /**
+     * Translates the center of this sphere by given amount.
+     *
+     * @param x the x-translation
+     * @param y the y-translation
+     * @param z the z-translation
+     * @return itself
+     */
     public abstract Sphere move(double x, double y, double z);
 
-    public default Sphere move(Vector center) {
-        return move(center.getX(), center.getY(), center.getZ());
+    /**
+     * Translates the center of this sphere by given amount.
+     *
+     * @param v the translation
+     * @return itself
+     */
+    public default Sphere move(Vector v) {
+        return move(v.getX(), v.getY(), v.getZ());
     }
 
     /**
-     * Scales the sphere by a factor. This is equivalent to multiplying the
+     * Scales this sphere by a factor. This is equivalent to multiplying the
      * radius of the sphere with the factor.
      *
      * @param factor the factor

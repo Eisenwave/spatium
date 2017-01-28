@@ -180,7 +180,7 @@ public class Main {
     public static void testMatrixRotations() {
         System.out.println("TESTING MINECRAFT MATRIX ROTATIONS");
         Vector p = Vector.fromXYZ(0, 0, 1); //straight into z-direction (0 yaw, 0 pitch in Minecraft)
-        Matrix matrix = Matrix.fromYaw(90);
+        Matrix matrix = Matrix.fromRotY(90);
         Matrix result = Matrix.product(matrix, Matrix.fromVector(p));
         Vector p2 = Vector.fromXYZ(result.get(0, 0), result.get(1, 0), result.get(2, 0));
 

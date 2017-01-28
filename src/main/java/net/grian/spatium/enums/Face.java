@@ -18,6 +18,15 @@ public enum Face {
     WEST  (Direction.NEGATIVE_X);
 
     private final Direction direction;
+    private Face opposite;
+    static {//necessary since constructors would lead to forward references
+        UP.opposite = DOWN;
+        DOWN.opposite = UP;
+        NORTH.opposite = SOUTH;
+        SOUTH.opposite = NORTH;
+        EAST.opposite = WEST;
+        WEST.opposite = EAST;
+    }
 
     Face(Direction direction) {
         this.direction = direction;
@@ -52,15 +61,7 @@ public enum Face {
      * @return the opposite face
      */
     public Face opposite() {
-        switch (this) {
-        case UP: return DOWN;
-        case DOWN: return UP;
-        case NORTH: return SOUTH;
-        case SOUTH: return NORTH;
-        case EAST: return WEST;
-        case WEST: return EAST;
-        default: return null;
-        }
+        return opposite;
     }
 
 }

@@ -1,5 +1,7 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.Spatium;
+import net.grian.spatium.coll.Distances;
 import net.grian.spatium.geo.Triangle;
 import net.grian.spatium.geo.Vector;
 
@@ -42,6 +44,21 @@ public class TriangleImpl implements Triangle {
     @Override
     public Vector getC() {
         return Vector.fromXYZ(cx, cy, cz);
+    }
+
+    @Override
+    public double getLengthA() {
+        return Spatium.hypot(bx-ax, by-ay, bz-az);
+    }
+
+    @Override
+    public double getLengthB() {
+        return Spatium.hypot(cx-bx, cy-by, cz-bz);
+    }
+
+    @Override
+    public double getLengthC() {
+        return Spatium.hypot(ax-cx, ay-cy, az-cz);
     }
 
     @Override

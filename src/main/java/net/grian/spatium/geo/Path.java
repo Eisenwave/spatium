@@ -83,9 +83,9 @@ public interface Path extends SpatiumObject {
     public abstract Vector getPoint(double t);
 
     /**
-     * Returns the hypot of this path.
+     * Returns the length of this path.
      *
-     * @return the hypot of this path
+     * @return the length of this path
      */
     public abstract double getLength();
 

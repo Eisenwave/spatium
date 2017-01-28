@@ -10,7 +10,7 @@ public class DefaultCollisionEngine implements CollisionEngine {
         if (collider instanceof Vector)
             return testPoint((Vector) collider, target);
         else if (collider instanceof Ray)
-            return testPoint((Vector) collider, target);
+            return testRay((Ray) collider, target);
         return CollisionResult.UNKNOWN_COLLIDER;
     }
 

@@ -3,6 +3,7 @@ package net.grian.spatium.matrix;
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo.Vector;
+import net.grian.spatium.impl.Matrix2Impl;
 import net.grian.spatium.impl.MatrixImpl;
 
 /**
@@ -44,6 +45,9 @@ public interface Matrix {
      * equal to {@code rows * columns}
      */
     public static Matrix create(int rows, int columns, double... content) {
+        if (rows == 2 && columns == 2)
+            return new Matrix2Impl(content[0], content[1], content[2], content[3]);
+
         return new MatrixImpl(rows, columns, content);
     }
 
@@ -57,6 +61,8 @@ public interface Matrix {
      * amount of columns <= 0
      */
     public static Matrix create(int rows, int columns) {
+        if (rows == 2 && columns == 2) return new Matrix2Impl();
+
         return new MatrixImpl(rows, columns);
     }
 
@@ -69,6 +75,8 @@ public interface Matrix {
      * amount of columns <= 0
      */
     public static Matrix identity(int n) {
+        if (n == 2) return new Matrix2Impl(1, 0, 0, 1);
+
         double[] value = new double[n * n];
         for (int i = 0; i<n; i++)
             value[i + i*n] = 1;
@@ -76,85 +84,66 @@ public interface Matrix {
     }
 
     /**
-     * Returns a 3x3 rotation matrix from a yaw. Yaw is a clockwise rotation around the y-axis.
+     * <p>
+     *     Returns a 3x3 rotation matrix representing a counter-clockwise rotation around the x-axis.
+     * </p>
+     * <p>
+     *     For easier understanding, see: <a href="https://en.wikipedia.org/wiki/Right-hand_rule">Right Hand Rule</a>.
+     * </p>
      *
-     * @param yaw the yaw in degrees
+     * @param angle the angle in radians
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromYaw(double yaw) {
-        double theta = Spatium.radians(yaw);
+    public static Matrix fromRotX(double angle) {
+        double sin = Math.sin(angle), cos = Math.cos(angle);
         return Matrix.create(3, 3,
-                -Math.cos(theta), 0, -Math.sin(theta),
-                0, 1, 0,
-                Math.sin(theta), 0, -Math.cos(theta));
-    }
-
-    /**
-     * Returns a 3x3 rotation matrix from a pitch. Pitch is a clockwise rotation around the x-axis.
-     *
-     * @param pitch the pitch in degrees
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromPitch(double pitch) {
-        double phi = Spatium.radians(pitch);
-        return Matrix.create(3, 3,
-                -Math.cos(phi),  Math.sin(phi), 0,
-                -Math.sin(phi), -Math.cos(phi), 0,
-                0,              0,              1);
-    }
-
-    /**
-     * Returns a 3x3 rotation matrix from a roll. Roll is a clockwise rotation around the z-axis.
-     *
-     * @param roll the roll in degrees
-     * @return a new rotation matrix
-     */
-    @MinecraftSpecific
-    public static Matrix fromRoll(double roll) {
-        double psi = Spatium.radians(roll);
-        return Matrix.create(3, 3,
-                1, 0, 0,
-                0, -Math.cos(psi), Math.sin(psi),
-                0, -Math.sin(psi), -Math.cos(psi));
+                1,   0,    0,
+                0, cos, -sin,
+                0, sin,  cos);
     }
 
     /**
      * <p>
-     *     Creates a 3x3 rotation matrix for Minecraft yaw, pitch and roll. Note that first roll, then pitch and then
-     *     yaw are being applied.
+     *     Returns a 3x3 rotation matrix representing a counter-clockwise rotation around the y-axis.
      * </p>
-     * The result of this rotation will be the following:
-     * <ol>
-     *     <li>roll (clockwise rotation around z-axis) applied
-     *     <li>pitch (clockwise rotation around x-axis) applied
-     *     <li>yaw (clockwise rotation around y-axis) applied
-     * </ol>
+     * <p>
+     *     For easier understanding, see: <a href="https://en.wikipedia.org/wiki/Right-hand_rule">Right Hand Rule</a>.
+     * </p>
      *
-     * @param yaw the yaw of the rotation
-     * @param pitch the pitch of the rotation
-     * @param roll the roll of the rotation
+     * @param angle the angle in radians
      * @return a new rotation matrix
      */
     @MinecraftSpecific
-    public static Matrix fromYawPitchRoll(double yaw, double pitch, double roll) {
-        double theta = Spatium.radians(yaw), phi = Spatium.radians(pitch), psi = Spatium.radians(roll);
+    public static Matrix fromRotY(double angle) {
+        double sin = Math.sin(angle), cos = Math.cos(angle);
         return Matrix.create(3, 3,
-                //first row
-                Math.cos(theta) * Math.cos(phi),
-                0,
-                0,
-                //second row
-                Math.sin(theta) * Math.cos(phi),
-                0,
-                0,
-                //third row
-                Math.sin(phi),
-                -(Math.cos(phi) * Math.sin(psi)),
-                Math.cos(phi) * Math.cos(psi)
-        );//TODO Complete yaw, pitch, roll matrix
+                cos,  0, sin,
+                0,    1,    0,
+                -sin, 0, cos);
     }
+
+    /**
+     * <p>
+     *     Returns a 3x3 rotation matrix representing a counter-clockwise rotation around the z-axis.
+     * </p>
+     * <p>
+     *     For easier understanding, see: <a href="https://en.wikipedia.org/wiki/Right-hand_rule">Right Hand Rule</a>.
+     * </p>
+     *
+     * @param angle the angle in radians
+     * @return a new rotation matrix
+     */
+    @MinecraftSpecific
+    public static Matrix fromRotZ(double angle) {
+        double sin = Math.sin(angle), cos = Math.cos(angle);
+        return Matrix.create(3, 3,
+                cos, -sin,  0,
+                sin,  cos,  0,
+                0,      0,  1);
+    }
+
+    /* {{1,0,0},{0,x,-y},{0,y,x}} * {{x,0,y},{0,1,0},{-y,0,x}} * {{x,-y,0},{y,x,0},{0,0,1}} (x=cos, y=sin) */
 
     /**
      * Creates a 2x2 scaling matrix for x and y coordinates.
@@ -259,6 +248,29 @@ public interface Matrix {
 
         return result;
     }
+
+    public static Vector product(Matrix a, double x, double y, double z) {
+        if (a.getRows() != 3 || a.getColumns() != 3)
+            throw new MatrixDimensionsException("matrix must be 3x3");
+
+        return Vector.fromXYZ(
+                a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
+                a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
+                a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
+    }
+
+    public static Vector product(Matrix a, Vector column) {
+        return product(a, column.getX(), column.getY(), column.getZ());
+    }
+
+    /*
+    public static Matrix product(double x, double y, double z, Matrix a) {
+        return Matrix.fromPoints(1, 3,
+                a.get(0,0)*x + a.get(1,0)*y + a.get(2,0)*z,
+                a.get(0,1)*x + a.get(1,1)*y + a.get(2,1)*z,
+                a.get(0,2)*x + a.get(1,2)*z + a.get(2,2)*z);
+    }
+    */
 
     /**
      * Returns the product of two matrices.
@@ -367,7 +379,7 @@ public interface Matrix {
         Matrix result = square(matrix);
         if (result.equals(matrix)) return matrix;
 
-        for (int i = 1; i<power; i++)
+        for (int i = 2; i<power; i++)
             result = product(result, matrix);
 
         return result;

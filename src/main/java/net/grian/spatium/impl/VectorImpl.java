@@ -3,6 +3,8 @@ package net.grian.spatium.impl;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo.BlockVector;
 import net.grian.spatium.geo.Vector;
+import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.matrix.MatrixDimensionsException;
 
 import java.util.Arrays;
 
@@ -92,8 +94,7 @@ public class VectorImpl implements Vector {
         return new VectorImpl(
                 (this.y * z - this.z * y),
                 (this.z * x - this.x * z),
-                (this.x * y - this.y * x)
-                );
+                (this.x * y - this.y * x));
     }
 
     @Override
@@ -145,6 +146,17 @@ public class VectorImpl implements Vector {
     public Vector setZ(double z) {
         this.z = z;
         return this;
+    }
+
+    @Override
+    public Vector transform(Matrix m) {
+        if (m.getRows() != 3 || m.getColumns() != 3)
+            throw new MatrixDimensionsException("matrix must be a 3x3 matrix");
+
+        return this.set(
+                m.get(0,0)*x + m.get(0,1)*y + m.get(0,2)*z,
+                m.get(1,0)*x + m.get(1,1)*y + m.get(1,2)*z,
+                m.get(2,0)*x + m.get(2,1)*y + m.get(2,2)*z);
     }
 
     @Override
@@ -206,10 +218,34 @@ public class VectorImpl implements Vector {
     }
 
     @Override
+    public Vector multiply(double factor) {
+        this.x *= factor;
+        this.y *= factor;
+        this.z *= factor;
+        return this;
+    }
+
+    @Override
+    public Vector invert() {
+        this.x = -x;
+        this.y = -y;
+        this.z = -z;
+        return this;
+    }
+
+    @Override
     public Vector divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;
+        return this;
+    }
+
+    @Override
+    public Vector divide(double divisor) {
+        this.x /= divisor;
+        this.y /= divisor;
+        this.z /= divisor;
         return this;
     }
 

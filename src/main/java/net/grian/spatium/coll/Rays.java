@@ -1,7 +1,11 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>
@@ -18,12 +22,14 @@ public final class Rays {
 
     /**
      * Tests where two {@link Ray}s collide.
-     *
-     * <br><br>The returned value is a multiplier for the directional vector of
-     * the ray at which the ray and the other object collide with each other.
-     *
-     * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
+     * </p>
      *
      * @param a the first ray
      * @param b the second ray
@@ -52,12 +58,14 @@ public final class Rays {
 
     /**
      * Tests where a {@link Ray} and a Point ({@link Vector}) collide.
-     *
-     * <br><br>The returned value is a multiplier for the directional vector of
-     * the ray at which the ray and the other object collide with each other.
-     *
-     * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
+     * </p>
      *
      * @param ray the ray
      * @param point the point
@@ -68,73 +76,23 @@ public final class Rays {
     }
 
     /**
-     * Tests where a {@link Ray} and a {@link Sphere} collide.
-     *
-     * <br><br>The returned value is a multiplier for the directional vector of
-     * the ray at which the ray and the other object collide with each other.
-     *
-     * <br><br>The point of the collision can be obtained by setting the hypot
-     * of the first ray to that multiplier using {@link Ray#setLength(double)}.
+     * Tests where a {@link Ray} and a Point ({@link Sphere}) collide.
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
+     * </p>
      *
      * @param ray the ray
      * @param sphere the sphere
      * @return where the ray and the point collide or {@link Double#NaN}
      */
     public static double cast(Ray ray, Sphere sphere) {
-        return 0;
-
-        /*
-        Vector center_origin = ray.getOrigin().subtract(sphere.getCenter());
-        double radiusSquared = sphere.getRadiusSquared();
-
-        //ray origin inside sphere
-        if(center_origin.dot(center_origin) <= radiusSquared) {
-            return 0;
-        }
-
-        else if(center_origin.dot(ray.getDirection()) <= 0) {
-            Vector v = center_origin.subtract()projection(CA,d)
-            double vSquared = v.dot(v);
-            if(vSquared <= radiusSquared){
-                collisionPoint = C + v - multiply(normalize(d), Math.sqrt(rSquared-vSquared))
-            }
-            else{
-                collisionPoint = none
-            }
-        }
-        
-        else return Double.NaN;
-
-        /*
-        //input
-        vector A the ray origin
-        vector d the ray direction
-        vector C the sphere center
-        double r the sphere radius
-        //end of input
-
-        vector collisionPoint
-        vector v
-        vector CA = A-C
-        double rSquared = r*r
-        double vSquared
-        if(dotProduct(CA,CA) <= rSquared){
-            collisionPoint = A
-        }
-        else if(dotProduct(CA,d) <= 0){
-            v = CA - projection(CA,d)
-            vSquared = dotProduct(v,v)
-            if(vSquared <= rSquared){
-                collisionPoint = C + v - multiply(normalize(d),squareRoot(rSquared-vSquared))
-            }
-            else{
-                collisionPoint = none
-            }
-        }
-        else{
-            collisionPoint = none
-        }
-        */
+        double[] entryExit = pierce(ray, sphere);
+        return entryExit==null? Double.NaN : entryExit[0];
     }
 
     /**
@@ -146,8 +104,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
@@ -177,8 +135,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
@@ -187,18 +145,9 @@ public final class Rays {
      */
     public static double cast(Ray ray, AxisPlane plane) {
         switch (plane.getAxis()) {
-            case X: {
-                double t = (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
-                return Double.isFinite(t)? t : Double.NaN;
-            }
-            case Y: {
-                double t = (ray.getOriginY() - plane.getDepth()) / ray.getDirY();
-                return Double.isFinite(t)? t : Double.NaN;
-            }
-            case Z: {
-                double t = (ray.getOriginZ() - plane.getDepth()) / ray.getDirZ();
-                return Double.isFinite(t)? t : Double.NaN;
-            }
+            case X: return (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
+            case Y: return (ray.getOriginY() - plane.getDepth()) / ray.getDirY();
+            case Z: return (ray.getOriginZ() - plane.getDepth()) / ray.getDirZ();
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
@@ -212,8 +161,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
@@ -221,8 +170,7 @@ public final class Rays {
      * @return where the ray and the plane collide or {@link Double#NaN}
      */
     public static double cast(Ray ray, Slab slab) {
-        double[] entryExit = pierce(ray, slab);
-        return entryExit==null? Double.NaN : entryExit[0];
+        return pierce(ray, slab)[0];
     }
 
     /**
@@ -234,8 +182,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
@@ -256,8 +204,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
@@ -278,8 +226,8 @@ public final class Rays {
      *     object collide with each other.
      * </p>
      * <p>
-     *     The point of the collision can be obtained by setting the hypot of the first ray to that multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      * Source:<a href="https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm">
      * Möller–Trumbore intersection algorithm</a>
@@ -290,23 +238,25 @@ public final class Rays {
      */
     public static double cast(Ray ray, Triangle triangle) {
         Vector
-                o = ray.getOrigin(), d = ray.getDirection(),
-                a = triangle.getA(), b = triangle.getB(), c = triangle.getC(),
-                ab = Vector.between(a, b), ac = Vector.between(a, c),
-                normal1 = d.cross(ab);
+                origin = ray.getOrigin(),
+                dir = ray.getDirection(),
+                a = triangle.getA(),
+                ab = Vector.between(a, triangle.getB()),
+                ac = Vector.between(a, triangle.getC()),
+                normal1 = dir.cross(ab);
 
         double det = ab.dot(normal1);
         //ray is parallel to triangle
         if (Spatium.equals(det, 0)) return Double.NaN;
         double invDet = 1 / det;
 
-        Vector ao = Vector.between(o, a);
-        double u = ao.dot(normal1) * invDet;
+        Vector ao = Vector.between(a, origin);
+        double u = origin.dot(normal1) * invDet;
         //intersection lies outside the triangle
         if (u < 0 || u > 1) return Double.NaN;
 
         Vector normal2 = ao.cross(ab);
-        double v = d.dot(normal2) * invDet;
+        double v = dir.dot(normal2) * invDet;
         //intersection lies outside the triangle
         if (v < 0 || v > 1) return Double.NaN;
 
@@ -315,7 +265,46 @@ public final class Rays {
         return t>Spatium.EPSILON? t : Double.NaN;
     }
 
-    //RAY PIERCES
+    //ENTRY AND EXIT RAY CASTS
+
+    /**
+     * <p>
+     *     Tests where a {@link Ray} enters and exits a {@link Sphere} collide. Unlike most algorithms, this one
+     *     neither cancels early when the ray is inside the sphere, nor when the sphere is behind the ray origin.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param sphere the sphere
+     * @return where the ray and the point collide or {@link Double#NaN}
+     */
+    public static double[] pierce(Ray ray, Sphere sphere) {
+        Vector center = sphere.getCenter();
+
+        //the ray multiplier
+        double tm = Projections.pointOnRay(ray, center);
+        Vector base = ray.getPoint(tm);
+
+        double r = sphere.getRadius();
+        double d = base.distanceTo(center);
+        if (d > r) return null;
+
+        double l = ray.getLength();
+        //the +- offset of the ray
+        //0 if ray pierces the surface of sphere, 1 if ray passes through center
+        double dt = Math.cos(d / r * CacheMath.HALF_PI) * r / l;
+
+        return tm >= 0?
+                new double[] {tm - dt, tm + dt} :
+                new double[] {tm + dt, tm - dt};
+    }
 
     /**
      * <p>
@@ -329,23 +318,33 @@ public final class Rays {
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(double)}.
      * </p>
+     * <p>
+     *     Special cases:
+     *     <ul>
+     *         <li>If the ray and the slab are parallel, the array will contain infinite values. In this case the
+     *         ray origin is inside the slab, should the double be equal to <code>[-infinity, infinity]</code></li>
+     *         <li>should it be outside negative direction, <code>[infinity, infinity]</code></li>
+     *         <li>should the origin be outside in positive direction <code>[-infinity, -infinity]</code></li>
+     *     </ul>
+     * </p>
      *
      * @param ray the ray
      * @param slab the slab
-     * @return the entry and exit points of the ray or null
+     * @return the entry and exit points of the ray
      */
+    @Nonnull
     public static double[] pierce(Ray ray, Slab slab) {
         Vector normal = slab.getNormal().normalize();
         double denominator = normal.dot( ray.getDirection().normalize() );
-        if (Spatium.equals(denominator, 0)) //ray and plane are parallel
-            return null;
+        //if (Spatium.equals(denominator, 0)) //ray and plane are parallel
+        //    return null;
 
         Vector origin = ray.getOrigin();
         if (denominator > 0) return new double[] {
                 normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
                 normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
         };
-        else return new double[]{
+        else return new double[] {
                 normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
                 normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
         };
@@ -363,20 +362,29 @@ public final class Rays {
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
      *     {@link Ray#setLength(double)}.
      * </p>
+     * <p>
+     *     Special cases:
+     *     <ul>
+     *         <li>If the ray and the slab are parallel, the array will contain infinite values. In this case the
+     *         ray origin is inside the slab, should the double be equal to <code>[-infinity, infinity]</code></li>
+     *         <li>should it be outside negative direction, <code>[infinity, infinity]</code></li>
+     *         <li>should the origin be outside in positive direction <code>[-infinity, -infinity]</code></li>
+     *     </ul>
+     * </p>
      *
      * @param ray the ray
      * @param slab the slab
      * @return the entry and exit points of the ray or null
      */
+    @Nonnull
     public static double[] pierce(Ray ray, AxisSlab slab) {
         double d;
         switch (slab.getAxis()) {
-            case X: d = ray.getDirX(); break;
-            case Y: d = ray.getDirY(); break;
-            case Z: d = ray.getDirZ(); break;
+            case X: d = 1 / ray.getDirX(); break;
+            case Y: d = 1 / ray.getDirY(); break;
+            case Z: d = 1 / ray.getDirZ(); break;
             default: throw new IllegalStateException("slab has no axis");
         }
-        if (Spatium.equals(d, 0)) return null;
 
         if (d >= 0) return new double[] {
                 (slab.getMinDepth() - ray.getOriginX()) / d,
@@ -405,54 +413,35 @@ public final class Rays {
      * @param box the bounding box
      * @return the entry and exit points of the ray or null
      */
+    @Nullable
     public static double[] pierce(Ray ray, AxisAlignedBB box) {
 
-        double tmin, tmax, tymin, tymax, tzmin, tzmax;
+        double tmin, tmax;
 
-        //x bounds
-        double divx = 1 / ray.getDirX();
-        if (divx >= 0) {
-            tmin = (box.getMinX() - ray.getOriginX()) * divx;
-            tmax = (box.getMaxX() - ray.getOriginX()) * divx;
+        {//x-slab collision
+            final double div = 1 / ray.getDirX();
+            tmin = ((div >= 0? box.getMinX() : box.getMaxX()) - ray.getOriginX()) * div;
+            tmax = ((div >= 0? box.getMaxX() : box.getMinX()) - ray.getOriginX()) * div;
         }
-        else {
-            tmin = (box.getMaxX() - ray.getOriginX()) * divx;
-            tmax = (box.getMinX() - ray.getOriginX()) * divx;
+        {//y-slab collision
+            final double div = 1 / ray.getDirY();
+            double tymin = ((div >= 0? box.getMinY() : box.getMaxY()) - ray.getOriginY()) * div;
+            double tymax = ((div >= 0? box.getMaxY() : box.getMinY()) - ray.getOriginY()) * div;
+            
+            if (tmin > tymax || tymin > tmax) return null;
+            if (tymin > tmin) tmin = tymin;
+            if (tymax < tmax) tmax = tymax;
         }
-
-        //y bounds
-        double divy = 1 / ray.getDirY();
-        if (divy >= 0) {
-            tymin = (box.getMinY() - ray.getOriginY()) * divy;
-            tymax = (box.getMaxY() - ray.getOriginY()) * divy;
+        {//z-slab collision
+            final double div = 1 / ray.getDirZ();
+            double tzmin = ((div >= 0? box.getMinZ() : box.getMaxZ()) - ray.getOriginZ()) * div;
+            double tzmax = ((div >= 0? box.getMaxZ() : box.getMinZ()) - ray.getOriginZ()) * div;
+            
+            if (tmin > tzmax || tzmin > tmax) return null;
+            if (tzmin > tmin) tmin = tzmin;
+            if (tzmax < tmax) tmax = tzmax;
         }
-        else {
-            tymin = (box.getMaxY() - ray.getOriginY()) * divy;
-            tymax = (box.getMinY() - ray.getOriginY()) * divy;
-        }
-
-        if (tmin > tymax || tymin > tmax) {
-            return null;
-        }
-        if (tymin > tmin) tmin = tymin;
-        if (tymax < tmax) tmax = tymax;
-
-        //z bounds
-        double divz = 1 / ray.getDirZ();
-        if (divz >= 0) {
-            tzmin = (box.getMinZ() - ray.getOriginZ()) * divz;
-            tzmax = (box.getMaxZ() - ray.getOriginZ()) * divz;
-        }
-        else {
-            tzmin = (box.getMaxZ() - ray.getOriginZ()) * divz;
-            tzmax = (box.getMinZ() - ray.getOriginZ()) * divz;
-        }
-
-        if (tmin > tzmax || tzmin > tmax)
-            return null;
-        if (tzmin > tmin) tmin = tzmin;
-        if (tzmax < tmax) tmax = tzmax;
-
+        
         return new double[] {tmin, tmax};
     }
 
@@ -466,35 +455,41 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray#setLength(double)}.
+     *     {@link Ray#setLength(double)} (mutation) or {@link Ray#getPoint(double)} (no mutation).
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
      * @return the entry and exit points of the ray or null
      */
+    @Nullable
     public static double[] pierce(Ray ray, OrientedBB box) {
-        //u bounds
-        double[] t = pierce(ray, box.getSlabU());
-        if (t == null) return null;
+        double tmin, tmax;
+        {
+            //x bounds
+            double[] tx = pierce(ray, box.getSlabX());
 
-        //v bounds
-        double[] tv = pierce(ray, box.getSlabV());
-        if (tv == null) return null;
+            tmin = tx[0];
+            tmax = tx[1];
+        }
+        {
+            //y bounds
+            double[] ty = pierce(ray, box.getSlabY());
 
-        if (t[0] > tv[1] || tv[0] > t[1]) return null;
-        if (tv[0] > t[0]) t[0] = tv[0];
-        if (tv[1] < t[1]) t[1] = tv[1];
+            if (tmin > ty[1] || ty[0] > tmax) return null;
+            if (ty[0] > tmin) tmin = ty[0];
+            if (ty[1] < tmax) tmax = ty[1];
+        }
+        {
+            //z bounds
+            double[] tz = pierce(ray, box.getSlabZ());
 
-        //w bounds
-        double[] tw = pierce(ray, box.getSlabW());
-        if (tw == null) return null;
+            if (tmin > tz[1] || tz[0] > tmax) return null;
+            if (tz[0] > tmin) tmin = tz[0];
+            if (tz[1] < tmax) tmax = tz[1];
+        }
 
-        if (t[0] > tw[1] || tw[0] > t[1]) return null;
-        if (tw[0] > t[0]) t[0] = tw[0];
-        if (tw[1] < t[1]) t[1] = tw[1];
-
-        return t;
+        return new double[] {tmin, tmax};
     }
 
     /**

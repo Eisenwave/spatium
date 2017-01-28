@@ -110,13 +110,15 @@ public final class ArrayMath {
     
     @SuppressWarnings("unused")
     public static int coordsToIndex6(int x, int y, int z, int x2, int y2, int z2, int sizeX, int sizeY, int sizeZ, int sizeX2, int sizeY2, int sizeZ2) {
-        return 
+        int factor = sizeX;
+
+        return
                 x +
-                y*sizeX +
-                z*sizeX*sizeY +
-                x2*sizeX*sizeY*sizeZ +
-                y2*sizeX*sizeY*sizeZ*sizeX2 +
-                z2*sizeX*sizeY*sizeZ*sizeX2*sizeY2;
+                y*factor +
+                z*(factor *= sizeY) +
+                x2*(factor *= sizeZ) +
+                y2*(factor *= sizeX2) +
+                z2*(factor *= sizeY2);
     }
     
     public static int coordsToIndex(int[] coords, int[] sizes) {

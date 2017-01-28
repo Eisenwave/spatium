@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class CollisionsTest {
 
     @Test
-    public void testAABB_AABB() throws Exception {
+    public void AABB_AABB() throws Exception {
         assertFalse(Collisions.test(
                 AxisAlignedBB.fromPoints(0, 0, 0, 1, 1, 1),
                 AxisAlignedBB.fromPoints(2, 2, 2, 3, 3, 3)
@@ -24,7 +24,7 @@ public class CollisionsTest {
     }
 
     @Test
-    public void testRay_AABB() throws Exception {
+    public void Ray_AABB() throws Exception {
         assertFalse(Collisions.test(
                 Ray.fromOD(0, 0, 0, 1, 0, 1),
                 AxisAlignedBB.fromPoints(10, 10, 10, 11, 11, 11)
@@ -37,7 +37,7 @@ public class CollisionsTest {
     }
 
     @Test
-    public void testRay_Ray() throws Exception {
+    public void Ray_Ray() throws Exception {
         assertFalse(Collisions.test(
                 Ray.fromOD(0, 0, 0, 1, 1, 1),
                 Ray.fromOD(1, 0, 0, 0, 0, 1)
@@ -49,8 +49,8 @@ public class CollisionsTest {
         ));
     }
 
-    //@Test not for now, babe
-    public void testRay_Sphere() throws Exception {
+    @Test
+    public void Ray_Sphere() throws Exception {
         Sphere sphere = Sphere.fromCenterAndRadius(Vector.fromXYZ(0, 0, 0), 1);
 
         assertFalse(Collisions.test(

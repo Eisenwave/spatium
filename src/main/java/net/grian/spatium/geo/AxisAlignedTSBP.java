@@ -48,9 +48,9 @@ public interface AxisAlignedTSBP extends SpatiumObject {
     double getMaxHeight();
 
     /**
-     * Returns the depth of the plane in the direction it is in. For instance,
-     * a bounding plane located at {@code z = -5} in the direction
-     * {@link Direction#NEGATIVE_Z} would have a depth of {@code 5}
+     * Returns the depth of the plane in the direction it is in. For instance, a bounding plane located at
+     * {@code z = -5} in the direction {@link Direction#NEGATIVE_Z} would have a depth of {@code 5}.
+     *
      * @return the depth of the plane
      */
     public abstract double getDepth();

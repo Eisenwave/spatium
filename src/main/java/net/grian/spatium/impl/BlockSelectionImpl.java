@@ -106,7 +106,27 @@ public class BlockSelectionImpl implements BlockSelection {
 
     @Override
     public BlockSelection scale(int x, int y, int z) {
-        //TODO implement this
+        if (x >= 0) {
+            xmin *= x;
+            xmax *= x;
+        } else {
+            xmin = xmax * x;
+            xmax *= x;
+        }
+        if (y >= 0) {
+            ymin *= y;
+            ymax *= y;
+        } else {
+            ymin = ymax * y;
+            ymax *= y;
+        }
+        if (z >= 0) {
+            zmin *= z;
+            zmax *= z;
+        } else {
+            zmin = zmax * z;
+            zmax *= z;
+        }
         return this;
     }
 

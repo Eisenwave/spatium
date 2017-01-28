@@ -22,6 +22,20 @@ public interface AxisSlab extends Slab {
     @Override
     public abstract AxisPlane getMax();
 
+    //CHECKERS
+
+    @Override
+    public default boolean contains(double x, double y, double z) {
+        switch (getAxis()) {
+            case X: return x > getMinDepth() && x < getMaxDepth();
+            case Y: return y > getMinDepth() && y < getMaxDepth();
+            case Z: return z > getMinDepth() && z < getMaxDepth();
+            default: throw new IllegalStateException("unknown axis ("+getAxis()+")");
+        }
+    }
+
+    //SETTERS
+
     @Override
     public default Slab setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();

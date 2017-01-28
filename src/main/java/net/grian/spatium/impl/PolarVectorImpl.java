@@ -1,6 +1,7 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.geo.Vector;
+import net.grian.spatium.matrix.Matrix;
 
 public class PolarVectorImpl implements Vector {
 
@@ -101,25 +102,30 @@ public class PolarVectorImpl implements Vector {
     @Override
     public Vector setY(double y) {
         // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
     @Override
     public Vector setZ(double z) {
         // TODO Auto-generated method stub
-        return null;
+        return this;
+    }
+
+    @Override
+    public Vector transform(Matrix m) {
+        return this;
     }
 
     @Override
     public Vector add(double x, double y, double z) {
         // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
     @Override
     public Vector subtract(double x, double y, double z) {
         // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
     @Override
@@ -129,39 +135,27 @@ public class PolarVectorImpl implements Vector {
     }
 
     @Override
-    public Vector multiply(double x) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Vector divide(double x, double y, double z) {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Vector divide(double x) {
-        // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
     @Override
     public Vector setLength(double length) {
         // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
     @Override
     public Vector setYaw(double yaw) {
-        // TODO Auto-generated method stub
-        return null;
+        this.yaw = yaw;
+        return this;
     }
 
     @Override
     public Vector setPitch(double pitch) {
-        // TODO Auto-generated method stub
-        return null;
+        this.pitch = pitch;
+        return this;
     }
 
     @Override

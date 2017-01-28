@@ -3,6 +3,8 @@ package net.grian.spatium.transform;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.geo.AxisAlignedBB;
 import net.grian.spatium.geo.Vector;
+import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.matrix.MatrixDimensionsException;
 
 import java.util.Objects;
 
@@ -13,6 +15,37 @@ import java.util.Objects;
 public final class Transformations {
 
     private Transformations() {}
+
+    //TRANSFORM
+
+    /**
+     * Transforms a point using a transformation matrix.
+     *
+     * @param point the point to transform
+     * @param m the transformation matrix
+     * @throws MatrixDimensionsException if the matrix is not a 3x3 matrix
+     */
+    public static void transform(Vector point, Matrix m) {
+        if (m.getRows() != 3 || m.getColumns() != 3)
+            throw new MatrixDimensionsException("matrix must be a 3x3 matrix");
+
+        final double x = point.getX(), y = point.getY(), z = point.getZ();
+        point.set(
+                m.get(0,0)*x + m.get(0,1)*y + m.get(0,2)*z,
+                m.get(1,0)*x + m.get(1,1)*y + m.get(1,2)*z,
+                m.get(2,0)*x + m.get(2,1)*z + m.get(2,2)*z);
+    }
+    
+    /*
+    public static Vector product(Matrix a, double x, double y, double z) {
+        return Vector.fromXYZ(
+                a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
+                a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
+                a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
+    }
+     */
+
+    //TRANSLATE
 
     /**
      * Translates a point.
@@ -36,6 +69,8 @@ public final class Transformations {
     public static void translate(AxisAlignedBB box, double x, double y, double z) {
         box.move(x, y, z);
     }
+
+    //SCALE
 
     /**
      * <p>
@@ -80,6 +115,8 @@ public final class Transformations {
     public static void scale(Vector point, Vector anchor, double factor) {
         scale(point, anchor.getX(), anchor.getY(), anchor.getZ(), factor);
     }
+
+    //ROTATE
 
     /**
      * Rotates a point around another anchor point on yaw.
@@ -155,6 +192,8 @@ public final class Transformations {
         rotateYawPitch(point, anchor.getX(), anchor.getY(), anchor.getZ(), yaw, pitch);
     }
 
+    //MIRROR
+
     /**
      * Mirrors a point around an anchor point. This does nothing if the point is equal to the anchor point.
      *
@@ -217,6 +256,7 @@ public final class Transformations {
         }
     }
 
+    //AXIS ROTATE
 
     /**
      * <p>

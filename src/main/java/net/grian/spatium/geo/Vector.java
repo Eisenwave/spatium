@@ -4,6 +4,7 @@ import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.VectorImpl;
+import net.grian.spatium.matrix.Matrix;
 
 import java.util.Random;
 
@@ -169,16 +170,16 @@ public interface Vector extends SpatiumObject {
     public abstract double getPitch();
 
     /**
-     * Returns the hypot of the vector.
+     * Returns the length of the vector.
      *
-     * @return the hypot of the vector
+     * @return the length of the vector
      */
     public abstract double getLength();
 
     /**
-     * Returns the squared hypot of the vector.
+     * Returns the squared length of the vector.
      *
-     * @return the squared hypot of the vector
+     * @return the squared length of the vector
      */
     public abstract double getLengthSquared();
 
@@ -310,10 +311,8 @@ public interface Vector extends SpatiumObject {
     // CHECKERS
 
     /**
-     * Returns whether this vector equals another vector.
-     *
-     * <br><br>The margin for doubleing point inaccuracies is
-     * {@link Spatium#EPSILON}
+     * Returns whether this vector equals another vector with a margin for floating point inaccuracies of
+     * {@link Spatium#EPSILON}.
      *
      * @param v the vector
      * @return whether this vector equals another vector
@@ -326,10 +325,13 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
-     * Returns whether this vector is a multiple of the vector <b>v<b/>, meaning that:
+     * Returns whether this vector is a multiple of the vector <b>v</b>, meaning that:
      * <blockquote>
      *     <code>r * this = v</code>
      * </blockquote>
+     * <p>
+     *     This is equivalent to whether this vector is parallel to another vector.
+     * </p>
      *
      * @param v the vector
      * @return whether this vector is a multiple of v
@@ -386,6 +388,14 @@ public interface Vector extends SpatiumObject {
      * @return itself
      */
     public abstract Vector setZ(double z);
+
+    /**
+     * Transforms this vector using a 3x3 matrix.
+     *
+     * @param m the transformation matrix
+     * @return itself
+     */
+    public abstract Vector transform(Matrix m);
 
     // OPERATIONS
 
@@ -449,6 +459,15 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
+     * Inverts the vector, making it point into the exact opposite direction while preserving length.
+     *
+     * @return itself
+     */
+    public default Vector invert() {
+        return multiply(-1);
+    }
+
+    /**
      * Divides the coordinates of this vector.
      *
      * @param x the x divisor
@@ -469,19 +488,20 @@ public interface Vector extends SpatiumObject {
     }
 
     /**
-     * Divides the vector through its own hypot / Sets the hypot of the
-     * vector to 1.
+     * Divides the vector through its own length / Sets the length of the vector to 1.
+     *
      * @return itself
      * @see #getLength()
+     * @see #setLength(double)
      */
     public default Vector normalize() {
         return setLength(1);
     }
 
     /**
-     * Sets the hypot of the vector.
+     * Sets the length of the vector.
      *
-     * @param length the hypot of the vector
+     * @param length the length of the vector
      * @return itself
      * @see #normalize()
      */

@@ -92,4 +92,12 @@ public class SlabImpl implements Slab {
         dmax -= depth;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return SlabImpl.class.getSimpleName()+
+                "{n="+getNormal()+
+                ",dmin="+getMinDepth()+
+                ",dmax="+getMaxDepth()+"}";
+    }
 }

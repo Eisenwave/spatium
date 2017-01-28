@@ -21,4 +21,10 @@ public interface Space extends SpatiumObject {
      */
     public abstract double getSurfaceArea();
 
+    public abstract boolean contains(double x, double y, double z);
+
+    public default boolean contains(Vector point) {
+        return contains(point.getX(), point.getY(), point.getZ());
+    }
+
 }

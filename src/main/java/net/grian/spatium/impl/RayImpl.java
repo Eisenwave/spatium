@@ -98,17 +98,6 @@ public class RayImpl implements Ray {
         );
     }
 
-    @Override
-    public Vector closestPointTo(Vector point) {
-        Vector dir = getDirection();
-        double factor = dir.dot(point) / dir.dot(dir);
-
-        return Vector.fromXYZ(
-                this.xo + this.xd * factor,
-                this.yo + this.yd * factor,
-                this.zo + this.zd * factor);
-    }
-
     // SETTERS
 
     @Override

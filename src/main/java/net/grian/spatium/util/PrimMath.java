@@ -437,56 +437,64 @@ public final class PrimMath {
 	public static long clamp(long min, long val, long max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
 		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+		return (val < min) ? min : (val > max) ? max : val;
 	}
 	
 	public static int clamp(int min, int val, int max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+
+        return (val < min) ? min : (val > max) ? max : val;
 	}
 	
 	public static short clamp(short min, short val, short max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+
+        return (val < min) ? min : (val > max) ? max : val;
 	}
 	
 	public static byte clamp(byte min, byte val, byte max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+
+        return (val < min) ? min : (val > max) ? max : val;
 	}
 	
 	public static double clamp(double min, double val, double max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+
+        return (val < min) ? min : (val > max) ? max : val;
 	}
 	
 	public static float clamp(float min, float val, float max) {
 		if (min > max) throw new IllegalArgumentException("min > max");
-		
-		return
-				(val < min) ? min :
-					(val > max) ? max :
-						val;
+
+        return (val < min) ? min : (val > max) ? max : val;
 	}
+
+	//ABS
+
+    public static long abs(long number) {
+        return number<0? -number : number;
+    }
+
+    public static int abs(int number) {
+        return number<0? -number : number;
+    }
+
+    public static short abs(short number) {
+        return number<0? (short) -number : number;
+    }
+
+    public static byte abs(byte number) {
+        return number<0? (byte) -number : number;
+    }
+
+    public static double abs(double number) {
+        return number<0? -number : number;
+    }
+
+    public static float abs(float number) {
+        return number<0? -number : number;
+    }
 
 	//MAX
 

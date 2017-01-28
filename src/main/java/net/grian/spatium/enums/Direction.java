@@ -1,32 +1,50 @@
 package net.grian.spatium.enums;
 
 import net.grian.spatium.anno.MinecraftSpecific;
+import net.grian.spatium.geo.Vector;
+
+import static net.grian.spatium.enums.Axis.*;
+import static net.grian.spatium.enums.Direction.AxisDirection.*;
+import static net.grian.spatium.enums.Face.*;
 
 /**
- * One of six directions, or movements into negative or positive directions
- * of one of three axes in 3D space.
- * 
- * <br><br>This enum is independent from Minecraft space and thus highly
- * recommended for strictly mathematical purpouses. 
+ * <p>
+ *     One of six directions, or movements into negative or positive directions of one of three axes in 3D space.
+ * </p>
+ * <p>
+ *     This enum is universal (not specific to Minecraft geometry) and thus highly recommended for strictly
+ *     for geometric operations, unlike its Minecraft counterpart ({@link Face}).
+ * </p>
  * 
  * @see Face
  */
 public enum Direction {
-    POSITIVE_X(Axis.X, AxisDirection.POSITIVE, Face.EAST),
-    POSITIVE_Y(Axis.Y, AxisDirection.POSITIVE, Face.UP),
-    POSITIVE_Z(Axis.Z, AxisDirection.POSITIVE, Face.SOUTH),
-    NEGATIVE_X(Axis.X, AxisDirection.NEGATIVE, Face.WEST),
-    NEGATIVE_Y(Axis.Y, AxisDirection.NEGATIVE, Face.DOWN),
-    NEGATIVE_Z(Axis.Z, AxisDirection.NEGATIVE, Face.NORTH);
+    NEGATIVE_X(Vector.fromXYZ(-1,  0,  0), NEGATIVE, X, WEST),
+    POSITIVE_X(Vector.fromXYZ( 1,  0,  0), POSITIVE, X, EAST),
+    NEGATIVE_Y(Vector.fromXYZ( 0, -1,  0), NEGATIVE, Y, DOWN),
+    POSITIVE_Y(Vector.fromXYZ( 0,  1,  0), POSITIVE, Y, UP),
+    NEGATIVE_Z(Vector.fromXYZ( 0,  0, -1), NEGATIVE, Z, NORTH),
+    POSITIVE_Z(Vector.fromXYZ( 0,  0,  1), POSITIVE, Z, SOUTH);
 
     private final Axis axis;
     private final AxisDirection direction;
     private final Face face;
+    private final Vector vector;
 
-    Direction(Axis axis, AxisDirection direction, Face face) {
+    Direction(Vector vector, AxisDirection direction, Axis axis, Face face) {
+        this.vector = vector;
         this.axis = axis;
         this.direction = direction;
         this.face = face;
+    }
+
+    /**
+     * Returns a vector pointing straight into this direction.
+     *
+     * @return a vector pointing straight into this direction
+     */
+    public Vector vector() {
+        return vector.clone();
     }
 
     /**
@@ -69,18 +87,18 @@ public enum Direction {
     }
 
     public static Direction valueOf(Axis axis, AxisDirection direction) {
-        if (direction == AxisDirection.POSITIVE) switch (axis) {
-        case X: return Direction.POSITIVE_X;
-        case Y: return Direction.POSITIVE_Y;
-        case Z: return Direction.POSITIVE_Z;
+        if (direction == POSITIVE) switch (axis) {
+        case X: return POSITIVE_X;
+        case Y: return POSITIVE_Y;
+        case Z: return POSITIVE_Z;
         }
         else switch (axis) {
-        case X: return Direction.NEGATIVE_X;
-        case Y: return Direction.NEGATIVE_Y;
-        case Z: return Direction.NEGATIVE_Z;
+        case X: return NEGATIVE_X;
+        case Y: return NEGATIVE_Y;
+        case Z: return NEGATIVE_Z;
         }
-        assert false: "axis = "+axis+", direction = "+direction;
-        return null;
+
+        throw new IllegalArgumentException(axis+", "+direction);
     }
 
     public static enum AxisDirection {

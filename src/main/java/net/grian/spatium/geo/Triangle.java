@@ -7,8 +7,19 @@ import net.grian.spatium.impl.TriangleImpl;
  */
 public interface Triangle {
 
-    public static Triangle create(Vector a, Vector b, Vector c) {
+    public static Triangle fromPoints(Vector a, Vector b, Vector c) {
         return new TriangleImpl(a, b, c);
+    }
+
+    public static Triangle fromPoints(
+            double ax, double ay, double az,
+            double bx, double by, double bz,
+            double cx, double cy, double cz) {
+
+        return fromPoints(
+                Vector.fromXYZ(ax, ay, az),
+                Vector.fromXYZ(bx, by, bz),
+                Vector.fromXYZ(cx, cy, cz));
     }
 
     //GETTERS
@@ -18,6 +29,27 @@ public interface Triangle {
     public abstract Vector getB();
 
     public abstract Vector getC();
+
+    /**
+     * Returns the length of side <b>a</b> or <b>AB</b> of this triangle.
+     *
+     * @return the length of side a
+     */
+    public abstract double getLengthA();
+
+    /**
+     * Returns the length of side <b>b</b> or <b>BC</b> of this triangle.
+     *
+     * @return the length of side b
+     */
+    public abstract double getLengthB();
+
+    /**
+     * Returns the length of side <b>c</b> or <b>CA</b> of this triangle.
+     *
+     * @return the length of side c
+     */
+    public abstract double getLengthC();
 
     public default Vector[] getPoints() {
         return new Vector[] {getA(), getB(), getC()};
@@ -34,6 +66,20 @@ public interface Triangle {
      */
     public default Plane getPlane() {
         return Plane.fromPointNormal(getA(), getNormal());
+    }
+
+    /**
+     * Returns the area of this triangle (half surface area). By default, this is done using
+     * <a href="https://en.wikipedia.org/wiki/Heron's_formula">Heron's Formula</a>.
+     *
+     * @return the area of the triangle
+     */
+    public default double getArea() {
+        final double
+                a = getLengthA(), b = getLengthB(), c = getLengthC(),
+                s = (a + b + c) / 2;
+
+        return Math.sqrt(s * (s-a) * (s-b) * (s-c));
     }
 
     //CHECKERS
@@ -90,8 +136,22 @@ public interface Triangle {
         return move(point.subtract(getCenter()));
     }
 
+    /**
+     * Translates all points of this triangle by a given amount.
+     *
+     * @param x the x-translation
+     * @param y the y-translation
+     * @param z the z-translation
+     * @return itself
+     */
     public abstract Triangle move(double x, double y, double z);
 
+    /**
+     * Translates all points of this triangle by a given amount.
+     *
+     * @param v the translation
+     * @return itself
+     */
     public default Triangle move(Vector v) {
         return move(v.getX(), v.getY(), v.getZ());
     }

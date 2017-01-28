@@ -55,30 +55,52 @@ public interface Slab {
     /**
      * Constructs a slab from two points and a normal vector.
      *
-     * @param p1 a point on the first plane
-     * @param p2 a point on the second plane
+     * @param a a point on the first plane
+     * @param b a point on the second plane
      * @param normal the normal
      * @return a new slab
      */
-    public static Slab fromPointsNormal(Vector p1, Vector p2, Vector normal) {
-        double
-                xn = normal.getX(), yn = normal.getZ(), zn = normal.getZ(),
-                d1 = xn*p1.getX() + yn*p1.getY() + zn*p1.getZ(),
-                d2 = xn*p2.getX() + yn*p2.getY() + zn*p2.getZ();
+    public static Slab fromPointsNormal(Vector a, Vector b, Vector normal) {
+        double da = normal.dot(a), db = normal.dot(b);
 
-        return new SlabImpl(xn, yn, zn, Math.min(d1, d2), Math.max(d1, d2));
+        return new SlabImpl(normal, Math.min(da, db), Math.max(da, db));
     }
 
     //GETTERS
 
+    /**
+     * Returns the normal of this slab, which is the normal of the two parallel planes defined by this slab.
+     *
+     * @return the slab normal
+     */
     public abstract Vector getNormal();
 
+    /**
+     * Returns the minimum plane.
+     *
+     * @return the minimum plane
+     */
     public abstract Plane getMin();
 
+    /**
+     * Returns the maximum plane.
+     *
+     * @return the maximum plane
+     */
     public abstract Plane getMax();
 
+    /**
+     * Returns some point on the minimum plane.
+     *
+     * @return some point on the minimum plane
+     */
     public abstract Vector getMinPoint();
 
+    /**
+     * Returns some point on the maximum plane.
+     *
+     * @return some point on the maximum plane
+     */
     public abstract Vector getMaxPoint();
 
     public abstract double getMinDepth();
