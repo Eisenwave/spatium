@@ -1,7 +1,7 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.geo.Sphere;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Sphere;
+import net.grian.spatium.geo3.Vector3;
 
 public class SphereImpl implements Sphere {
 
@@ -24,7 +24,7 @@ public class SphereImpl implements Sphere {
         this(sphere.x, sphere.y, sphere.z, sphere.r);
     }
 
-    public SphereImpl(Vector center, double r) {
+    public SphereImpl(Vector3 center, double r) {
         this(center.getX(), center.getY(), center.getZ(), r);
     }
 
@@ -46,8 +46,8 @@ public class SphereImpl implements Sphere {
     }
 
     @Override
-    public Vector getCenter() {
-        return Vector.fromXYZ(x, y, z);
+    public Vector3 getCenter() {
+        return Vector3.fromXYZ(x, y, z);
     }
 
     @Override

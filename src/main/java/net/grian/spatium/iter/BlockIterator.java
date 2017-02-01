@@ -1,8 +1,8 @@
 package net.grian.spatium.iter;
 
 import net.grian.spatium.array.Incrementer3;
-import net.grian.spatium.geo.BlockSelection;
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo3.BlockSelection;
+import net.grian.spatium.geo3.BlockVector;
 
 import java.util.Iterator;
 

@@ -33,7 +33,7 @@ public class Incrementer2 {
         if (++x >= limX) {
             x = 0;
             if (++y >= limY)
-                throw new NoSuchElementException();
+                throw new NoSuchElementException("["+x+","+y+"], lim=["+limX+","+limY+"]");
         }
     }
 

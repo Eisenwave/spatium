@@ -1,6 +1,6 @@
 package net.grian.spatium;
 
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Vector3;
 
 public final class Spatium {
 
@@ -29,7 +29,7 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
      *
      * @param a the first number
      * @param b the second number
@@ -41,7 +41,7 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between three numbers {@code a,b,c} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
      *
      * @param a the first number
      * @param b the second number
@@ -53,7 +53,7 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
      *
      * @param a the first number
      * @param b the second number
@@ -65,7 +65,7 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between three numbers {@code a,b,c} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
      *
      * @param a the first number
      * @param b the second number
@@ -77,7 +77,7 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between several numbers is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector}.
+     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
      *
      * @param numbers the numbers
      * @return whether the numbers are roughly the same

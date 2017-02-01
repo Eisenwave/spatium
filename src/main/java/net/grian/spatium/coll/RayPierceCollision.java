@@ -1,18 +1,18 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo.Ray;
+import net.grian.spatium.geo3.Ray3;
 
-public class RayPierceCollision<T> extends Collision<Ray, T> {
+public class RayPierceCollision<T> extends Collision<Ray3, T> {
 
     private final double entry, exit;
 
-    public RayPierceCollision(CollisionEngine.CollisionResult result, Ray ray, T target, double entry, double exit) {
+    public RayPierceCollision(CollisionEngine.CollisionResult result, Ray3 ray, T target, double entry, double exit) {
         super(result, ray, target);
         this.entry = entry;
         this.exit = exit;
     }
 
-    public RayPierceCollision(Ray ray, T target) {
+    public RayPierceCollision(Ray3 ray, T target) {
         this(CollisionEngine.CollisionResult.NEGATIVE, ray, target, Double.NaN, Double.NaN);
     }
 

@@ -1,9 +1,9 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo.AxisAlignedBB;
-import net.grian.spatium.geo.Plane;
-import net.grian.spatium.geo.Sphere;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.Plane;
+import net.grian.spatium.geo3.Sphere;
+import net.grian.spatium.geo3.Vector3;
 
 public final class Surfaces {
 
@@ -21,8 +21,8 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector findNormal(Sphere sphere, Vector point) {
-        return Vector.between(sphere.getCenter(), point);
+    public Vector3 findNormal(Sphere sphere, Vector3 point) {
+        return Vector3.between(sphere.getCenter(), point);
     }
 
     /**
@@ -34,7 +34,7 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector findNormal(AxisAlignedBB box, Vector point) {
+    public Vector3 findNormal(AxisAlignedBB3 box, Vector3 point) {
         return box.getClosestSide(point).vector();
     }
 
@@ -51,10 +51,10 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector findNormal(Plane plane, Vector point) {
+    public Vector3 findNormal(Plane plane, Vector3 point) {
         return plane.signedDistanceTo(point) > 0?
                 plane.getNormal() :
-                plane.getNormal().invert();
+                plane.getNormal().negate();
     }
 
     /**
@@ -64,9 +64,9 @@ public final class Surfaces {
      * @param normal the normal vector
      * @return the reflection vector
      */
-    public Vector reflect(Vector incident, Vector normal) {
-        Vector d = incident.clone();
-        Vector n = normal.normalize();
+    public Vector3 reflect(Vector3 incident, Vector3 normal) {
+        Vector3 d = incident.clone();
+        Vector3 n = normal.normalize();
         n.multiply(2 * d.dot(n));
 
         return d.subtract(n);

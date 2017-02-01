@@ -1,7 +1,7 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.transform.Quaternion;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
 
@@ -16,7 +16,7 @@ public class QuaternionImpl implements Quaternion {
         this.w = w;
     }
 
-    public QuaternionImpl(Vector vector, double scale) {
+    public QuaternionImpl(Vector3 vector, double scale) {
         this.x = vector.getX();
         this.y = vector.getY();
         this.z = vector.getZ();
@@ -51,12 +51,12 @@ public class QuaternionImpl implements Quaternion {
 
     @Override
     public double getLength() {
-        return Math.sqrt(x * x + y * y + z * z + w * w);
+        return Math.sqrt(getLengthSquared());
     }
 
     @Override
     public double getLengthSquared() {
-        return x * x + y * y + z * z + w * w;
+        return x*x + y*y + z*z + w*w;
     }
 
     @Override
@@ -138,6 +138,8 @@ public class QuaternionImpl implements Quaternion {
         return this;
     }
 
+    //OPERATIONS
+    
     @Override
     public Quaternion add(Quaternion q) {
         this.x += q.getX();
@@ -164,12 +166,12 @@ public class QuaternionImpl implements Quaternion {
         this.w *= scale;
         return this;
     }
-
+    
     @Override
     public Quaternion multiply(Quaternion q) {
         double
-                lx = x,        ly = y,        lz = z,        lw = w,
-                rx = q.getX(), ry = q.getY(), rz = q.getZ(), rw = q.getW();
+            lx = x,        ly = y,        lz = z,        lw = w,
+            rx = q.getX(), ry = q.getY(), rz = q.getZ(), rw = q.getW();
 
         this.w = lw*rw - lx*rx - ly*ry - lz*rz;
         this.x = lw*rx + lx*rw + ly*rz - lz*ry;
@@ -185,11 +187,6 @@ public class QuaternionImpl implements Quaternion {
         this.z /= divisor;
         this.w /= divisor;
         return this;
-    }
-
-    @Override
-    public Quaternion divide(Quaternion q) {
-        return null;
     }
 
     // MISC

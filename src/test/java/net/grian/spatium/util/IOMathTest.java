@@ -9,7 +9,7 @@ public class IOMathTest {
     @Test
     public void asBytes() throws Exception {
         int number = 0x01_02_03_04;
-        byte[] bytes = IOMath.asBytes(number);
+        byte[] bytes = IOMath.toBytes(number);
         assertEquals(bytes[0], 1);
         assertEquals(bytes[1], 2);
         assertEquals(bytes[2], 3);
@@ -27,7 +27,7 @@ public class IOMathTest {
     @Test
     public void asBytesInverted() throws Exception {
         int number = 0x01_02_03_04;
-        assertEquals(number, IOMath.asInt(IOMath.asBytes(number)));
+        assertEquals(number, IOMath.asInt(IOMath.toBytes(number)));
     }
 
     @Test

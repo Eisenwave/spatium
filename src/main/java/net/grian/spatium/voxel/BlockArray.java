@@ -2,8 +2,8 @@ package net.grian.spatium.voxel;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.function.Int3Consumer;
-import net.grian.spatium.geo.BlockSelection;
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo3.BlockSelection;
+import net.grian.spatium.geo3.BlockVector;
 
 import java.io.Serializable;
 

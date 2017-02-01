@@ -1,8 +1,9 @@
 package net.grian.spatium.voxel;
 
 import net.grian.spatium.enums.Direction;
-import net.grian.spatium.geo.BlockSelection;
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.function.Int3Consumer;
+import net.grian.spatium.geo3.BlockSelection;
+import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.util.ColorMath;
 import net.grian.spatium.util.RGBValue;
 
@@ -335,22 +336,25 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
 
     @Override
     public void forEach(Consumer<? super Voxel> action) {
-        final int limX = getSizeX(), limY = getSizeY(), limZ = getSizeZ();
-
-        for (int x = 0; x<limX; x++)
-            for (int y = 0; y<limY; y++)
-                for (int z = 0; z<limZ; z++)
+        for (int x = 0; x<sizeX; x++)
+            for (int y = 0; y<sizeY; y++)
+                for (int z = 0; z<sizeZ; z++)
                     if (ColorMath.isVisible(getRGB(x, y, z)))
                         action.accept(new Voxel(x, y, z));
     }
 
     public void forEachPosition(Consumer<? super BlockVector> action) {
-        final int limX = getSizeX(), limY = getSizeY(), limZ = getSizeZ();
-
-        for (int x = 0; x<limX; x++)
-            for (int y = 0; y<limY; y++)
-                for (int z = 0; z<limZ; z++)
+        for (int x = 0; x<sizeX; x++)
+            for (int y = 0; y<sizeY; y++)
+                for (int z = 0; z<sizeZ; z++)
                     action.accept(BlockVector.fromXYZ(x, y, z));
+    }
+    
+    public void forEachPosition(Int3Consumer action) {
+        for (int x = 0; x<sizeX; x++)
+            for (int y = 0; y<sizeY; y++)
+                for (int z = 0; z<sizeZ; z++)
+                    action.accept(x, y, z);
     }
 
     /**
@@ -596,7 +600,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
          *
          * @return a bitmap representing which faces are visible
          */
-        public byte getVisibilityMap() {
+        public byte getVisibilityMask() {
             return VoxelArray.this.getVisibilityMask(x, y, z);
         }
 

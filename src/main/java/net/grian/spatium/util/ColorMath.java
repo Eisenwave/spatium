@@ -59,9 +59,9 @@ public final class ColorMath {
     public static int fromTintedRGB(int rgb, int tint) {
         final int luma = luminance2(rgb);
         return fromRGB(
-                (red(tint) * luma)   / 255,
-                (green(tint) * luma) / 255,
-                (blue(tint) * luma)  / 255);
+            (red(tint) * luma)   / 255,
+            (green(tint) * luma) / 255,
+            (blue(tint) * luma)  / 255);
     }
 
     //OPERATIONS
@@ -139,14 +139,14 @@ public final class ColorMath {
     public static int stack(float btmR, float btmG, float btmB, float btmA,
                             float topR, float topG, float topB, float topA) {
         final float
-                deficit = (1 - topA),
-                outA = topA + btmA*deficit;
+            deficit = (1 - topA),
+            outA = topA + btmA*deficit;
 
         return fromRGB(
-                (topR*topA + btmR*btmA*deficit) / outA,
-                (topG*topA + btmG*btmA*deficit) / outA,
-                (topB*topA + btmB*btmA*deficit) / outA,
-                outA);
+            (topR*topA + btmR*btmA*deficit) / outA,
+            (topG*topA + btmG*btmA*deficit) / outA,
+            (topB*topA + btmB*btmA*deficit) / outA,
+            outA);
     }
 
     /**
@@ -165,6 +165,29 @@ public final class ColorMath {
     public static int stack(int btmR, int btmG, int btmB, int btmA, int topR, int topG, int topB, int topA) {
         return stack(btmR/255F, btmG/255F, btmB/255F, btmA/255F, topR/255F, topG/255F, topB/255F, topA/255F);
     }
+    
+    public static int blend(int a, int b, float weightA) {
+        if (weightA < 0 || weightA > 1) throw new IllegalArgumentException("weight out of range (0-1)");
+        float weightB = 1 - weightA;
+        
+        int
+            red = (int) (red(a)*weightA + red(b)*weightB),
+            grn = (int) (green(a)*weightA + green(b)*weightB),
+            blu = (int) (blue(a)*weightA + blue(b)*weightB),
+            alp = (int) (alpha(a)*weightA + alpha(b)*weightB);
+        
+        return fromRGB(red, grn, blu, alp);
+    }
+    
+    public static int scaleRGB(int rgb, float scale) {
+        if (scale < 0 || scale > 1) throw new IllegalArgumentException("weight out of range (0-1)");
+        
+        return fromRGB(
+            (int) (red(rgb) * scale),
+            (int) (green(rgb) * scale),
+            (int) (blue(rgb) * scale),
+            alpha(rgb));
+    }
 
     /**
      * "Stacks" two colors which means rendering one color in front of another or rendering one layer above another.
@@ -176,16 +199,16 @@ public final class ColorMath {
     public static int stack(int bottom, int top) {
         final int topAlpha = alpha(top);
         return topAlpha == 0? bottom : stack(
-                red(bottom), green(bottom), blue(bottom), alpha(bottom),
-                red(top),    green(top),    blue(top),    topAlpha);
+            red(bottom), green(bottom), blue(bottom), alpha(bottom),
+            red(top),    green(top),    blue(top),    topAlpha);
     }
 
     public static int anaglyph(int r, int g, int b, int a) {
         return fromRGB(
-                (r * 30 + g * 59 + b * 11) / 100,
-                (r * 30 + g * 70) / 100,
-                (r * 30 + b * 70) / 100,
-                a);
+            (r * 30 + g * 59 + b * 11) / 100,
+            (r * 30 + g * 70) / 100,
+            (r * 30 + b * 70) / 100,
+            a);
     }
 
     public static int anaglyph(int rgb) {

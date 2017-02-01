@@ -1,6 +1,6 @@
 package net.grian.spatium.anno;
 
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Vector3;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,11 +14,11 @@ import java.lang.annotation.Target;
  *     using Minecraft specific operations should be avoided when creating portable systems.
  * </p>
  * <p>
- *     For example, {@link Vector#multiply(float)} will always behave in the exact same way no matter how the axes
+ *     For example, {@link Vector3#multiply(double)} will always behave in the exact same way no matter how the axes
  *     are arranged and how yaw and pitch are defined.
  * </p>
  * <p>
- *     On the other side, {@link Vector#setYawPitch(float, float)} would have a different meaning in a system with a
+ *     On the other side, {@link Vector3#setYawPitch(double, double)} would have a different meaning in a system with a
  *     different definition of yaw and pitch or a different arrangement of axes.
  * </p>
  */

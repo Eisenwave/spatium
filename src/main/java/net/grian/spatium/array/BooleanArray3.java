@@ -1,10 +1,9 @@
 package net.grian.spatium.array;
 
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.util.PrimMath;
 import net.grian.spatium.voxel.BitArray3;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
 public class BooleanArray3 extends AbstractArray3 implements BitArray3, Iterable<Boolean>, Cloneable {

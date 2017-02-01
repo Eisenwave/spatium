@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo.Ray;
+import net.grian.spatium.geo3.Ray3;
 
 import java.util.Collection;
 
@@ -11,7 +11,7 @@ public interface CollisionEngine {
 
     public abstract <C, T> CollisionResult test(C collider, T target);
 
-    public abstract <T> RayCollision<T> rayCast(Ray ray, T target);
+    public abstract <T> RayCollision<T> rayCast(Ray3 ray, T target);
 
     public default <C, T> Collision test(C collider, Collection<T> targets) {
         if (targets.isEmpty())
@@ -31,7 +31,7 @@ public interface CollisionEngine {
         return new Collision<>(CollisionResult.NEGATIVE, collider, targets);
     }
 
-    public default <T> RayCollision<T> rayCast(Ray ray, Collection<T> targets) {
+    public default <T> RayCollision<T> rayCast(Ray3 ray, Collection<T> targets) {
         if (targets.isEmpty())
             throw new IllegalArgumentException("at least one target required");
 

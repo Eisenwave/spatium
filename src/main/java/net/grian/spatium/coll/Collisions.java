@@ -1,7 +1,7 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo.*;
+import net.grian.spatium.geo3.*;
 
 /**
  * <p>
@@ -27,7 +27,7 @@ public final class Collisions {
      * @param b the second point
      * @return whether the points collide
      */
-    public static boolean test(Vector a, Vector b) {
+    public static boolean test(Vector3 a, Vector3 b) {
         return a.equals(b);
     }
 
@@ -57,20 +57,20 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether two {@link AxisAlignedBB}s collide/intersect.
+     * Tests whether two {@link AxisAlignedBB3}s collide/intersect.
      *
      * @param a the first bounding box
      * @param b the second bounding box
      * @return whether the boxes collide/intersect
      */
-    public static boolean test(AxisAlignedBB a, AxisAlignedBB b) {
+    public static boolean test(AxisAlignedBB3 a, AxisAlignedBB3 b) {
         return
-                a.getMinX() <= b.getMaxX() &&
-                a.getMaxX() >= b.getMinX() &&
-                a.getMinY() <= b.getMaxY() &&
-                a.getMaxY() >= b.getMinY() &&
-                a.getMinZ() <= b.getMaxZ() &&
-                a.getMaxZ() >= b.getMinZ();
+            a.getMinX() <= b.getMaxX() &&
+            a.getMaxX() >= b.getMinX() &&
+            a.getMinY() <= b.getMaxY() &&
+            a.getMaxY() >= b.getMinY() &&
+            a.getMinZ() <= b.getMaxZ() &&
+            a.getMaxZ() >= b.getMinZ();
     }
 
     /**
@@ -82,22 +82,22 @@ public final class Collisions {
      */
     public static boolean test(AxisAlignedTSBP a, AxisAlignedTSBP b) {
         return
-                a.getMinX() <= b.getMaxX() &&
-                a.getMaxX() >= b.getMinX() &&
-                a.getMinY() <= b.getMaxY() &&
-                a.getMaxY() >= b.getMinY() &&
-                a.getMinZ() <= b.getMaxZ() &&
-                a.getMaxZ() >= b.getMinZ();
+            a.getMinX() <= b.getMaxX() &&
+            a.getMaxX() >= b.getMinX() &&
+            a.getMinY() <= b.getMaxY() &&
+            a.getMaxY() >= b.getMinY() &&
+            a.getMinZ() <= b.getMaxZ() &&
+            a.getMaxZ() >= b.getMinZ();
     }
 
     /**
-     * Tests whether two {@link Triangle}s collide/intersect.
+     * Tests whether two {@link Triangle3}s collide/intersect.
      *
      * @param a the first triangle
      * @param b the second triangle
      * @return whether the triangles collide/intersect
      */
-    public static boolean test(Triangle a, Triangle b) {
+    public static boolean test(Triangle3 a, Triangle3 b) {
         return Intersections.of(a, b) != null;
     }
 
@@ -115,25 +115,25 @@ public final class Collisions {
     //HETERO - TESTS
 
     /**
-     * Tests whether an {@link AxisAlignedBB} and a {@link Sphere} collide.
+     * Tests whether an {@link AxisAlignedBB3} and a {@link Sphere} collide.
      *
      * @param box the bounding box
      * @param sphere the sphere
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB box, Sphere sphere) {
-        double d = Rays.cast(Ray.between(sphere.getCenter(), box.getCenter()), box);
+    public static boolean test(AxisAlignedBB3 box, Sphere sphere) {
+        double d = Rays.cast(Ray3.between(sphere.getCenter(), box.getCenter()), box);
         return d * d < sphere.getRadiusSquared();
     }
 
     /**
-     * Tests whether an {@link AxisAlignedBB} and an {@link AxisPlane} collide.
+     * Tests whether an {@link AxisAlignedBB3} and an {@link AxisPlane} collide.
      *
      * @param box the bounding box
      * @param plane the plane
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB box, AxisPlane plane) {
+    public static boolean test(AxisAlignedBB3 box, AxisPlane plane) {
         double d = plane.getDepth();
         switch (plane.getAxis()) {
             case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
@@ -151,7 +151,7 @@ public final class Collisions {
      * @return whether the sphere and the plane collide
      */
     public static boolean test(Sphere sphere, Plane plane) {
-        Ray sphereToPlane = Ray.fromOD(sphere.getCenter(), plane.getNormal().multiply(-1));
+        Ray3 sphereToPlane = Ray3.fromOD(sphere.getCenter(), plane.getNormal().multiply(-1));
         return sphereToPlane.getLengthSquared() <= sphere.getRadiusSquared();
     }
 
@@ -172,95 +172,95 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link Ray} collide.
+     * Tests whether a {@link Ray3} and a {@link Ray3} collide.
      *
      * @param a the first ray
      * @param b the second ray
      * @return whether the rays collide
      */
-    public static boolean test(Ray a, Ray b) {
+    public static boolean test(Ray3 a, Ray3 b) {
         return Double.isFinite(Rays.cast(a, b));
     }
 
     /**
-     * Tests whether a {@link Ray} and a Point ({@link Vector}) collide.
+     * Tests whether a {@link Ray3} and a Point ({@link Vector3}) collide.
      *
      * @param ray the ray
      * @param point the point
      * @return whether the box and the point collide
      */
-    public static boolean test(Ray ray, Vector point) {
+    public static boolean test(Ray3 ray, Vector3 point) {
         return ray.contains(point);
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link Plane} collide.
+     * Tests whether a {@link Ray3} and a {@link Plane} collide.
      *
      * @param ray the ray
      * @param plane the plane
      * @return whether the ray and the plane collide
      */
-    public static boolean test(Ray ray, Plane plane) {
+    public static boolean test(Ray3 ray, Plane plane) {
         return Double.isFinite(Rays.cast(ray, plane));
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link Slab} collide.
+     * Tests whether a {@link Ray3} and a {@link Slab3} collide.
      *
      * @param ray the ray
      * @param slab the slab
      * @return whether the ray and the plane collide
      */
-    public static boolean test(Ray ray, Slab slab) {
+    public static boolean test(Ray3 ray, Slab3 slab) {
         double[] entryExit = Rays.pierce(ray, slab);
         return
-                Double.isFinite(entryExit[0]) ||
-                entryExit[0] != entryExit[1];
+            Double.isFinite(entryExit[0]) ||
+            entryExit[0] != entryExit[1];
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link AxisPlane} collide. This condition is fulfilled if either the
+     * Tests whether a {@link Ray3} and a {@link AxisPlane} collide. This condition is fulfilled if either the
      * ray is not perpendicular to the plane or the ray lies within the plane.
      *
      * @param ray the ray
      * @param plane the plane
      * @return whether the ray and the plane collide
      */
-    public static boolean test(Ray ray, AxisPlane plane) {
+    public static boolean test(Ray3 ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return
-                    !(Spatium.equals(ray.getDirY(), 0) &&  Spatium.equals(ray.getDirZ(), 0)) ||
-                    Spatium.equals(ray.getOriginX(), plane.getDepth());
+                !(Spatium.equals(ray.getDirY(), 0) &&  Spatium.equals(ray.getDirZ(), 0)) ||
+                Spatium.equals(ray.getOriginX(), plane.getDepth());
             case Y: return
-                    !(Spatium.equals(ray.getDirZ(), 0) &&  Spatium.equals(ray.getDirX(), 0)) ||
-                    Spatium.equals(ray.getOriginY(), plane.getDepth());
+                !(Spatium.equals(ray.getDirZ(), 0) &&  Spatium.equals(ray.getDirX(), 0)) ||
+                Spatium.equals(ray.getOriginY(), plane.getDepth());
             case Z: return
-                    !(Spatium.equals(ray.getDirX(), 0) &&  Spatium.equals(ray.getDirY(), 0)) ||
-                    Spatium.equals(ray.getOriginZ(), plane.getDepth());
+                !(Spatium.equals(ray.getDirX(), 0) &&  Spatium.equals(ray.getDirY(), 0)) ||
+                Spatium.equals(ray.getOriginZ(), plane.getDepth());
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link Sphere} collide.
+     * Tests whether a {@link Ray3} and a {@link Sphere} collide.
      *
      * @param ray the ray
      * @param sphere the sphere
      * @return whether the ray and the plane collide
      */
-    public static boolean test(Ray ray, Sphere sphere) {
+    public static boolean test(Ray3 ray, Sphere sphere) {
         return Double.isFinite(Rays.cast(ray, sphere));
     }
 
     /**
-     * Tests whether a {@link Ray} and a {@link AxisAlignedBB} collide.
+     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB3} collide.
      *
      *
      * @param ray the ray
      * @param box the bounding box
      * @return whether the ray and the box collide
      */
-    public static boolean test(Ray ray, AxisAlignedBB box) {
+    public static boolean test(Ray3 ray, AxisAlignedBB3 box) {
         return Double.isFinite(Rays.cast(ray, box));
     }
 
@@ -271,62 +271,62 @@ public final class Collisions {
      * @param point the point
      * @return whether the sphere and the point collide
      */
-    public static boolean test(Sphere sphere, Vector point) {
+    public static boolean test(Sphere sphere, Vector3 point) {
         return sphere.contains(point);
     }
 
     /**
-     * Tests whether a {@link Triangle} and an {@link Plane} collide. This operation is performed by checking if not
+     * Tests whether a {@link Triangle3} and an {@link Plane} collide. This operation is performed by checking if not
      * all points of triangle are on the same side of the plane.
      *
      * @param triangle the triangle
      * @param plane the plane
      * @return whether the triangle and the plane collide
      */
-    public static boolean test(Triangle triangle, Plane plane) {
-        Vector
-                p = plane.getPoint(),
-                n = plane.getNormal();
+    public static boolean test(Triangle3 triangle, Plane plane) {
+        Vector3
+            p = plane.getPoint(),
+            n = plane.getNormal();
         return !(
-                Vector.between(triangle.getA(), p).dot(n) > 0 ==
-                Vector.between(triangle.getB(), p).dot(n) > 0 ==
-                Vector.between(triangle.getC(), p).dot(n) > 0 );
+            Vector3.between(triangle.getA(), p).dot(n) > 0 ==
+            Vector3.between(triangle.getB(), p).dot(n) > 0 ==
+            Vector3.between(triangle.getC(), p).dot(n) > 0 );
     }
 
     /**
-     * Tests whether a {@link Triangle} and an {@link AxisPlane} collide. This operation is performed by
+     * Tests whether a {@link Triangle3} and an {@link AxisPlane} collide. This operation is performed by
      * checking if not all points of triangle are on the same side of the plane.
      *
      * @param triangle the triangle
      * @param plane the plane
      * @return whether the triangle and the plane collide
      */
-    public static boolean test(Triangle triangle, AxisPlane plane) {
+    public static boolean test(Triangle3 triangle, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return !(
-                    triangle.getA().getX() > plane.getDepth() ==
-                    triangle.getB().getX() > plane.getDepth() ==
-                    triangle.getC().getX() > plane.getDepth() );
+                triangle.getA().getX() > plane.getDepth() ==
+                triangle.getB().getX() > plane.getDepth() ==
+                triangle.getC().getX() > plane.getDepth() );
             case Y: return !(
-                    triangle.getA().getY() > plane.getDepth() ==
-                    triangle.getB().getY() > plane.getDepth() ==
-                    triangle.getC().getY() > plane.getDepth() );
+                triangle.getA().getY() > plane.getDepth() ==
+                triangle.getB().getY() > plane.getDepth() ==
+                triangle.getC().getY() > plane.getDepth() );
             case Z: return !(
-                    triangle.getA().getZ() > plane.getDepth() ==
-                    triangle.getB().getZ() > plane.getDepth() ==
-                    triangle.getC().getZ() > plane.getDepth() );
+                triangle.getA().getZ() > plane.getDepth() ==
+                triangle.getB().getZ() > plane.getDepth() ==
+                triangle.getC().getZ() > plane.getDepth() );
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
 
     /**
-     * Tests whether an {@link AxisAlignedBB} and a Point collide.
+     * Tests whether an {@link AxisAlignedBB3} and a Point collide.
      *
      * @param box the bounding box
      * @param point the point
      * @return whether the box and the point collide
      */
-    public static boolean test(AxisAlignedBB box, Vector point) {
+    public static boolean test(AxisAlignedBB3 box, Vector3 point) {
         return box.contains(point);
     }
 
@@ -337,7 +337,7 @@ public final class Collisions {
      * @param point the point
      * @return whether the box and the point collide
      */
-    public static boolean test(AxisAlignedTSBP plane, Vector point) {
+    public static boolean test(AxisAlignedTSBP plane, Vector3 point) {
         return plane.contains(point);
     }
 

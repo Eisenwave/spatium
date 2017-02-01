@@ -1,6 +1,6 @@
 package net.grian.spatium.array;
 
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo3.BlockVector;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

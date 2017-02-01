@@ -24,22 +24,26 @@ public final class CacheMath {
     private CacheMath() {}
 
     public final static double
-            HUNDRED = 100,
-            THOUSAND = 1000,
-            MILLION = 1_000_000,
-            BILLION = 1_000_000_000,
-            TRILLION = 1_000_000_000,
-            GOLDEN = 1.618033988749894848204586834365638117720309179805762862135,
-            TAU = Math.PI * 2,
-            HALF_PI = Math.PI / 2,
-            SQRT_2 = Math.sqrt(2),
-            SQRT_3 = Math.sqrt(3),
-            HALF_SQRT_2 = SQRT_2 / 2,
-            THIRD_SQRT_3 = SQRT_3 / 3,
-            SQRT_HALF = Math.sqrt(1 / 2D),
-            CBRT_THIRD = Math.cbrt(1 / 3D),
-            INV_SQRT_2 = 1 / SQRT_2,
-            INV_SQRT_3 = 1 / SQRT_3;
+        HUNDRED = 100,
+        THOUSAND = 1000,
+        MILLION = 1_000_000,
+        BILLION = 1_000_000_000,
+        TRILLION = 1_000_000_000,
+    
+        FOUR_THIRDS = 4 / 3D,
+        FOUR_THIRDS_PI = FOUR_THIRDS * Math.PI,
+    
+        GOLDEN = 1.618033988749894848204586834365638117720309179805762862135,
+        TAU = Math.PI * 2,
+        HALF_PI = Math.PI / 2,
+        SQRT_2 = Math.sqrt(2),
+        SQRT_3 = Math.sqrt(3),
+        HALF_SQRT_2 = SQRT_2 / 2,
+        THIRD_SQRT_3 = SQRT_3 / 3,
+        SQRT_HALF = Math.sqrt(1 / 2D),
+        CBRT_THIRD = Math.cbrt(1 / 3D),
+        INV_SQRT_2 = 1 / SQRT_2,
+        INV_SQRT_3 = 1 / SQRT_3;
 
     public final static double TO_RADIANS = Math.PI / 180;
 

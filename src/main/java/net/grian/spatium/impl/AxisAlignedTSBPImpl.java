@@ -3,8 +3,8 @@ package net.grian.spatium.impl;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.enums.Direction.AxisDirection;
-import net.grian.spatium.geo.AxisAlignedTSBP;
-import net.grian.spatium.geo.Ray;
+import net.grian.spatium.geo3.AxisAlignedTSBP;
+import net.grian.spatium.geo3.Ray3;
 
 public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
 
@@ -237,7 +237,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
      * @param ray the ray
      * @return True, the ray penetrates the rectangle on its outside / inwards
      */
-    public boolean mayCollideInwards(Ray ray) {
+    public boolean mayCollideInwards(Ray3 ray) {
         switch (dir) {
         case POSITIVE_X:
             return ray.getDirection().getX() < 0;

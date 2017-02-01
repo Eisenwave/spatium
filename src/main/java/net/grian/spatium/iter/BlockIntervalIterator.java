@@ -1,7 +1,7 @@
 package net.grian.spatium.iter;
 
-import net.grian.spatium.geo.BlockVector;
-import net.grian.spatium.geo.Ray;
+import net.grian.spatium.geo3.BlockVector;
+import net.grian.spatium.geo3.Ray3;
 import net.grian.spatium.util.PrimMath;
 
 import java.util.Iterator;
@@ -14,7 +14,7 @@ public class BlockIntervalIterator implements Iterator<BlockVector> {
 
     private int x, y, z, i, err0, err1;
 
-    public BlockIntervalIterator(Ray ray) {
+    public BlockIntervalIterator(Ray3 ray) {
         BlockVector origin = ray.getOrigin().toBlockVector(), end = ray.getEnd().toBlockVector();
         int
                 x0 = origin.getX(), y0 = origin.getY(), z0 = origin.getZ(),

@@ -2,7 +2,7 @@ package net.grian.spatium.matrix;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.Matrix2Impl;
 import net.grian.spatium.impl.MatrixImpl;
 
@@ -98,9 +98,9 @@ public interface Matrix {
     public static Matrix fromRotX(double angle) {
         double sin = Math.sin(angle), cos = Math.cos(angle);
         return Matrix.create(3, 3,
-                1,   0,    0,
-                0, cos, -sin,
-                0, sin,  cos);
+            1,   0,    0,
+            0, cos, -sin,
+            0, sin,  cos);
     }
 
     /**
@@ -118,9 +118,9 @@ public interface Matrix {
     public static Matrix fromRotY(double angle) {
         double sin = Math.sin(angle), cos = Math.cos(angle);
         return Matrix.create(3, 3,
-                cos,  0, sin,
-                0,    1,    0,
-                -sin, 0, cos);
+            cos,  0, sin,
+            0,    1,    0,
+            -sin, 0, cos);
     }
 
     /**
@@ -138,9 +138,9 @@ public interface Matrix {
     public static Matrix fromRotZ(double angle) {
         double sin = Math.sin(angle), cos = Math.cos(angle);
         return Matrix.create(3, 3,
-                cos, -sin,  0,
-                sin,  cos,  0,
-                0,      0,  1);
+            cos, -sin,  0,
+            sin,  cos,  0,
+            0,      0,  1);
     }
 
     /* {{1,0,0},{0,x,-y},{0,y,x}} * {{x,0,y},{0,1,0},{-y,0,x}} * {{x,-y,0},{y,x,0},{0,0,1}} (x=cos, y=sin) */
@@ -154,8 +154,8 @@ public interface Matrix {
      */
     public static Matrix fromScale(double x, double y) {
         return create(2, 2,
-                x, 0,
-                0, y);
+            x, 0,
+            0, y);
     }
 
     /**
@@ -168,9 +168,9 @@ public interface Matrix {
      */
     public static Matrix fromScale(double x, double y, double z) {
         return create(3, 3,
-                x, 0, 0,
-                0, y, 0,
-                0, 0, z);
+            x, 0, 0,
+            0, y, 0,
+            0, 0, z);
     }
 
     /**
@@ -193,16 +193,16 @@ public interface Matrix {
     }
 
     /**
-     * Creates a new 3x1 (single column) matrix from a Vector.
+     * Creates a new 3x1 (single column) matrix from a Vector3.
      *
      * @param v the vector
      * @return a new matrix
      */
-    public static Matrix fromVector(Vector v) {
+    public static Matrix fromVector(Vector3 v) {
         return create(3, 1,
-                v.getX(),
-                v.getY(),
-                v.getZ());
+            v.getX(),
+            v.getY(),
+            v.getZ());
     }
 
     //OPERATIONS
@@ -249,17 +249,17 @@ public interface Matrix {
         return result;
     }
 
-    public static Vector product(Matrix a, double x, double y, double z) {
+    public static Vector3 product(Matrix a, double x, double y, double z) {
         if (a.getRows() != 3 || a.getColumns() != 3)
             throw new MatrixDimensionsException("matrix must be 3x3");
 
-        return Vector.fromXYZ(
-                a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
-                a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
-                a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
+        return Vector3.fromXYZ(
+            a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
+            a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
+            a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
     }
 
-    public static Vector product(Matrix a, Vector column) {
+    public static Vector3 product(Matrix a, Vector3 column) {
         return product(a, column.getX(), column.getY(), column.getZ());
     }
 
@@ -401,10 +401,10 @@ public interface Matrix {
         if (row == 0 && col == 0) return matrix.clone();
 
         final int
-        arow = matrix.getRows(),
-        acol = matrix.getColumns(),
-        brow = arow + row,
-        bcol = acol + col;
+            arow = matrix.getRows(),
+            acol = matrix.getColumns(),
+            brow = arow + row,
+            bcol = acol + col;
 
         double[] content = new double[brow * bcol];
 
@@ -539,8 +539,8 @@ public interface Matrix {
      */
     public default boolean equalSize(Matrix matrix) {
         return
-                this.getRows()    == matrix.getRows() &&
-                this.getColumns() == matrix.getColumns();
+            this.getRows()    == matrix.getRows() &&
+            this.getColumns() == matrix.getColumns();
     }
 
     // SETTERS

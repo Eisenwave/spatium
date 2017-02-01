@@ -1,16 +1,16 @@
 package net.grian.spatium.iter;
 
-import net.grian.spatium.geo.Ray;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Ray3;
+import net.grian.spatium.geo3.Vector3;
 
 import java.util.Iterator;
 
-public class IntervalIterator implements Iterator<Vector> {
+public class IntervalIterator implements Iterator<Vector3> {
 
     private double x, y, z, xi, yi, zi;
     private int i;
 
-    public IntervalIterator(Ray ray, double interval) {
+    public IntervalIterator(Ray3 ray, double interval) {
         this.x = ray.getOriginX();
         this.y = ray.getOriginY();
         this.z = ray.getOriginZ();
@@ -27,8 +27,8 @@ public class IntervalIterator implements Iterator<Vector> {
     }
 
     @Override
-    public Vector next() {
-        Vector result = Vector.fromXYZ(x, y, z);
+    public Vector3 next() {
+        Vector3 result = Vector3.fromXYZ(x, y, z);
         i--; x += xi; y += yi; z += zi;
         return result;
     }

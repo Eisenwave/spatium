@@ -1,8 +1,8 @@
 package net.grian.spatium.iter;
 
-import net.grian.spatium.geo.BlockVector;
-import net.grian.spatium.geo.Ray;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.BlockVector;
+import net.grian.spatium.geo3.Ray3;
+import net.grian.spatium.geo3.Vector3;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -13,7 +13,7 @@ public class BlockIntervalIteratorTest {
 
     @Test
     public void validStartEnd() throws Exception {
-        Ray ray = randomRay(16, 256);
+        Ray3 ray = randomRay(16, 256);
 
         Iterator<BlockVector> iterator = ray.blockIntervalIterator();
         BlockVector[] expexted = firstLast(ray);
@@ -25,7 +25,7 @@ public class BlockIntervalIteratorTest {
 
     @Test
     public void connectedLine() throws Exception {
-        Ray ray = randomRay(16, 64);
+        Ray3 ray = randomRay(16, 64);
 
         Iterator<BlockVector> iterator = ray.blockIntervalIterator();
         BlockVector previous = iterator.next();
@@ -51,17 +51,17 @@ public class BlockIntervalIteratorTest {
      * @param max the maximum length
      * @return a random ray
      */
-    private static Ray randomRay(float min, float max) {
-        Vector a = Vector.random(max), b = Vector.random(max);
+    private static Ray3 randomRay(float min, float max) {
+        Vector3 a = Vector3.random(max), b = Vector3.random(max);
         while (a.distanceTo(b) < min) {
-            a = Vector.random(max);
-            b = Vector.random(max);
+            a = Vector3.random(max);
+            b = Vector3.random(max);
         }
 
-        return Ray.between(a, b);
+        return Ray3.between(a, b);
     }
 
-    private static BlockVector[] firstLast(Ray ray) {
+    private static BlockVector[] firstLast(Ray3 ray) {
         return new BlockVector[] {
                 ray.getOrigin().toBlockVector(),
                 ray.getEnd().toBlockVector()

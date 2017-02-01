@@ -1,8 +1,8 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.enums.Direction;
-import net.grian.spatium.geo.BlockVector;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.BlockVector;
+import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.util.PrimMath;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class BlockVectorImpl implements BlockVector {
         this.z = z;
     }
 
-    public BlockVectorImpl(Vector v) {
+    public BlockVectorImpl(Vector3 v) {
         this.x = (int) PrimMath.floor(v.getX());
         this.y = (int) PrimMath.floor(v.getY());
         this.z = (int) PrimMath.floor(v.getZ());

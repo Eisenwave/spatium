@@ -1,6 +1,7 @@
 package net.grian.spatium.transform;
 
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Triangle3;
+import net.grian.spatium.geo3.Vector3;
 
 @FunctionalInterface
 public interface Transformation {
@@ -10,7 +11,16 @@ public interface Transformation {
      *
      * @param point the point
      */
-    public void transform(Vector point);
+    public void transform(Vector3 point);
+    
+    /**
+     * Applies the transformation to a triangle.
+     *
+     * @param triangle the triangle
+     */
+    public default void transform(Triangle3 triangle) {
+        triangle.transform(this);
+    }
 
     /**
      * Returns a new transformation which is a composition of the given transformation and this one. The new

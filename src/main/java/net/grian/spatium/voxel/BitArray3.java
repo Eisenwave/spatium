@@ -1,6 +1,6 @@
 package net.grian.spatium.voxel;
 
-import net.grian.spatium.geo.BlockVector;
+import net.grian.spatium.geo3.BlockVector;
 
 public interface BitArray3 {
 

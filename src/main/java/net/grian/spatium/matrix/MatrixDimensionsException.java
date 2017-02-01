@@ -18,9 +18,9 @@ public class MatrixDimensionsException extends MatrixException {
     
     public MatrixDimensionsException(Matrix a, Matrix b) {
         super(
-        		"["+a.getRows()+","+a.getColumns()+"]" +
-        		" & " +
-        		"["+b.getRows()+","+b.getColumns()+"]");
+            "["+a.getRows()+","+a.getColumns()+"]" +
+            " & " +
+            "["+b.getRows()+","+b.getColumns()+"]");
     }
 
 }

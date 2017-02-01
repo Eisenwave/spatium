@@ -1,8 +1,7 @@
 package net.grian.spatium.voxel;
 
-import net.grian.spatium.geo.BlockSelection;
+import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.util.ColorMath;
-import net.grian.spatium.util.PrimMath;
 import org.junit.Assert;
 import org.junit.Test;
 

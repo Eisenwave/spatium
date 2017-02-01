@@ -1,7 +1,7 @@
 package net.grian.spatium.enums;
 
 import net.grian.spatium.anno.MinecraftSpecific;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Vector3;
 
 import static net.grian.spatium.enums.Axis.*;
 import static net.grian.spatium.enums.Direction.AxisDirection.*;
@@ -19,19 +19,19 @@ import static net.grian.spatium.enums.Face.*;
  * @see Face
  */
 public enum Direction {
-    NEGATIVE_X(Vector.fromXYZ(-1,  0,  0), NEGATIVE, X, WEST),
-    POSITIVE_X(Vector.fromXYZ( 1,  0,  0), POSITIVE, X, EAST),
-    NEGATIVE_Y(Vector.fromXYZ( 0, -1,  0), NEGATIVE, Y, DOWN),
-    POSITIVE_Y(Vector.fromXYZ( 0,  1,  0), POSITIVE, Y, UP),
-    NEGATIVE_Z(Vector.fromXYZ( 0,  0, -1), NEGATIVE, Z, NORTH),
-    POSITIVE_Z(Vector.fromXYZ( 0,  0,  1), POSITIVE, Z, SOUTH);
+    NEGATIVE_X(Vector3.fromXYZ(-1,  0,  0), NEGATIVE, X, WEST),
+    POSITIVE_X(Vector3.fromXYZ( 1,  0,  0), POSITIVE, X, EAST),
+    NEGATIVE_Y(Vector3.fromXYZ( 0, -1,  0), NEGATIVE, Y, DOWN),
+    POSITIVE_Y(Vector3.fromXYZ( 0,  1,  0), POSITIVE, Y, UP),
+    NEGATIVE_Z(Vector3.fromXYZ( 0,  0, -1), NEGATIVE, Z, NORTH),
+    POSITIVE_Z(Vector3.fromXYZ( 0,  0,  1), POSITIVE, Z, SOUTH);
 
     private final Axis axis;
     private final AxisDirection direction;
     private final Face face;
-    private final Vector vector;
+    private final Vector3 vector;
 
-    Direction(Vector vector, AxisDirection direction, Axis axis, Face face) {
+    Direction(Vector3 vector, AxisDirection direction, Axis axis, Face face) {
         this.vector = vector;
         this.axis = axis;
         this.direction = direction;
@@ -43,7 +43,7 @@ public enum Direction {
      *
      * @return a vector pointing straight into this direction
      */
-    public Vector vector() {
+    public Vector3 vector() {
         return vector.clone();
     }
 

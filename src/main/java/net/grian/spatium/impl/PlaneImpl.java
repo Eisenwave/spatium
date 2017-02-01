@@ -1,8 +1,8 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo.Plane;
-import net.grian.spatium.geo.Vector;
+import net.grian.spatium.geo3.Plane;
+import net.grian.spatium.geo3.Vector3;
 
 public class PlaneImpl implements Plane {
 
@@ -38,13 +38,13 @@ public class PlaneImpl implements Plane {
         this.zn = copyOf.zn;
     }
 
-    public PlaneImpl(Vector center, Vector normal) {
+    public PlaneImpl(Vector3 center, Vector3 normal) {
         this(
                 center.getX(), center.getY(), center.getZ(),
                 normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public PlaneImpl(Vector point, Vector t, Vector r) {
+    public PlaneImpl(Vector3 point, Vector3 t, Vector3 r) {
         this(point, t.cross(r));
     }
 
@@ -55,13 +55,13 @@ public class PlaneImpl implements Plane {
     // GETTERS
 
     @Override
-    public Vector getPoint() {
-        return Vector.fromXYZ(x, y, z);
+    public Vector3 getPoint() {
+        return Vector3.fromXYZ(x, y, z);
     }
 
     @Override
-    public Vector getNormal() {
-        return Vector.fromXYZ(xn, yn, zn);
+    public Vector3 getNormal() {
+        return Vector3.fromXYZ(xn, yn, zn);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PlaneImpl implements Plane {
     public boolean contains(double x, double y, double z) {
         //if the dot product of a vector from the center of the plane to the point and the plane normal are
         //orthogonal, the point lies in the plane
-        return Spatium.equals((x-x)*xn + (y-y)*yn + (z-z)*zn, 0) ;
+        return Spatium.equals((x-this.x)*xn + (y-this.y)*yn + (z-this.z)*zn, 0) ;
     }
 
     // GETTERS
