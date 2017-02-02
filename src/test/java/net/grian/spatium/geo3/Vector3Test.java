@@ -104,8 +104,7 @@ public class Vector3Test {
         assertEquals(POS_Y, vector.transform(leftHand));
         assertEquals(POS_X, vector.transform(leftHand));
     }
-
-    @Test
+    
     public void performance_Inverse() throws Exception {
         for (int size = 1; size<11; size++) {
             double[] numbers = new double[size * size];
