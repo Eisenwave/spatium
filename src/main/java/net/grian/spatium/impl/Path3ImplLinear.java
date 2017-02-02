@@ -4,13 +4,15 @@ import net.grian.spatium.geo3.Path3;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.util.PrimArrays;
 
+import java.util.Arrays;
+
 public class Path3ImplLinear implements Path3 {
 
     private final Vector3[] points;
 
     public Path3ImplLinear(Vector3... points) {
         if (points.length == 0) throw new IllegalArgumentException("no points given");
-        this.points = PrimArrays.clone(points);
+        this.points = Arrays.copyOf(points, points.length);
     }
 
     @Override
@@ -70,6 +72,6 @@ public class Path3ImplLinear implements Path3 {
 
     @Override
     public Vector3[] getControlPoints() {
-        return PrimArrays.clone(points);
+        return Arrays.copyOf(points, points.length);
     }
 }

@@ -3,8 +3,9 @@ package net.grian.spatium.impl;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
 import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
-import net.grian.spatium.util.PrimArrays;
 import net.grian.spatium.util.Strings;
+
+import java.util.Arrays;
 
 public class MatrixImpl implements Matrix {
 
@@ -16,7 +17,7 @@ public class MatrixImpl implements Matrix {
             throw new MatrixDimensionsException("content must be "+rows+"x"+columns+" long");
         this.rows = rows;
         this.columns = columns;
-        this.content = PrimArrays.clone(content);
+        this.content = Arrays.copyOf(content, content.length);
     }
 
     public MatrixImpl(int rows, int columns) {

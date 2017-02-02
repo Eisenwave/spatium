@@ -1,10 +1,7 @@
 package net.grian.spatium.util;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "ManualArrayCopy"})
 public final class PrimArrays {
@@ -214,46 +211,6 @@ public final class PrimArrays {
         return array;
     }
     
-    //CLONE
-    
-    public static <T> T[] clone(T[] array) {
-        T[] result = newInstance(array.getClass().getComponentType(), array.length);
-        for (int i = 0; i<array.length; i++)
-            result[i] = array[i];
-        return result;
-    }
-
-    public static long[] clone(long[] array) {
-        long[] result = new long[array.length];
-        System.arraycopy(array, 0, result, 0, array.length);
-        return result;
-    }
-    
-    public static int[] clone(int[] array) {
-        int[] result = new int[array.length];
-        System.arraycopy(array, 0, result, 0, array.length);
-        return result;
-    }
-
-    public static double[] clone(double[] array) {
-        double[] result = new double[array.length];
-        System.arraycopy(array, 0, result, 0, array.length);
-        return result;
-    }
-    
-    public static float[] clone(float[] array) {
-        float[] result = new float[array.length];
-        System.arraycopy(array, 0, result, 0, array.length);
-        return result;
-    }
-    
-    public static char[] clone(char[] array) {
-        char[] result = new char[array.length];
-        for (int i = 0; i<array.length; i++)
-            result[i] = array[i];
-        return result;
-    }
-    
     //EQUAL
     
     public static boolean equal(int[] array1, int[] array2) {
@@ -362,40 +319,6 @@ public final class PrimArrays {
         return false;
     }
     
-    //FILL
-    
-    public static <T> void fill(T[] array, T value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(long[] array, long value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(int[] array, int value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(short[] array, short value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(char[] array, char value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(byte[] array, byte value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(double[] array, double value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
-    public static void fill(float[] array, float value) {
-        for (int i = 0; i<array.length; i++) array[i] = value;
-    }
-    
     //PASTE
     
     public static <T> void paste(T[] tail, T[] array, int index) {
@@ -420,7 +343,7 @@ public final class PrimArrays {
     //MERGE
     
     @SafeVarargs
-    public static <T> T[] merge(T[]... arrays) {
+    public static <T> T[] concat(T[]... arrays) {
         int length = 0;
         for (T[] array1 : arrays) length += array1.length;
         
@@ -435,7 +358,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static long[] merge(long[]... arrays) {
+    public static long[] concat(long[]... arrays) {
         int length = 0;
         for (long[] array1 : arrays) length += array1.length;
         
@@ -450,7 +373,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static int[] merge(int[]... arrays) {
+    public static int[] concat(int[]... arrays) {
         int length = 0;
         for (int[] array1 : arrays) length += array1.length;
         
@@ -465,7 +388,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static short[] merge(short[]... arrays) {
+    public static short[] concat(short[]... arrays) {
         int length = 0;
         for (short[] array1 : arrays) length += array1.length;
         
@@ -480,7 +403,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static char[] merge(char[]... arrays) {
+    public static char[] concat(char[]... arrays) {
         int length = 0;
         for (char[] array1 : arrays) length += array1.length;
         
@@ -495,7 +418,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static byte[] merge(byte[]... arrays) {
+    public static byte[] concat(byte[]... arrays) {
         int length = 0;
         for (byte[] array1 : arrays) length += array1.length;
         
@@ -510,7 +433,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static double[] merge(double[]... arrays) {
+    public static double[] concat(double[]... arrays) {
         int length = 0;
         for (double[] array1 : arrays) length += array1.length;
         
@@ -525,7 +448,7 @@ public final class PrimArrays {
         return result;
     }
     
-    public static float[] merge(float[]... arrays) {
+    public static float[] concat(float[]... arrays) {
         int length = 0;
         for (float[] array1 : arrays) length += array1.length;
         
@@ -599,10 +522,9 @@ public final class PrimArrays {
     
     //NEW INSTANCE
     
-    public static <T> T[] newInstance(Class<?> component, int length, T content) {
-        T[] result = newInstance(component, length);
-        fill(result, content);
-        return result;
+    @SuppressWarnings("unchecked")
+    public static <T> T[] newInstance(Class<?> component, int... dimensions) {
+        return (T[]) Array.newInstance(component, dimensions);
     }
     
     @SuppressWarnings("unchecked")
@@ -798,18 +720,6 @@ public final class PrimArrays {
      */
     public static float random(float... array) {
         return array[ initRNG().nextInt(array.length) ];
-    }
-    
-    public static List<byte[]> split(byte[] array, int length) {
-        int count = PrimMath.ceil((float)array.length / length);
-        List<byte[]> splits = new ArrayList<>(count);
-        for (int i = 0; i<count; i++) {
-            int min = i*length;
-            int max = PrimMath.clamp(0, (i+1)*length-1, array.length-1);
-            splits.set(i, subArray(array, min, max));
-        }
-        
-        return splits;
     }
     
     public static <T> void swap(T[] array, int i1, int i2) {

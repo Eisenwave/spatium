@@ -118,7 +118,7 @@ public final class ArrayMath {
             z*(factor *= sizeY) +
             x2*(factor *= sizeZ) +
             y2*(factor *= sizeX2) +
-            z2*(factor *= sizeY2);
+            z2* factor * sizeY2;
     }
     
     public static int coordsToIndex(int[] coords, int[] sizes) {

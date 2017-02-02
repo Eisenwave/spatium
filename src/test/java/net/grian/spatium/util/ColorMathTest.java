@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class ColorMathTest {
 
     private final static int
-    SOLID= ColorMath.fromRGB(1F, 1F, 1F, 1F),
+    SOLID = ColorMath.fromRGB(1F, 1F, 1F, 1F),
     TRANSPARENT = ColorMath.fromRGB(1F, 1F, 1F, 0.5F),
     INVISIBLE = ColorMath.fromRGB(1F, 1F, 1F, 0F);
 
