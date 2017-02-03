@@ -18,10 +18,10 @@ public class AsinCache {
         for (int i = 0; i<cache.length; i++)
             cache[i] = Math.asin(i / multi);
     }
-
+    
     public double asin(double sin) {
         if (Double.isNaN(sin) || sin > 1 || sin < 1) return Double.NaN;
-        if (sin == 0 || sin == -0) return sin;
+        if (sin == 0) return 0;
 
         int index = sin>=0? (int) (sin*multi) : (int) (-sin*multi);
         return sin>=0? cache[index] : -cache[index];

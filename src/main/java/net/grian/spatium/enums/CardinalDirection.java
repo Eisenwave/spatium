@@ -1,6 +1,9 @@
 package net.grian.spatium.enums;
 
 import net.grian.spatium.anno.MinecraftSpecific;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
 
 @SuppressWarnings("Duplicates")
 public enum CardinalDirection {
@@ -36,6 +39,7 @@ public enum CardinalDirection {
      * </ul>
      * @return the angle in degrees
      */
+    @Contract(pure = true)
     @MinecraftSpecific
     public int angle() {
         return angle;
@@ -47,6 +51,7 @@ public enum CardinalDirection {
      * @return this direction
      * @see Face#direction()
      */
+    @Contract(pure = true)
     @MinecraftSpecific
     public Direction direction() {
         return direction;
@@ -57,6 +62,8 @@ public enum CardinalDirection {
      *
      * @return the corresponding face
      */
+    @Nonnull
+    @Contract(pure = true)
     public Face face() {
         return face;
     }
@@ -65,6 +72,8 @@ public enum CardinalDirection {
      * Gets the right hand cardinal direction of the current one.
      * <br>Example: <b>NORTH -> EAST
      */
+    @Nonnull
+    @Contract(pure = true)
     public CardinalDirection right() {
         switch (this) {
         case EAST: return SOUTH;
@@ -79,6 +88,8 @@ public enum CardinalDirection {
      * Gets the left hand cardinal direction of the current one.
      * <br>Example: <b>NORTH -> WEST
      */
+    @Nonnull
+    @Contract(pure = true)
     public CardinalDirection left() {
         switch (this) {
             case EAST: return NORTH;
@@ -88,7 +99,7 @@ public enum CardinalDirection {
         default: throw new AssertionError(this);
         }
     }
-
+    
     public CardinalDirection rotate(CardinalRotation rotation) {
         switch (rotation) {
             case R0: return this;
@@ -103,6 +114,8 @@ public enum CardinalDirection {
      * Gets the opposite cardinal direction of this direction.
      * <br>Example: <b>NORTH -> SOUTH
      */
+    @Nonnull
+    @Contract(pure = true)
     public CardinalDirection opposite() {
         return opposite;
     }

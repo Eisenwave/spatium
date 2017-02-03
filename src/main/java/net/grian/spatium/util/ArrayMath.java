@@ -1,9 +1,12 @@
 package net.grian.spatium.util;
 
+import org.jetbrains.annotations.Contract;
+
 public final class ArrayMath {
     
     private ArrayMath() {}
     
+    @Contract(value = "_, _, _ -> !null", pure = true)
     @SuppressWarnings("unused")
     public static int[] indexToCoords2(int index, int x, int y) {
         return new int[] {

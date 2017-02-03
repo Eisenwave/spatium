@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class RaysTest {
 
     @Test
-    public void Ray_Sphere() {
+    public void Ray_Sphere() throws Exception {
         Sphere sphere = Sphere.fromCenterAndRadius(0, 0, 0, 10);
 
         Ray3 ray0 = Ray3.fromOD(-20, 0, 0, 5, 0, 0);
@@ -18,7 +18,7 @@ public class RaysTest {
     }
 
     @Test
-    public void Ray_AABB() {
+    public void Ray_AABB() throws Exception {
         AxisAlignedBB3 box = AxisAlignedBB3.fromPoints(-1, -1, -1, 1, 1, 1);
         Ray3 ray = Ray3.fromOD(-2, 0, 0, 1, 0, 0);
 

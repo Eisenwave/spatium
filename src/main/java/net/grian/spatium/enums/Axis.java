@@ -2,6 +2,8 @@ package net.grian.spatium.enums;
 
 import net.grian.spatium.geo3.Vector3;
 
+import javax.annotation.Nonnull;
+
 /**
  * An Axis in 3D space.
  */
@@ -21,6 +23,7 @@ public enum Axis {
         this.vector = vector;
     }
 
+    @Nonnull
     public Vector3 vector() {
         return vector.clone();
     }

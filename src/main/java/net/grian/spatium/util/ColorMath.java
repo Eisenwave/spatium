@@ -1,5 +1,7 @@
 package net.grian.spatium.util;
 
+import org.jetbrains.annotations.Contract;
+
 import java.awt.Color;
 
 /**
@@ -26,7 +28,8 @@ public final class ColorMath {
     private ColorMath() {}
 
     //"CONSTRUCTORS"
-
+    
+    @Contract(pure = true)
     public static int fromRGB(int r, int g, int b, int a) {
         if (r > 0xFF || g > 0xFF || b > 0xFF || a > 0xFF)
             throw new IllegalArgumentException("channel out of range (> 0xFF");
@@ -35,7 +38,7 @@ public final class ColorMath {
 
         return a<<24 | r<<16 | g<<8 | b;
     }
-
+    
     public static int fromRGB(float r, float g, float b, float a) {
         return fromRGB((int) (r*255), (int) (g*255), (int) (b*255), (int) (a*255));
     }
@@ -52,6 +55,7 @@ public final class ColorMath {
         return (fromHSB(h, s, b) & 0x00FFFFFF) | ((int) (a*255)<<24);
     }
 
+    @Contract(pure = true)
     public static int fromHSB(float h, float s, float b) {
         return Color.HSBtoRGB(h, s, b);
     }

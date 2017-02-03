@@ -1,5 +1,6 @@
 package net.grian.spatium.util;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public interface RGBValue {
@@ -18,6 +19,7 @@ public interface RGBValue {
      *
      * @return this object's color
      */
+    @Nonnull
     public default Color getColor() {
         return new Color(getRGB(), true);
     }

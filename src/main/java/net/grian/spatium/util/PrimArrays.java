@@ -1,5 +1,6 @@
 package net.grian.spatium.util;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -8,49 +9,49 @@ public final class PrimArrays {
     
     private PrimArrays() {}
     
-    public static long[] asLongs(Number[] array) {
+    public static long[] asLongs(@Nonnull Number[] array) {
         long[] prim = new long[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].longValue();
         return prim;
     }
     
-    public static int[] asInts(Number[] array) {
+    public static int[] asInts(@Nonnull Number[] array) {
         int[] prim = new int[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].intValue();
         return prim;
     }
     
-    public static short[] asShorts(Number[] array) {
+    public static short[] asShorts(@Nonnull Number[] array) {
         short[] prim = new short[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].shortValue();
         return prim;
     }
     
-    public static byte[] asBytes(Number[] array) {
+    public static byte[] asBytes(@Nonnull Number[] array) {
         byte[] prim = new byte[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].byteValue();
         return prim;
     }
     
-    public static char[] asChars(Character[] array) {
+    public static char[] asChars(@Nonnull Character[] array) {
         char[] prim = new char[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i];
         return prim;
     }
     
-    public static double[] asDoubles(Number[] array) {
+    public static double[] asDoubles(@Nonnull Number[] array) {
         double[] prim = new double[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].doubleValue();
         return prim;
     }
     
-    public static float[] asFloats(Number[] array) {
+    public static float[] asFloats(@Nonnull Number[] array) {
         float[] prim = new float[array.length];
         for (int i = 0; i<array.length; i++) prim[i] = array[i].floatValue();
         return prim;
     }
     
-    public static long[] asLongs(Collection<? extends Number> collection) {
+    public static long[] asLongs(@Nonnull Collection<? extends Number> collection) {
         long[] prim = new long[collection.size()];
         
         int i = 0;
@@ -58,7 +59,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static int[] asInts(Collection<? extends Number> collection) {
+    public static int[] asInts(@Nonnull Collection<? extends Number> collection) {
         int[] prim = new int[collection.size()];
         
         int i = 0;
@@ -66,7 +67,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static short[] asShorts(Collection<? extends Number> collection) {
+    public static short[] asShorts(@Nonnull Collection<? extends Number> collection) {
         short[] prim = new short[collection.size()];
         
         int i = 0;
@@ -74,7 +75,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static byte[] asBytes(Collection<? extends Number> collection) {
+    public static byte[] asBytes(@Nonnull Collection<? extends Number> collection) {
         byte[] prim = new byte[collection.size()];
         
         int i = 0;
@@ -82,7 +83,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static char[] asChars(Collection<? extends Character> collection) {
+    public static char[] asChars(@Nonnull Collection<? extends Character> collection) {
         char[] prim = new char[collection.size()];
         
         int i = 0;
@@ -90,7 +91,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static double[] asDoubles(Collection<? extends Number> collection) {
+    public static double[] asDoubles(@Nonnull Collection<? extends Number> collection) {
         double[] prim = new double[collection.size()];
         
         int i = 0;
@@ -98,7 +99,7 @@ public final class PrimArrays {
         return prim;
     }
     
-    public static float[] asFloats(Collection<? extends Number> collection) {
+    public static float[] asFloats(@Nonnull Collection<? extends Number> collection) {
         float[] prim = new float[collection.size()];
         
         int i = 0;
@@ -461,63 +462,6 @@ public final class PrimArrays {
         }
         
         return result;
-    }
-    
-    public static void moveLeft(long[] array, boolean wrap, long filler) {
-        //special lenghts
-        switch (array.length) {
-        case 0: {
-            return;
-        }
-        case 1: {
-            if (!wrap) array[0] = filler;
-            return;
-        }
-        case 2: {
-            if (!wrap) {array[0] = array[1]; array[1] = filler;}
-            else swap(array, 0, 1);
-            return;
-        }
-        default: {
-            long firstVal = array[0];
-            int maxIndex = array.length-1;
-            int i = 0;
-            while (i < maxIndex) array[i] = array[++i];
-            array[maxIndex] = wrap? firstVal : filler;
-        }
-        }
-    }
-    
-    public static void moveLeft(int[] array, boolean wrap, int filler) {
-        switch (array.length) {
-        case 0: {
-            return;
-        }
-        case 1: {
-            if (!wrap) array[0] = filler;
-            return;
-        }
-        case 2: {
-            if (!wrap) {array[0] = array[1]; array[1] = filler;}
-            else swap(array, 0, 1);
-            return;
-        }
-        default: {
-            int firstVal = array[0];
-            int maxIndex = array.length-1;
-            int i = 0;
-            while (i < maxIndex) array[i] = array[++i];
-            array[maxIndex] = wrap? firstVal : filler;
-        }
-        }
-    }
-    
-    public static void moveLeft(long[] array, boolean wrap) {
-        moveLeft(array, wrap, 0);
-    }
-    
-    public static void moveLeft(int[] array, boolean wrap) {
-        moveLeft(array, wrap, 0);
     }
     
     //NEW INSTANCE

@@ -1,9 +1,12 @@
 package net.grian.spatium.util;
 
+import org.jetbrains.annotations.Contract;
+
 public final class IOMath {
 
     private IOMath() {}
 
+    @Contract("_ -> !null")
     public static byte[] toBytes(long Long) {
         return new byte[]{
             (byte) ((Long >> 56) & 0xFF),

@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBB3Impl;
+import org.jetbrains.annotations.Contract;
 
 import static net.grian.spatium.util.PrimMath.*;
 import static net.grian.spatium.enums.Direction.*;
@@ -138,7 +139,7 @@ public interface AxisAlignedBB3 extends Space {
     }
 
     // CHECKERS
-
+    
     public default boolean equals(AxisAlignedBB3 box) {
         return
             Spatium.equals(this.getMinX(), box.getMinX()) &&
