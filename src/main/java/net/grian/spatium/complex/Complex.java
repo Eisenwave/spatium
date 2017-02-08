@@ -1,15 +1,16 @@
 package net.grian.spatium.complex;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.ComplexImplCartesian;
 import net.grian.spatium.impl.ComplexImplEuler;
+
+import java.io.Serializable;
 
 /**
  * A complex number which can either be provided in the form: {@code z = a + bi}
  * or the form: {@code z = r * e^(phi*i*pi)} depending on its implementation.
  */
-public interface Complex extends SpatiumObject {
+public interface Complex extends Serializable, Cloneable {
 
     /**
      * Returns a new cartesian implementation of a complex number in the form:
@@ -21,7 +22,7 @@ public interface Complex extends SpatiumObject {
      * @param b the imaginary part
      * @return a new complex number
      */
-    public static CartesianComplex newCartesian(double a, double b) {
+    public static Complex fromCartesian(double a, double b) {
         return new ComplexImplCartesian(a, b);
     }
 
@@ -35,7 +36,7 @@ public interface Complex extends SpatiumObject {
      * @param phi the angle
      * @return a new complex number
      */
-    public static EulerComplex newEuler(double r, double phi) {
+    public static Complex fromEuler(double r, double phi) {
         return new ComplexImplEuler(r, phi);
     }
 
@@ -168,24 +169,6 @@ public interface Complex extends SpatiumObject {
     public abstract Complex divide(Complex z);
 
     // MISC
-
-    /**
-     * Returns a new cartesian representation of this complex number. If this
-     * complex number is already represented in a the cartesian form, the
-     * returned object is equal to {@link #clone()}.
-     *
-     * @return a new cartesian complex number
-     */
-    public abstract CartesianComplex toCartesian();
-
-    /**
-     * Returns a new euler representation of this complex number. If this
-     * complex number is already represented in a the euler form, the
-     * returned object is equal to {@link #clone()}.
-     *
-     * @return a new euler complex number
-     */
-    public abstract EulerComplex toEuler();
 
     /**
      * Returns a new copy of this complex number. The representation of the

@@ -2,7 +2,6 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
-import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 import net.grian.spatium.util.Strings;
 
 import java.util.Arrays;
@@ -34,18 +33,6 @@ public class MatrixImpl implements Matrix {
 
     @Override
     public double get(int i, int j) {
-        validate(i, j);
-        return uget(i, j);
-    }
-
-    /**
-     * "Unvalidated" or "unchecked" getter.
-     *
-     * @param i the row index
-     * @param j the column index
-     * @return the value at the indices
-     */
-    public double uget(int i, int j) {
         return content[i*columns + j];
     }
 
@@ -59,7 +46,7 @@ public class MatrixImpl implements Matrix {
 
         double[] result = new double[columns];
         for (int j = 0; j<columns; j++)
-            result[j] = uget(i, j);
+            result[j] = get(i, j);
 
         return result;
     }
@@ -70,7 +57,7 @@ public class MatrixImpl implements Matrix {
 
         double[] result = new double[rows];
         for (int i = 0; i<rows; i++)
-            result[i] = uget(i, j);
+            result[i] = get(i, j);
 
         return result;
     }
@@ -98,7 +85,7 @@ public class MatrixImpl implements Matrix {
      * @return the determinant without square-matrix validation
      */
     private double uncheckedDeterminant() {
-        if (rows == 1) return uget(0, 0);
+        if (rows == 1) return get(0, 0);
         if (rows == 2) return determinant2();
         if (rows == 3) return determinant3();
         return determinantRecursive();
@@ -111,7 +98,7 @@ public class MatrixImpl implements Matrix {
      * @return the determinant of the matrix
      */
     private double determinant2() {
-        return uget(0, 0)*uget(1, 1) - uget(0, 1)*uget(1, 0);
+        return get(0, 0)*get(1, 1) - get(0, 1)*get(1, 0);
     }
 
     /**
@@ -122,12 +109,12 @@ public class MatrixImpl implements Matrix {
      */
     private double determinant3() {
         return
-          uget(0,0)*uget(1,1)*uget(2,2)
-        + uget(0,1)*uget(1,2)*uget(2,0)
-        + uget(0,2)*uget(1,0)*uget(2,1)
-        - uget(0,2)*uget(1,1)*uget(2,0)
-        - uget(0,0)*uget(1,2)*uget(2,1)
-        - uget(0,1)*uget(1,0)*uget(2,2);
+          get(0,0)*get(1,1)*get(2,2)
+        + get(0,1)*get(1,2)*get(2,0)
+        + get(0,2)*get(1,0)*get(2,1)
+        - get(0,2)*get(1,1)*get(2,0)
+        - get(0,0)*get(1,2)*get(2,1)
+        - get(0,1)*get(1,0)*get(2,2);
     }
 
     private double determinantRecursive() {
@@ -140,7 +127,7 @@ public class MatrixImpl implements Matrix {
         for (int i = 0; i<columns; i++) {
             pasteWithoutRowCol(canvas, i, 0);
 
-            result += uget(i, 0) * minusOnePow(i) * canvas.determinantRecursive();
+            result += get(i, 0) * minusOnePow(i) * canvas.determinantRecursive();
         }
 
         return result;
@@ -150,7 +137,7 @@ public class MatrixImpl implements Matrix {
     public MatrixImpl getCofactors() {
         if (rows != columns)
             throw new MatrixDimensionsException("matrix must be square matrix");
-        if (rows == 1) return new MatrixImpl(1, 1, uget(0, 0));
+        if (rows == 1) return new MatrixImpl(1, 1, get(0, 0));
         if (rows == 2) return cofactors2();
 
         MatrixImpl result = new MatrixImpl(rows, columns);
@@ -178,15 +165,15 @@ public class MatrixImpl implements Matrix {
         //determinant can be obtained faster since adjugate already contains all necessary information
         double det = 0;
         for (int i = 0; i<rows; i++)
-            det += adj.get(i, 0) * uget(0, i);
+            det += adj.get(i, 0) * get(0, i);
 
         return adj.scale(1 / det);
     }
 
     private MatrixImpl cofactors2() {
         return new MatrixImpl(2, 2,
-                 uget(1, 1), -uget(1, 0),
-                -uget(0, 1),  uget(0, 0));
+                 get(1, 1), -get(1, 0),
+                -get(0, 1),  get(0, 0));
     }
 
     /**
@@ -207,7 +194,7 @@ public class MatrixImpl implements Matrix {
         for (int i = 0; i<rows; i++) for (int j = 0; j<columns; j++) {
             if (i == row || j == col) continue;
 
-            matrix.set(x, y, uget(i, j));
+            matrix.set(x, y, get(i, j));
 
             if(++x == m) {
                 y++;
@@ -230,26 +217,12 @@ public class MatrixImpl implements Matrix {
 
     @Override
     public MatrixImpl set(int i, int j, double value) {
-        validate(i, j);
-        uset(i, j, value);
-        return this;
-    }
-
-    /**
-     * "Unvalidated" or "unchecked" setter.
-     *
-     * @param i the row index
-     * @param j the column index
-     * @param value the value to set
-     */
-    private void uset(int i, int j, double value) {
         content[i*columns + j] = value;
+        return this;
     }
 
     @Override
     public MatrixImpl swap(int i0, int j0, int i1, int j1) {
-        validate(i0, j0);
-        validate(i1, j1);
         uswap(i0, j0, i1, j1);
         return this;
     }
@@ -315,6 +288,7 @@ public class MatrixImpl implements Matrix {
         return obj instanceof Matrix && equals((Matrix) obj);
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public MatrixImpl clone() {
         return new MatrixImpl(this);
@@ -333,23 +307,16 @@ public class MatrixImpl implements Matrix {
 
     private void validateCol(int col) {
         if (col < 0)
-            throw new MatrixIndexOutOfBoundsException("j="+col+" < 0");
+            throw new IndexOutOfBoundsException("j="+col+" < 0");
         if (col >= columns)
-            throw new MatrixIndexOutOfBoundsException("j="+col+" >= "+columns+" columns");
+            throw new IndexOutOfBoundsException("j="+col+" >= "+columns+" columns");
     }
 
     private void validateRow(int row) {
         if (row < 0)
-            throw new MatrixIndexOutOfBoundsException("i="+row+" < 0");
+            throw new IndexOutOfBoundsException("i="+row+" < 0");
         if (row >= rows)
-            throw new MatrixIndexOutOfBoundsException("i="+row+" >= "+rows+" rows");
-    }
-
-    private void validate(int row, int col) {
-        if (row < 0 || row >= rows)
-            throw new MatrixIndexOutOfBoundsException("row  "+row+" < 0 or >= "+rows);
-        if (col < 0 || col >= columns)
-            throw new MatrixIndexOutOfBoundsException("col "+col+" < 0 or >= "+columns);
+            throw new IndexOutOfBoundsException("i="+row+" >= "+rows+" rows");
     }
 
 }

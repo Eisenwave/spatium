@@ -2,17 +2,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.grian.spatium</groupId>
-    <artifactId>spatium</artifactId>
-    <version>0.1</version>
-    <name>Spatium</name>
-    <description>Grian 3D library</description>
-
     <parent>
         <groupId>net.grian</groupId>
         <artifactId>SpigotParent</artifactId>
         <version>1.0</version>
     </parent>
+
+    <groupId>net.grian.spatium</groupId>
+    <artifactId>spatium</artifactId>
+    <version>0.1</version>
+    <name>Spatium</name>
+    <description>Grian 3D library</description>
 
     <developers>
         <developer>

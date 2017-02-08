@@ -2,6 +2,7 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.*;
+import net.grian.spatium.util.PrimMath;
 
 /**
  * <p>
@@ -113,17 +114,16 @@ public final class Collisions {
     }
 
     //HETERO - TESTS
-
+    
     /**
-     * Tests whether an {@link AxisAlignedBB3} and a {@link Sphere} collide.
+     * Tests whether an {@link AxisAlignedBB3} and a point ({@link Vector3}) collide.
      *
      * @param box the bounding box
-     * @param sphere the sphere
-     * @return whether the box and the sphere collide
+     * @param point the point
+     * @return whether the box and the point collide
      */
-    public static boolean test(AxisAlignedBB3 box, Sphere sphere) {
-        double d = Rays.cast(Ray3.between(sphere.getCenter(), box.getCenter()), box);
-        return d * d < sphere.getRadiusSquared();
+    public static boolean test(AxisAlignedBB3 box, Vector3 point) {
+        return box.contains(point);
     }
 
     /**
@@ -141,6 +141,83 @@ public final class Collisions {
             case Z: return (box.getMinZ() <= d) != (box.getMaxZ() <= d);
             default: throw new IllegalArgumentException("plane has no axis");
         }
+    }
+    
+    /**
+     * Tests whether an {@link AxisAlignedBB3} and a {@link Sphere} collide.
+     *
+     * @param box the bounding box
+     * @param sphere the sphere
+     * @return whether the box and the sphere collide
+     */
+    public static boolean test(AxisAlignedBB3 box, Sphere sphere) {
+        double
+            cenX = sphere.getX(),
+            cenY = sphere.getY(),
+            cenZ = sphere.getZ(),
+            x = PrimMath.clamp(box.getMinX(), cenX, box.getMaxX()),
+            y = PrimMath.clamp(box.getMinY(), cenY, box.getMaxY()),
+            z = PrimMath.clamp(box.getMinZ(), cenZ, box.getMaxZ());
+        
+        return Spatium.hypot(x-cenX, y-cenY, z-cenZ) <= sphere.getRadiusSquared();
+    }
+    
+    /**
+     * Tests whether an {@link AxisAlignedBB3} and a {@link OrientedBB3} collide.
+     *
+     * @param aabb the axis aligned box
+     * @param obb the oriented box
+     * @return whether the boxes collide
+     */
+    public static boolean test(AxisAlignedBB3 aabb, OrientedBB3 obb) {
+        Vector3 obbCen = obb.getCenter();
+        
+        //early and inexpensive cancel should the obb center be inside aabb
+        if (aabb.contains(obbCen)) return true;
+ 
+        Vector3 aabbCen = aabb.getCenter();
+        Vector3 aabbSrf = Vector3.fromXYZ( // = point inside aabb closest to obb
+            PrimMath.clamp(aabb.getMinX(), obbCen.getX(), aabb.getMaxX()),
+            PrimMath.clamp(aabb.getMinY(), obbCen.getY(), aabb.getMaxY()),
+            PrimMath.clamp(aabb.getMinZ(), obbCen.getZ(), aabb.getMaxZ()));
+        
+        //minimum distance between aabb center and obb center
+        double t = Rays.cast(Ray3.between(aabbCen, aabbSrf), obb);
+        
+        //this works because t is a ray multiplier of aabbCen->aabbSrf
+        //t is larger than 1 if the closest point on the obb is outside the aabb
+        //if t is smaller, the closest point is inside the aabb and the boxes intersect
+        return t <= 1 + Spatium.EPSILON;
+    }
+    
+    /**
+     * Tests whether a {@link OrientedBB3} and a {@link Sphere} collide.
+     *
+     * @param box the bounding box
+     * @param sphere the sphere
+     * @return whether the box and the sphere collide
+     */
+    public static boolean test(OrientedBB3 box, Sphere sphere) {
+        //get the sphere center relative to the box center
+        Vector3 relCenter = sphere.getCenter().subtract(box.getCenter());
+        //turn that point from world space into object space
+        relCenter.transform(box.getTransform());
+        
+        double dx = box.getSizeX()/2, dy = box.getSizeY()/2, dz = box.getSizeZ()/2;
+        AxisAlignedBB3 aabb = AxisAlignedBB3.fromPoints(-dx, -dy, -dz, dx, dy, dz);
+        
+        return test(aabb, Sphere.fromCenterAndRadius(relCenter, sphere.getRadius()));
+    }
+    
+    /**
+     * Tests whether a {@link Sphere} and a Point collide.
+     *
+     * @param sphere the sphere
+     * @param point the point
+     * @return whether the sphere and the point collide
+     */
+    public static boolean test(Sphere sphere, Vector3 point) {
+        return sphere.contains(point);
     }
 
     /**
@@ -170,7 +247,18 @@ public final class Collisions {
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
-
+    
+    /**
+     * Tests whether a {@link AxisCylinder} and a point ({@link Vector3}) collide.
+     *
+     * @param cylinder the cylinder
+     * @param point the point
+     * @return whether the cylinder and the point collide
+     */
+    public static boolean test(AxisCylinder cylinder, Vector3 point) {
+        return cylinder.contains(point);
+    }
+    
     /**
      * Tests whether a {@link Ray3} and a {@link Ray3} collide.
      *
@@ -263,16 +351,17 @@ public final class Collisions {
     public static boolean test(Ray3 ray, AxisAlignedBB3 box) {
         return Double.isFinite(Rays.cast(ray, box));
     }
-
+    
     /**
-     * Tests whether a {@link Sphere} and a Point collide.
+     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB3} collide.
      *
-     * @param sphere the sphere
-     * @param point the point
-     * @return whether the sphere and the point collide
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return whether the ray and the box collide
      */
-    public static boolean test(Sphere sphere, Vector3 point) {
-        return sphere.contains(point);
+    public static boolean test(Ray3 ray, OrientedBB3 box) {
+        return Double.isFinite(Rays.cast(ray, box));
     }
 
     /**
@@ -317,17 +406,6 @@ public final class Collisions {
                 triangle.getC().getZ() > plane.getDepth() );
             default: throw new IllegalArgumentException("plane has no axis");
         }
-    }
-
-    /**
-     * Tests whether an {@link AxisAlignedBB3} and a Point collide.
-     *
-     * @param box the bounding box
-     * @param point the point
-     * @return whether the box and the point collide
-     */
-    public static boolean test(AxisAlignedBB3 box, Vector3 point) {
-        return box.contains(point);
     }
 
     /**

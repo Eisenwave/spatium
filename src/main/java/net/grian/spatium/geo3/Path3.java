@@ -1,12 +1,13 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Path3ImplBezier;
 import net.grian.spatium.impl.Path3ImplCircle;
 import net.grian.spatium.impl.Path3ImplLinear;
 import net.grian.spatium.impl.Ray3Impl;
 
-public interface Path3 extends SpatiumObject {
+import java.io.Serializable;
+
+public interface Path3 extends Serializable, Cloneable {
 
     /**
      * Creates a new circular path on a sphere with equal diameter as the sphere. This circular path is the

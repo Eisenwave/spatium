@@ -1,10 +1,10 @@
 package net.grian.spatium.transform;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.QuaternionImpl;
-import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -15,7 +15,7 @@ import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
  *     <br>{@code w + xi + yj + zk}
  * <p/>
  */
-public interface Quaternion extends SpatiumObject {
+public interface Quaternion extends Serializable, Cloneable {
 
     /**
      * Creates a new quaternion from vector coordinates and a scale.
@@ -280,7 +280,7 @@ public interface Quaternion extends SpatiumObject {
             case 1: return getY();
             case 2: return getZ();
             case 3: return getW();
-            default: throw new MatrixIndexOutOfBoundsException("quaternion does not have "+index+"th number");
+            default: throw new IndexOutOfBoundsException("quaternion does not have "+index+"th number");
         }
     }
 

@@ -112,9 +112,14 @@ public class Triangle3Impl implements Triangle3 {
 
     @Override
     public Triangle3 scale(double x, double y, double z) {
-        ax *= x; ay *= y; az *= z;
-        bx *= x; by *= y; az *= z;
-        cx *= x; cy *= y; cz *= z;
+        final double
+            cenX = (ax + bx + cx) / 3,
+            cenY = (ay + by + cy) / 3,
+            cenZ = (az + bz + cz) / 3;
+    
+        ax = (ax - cenX) * x; bx = (bx - cenX) * x; cx = (cx = cenX) * x;
+        ay = (ay - cenY) * y; by = (by - cenY) * y; cy = (cy = cenY) * y;
+        az = (az - cenZ) * z; bz = (bz - cenZ) * z; cz = (cz = cenZ) * z;
         return this;
     }
     

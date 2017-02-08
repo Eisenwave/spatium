@@ -5,10 +5,12 @@ import net.grian.spatium.impl.Triangle3Impl;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.transform.Transformation;
 
+import java.io.Serializable;
+
 /**
  * A 3D-Triangle3 defined by 3 points.
  */
-public interface Triangle3 extends Polygon3, Area {
+public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
 
     static Triangle3 fromPoints(Vector3 a, Vector3 b, Vector3 c) {
         return new Triangle3Impl(a, b, c);
@@ -213,6 +215,7 @@ public interface Triangle3 extends Polygon3, Area {
     
     abstract Triangle3 scale(double x, double y, double z);
 
+    @Override
     default Triangle3 scale(double factor) {
         return scale(factor, factor, factor);
     }

@@ -73,4 +73,13 @@ public interface Triangle2 extends Area {
     
     //SETTERS
     
+    abstract Triangle2 translate(double x, double y);
+    
+    abstract Triangle2 scale(double x, double y);
+    
+    @Override
+    default Triangle2 scale(double factor) {
+        return scale(factor, factor);
+    }
+    
 }

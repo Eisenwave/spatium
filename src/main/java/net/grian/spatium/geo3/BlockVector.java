@@ -1,11 +1,12 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.BlockVectorImpl;
+
+import java.io.Serializable;
 
 import static net.grian.spatium.util.PrimMath.*;
 
-public interface BlockVector extends SpatiumObject {
+public interface BlockVector extends Serializable, Cloneable {
 
     public static BlockVector create() {
         return new BlockVectorImpl();

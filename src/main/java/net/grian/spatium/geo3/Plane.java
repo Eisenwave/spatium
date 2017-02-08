@@ -1,9 +1,10 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.PlaneImpl;
 
-public interface Plane extends SpatiumObject {
+import java.io.Serializable;
+
+public interface Plane extends Serializable, Cloneable {
 
     /**
      * Constructs a new plane from a point on the plane and two vectors.

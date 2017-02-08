@@ -2,17 +2,17 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * A three-dimensional vector. Can be either karthesian or polar depending on
  * the implementation.
  */
-public interface Vector3 extends SpatiumObject {
+public interface Vector3 extends Serializable, Cloneable {
 
     /**
      * Creates a new Vector3.

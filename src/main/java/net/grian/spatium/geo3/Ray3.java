@@ -6,12 +6,13 @@ import net.grian.spatium.impl.Ray3Impl;
 import net.grian.spatium.iter.BlockIntervalIterator;
 import net.grian.spatium.iter.IntervalIterator;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * A ray, defined by an origin and a direction.
  */
-public interface Ray3 extends Path3 {
+public interface Ray3 extends Path3, Serializable, Cloneable {
 
     /**
      * Creates a new ray from 3 coordinates for the origin point and 3 coordinates for the direction vector.

@@ -6,6 +6,7 @@ import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class OrientedBB3Impl implements OrientedBB3 {
 
@@ -20,13 +21,13 @@ public class OrientedBB3Impl implements OrientedBB3 {
     @Nonnull
     private Matrix trans;
 
-    private OrientedBB3Impl(double x, double y, double z, double dx, double dy, double dz, Matrix transform) {
+    private OrientedBB3Impl(double x, double y, double z, double dx, double dy, double dz, @Nonnull Matrix transform) {
         if (dx < 0) throw new IllegalArgumentException("dx must be positive");
         if (dy < 0) throw new IllegalArgumentException("dy must be positive");
         if (dz < 0) throw new IllegalArgumentException("dz must be positive");
         this.cx = x;  this.cy = y;  this.cz = z;
         this.dx = dx; this.dy = dy; this.dz = dz;
-        this.trans = transform;
+        this.trans = Objects.requireNonNull(transform);
 
     }
 
@@ -128,7 +129,6 @@ public class OrientedBB3Impl implements OrientedBB3 {
                 Math.abs(relPoint.getZ()) <= dz;
     }
 
-
     //SETTERS
 
     @Override
@@ -144,7 +144,17 @@ public class OrientedBB3Impl implements OrientedBB3 {
         this.trans = Matrix.product(this.trans, transform);
         return this;
     }
-
+    
+    @Override
+    public OrientedBB3 scale(double factor) {
+        this.cx *= factor;
+        this.cy *= factor;
+        this.cz *= factor;
+        return this;
+    }
+    
+    //MISC
+    
     @Override
     public String toString() {
         return OrientedBB3.class.getSimpleName()+

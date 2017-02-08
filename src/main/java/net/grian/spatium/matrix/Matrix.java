@@ -2,9 +2,12 @@ package net.grian.spatium.matrix;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
+import net.grian.spatium.function.Double2DoubleFunction;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.Matrix2Impl;
 import net.grian.spatium.impl.MatrixImpl;
+import net.grian.spatium.util.PrimMath;
+import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
@@ -383,6 +386,47 @@ public interface Matrix {
             result = product(result, matrix);
 
         return result;
+    }
+    
+    /**
+     * <p>
+     *     Runs the aho algorithm on a given adjacency matrix with given accumulative and path-operations.
+     * </p>
+     * <p>
+     *     Note the following requirements for the operations: <ul>
+     *         <li>the accumulative operation must be commutative (order irrelevant)</li>
+     *         <li>both operations must be associative</li>
+     *     </ul>
+     * </p>
+     *
+     * @param matrix the matrix
+     * @param accuOp the accumulative operation
+     * @param pathOp the path operation
+     */
+    @Contract("null,null,null -> fail")
+    public static void aho(Matrix matrix, Double2DoubleFunction accuOp, Double2DoubleFunction pathOp) {
+        final int n = matrix.getRows();
+        if (n != matrix.getColumns())
+            throw new MatrixDimensionsException("matrix must be square");
+        
+        for (int k = 0; k<n; k++) {
+            for (int i = 0; i<n; i++) for (int j = 0; j<n; j++) {
+                if (i == k || j == k) continue;
+                double val = pathOp.apply(matrix.get(i, k), matrix.get(k, j));
+                double set = accuOp.apply(matrix.get(i, j), val);
+                matrix.set(i, j, set);
+            }
+        }
+    }
+    
+    /**
+     * Runs the Floyd-Warshall algorithm on a given adjacency matrix.
+     *
+     * @param matrix the matrix
+     */
+    @Contract("null -> fail")
+    public static void floydWarshall(Matrix matrix) {
+        aho(matrix, PrimMath::min, (a, b) -> a+b);
     }
 
     /**

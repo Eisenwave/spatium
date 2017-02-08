@@ -3,6 +3,8 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Slab3Impl;
 
+import java.io.Serializable;
+
 /**
  * <p>
  *     A pair of parallel planes in <code>R<sup>3</sup></code>, provided in the form:
@@ -16,7 +18,7 @@ import net.grian.spatium.impl.Slab3Impl;
  *     A slab is an infinite but enclosed space with infinite volume and surface area.
  * </p>
  */
-public interface Slab3 {
+public interface Slab3 extends Serializable, Cloneable {
 
     /**
      * Constructs a new slab from two plane equations (general form).

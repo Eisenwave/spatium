@@ -3,11 +3,12 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.impl.BlockSelectionImpl;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import static net.grian.spatium.util.PrimMath.*;
 
-public interface BlockSelection extends Space, Iterable<BlockVector> {
+public interface BlockSelection extends Space, Iterable<BlockVector>, Serializable, Cloneable {
 
     /**
      * Creates a new bounding box between two points.

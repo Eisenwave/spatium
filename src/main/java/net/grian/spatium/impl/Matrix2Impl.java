@@ -1,7 +1,6 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.matrix.Matrix;
-import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
 public class Matrix2Impl implements Matrix {
 
@@ -22,7 +21,6 @@ public class Matrix2Impl implements Matrix {
 
     @Override
     public double get(int i, int j) {
-        validate(i, j);
         return content[i*2 + j];
     }
 
@@ -31,7 +29,7 @@ public class Matrix2Impl implements Matrix {
         switch (i) {
             case 0: return new double[] {content[0], content[1]};
             case 1: return new double[] {content[2], content[3]};
-            default: throw new MatrixIndexOutOfBoundsException(i+" must be 0-1");
+            default: throw new IndexOutOfBoundsException(i+" must be 0-1");
         }
     }
 
@@ -40,7 +38,7 @@ public class Matrix2Impl implements Matrix {
         switch (j) {
             case 0: return new double[] {content[0], content[2]};
             case 1: return new double[] {content[1], content[3]};
-            default: throw new MatrixIndexOutOfBoundsException(j+" must be 0-1");
+            default: throw new IndexOutOfBoundsException(j+" must be 0-1");
         }
     }
 
@@ -76,16 +74,12 @@ public class Matrix2Impl implements Matrix {
 
     @Override
     public Matrix set(int i, int j, double value) {
-        validate(i, j);
         content[i*2 + j] = value;
         return this;
     }
 
     @Override
     public Matrix swap(int i0, int j0, int i1, int j1) {
-        validate(i0, j0);
-        validate(i1, j1);
-
         final int from = i0*2 + j0, to = i1*2 + j1;
 
         double swap = content[to];
@@ -138,7 +132,13 @@ public class Matrix2Impl implements Matrix {
         content[3] *= factor;
         return this;
     }
-
+    
+    @Override
+    public String toString() {
+        return "[["+content[0]+","+content[1]+"],["+content[2]+","+content[3]+"]]";
+    }
+    
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Matrix clone() {
         return new Matrix2Impl(this);
@@ -148,23 +148,16 @@ public class Matrix2Impl implements Matrix {
 
     private void validateCol(int col) {
         if (col < 0)
-            throw new MatrixIndexOutOfBoundsException("j="+col+" < 0");
+            throw new IndexOutOfBoundsException("j="+col+" < 0");
         if (col >= 2)
-            throw new MatrixIndexOutOfBoundsException("j="+col+" >= "+2+" columns");
+            throw new IndexOutOfBoundsException("j="+col+" >= "+2+" columns");
     }
 
     private void validateRow(int row) {
         if (row < 0)
-            throw new MatrixIndexOutOfBoundsException("i="+row+" < 0");
+            throw new IndexOutOfBoundsException("i="+row+" < 0");
         if (row >= 2)
-            throw new MatrixIndexOutOfBoundsException("i="+row+" >= "+2+" rows");
-    }
-
-    private void validate(int row, int col) {
-        if (row < 0 || row >= 2)
-            throw new MatrixIndexOutOfBoundsException("row  "+row+" < 0 or >= "+2);
-        if (col < 0 || col >= 2)
-            throw new MatrixIndexOutOfBoundsException("col "+col+" < 0 or >= "+2);
+            throw new IndexOutOfBoundsException("i="+row+" >= "+2+" rows");
     }
 
 }

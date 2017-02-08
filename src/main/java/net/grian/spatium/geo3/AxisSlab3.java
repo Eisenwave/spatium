@@ -3,7 +3,9 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.impl.AxisSlab33Impl;
 
-public interface AxisSlab3 extends Slab3 {
+import java.io.Serializable;
+
+public interface AxisSlab3 extends Slab3, Serializable, Cloneable {
 
     public static AxisSlab3 create(Axis axis, double min, double max) {
         return new AxisSlab33Impl(axis, min, max);

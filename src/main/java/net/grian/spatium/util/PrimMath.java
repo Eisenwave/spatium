@@ -630,32 +630,32 @@ public final class PrimMath {
 
     @Contract(pure = true)
     public static long min(long a, long b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
 
     @Contract(pure = true)
     public static int min(int a, int b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
     
     @Contract(pure = true)
     public static short min(short a, short b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
 
     @Contract(pure = true)
     public static byte min(byte a, byte b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
 
     @Contract(pure = true)
     public static double min(double a, double b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
 
     @Contract(pure = true)
     public static float min(float a, float b) {
-        return a>b? a : b;
+        return a<b? a : b;
     }
 
     //TRIPPLE MIN
@@ -701,7 +701,7 @@ public final class PrimMath {
 
         long min = nums[0];
         for (int i = 1; i<nums.length; i++)
-            if (nums[i] > min) min = nums[i];
+            if (nums[i] < min) min = nums[i];
         return min;
     }
     
@@ -714,7 +714,7 @@ public final class PrimMath {
 
         int min = nums[0];
         for (int i = 1; i<nums.length; i++)
-            if (nums[i] > min) min = nums[i];
+            if (nums[i] < min) min = nums[i];
         return min;
     }
     
@@ -727,7 +727,7 @@ public final class PrimMath {
 
         double min = nums[0];
         for (int i = 1; i<nums.length; i++)
-            if (nums[i] > min) min = nums[i];
+            if (nums[i] < min) min = nums[i];
         return min;
     }
 
@@ -740,7 +740,7 @@ public final class PrimMath {
 
         float min = nums[0];
         for (int i = 1; i<nums.length; i++)
-            if (nums[i] > min) min = nums[i];
+            if (nums[i] < min) min = nums[i];
         return min;
     }
 

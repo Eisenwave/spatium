@@ -1,5 +1,6 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.geo2.Area;
 import net.grian.spatium.geo2.Triangle2;
 import net.grian.spatium.geo2.Vector2;
 
@@ -40,6 +41,24 @@ public class Triangle2Impl implements Triangle2 {
         return Vector2.fromXY(
             (ax + bx + cx) /3,
             (ay + by + cy) /3);
+    }
+    
+    @Override
+    public Triangle2 translate(double x, double y) {
+        ax += x; bx += x; cx += x;
+        ay += y; by += y; cy += y;
+        return this;
+    }
+    
+    @Override
+    public Triangle2 scale(double x, double y) {
+        final double
+            cenX = (ax + bx + cx) / 3,
+            cenY = (ay + by + cy) / 3;
+        
+        ax = (ax - cenX) * x; bx = (bx - cenX) * x; cx = (cx = cenX) * x;
+        ay = (ay - cenY) * y; by = (by - cenY) * y; cy = (cy = cenY) * y;
+        return this;
     }
     
     @Override

@@ -3,10 +3,12 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.impl.OrientedBB3Impl;
 import net.grian.spatium.matrix.Matrix;
 
+import java.io.Serializable;
+
 /**
  * An oriented cuboid bounding box.
  */
-public interface OrientedBB3 extends Space {
+public interface OrientedBB3 extends Space, Serializable, Cloneable {
 
     /**
      * Constructs a new oriented bounding box from its center and dimensions.
@@ -134,14 +136,6 @@ public interface OrientedBB3 extends Space {
         return (x * y + x * z + y * z) * 2;
     }
 
-    //CHECKERS
-
-    public boolean contains(double x, double y, double z);
-
-    public default boolean contains(Vector3 point) {
-        return contains(point.getX(), point.getY(), point.getZ());
-    }
-
     //SETTERS
 
     public abstract OrientedBB3 move(double x, double y, double z);
@@ -163,5 +157,17 @@ public interface OrientedBB3 extends Space {
     public default OrientedBB3 rotateZ(double angle) {
         return transform(Matrix.fromRotZ(angle));
     }
-
+    
+    @Override
+    public abstract OrientedBB3 scale(double factor);
+    
+    /**
+     * Returns the bounding box as a AABB without its transformations.
+     *
+     * @return the untransformed aabb of this obb
+     */
+    public default AxisAlignedBB3 toAABB() {
+        return AxisAlignedBB3.createCuboid(getCenter(), getSizeX(), getSizeY(), getSizeZ());
+    }
+    
 }

@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PrimMathTest {
-
+    
     public final static float
     EXACT_POS= 2F,
     EXACT_NEG = -2F,

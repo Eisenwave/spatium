@@ -4,7 +4,9 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.impl.SphereImpl;
 
-public interface Sphere extends Space {
+import java.io.Serializable;
+
+public interface Sphere extends Space, Serializable, Cloneable {
 
     /**
      * Constructs a new sphere.
@@ -180,7 +182,10 @@ public interface Sphere extends Space {
      * @param factor the factor
      * @return itself
      */
-    public abstract Sphere scale(double factor);
+    @Override
+    public default Sphere scale(double factor) {
+        return setRadius(getRadius() * factor);
+    }
 
     /**
      * Sets the radius of the sphere.

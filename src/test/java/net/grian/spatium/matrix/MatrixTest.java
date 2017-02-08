@@ -7,6 +7,38 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MatrixTest {
+    
+    @Test
+    public void floydWarshall() {
+        final double inf = Double.POSITIVE_INFINITY;
+        
+        Matrix matrix = Matrix.create(4, 4,
+            0,   inf, -2, inf,
+            4,     0,  3, inf,
+            inf, inf,  0,   2,
+            inf,  -1, inf,  0);
+        Matrix expected = Matrix.create(4, 4,
+            0, -1, -2, 0,
+            4,  0,  2, 4,
+            5,  1,  0, 2,
+            3, -1,  1, 0);
+        
+        Matrix.floydWarshall(matrix);
+        assertEquals(matrix, expected);
+    }
+    
+    @Test
+    public void pow() {
+        Matrix matrix = Matrix.create(5, 5,
+            3, 0, 0, -2, 4,
+            0, 2, 0, 0, 0,
+            0, -1, 0, 5, -3,
+            -4, 0, 1, 0, 6,
+            0, -1, 0, 3, 2);
+        
+        matrix.scale(2);
+        System.out.println(matrix.getDeterminant());
+    }
 
     @Test
     public void create() throws Exception {

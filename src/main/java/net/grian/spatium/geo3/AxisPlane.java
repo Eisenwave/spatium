@@ -4,10 +4,12 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.impl.AxisPlaneImpl;
 
+import java.io.Serializable;
+
 /**
  * An axis aligned plane.
  */
-public interface AxisPlane extends Plane {
+public interface AxisPlane extends Plane, Serializable, Cloneable {
 
     /**
      * Creates a new plane, as seen in the general form:

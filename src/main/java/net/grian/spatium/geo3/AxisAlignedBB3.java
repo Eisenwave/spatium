@@ -3,7 +3,8 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBB3Impl;
-import org.jetbrains.annotations.Contract;
+
+import java.io.Serializable;
 
 import static net.grian.spatium.util.PrimMath.*;
 import static net.grian.spatium.enums.Direction.*;
@@ -11,7 +12,7 @@ import static net.grian.spatium.enums.Direction.*;
 /**
  * An axis aligned bounding box, or the cubical space between two points.
  */
-public interface AxisAlignedBB3 extends Space {
+public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
 
     /**
      * Creates a new bounding box between two points.
@@ -27,6 +28,16 @@ public interface AxisAlignedBB3 extends Space {
     public static AxisAlignedBB3 fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
         return new AxisAlignedBB3Impl(xa, ya, za, xb, yb, zb);
     }
+    
+    public static AxisAlignedBB3 createCuboid(Vector3 center, double x, double y, double z) {
+        return new AxisAlignedBB3Impl(
+            center.getX() - x,
+            center.getY() - y,
+            center.getZ() - z,
+            center.getX() + x,
+            center.getY() + y,
+            center.getZ() + z);
+    }
 
     /**
      * Creates a new cubical axis aligned bounding box around a center and of a set size. Each side of the cube will
@@ -37,13 +48,7 @@ public interface AxisAlignedBB3 extends Space {
      * @return a new axis aligned bounding box
      */
     public static AxisAlignedBB3 createCube(Vector3 center, double size) {
-        return new AxisAlignedBB3Impl(
-            center.getX() - size,
-            center.getY() - size,
-            center.getZ() - size,
-            center.getX() + size,
-            center.getY() + size,
-            center.getZ() + size);
+        return createCuboid(center, size, size, size);
     }
 
     /**
@@ -223,6 +228,7 @@ public interface AxisAlignedBB3 extends Space {
      * @param factor the scale factor
      * @return itself
      */
+    @Override
     public default AxisAlignedBB3 scale(double factor) {
         return scale(factor, factor, factor);
     }

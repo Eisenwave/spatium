@@ -2,6 +2,7 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
+import net.grian.spatium.geo3.Space;
 import net.grian.spatium.iter.BlockIterator;
 
 import java.util.Iterator;
@@ -129,7 +130,12 @@ public class BlockSelectionImpl implements BlockSelection {
         }
         return this;
     }
-
+    
+    @Override
+    public Space scale(double factor) {
+        return scale((int) factor, (int) factor, (int) factor);
+    }
+    
     @Override
     public BlockSelection grow(int x, int y, int z) {
         //TODO implement this

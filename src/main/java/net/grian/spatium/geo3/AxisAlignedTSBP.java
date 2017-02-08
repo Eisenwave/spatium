@@ -1,11 +1,12 @@
 package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.SpatiumObject;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.enums.Direction;
 
-public interface AxisAlignedTSBP extends SpatiumObject {
+import java.io.Serializable;
+
+public interface AxisAlignedTSBP extends Serializable, Cloneable {
 
     // GETTERS
 

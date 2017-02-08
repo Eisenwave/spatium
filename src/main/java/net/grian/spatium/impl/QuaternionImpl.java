@@ -2,7 +2,6 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.transform.Quaternion;
 import net.grian.spatium.geo3.Vector3;
-import net.grian.spatium.matrix.MatrixIndexOutOfBoundsException;
 
 
 public class QuaternionImpl implements Quaternion {
@@ -91,7 +90,7 @@ public class QuaternionImpl implements Quaternion {
             case 1: return y;
             case 2: return z;
             case 3: return w;
-            default: throw new MatrixIndexOutOfBoundsException("quaternion does not have index "+index);
+            default: throw new IndexOutOfBoundsException("quaternion does not have index "+index);
         }
     }
 
@@ -191,6 +190,7 @@ public class QuaternionImpl implements Quaternion {
 
     // MISC
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Quaternion clone() {
         return new QuaternionImpl(this);
