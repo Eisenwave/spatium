@@ -1,10 +1,24 @@
 package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.impl.ConeImpl;
 
 import java.io.Serializable;
 
 public interface Cone extends Space, Cloneable, Serializable {
+    
+    static Cone fromApexDirRadius(double x, double y, double z, double dx, double dy, double dz, double r) {
+        return new ConeImpl(x, y, z, dx, dy, dz, r);
+    }
+    
+    static Cone fromApexDirRadius(Vector3 apex, Vector3 dir, double r) {
+        return fromApexDirRadius(apex.getX(), apex.getY(), apex.getZ(), dir.getX(), dir.getY(), dir.getZ(), r);
+    }
+    
+    static Cone fromApexDirAperture(Vector3 apex, Vector3 dir, double aperture) {
+        double r = dir.getLength() * Math.atan(aperture / 2);
+        return fromApexDirRadius(apex.getX(), apex.getY(), apex.getZ(), dir.getX(), dir.getY(), dir.getZ(), r);
+    }
     
     /**
      * Returns the tip of this cone, commonly known as the Apex.
@@ -88,19 +102,21 @@ public interface Cone extends Space, Cloneable, Serializable {
         Vector3
             apex = getApex(),
             apexToPoint = Vector3.fromXYZ(x, y, z).subtract(apex),
-            dir = getDirection().normalize();
+            axis = getDirection().normalize();
         
         //distance (must be between 0 and height) of the point (projected onto cone axis) to the apex
-        double coneDist = apexToPoint.dot(dir) / apexToPoint.getLength();
+        double coneDist = apexToPoint.dot(axis);
         if (coneDist < 0 || coneDist > height) return false;
         
         double
-            //radius between 0 and base radius
-            coneR = (coneDist / height) * getBaseRadius(),
+            //radius between at coneDist (between 0 and base radius)
+            maxRadius = (coneDist / height) * getBaseRadius(),
             //note that apexToPoint and dir are being mutated here which is irrelevant in this situation though
-            orthoDist = apexToPoint.subtract(dir.multiply(coneDist)).getLength();
-    
-        return orthoDist < coneR;
+            localRadius = apexToPoint
+                .subtract(axis.multiply(coneDist))
+                .getLength();
+        
+        return localRadius <= maxRadius;
     }
     
     //SETTERS

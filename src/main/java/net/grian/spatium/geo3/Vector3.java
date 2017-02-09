@@ -296,7 +296,12 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z coordinate of the vector
      * @return the cross-product of this and another vector
      */
-    abstract Vector3 cross(double x, double y, double z);
+    default Vector3 cross(double x, double y, double z) {
+        return fromXYZ(
+            getY() * z - getZ() * y,
+            getZ() * x - getX() * z,
+            getX() * y - getY() * x);
+    }
 
     /**
      * Returns the cross-product of this and another vector.
@@ -505,7 +510,9 @@ public interface Vector3 extends Serializable, Cloneable {
      * @return itself
      * @see #normalize()
      */
-    abstract Vector3 setLength(double length);
+    default Vector3 setLength(double length) {
+        return multiply(length / getLength());
+    }
 
     //ROTATIONS
     
