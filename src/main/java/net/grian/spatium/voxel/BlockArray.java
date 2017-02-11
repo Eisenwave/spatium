@@ -1,6 +1,7 @@
 package net.grian.spatium.voxel;
 
 import net.grian.spatium.anno.MinecraftSpecific;
+import net.grian.spatium.array.AbstractArray3;
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
@@ -8,7 +9,7 @@ import net.grian.spatium.geo3.BlockVector;
 import java.io.Serializable;
 
 @MinecraftSpecific
-public class BlockArray implements BitArray3, Serializable, Cloneable {
+public class BlockArray extends AbstractArray3 implements BitArray3, Serializable, Cloneable {
 
     /** store block biomes */
     public final static int
@@ -16,25 +17,24 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
     /** store block light */
     FLAG_LIGHT = 1 << 1;
 
-    private final short[][][] arrayId;
-    private final byte[][][] arrayData;
+    private final short[] arrayId;
+    private final byte[] arrayData;
 
-    private final byte[][][] arrayBiome;
-    private final byte[][][] arrayLight;
+    private final byte[] arrayBiome;
+    private final byte[] arrayLight;
 
-    private final int sizeX, sizeY, sizeZ, flags;
+    private final int flags;
 
     public BlockArray(int x, int y, int z, int flags) {
-        if (x == 0 || y == 0 || z == 0) throw new IllegalArgumentException("size 0 voxel array");
-        this.sizeX = x;
-        this.sizeY = y;
-        this.sizeZ = z;
+        super(x, y, z);
+        final int length = x * y * z;
+        if (length == 0) throw new IllegalArgumentException("size 0 voxel array");
+        
         this.flags = flags;
-
-        this.arrayId = new short[x][y][z];
-        this.arrayData = new byte[x][y][z];
-        this.arrayBiome = (flags & FLAG_BIOMES) != 0? new byte[x][y][z] : null;
-        this.arrayLight = (flags & FLAG_LIGHT)  != 0? new byte[x][y][z] : null;
+        this.arrayId = new short[length];
+        this.arrayData = new byte[length];
+        this.arrayBiome = (flags & FLAG_BIOMES) != 0? new byte[length] : null;
+        this.arrayLight = (flags & FLAG_LIGHT)  != 0? new byte[length] : null;
     }
 
     public BlockArray(int x, int y, int z) {
@@ -120,7 +120,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      * @return the block at the specified position
      */
     public BlockKey getBlock(int x, int y, int z) {
-        return new BlockKey(arrayId[x][y][z], arrayData[x][y][z]);
+        return new BlockKey(arrayId[indexOf(x, y, z)], arrayData[indexOf(x, y, z)]);
     }
 
     /**
@@ -130,9 +130,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      * @return the block at the specified position
      */
     public BlockKey getBlock(BlockVector v) {
-        return new BlockKey(
-                arrayId[v.getX()][v.getY()][v.getZ()],
-                arrayData[v.getX()][v.getY()][v.getZ()]);
+        return getBlock(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -144,7 +142,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      * @return the block id at the specified position
      */
     public short getId(int x, int y, int z) {
-        return arrayId[x][y][z];
+        return arrayId[indexOf(x, y, z)];
     }
 
     /**
@@ -166,7 +164,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      * @return the block data at the specified position
      */
     public byte getData(int x, int y, int z) {
-        return arrayData[x][y][z];
+        return arrayData[indexOf(x, y, z)];
     }
 
     /**
@@ -190,7 +188,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      */
     public int getBiome(int x, int y, int z) {
         if (!hasBiomes()) throw new IllegalStateException("block array stores no biomes");
-        return arrayBiome[x][y][z];
+        return arrayBiome[indexOf(x, y, z)];
     }
 
     /**
@@ -204,7 +202,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
      */
     public byte getBlockLight(int x, int y, int z) {
         if (!hasLight()) throw new IllegalStateException("block array stores no light");
-        return arrayLight[x][y][z];
+        return arrayLight[indexOf(x, y, z)];
     }
 
     //CHECKERS
@@ -257,7 +255,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
     //SETTERS
 
     public void setId(int x, int y, int z, short id) {
-        arrayId[x][y][z] = id;
+        arrayId[indexOf(x, y, z)] = id;
     }
 
     public void setId(BlockVector pos, short id) {
@@ -265,7 +263,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
     }
 
     public void setData(int x, int y, int z, byte data) {
-        arrayData[x][y][z] = data;
+        arrayData[indexOf(x, y, z)] = data;
     }
 
     public void setData(BlockVector pos, byte data) {
@@ -273,8 +271,8 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
     }
 
     public void setBlock(int x, int y, int z, short id, byte data) {
-        arrayId[x][y][z] = id;
-        arrayData[x][y][z] = data;
+        arrayId[indexOf(x, y, z)] = id;
+        arrayData[indexOf(x, y, z)] = data;
     }
 
     public void setBlock(int x, int y, int z, BlockKey block) {
@@ -287,7 +285,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
 
     public void setBiome(int x, int y, int z, int biomeId) {
         if (!hasBiomes()) throw new IllegalArgumentException("this block array has no biomes");
-        arrayBiome[x][y][z] = (byte) biomeId;
+        arrayBiome[indexOf(x, y, z)] = (byte) biomeId;
     }
 
     public void setBiome(BlockVector pos, int biomeId) {
@@ -296,7 +294,7 @@ public class BlockArray implements BitArray3, Serializable, Cloneable {
 
     public void setBlockLight(int x, int y, int z, byte level) {
         if (!hasLight()) throw new IllegalArgumentException("this block array has no block light");
-        arrayLight[x][y][z] = level;
+        arrayLight[indexOf(x, y, z)] = level;
     }
 
     public void setBlockLight(BlockVector pos, byte level) {

@@ -1,7 +1,9 @@
 package net.grian.spatium.voxel;
 
+import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.util.ColorMath;
+import net.grian.spatium.util.RuntimeUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,6 +27,27 @@ public class VoxelArrayTest {
         array.fill(ColorMath.SOLID_RED);
 
         Assert.assertEquals(3*5*7, array.size());
+    }
+    
+    @Test
+    public void memoryUsage() throws Exception {
+        Object[] trap = new Object[2];
+        {
+            System.gc();
+            double megsBefore = RuntimeUtil.usedMemory() / CacheMath.MILLION;
+            trap[0] = new int[10][10][10];
+            System.gc();
+            double megsAfter = RuntimeUtil.usedMemory() / CacheMath.MILLION;
+            System.out.println(megsBefore+" MB -> "+megsAfter+" MB");
+        }
+        {
+            System.gc();
+            double megsBefore = RuntimeUtil.usedMemory() / CacheMath.MILLION;
+            trap[1] = new int[10*10*10];
+            System.gc();
+            double megsAfter = RuntimeUtil.usedMemory() / CacheMath.MILLION;
+            System.out.println(megsBefore+" MB -> "+megsAfter+" MB");
+        }
     }
 
     @Test

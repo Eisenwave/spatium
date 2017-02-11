@@ -14,6 +14,10 @@ public class AbstractArray2 implements Serializable {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
+    
+    protected int indexOf(int x, int y) {
+        return x + y*sizeX;
+    }
 
     /**
      * Returns the size of the array in its first dimension.

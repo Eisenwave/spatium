@@ -1,5 +1,6 @@
 package net.grian.spatium.voxel;
 
+import net.grian.spatium.array.AbstractArray3;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.geo3.BlockSelection;
@@ -12,18 +13,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
+public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, Serializable, Iterable<VoxelArray.Voxel> {
 
-    private final int[][][] voxels;
-
-    private final int sizeX, sizeY, sizeZ;
+    private final int[] voxels;
 
     public VoxelArray(int x, int y, int z) {
+        super(x, y, z);
         if (x == 0 || y == 0 || z == 0) throw new IllegalArgumentException("size 0 voxel array");
-        this.voxels = new int[x][y][z];
-        this.sizeX = x;
-        this.sizeY = y;
-        this.sizeZ = z;
+        this.voxels = new int[x * y * z];
     }
 
     /**
@@ -47,7 +44,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
         for (int x = 0; x<limX; x++)
             for (int y = 0; y<limY; y++)
                 for (int z = 0; z<limZ; z++)
-                    voxels[x][y][z] = rgb;
+                    voxels[indexOf(x, y, z)] = rgb;
     }
 
     /**
@@ -159,7 +156,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
      * @return the color of the voxel at the position
      */
     public int getRGB(int x, int y, int z) {
-        return voxels[x][y][z];
+        return voxels[indexOf(x, y, z)];
     }
 
     /**
@@ -277,7 +274,7 @@ public class VoxelArray implements BitArray3, Cloneable, Serializable, Iterable<
      * @param rgb the voxel color
      */
     public void setRGB(int x, int y, int z, int rgb) {
-        voxels[x][y][z] = rgb;
+        voxels[indexOf(x, y, z)] = rgb;
     }
 
     /**

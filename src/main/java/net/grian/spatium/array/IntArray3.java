@@ -7,12 +7,12 @@ import java.util.function.Consumer;
 
 public class IntArray3 extends AbstractArray3 implements Iterable<Integer> {
 
-    private final int[][][] content;
+    private final int[] content;
 
     @SuppressWarnings("unchecked")
     public IntArray3(int x, int y, int z) {
         super(x,y,z);
-        this.content = new int[x][y][z];
+        this.content = new int[x * y * z];
     }
 
     /**
@@ -24,7 +24,7 @@ public class IntArray3 extends AbstractArray3 implements Iterable<Integer> {
      * @return the element at the coordinates
      */
     public int get(int x, int y, int z) {
-        return content[x][y][z];
+        return content[indexOf(x, y, z)];
     }
 
     /**
@@ -36,7 +36,7 @@ public class IntArray3 extends AbstractArray3 implements Iterable<Integer> {
      * @param value the new value
      */
     public void set(int x, int y, int z, int value) {
-        content[x][y][z] = value;
+        content[indexOf(x, y, z)] = value;
     }
 
     @Override

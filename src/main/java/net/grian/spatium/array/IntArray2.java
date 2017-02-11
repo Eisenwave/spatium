@@ -6,11 +6,11 @@ import java.util.function.IntConsumer;
 
 public class IntArray2 extends AbstractArray2 implements Iterable<Integer> {
 
-    private final int[][] content;
+    private final int[] content;
 
     public IntArray2(int x, int y) {
         super(x, y);
-        content = new int[x][y];
+        content = new int[x * y];
     }
 
     /**
@@ -21,7 +21,7 @@ public class IntArray2 extends AbstractArray2 implements Iterable<Integer> {
      * @return the element at the coordinates
      */
     public int get(int x, int y) {
-        return content[x][y];
+        return content[indexOf(x, y)];
     }
 
     /**
@@ -32,7 +32,7 @@ public class IntArray2 extends AbstractArray2 implements Iterable<Integer> {
      * @param value the new value
      */
     public void set(int x, int y, int value) {
-        content[x][y] = value;
+        content[indexOf(x, y)] = value;
     }
 
     @Override

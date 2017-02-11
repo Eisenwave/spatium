@@ -426,7 +426,7 @@ public interface Matrix {
      */
     @Contract("null -> fail")
     public static void floydWarshall(Matrix matrix) {
-        aho(matrix, PrimMath::min, (a, b) -> a+b);
+        aho(matrix, PrimMath::min, (a, b) -> a + b);
     }
 
     /**

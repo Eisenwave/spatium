@@ -16,6 +16,10 @@ public abstract class AbstractArray3 implements Serializable {
         this.sizeY = sizeY;
         this.sizeZ = sizeZ;
     }
+    
+    protected int indexOf(int x, int y, int z) {
+        return z*sizeX*sizeY + y*sizeX + x;
+    }
 
     /**
      * Returns the size of the array in its first dimension.
