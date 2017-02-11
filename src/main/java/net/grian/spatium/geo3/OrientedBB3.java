@@ -161,13 +161,17 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
     @Override
     public abstract OrientedBB3 scale(double factor);
     
+    //MISC
+    
+    abstract OrientedBB3 clone();
+    
     /**
      * Returns the bounding box as a AABB without its transformations.
      *
      * @return the untransformed aabb of this obb
      */
     public default AxisAlignedBB3 toAABB() {
-        return AxisAlignedBB3.createCuboid(getCenter(), getSizeX(), getSizeY(), getSizeZ());
+        return AxisAlignedBB3.fromCenterDims(getCenter(), getSizeX()/2, getSizeY()/2, getSizeZ()/2);
     }
     
 }

@@ -5,9 +5,9 @@ import net.grian.spatium.geo3.Plane;
 import net.grian.spatium.geo3.Sphere;
 import net.grian.spatium.geo3.Vector3;
 
-public final class Surfaces {
+public final class Normals {
 
-    private Surfaces() {}
+    private Normals() {}
 
     /**
      * <p>
@@ -21,7 +21,7 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 findNormal(Sphere sphere, Vector3 point) {
+    public Vector3 onSphere(Sphere sphere, Vector3 point) {
         return Vector3.between(sphere.getCenter(), point);
     }
 
@@ -34,7 +34,7 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 findNormal(AxisAlignedBB3 box, Vector3 point) {
+    public Vector3 onAABB(AxisAlignedBB3 box, Vector3 point) {
         return box.getClosestSide(point).vector();
     }
 
@@ -51,7 +51,7 @@ public final class Surfaces {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 findNormal(Plane plane, Vector3 point) {
+    public Vector3 onPlane(Plane plane, Vector3 point) {
         return plane.signedDistanceTo(point) > 0?
                 plane.getNormal() :
                 plane.getNormal().negate();

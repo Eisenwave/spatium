@@ -28,7 +28,6 @@ public class OrientedBB3Impl implements OrientedBB3 {
         this.cx = x;  this.cy = y;  this.cz = z;
         this.dx = dx; this.dy = dy; this.dz = dz;
         this.trans = Objects.requireNonNull(transform);
-
     }
 
     public OrientedBB3Impl(Vector3 center, double dx, double dy, double dz, Vector3 u, Vector3 v, Vector3 w) {
@@ -49,8 +48,17 @@ public class OrientedBB3Impl implements OrientedBB3 {
         this(
                 x, y, z,
                 dx, dy, dz,
-                Matrix.identity(3)
-        );
+                Matrix.identity(3));
+    }
+    
+    public OrientedBB3Impl(OrientedBB3Impl copyOf) {
+        this.cx = copyOf.cx;
+        this.cy = copyOf.cy;
+        this.cz = copyOf.cz;
+        this.dx = copyOf.dx;
+        this.dy = copyOf.dy;
+        this.dz = copyOf.dz;
+        this.trans = copyOf.trans.clone();
     }
 
     @Override
@@ -154,6 +162,12 @@ public class OrientedBB3Impl implements OrientedBB3 {
     }
     
     //MISC
+    
+    
+    @Override
+    public OrientedBB3 clone() {
+        return new OrientedBB3Impl(this);
+    }
     
     @Override
     public String toString() {

@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBB3Impl;
+import org.jetbrains.annotations.Contract;
 
 import java.io.Serializable;
 
@@ -29,7 +30,16 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
         return new AxisAlignedBB3Impl(xa, ya, za, xb, yb, zb);
     }
     
-    public static AxisAlignedBB3 createCuboid(Vector3 center, double x, double y, double z) {
+    /**
+     * Creates a new bounding box from a center and the half-sizes on each axis.
+     *
+     * @param center the center
+     * @param x the half-x-size
+     * @param y the half-y-size
+     * @param z the half-z-size
+     * @return a new bounding box
+     */
+    public static AxisAlignedBB3 fromCenterDims(Vector3 center, double x, double y, double z) {
         return new AxisAlignedBB3Impl(
             center.getX() - x,
             center.getY() - y,
@@ -47,8 +57,8 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param size   the size of the cube
      * @return a new axis aligned bounding box
      */
-    public static AxisAlignedBB3 createCube(Vector3 center, double size) {
-        return createCuboid(center, size, size, size);
+    public static AxisAlignedBB3 fromCenterDims(Vector3 center, double size) {
+        return fromCenterDims(center, size, size, size);
     }
 
     /**

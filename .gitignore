@@ -1,9 +1,6 @@
-*.class
-
 *.iml
 
 # Package Files #
-*.jar
 !/libs/*
 *.war
 *.ear
@@ -12,17 +9,14 @@
 
 .DS_Store
 
-.idea
+
 
 target
-target/*
 classes/*
 
+.idea
 .settings
-.settings/*
-
 .project
-
 .classpath
 
 Wrapper/log

@@ -9,7 +9,7 @@ public final class Strings {
 	private Strings() {}
 	
 	public static String[] append(String[] tail, String... head) {
-		return PrimArrays.append(tail, head);
+		return PrimArrays.contact(tail, head);
 	}
 	
 	public static String[] append(String[] tail, String head) {
@@ -144,72 +144,63 @@ public final class Strings {
 	
 	public static String join(String... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (String anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(char[]... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (char[] anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(Object... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (Object anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(long... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (long anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(int... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (int anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(short... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (short anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(char... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (char anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(double... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (double anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
 	
 	public static String join(float... array) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i<array.length; i++)
-			builder.append(array[i]);
+		for (float anArray : array) builder.append(anArray);
 		
 		return builder.toString();
 	}
@@ -224,8 +215,7 @@ public final class Strings {
 	
 	public static String joinStrings(Collection<String> collect) {
 		StringBuilder builder = new StringBuilder();
-		for (String str : collect)
-			builder.append(str);
+		collect.forEach(builder::append);
 		
 		return builder.toString();
 	}
@@ -241,9 +231,8 @@ public final class Strings {
 	public static String joinStrings(Collection<String> collect, String seperator) {
 		StringBuilder builder = new StringBuilder();
 		int i = 0;
-		Iterator<String> iter = collect.iterator();
-		while (iter.hasNext()) {
-			builder.append(iter.next());
+		for (String aCollect : collect) {
+			builder.append(aCollect);
 			if (++i < collect.size()) builder.append(seperator);
 		}
 		
@@ -476,7 +465,7 @@ public final class Strings {
 		String[] result = new String[0];
 		
 		for (String part : parts)
-			result = PrimArrays.append(result, split(part, length));
+			result = PrimArrays.contact(result, split(part, length));
 		
 		return result;
 	}

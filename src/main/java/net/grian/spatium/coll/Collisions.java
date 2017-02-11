@@ -2,7 +2,9 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.*;
+import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.util.PrimMath;
+import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
@@ -72,6 +74,22 @@ public final class Collisions {
             a.getMaxY() >= b.getMinY() &&
             a.getMinZ() <= b.getMaxZ() &&
             a.getMaxZ() >= b.getMinZ();
+    }
+    
+    /**
+     * Tests whether two {@link OrientedBB3}s collide/intersect.
+     *
+     * @param a the first bounding box
+     * @param b the second bounding box
+     * @return whether the boxes collide/intersect
+     */
+    public static boolean test(OrientedBB3 a, OrientedBB3 b) {
+        //inverse transform matrix of a allows for conversion of second box to local space of first box
+        //due to this, the first box can be seen as an AABB after transforming second box
+        Matrix toLocalTransform = a.getTransform().getInverse();
+        
+        //more simple AABB & OBB intersection test
+        return test(a.toAABB(), b.clone().transform(toLocalTransform));
     }
 
     /**
@@ -151,15 +169,8 @@ public final class Collisions {
      * @return whether the box and the sphere collide
      */
     public static boolean test(AxisAlignedBB3 box, Sphere sphere) {
-        double
-            cenX = sphere.getX(),
-            cenY = sphere.getY(),
-            cenZ = sphere.getZ(),
-            x = PrimMath.clamp(box.getMinX(), cenX, box.getMaxX()),
-            y = PrimMath.clamp(box.getMinY(), cenY, box.getMaxY()),
-            z = PrimMath.clamp(box.getMinZ(), cenZ, box.getMaxZ());
-        
-        return Spatium.hypot(x-cenX, y-cenY, z-cenZ) <= sphere.getRadiusSquared();
+        Vector3 closestPoint = clamp(sphere.getCenter(), box);
+        return sphere.contains(closestPoint);
     }
     
     /**
@@ -170,8 +181,10 @@ public final class Collisions {
      * @return whether the boxes collide
      */
     public static boolean test(AxisAlignedBB3 aabb, OrientedBB3 obb) {
-        Vector3 obbCen = obb.getCenter();
+        Vector3 closestPoint = clamp(obb.getCenter(), aabb);
+        return obb.contains(closestPoint);
         
+        /*
         //early and inexpensive cancel should the obb center be inside aabb
         if (aabb.contains(obbCen)) return true;
  
@@ -188,6 +201,20 @@ public final class Collisions {
         //t is larger than 1 if the closest point on the obb is outside the aabb
         //if t is smaller, the closest point is inside the aabb and the boxes intersect
         return t <= 1 + Spatium.EPSILON;
+        */
+    }
+    
+    @Contract(value = "_, _, _, _ -> !null", pure = true)
+    private static Vector3 clamp(double x, double y, double z, AxisAlignedBB3 bounds) {
+        return Vector3.fromXYZ(
+            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
+            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()),
+            PrimMath.clamp(bounds.getMinZ(), z, bounds.getMaxZ()));
+    }
+    
+    @Contract(value = "_, _ -> !null", pure = true)
+    private static Vector3 clamp(Vector3 point, AxisAlignedBB3 bounds) {
+        return clamp(point.getX(), point.getY(), point.getZ(), bounds);
     }
     
     /**
