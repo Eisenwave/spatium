@@ -8,6 +8,9 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../VoxelVert/pom.xml" />
+        <option value="$PROJECT_DIR$/../Torrens/pom.xml" />
+        <option value="$PROJECT_DIR$/../materia/pom.xml" />
+        <option value="$PROJECT_DIR$/../Utilities/pom.xml" />
       </list>
     </option>
   </component>

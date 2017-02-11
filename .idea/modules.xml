@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Torrens/Torrens.iml" filepath="$PROJECT_DIR$/../Torrens/Torrens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utilities/Utilities.iml" filepath="$PROJECT_DIR$/../Utilities/Utilities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../materia/materia.iml" filepath="$PROJECT_DIR$/../materia/materia.iml" />
       <module fileurl="file://$PROJECT_DIR$/spatium.iml" filepath="$PROJECT_DIR$/spatium.iml" />
       <module fileurl="file://$PROJECT_DIR$/../VoxelVert/vv.iml" filepath="$PROJECT_DIR$/../VoxelVert/vv.iml" />
     </modules>
