@@ -242,30 +242,28 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      * @param x the displacement in blocks on the x-axis
      * @param y the displacement in blocks on the y-axis
      * @param z the displacement in blocks on the z-axis
-     * @return itself
      */
-    public abstract BlockSelection move(int x, int y, int z);
+    public abstract void move(int x, int y, int z);
 
     /**
      * Moves the block selection.
      *
      * @param v a block vector representing the movement in blocks on x, y, z axes.
-     * @return itself
      */
-    public default BlockSelection move(BlockVector v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    public default void move(BlockVector v) {
+        move(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract BlockSelection scale(int x, int y, int z);
+    public abstract void scale(int x, int y, int z);
 
-    public default BlockSelection scale(BlockVector v) {
-        return scale(v.getX(), v.getY(), v.getZ());
+    public default void scale(BlockVector v) {
+        scale(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract BlockSelection grow(int x, int y, int z);
+    public abstract void grow(int x, int y, int z);
 
-    public default BlockSelection grow(BlockVector v) {
-        return grow(v.getX(), v.getY(), v.getZ());
+    public default void grow(BlockVector v) {
+        grow(v.getX(), v.getY(), v.getZ());
     }
 
     // MISC

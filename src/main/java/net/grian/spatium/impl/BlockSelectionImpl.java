@@ -95,18 +95,17 @@ public class BlockSelectionImpl implements BlockSelection {
     // SETTERS
 
     @Override
-    public BlockSelection move(int x, int y, int z) {
+    public void move(int x, int y, int z) {
         xmin += x;
         ymin += y;
         zmin += z;
         xmax += x;
         ymax += y;
         zmax += z;
-        return this;
     }
 
     @Override
-    public BlockSelection scale(int x, int y, int z) {
+    public void scale(int x, int y, int z) {
         if (x >= 0) {
             xmin *= x;
             xmax *= x;
@@ -128,18 +127,16 @@ public class BlockSelectionImpl implements BlockSelection {
             zmin = zmax * z;
             zmax *= z;
         }
-        return this;
     }
     
     @Override
-    public Space scale(double factor) {
-        return scale((int) factor, (int) factor, (int) factor);
+    public void scale(double factor) {
+        scale((int) factor, (int) factor, (int) factor);
     }
     
     @Override
-    public BlockSelection grow(int x, int y, int z) {
+    public void grow(int x, int y, int z) {
         //TODO implement this
-        return this;
     }
 
     @Override

@@ -52,9 +52,11 @@ public final class Normals {
      * @return the surface normal
      */
     public Vector3 onPlane(Plane plane, Vector3 point) {
-        return plane.signedDistanceTo(point) > 0?
-                plane.getNormal() :
-                plane.getNormal().negate();
+        Vector3 normal = plane.getNormal();
+        if (plane.signedDistanceTo(point) < 0)
+            normal.negate();
+        
+        return normal;
     }
 
     /**
@@ -66,10 +68,12 @@ public final class Normals {
      */
     public Vector3 reflect(Vector3 incident, Vector3 normal) {
         Vector3 d = incident.clone();
-        Vector3 n = normal.normalize();
+        Vector3 n = normal.clone();
+        n.normalize();
         n.multiply(2 * d.dot(n));
-
-        return d.subtract(n);
+        d.subtract(n);
+        
+        return d;
     }
 
 }

@@ -149,10 +149,10 @@ public interface Sphere extends Space, Serializable, Cloneable {
 
     // SETTERS
 
-    public abstract Sphere setCenter(double x, double y, double z);
+    public abstract void setCenter(double x, double y, double z);
 
-    public default Sphere setCenter(Vector3 center) {
-        return setCenter(center.getX(), center.getY(), center.getZ());
+    public default void setCenter(Vector3 center) {
+        setCenter(center.getX(), center.getY(), center.getZ());
     }
 
     /**
@@ -161,18 +161,16 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @param x the x-translation
      * @param y the y-translation
      * @param z the z-translation
-     * @return itself
      */
-    public abstract Sphere move(double x, double y, double z);
+    public abstract void move(double x, double y, double z);
 
     /**
      * Translates the center of this sphere by given amount.
      *
      * @param v the translation
-     * @return itself
      */
-    public default Sphere move(Vector3 v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    public default void move(Vector3 v) {
+        move(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -180,29 +178,26 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * radius of the sphere with the factor.
      *
      * @param factor the factor
-     * @return itself
      */
     @Override
-    public default Sphere scale(double factor) {
-        return setRadius(getRadius() * factor);
+    public default void scale(double factor) {
+        setRadius(getRadius() * factor);
     }
 
     /**
      * Sets the radius of the sphere.
      *
      * @param r new the radius
-     * @return itself
      */
-    public abstract Sphere setRadius(double r);
+    public abstract void setRadius(double r);
 
     /**
      * Sets the diameter of the sphere.
      *
      * @param d new the diameter
-     * @return itself
      */
-    public default Sphere setDiameter(double d) {
-        return setRadius(d * 0.5f);
+    public default void setDiameter(double d) {
+        setRadius(d * 0.5f);
     }
 
     // MISC

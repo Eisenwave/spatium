@@ -138,28 +138,28 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
 
     //SETTERS
 
-    public abstract OrientedBB3 move(double x, double y, double z);
+    public abstract void move(double x, double y, double z);
 
-    public default OrientedBB3 move(Vector3 v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    public default void move(Vector3 v) {
+        move(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract OrientedBB3 transform(Matrix transform);
+    public abstract void transform(Matrix transform);
 
-    public default OrientedBB3 rotateX(double angle) {
-        return transform(Matrix.fromRotX(angle));
+    public default void rotateX(double angle) {
+        transform(Matrix.fromRotX(angle));
     }
 
-    public default OrientedBB3 rotateY(double angle) {
-        return transform(Matrix.fromRotY(angle));
+    public default void rotateY(double angle) {
+        transform(Matrix.fromRotY(angle));
     }
 
-    public default OrientedBB3 rotateZ(double angle) {
-        return transform(Matrix.fromRotZ(angle));
+    public default void rotateZ(double angle) {
+        transform(Matrix.fromRotZ(angle));
     }
     
     @Override
-    public abstract OrientedBB3 scale(double factor);
+    public abstract void scale(double factor);
     
     //MISC
     

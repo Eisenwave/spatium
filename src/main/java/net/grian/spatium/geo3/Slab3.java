@@ -149,38 +149,34 @@ public interface Slab3 extends Serializable, Cloneable {
      * @param x the x-coordinate of the normal
      * @param y the y-coordinate of the normal
      * @param z the z-coordinate of the normal
-     * @return itself
      */
-    public abstract Slab3 setNormal(double x, double y, double z);
+    public abstract void setNormal(double x, double y, double z);
 
     /**
      * Sets the normal of the slab to a specified vector.
      *
      * @param normal the normal vector
-     * @return itself
      */
-    public default Slab3 setNormal(Vector3 normal) {
-        return setNormal(normal.getX(), normal.getY(), normal.getZ());
+    public default void setNormal(Vector3 normal) {
+        setNormal(normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public abstract Slab3 setMinDepth(double depth);
+    public abstract void setMinDepth(double depth);
 
-    public abstract Slab3 setMaxDepth(double depth);
+    public abstract void setMaxDepth(double depth);
 
     /**
      * Moves the slab into the direction of its normal vector.
      *
      * @param depth the additional depth
-     * @return itself
      */
-    public abstract Slab3 push(double depth);
+    public abstract void push(double depth);
 
     /**
      * Moves the slab into the opposite direction of its normal vector.
      *
      * @param depth the additional depth
-     * @return itself
      */
-    public abstract Slab3 pull(double depth);
+    public abstract void pull(double depth);
 
 }

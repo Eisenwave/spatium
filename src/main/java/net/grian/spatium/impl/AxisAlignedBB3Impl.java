@@ -110,26 +110,24 @@ public class AxisAlignedBB3Impl implements AxisAlignedBB3 {
     // SETTERS
 
     @Override
-    public AxisAlignedBB3 move(double x, double y, double z) {
+    public void move(double x, double y, double z) {
         xmin += x; xmax += x;
         ymin += y; ymax += y;
         zmin += z; zmax += z;
-        return this;
     }
 
     @Override
-    public AxisAlignedBB3 scale(double x, double y, double z) {
+    public void scale(double x, double y, double z) {
         xmin = x>0 ? this.xmin*x : this.xmax*x;
         ymin = y>0 ? this.ymin*y : this.ymax*y;
         zmin = z>0 ? this.zmin*z : this.zmax*z;
         xmax = x>0 ? this.xmax*x : this.xmin*x;
         ymax = y>0 ? this.ymax*y : this.ymin*y;
         zmax = z>0 ? this.zmax*z : this.zmin*z;
-        return this;
     }
 
     @Override
-    public AxisAlignedBB3 grow(double x, double y, double z) {
+    public void grow(double x, double y, double z) {
         double
                 dx = getSizeX(),
                 dy = getSizeY(),
@@ -155,7 +153,6 @@ public class AxisAlignedBB3Impl implements AxisAlignedBB3 {
             zmax = zmin;
             zmin = zmin - dz - z;
         }
-        return this;
     }
 
     @Override

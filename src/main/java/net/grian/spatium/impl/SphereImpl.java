@@ -96,33 +96,29 @@ public class SphereImpl implements Sphere {
     // SETTERS
 
     @Override
-    public Sphere setCenter(double x, double y, double z) {
+    public void setCenter(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
 
     @Override
-    public Sphere scale(double factor) {
+    public void scale(double factor) {
         if (factor < 0) throw new IllegalArgumentException("factor < 0");
         this.r *= factor;
-        return this;
     }
 
     @Override
-    public Sphere move(double x, double y, double z) {
+    public void move(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
-        return this;
     }
 
     @Override
-    public Sphere setRadius(double radius) {
+    public void setRadius(double radius) {
         if (radius < 0) throw new IllegalArgumentException("radius < 0");
         this.r = radius;
-        return this;
     }
 
     // MISC

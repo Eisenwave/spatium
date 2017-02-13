@@ -33,27 +33,27 @@ public interface Circle extends Area {
     
     //SETTERS
     
-    abstract Circle setX(double x);
+    abstract void setX(double x);
     
-    abstract Circle setY(double y);
+    abstract void setY(double y);
     
-    abstract Circle setZ(double z);
+    abstract void setZ(double z);
     
-    abstract Circle setCenter(double x, double y, double z);
+    abstract void setCenter(double x, double y, double z);
     
-    default Circle setCenter(Vector3 center) {
-        return setCenter(center.getX(), center.getY(), center.getZ());
+    default void setCenter(Vector3 center) {
+        setCenter(center.getX(), center.getY(), center.getZ());
     }
     
-    abstract Circle setRadius(double r);
+    abstract void setRadius(double r);
     
-    default Circle setDiameter(double d) {
-        return setRadius(d / 2);
+    default void setDiameter(double d) {
+        setRadius(d / 2);
     }
     
     @Override
-    default Circle scale(double factor) {
-        return setRadius(getRadius() * factor);
+    default void scale(double factor) {
+        setRadius(getRadius() * factor);
     }
     
 }

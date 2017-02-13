@@ -1,6 +1,7 @@
 package net.grian.spatium.cache;
 
 import net.grian.spatium.Spatium;
+import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
@@ -23,19 +24,30 @@ public final class CacheMath {
 
     private CacheMath() {}
 
+    //list of common ratios
     public final static double
+        TEN = 10,
         HUNDRED = 100,
         THOUSAND = 1000,
         MILLION = 1_000_000,
         BILLION = 1_000_000_000,
-        TRILLION = 1_000_000_000,
+        TENTH = 1 / TEN,
+        HUNDREDTH = 1 / HUNDRED,
+        THOUSANDTH = 1 / THOUSAND,
+        MILLIONTH = 1 / MILLION,
+        BILLIONTH = 1 / BILLION,
     
         FOUR_THIRDS = 4 / 3D,
-        FOUR_THIRDS_PI = FOUR_THIRDS * Math.PI,
+        FOUR_THIRDS_PI = FOUR_THIRDS * Math.PI;
     
+    //list of common constants or numbers
+    public final static double
         GOLDEN = 1.618033988749894848204586834365638117720309179805762862135,
         TAU = Math.PI * 2,
-        HALF_PI = Math.PI / 2,
+        HALF_PI = Math.PI / 2;
+    
+    //list of common roots
+    public final static double
         SQRT_2 = Math.sqrt(2),
         SQRT_3 = Math.sqrt(3),
         HALF_SQRT_2 = SQRT_2 / 2,
@@ -44,6 +56,11 @@ public final class CacheMath {
         CBRT_THIRD = Math.cbrt(1 / 3D),
         INV_SQRT_2 = 1 / SQRT_2,
         INV_SQRT_3 = 1 / SQRT_3;
+    
+    //list of common natural logs
+    public final static double
+        LN_2 = Math.log(2),
+        LN_10 = Math.log10(10);
 
     public final static double TO_RADIANS = Math.PI / 180;
 
@@ -53,6 +70,8 @@ public final class CacheMath {
     private static BinomCache cacheBinom = null;
 
     private static int sqrtPrecision = 0xFF;
+    
+    //MATH UTILITY
 
     public static int choose(int n, int k) {
         return cacheBinom==null? Spatium.choose(n, k) : cacheBinom.choose(n, k);
@@ -85,7 +104,35 @@ public final class CacheMath {
     public static double sqrt(double number) {
         return cacheSqrt==null? Math.sqrt(number) : cacheSqrt.sqrt(number);
     }
+    
+    /*
+    public static int binlog( int bits ) {
+        int log = 0;
+        if( ( bits & 0xffff0000 ) != 0 ) { bits >>>= 16; log = 16; }
+        if( bits >= 256 ) { bits >>>= 8; log += 8; }
+        if( bits >= 16  ) { bits >>>= 4; log += 4; }
+        if( bits >= 4   ) { bits >>>= 2; log += 2; }
+        return log + ( bits >>> 1 );
+    }
+    
+    public static int log2i(int number) {
+        if(number == 0) return 0;
+        return 31 - Integer.numberOfLeadingZeros(number);
+    }
+    */
+    
+    /*
+    public static int log2nlz( int bits ) {
+        if( bits == 0 )
+            return 0; // or throw exception
+        return 31 - Integer.numberOfLeadingZeros( bits );
+    }
+    */
+    
+    
 
+    //CACHE CONTROL FUNCTIONS
+    
     public static int getSqrtPrecision() {
         return sqrtPrecision;
     }

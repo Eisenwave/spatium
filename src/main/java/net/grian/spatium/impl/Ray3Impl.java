@@ -101,28 +101,25 @@ public class Ray3Impl implements Ray3 {
     // SETTERS
 
     @Override
-    public Ray3 setOrigin(double x, double y, double z) {
+    public void setOrigin(double x, double y, double z) {
         this.xo = x;
         this.yo = y;
         this.zo = z;
-        return this;
     }
 
     @Override
-    public Ray3 setDirection(double x, double y, double z) {
+    public void setDirection(double x, double y, double z) {
         this.xd = x;
         this.yd = y;
         this.zd = z;
-        return this;
     }
 
     @Override
-    public Ray3 setLength(double t) {
+    public void setLength(double t) {
         double m = t / getLength();
         this.xd *= m;
         this.yd *= m;
         this.zd *= m;
-        return this;
     }
 
     // CHECKERS

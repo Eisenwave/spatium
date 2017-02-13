@@ -44,38 +44,34 @@ public class ConeImpl implements Cone {
     }
     
     @Override
-    public Cone scale(double factor) {
+    public void scale(double factor) {
         dx *= factor;
         dy *= factor;
         dz *= factor;
-        return this;
     }
     
     @Override
-    public Cone setHeight(double height) {
-        return scale(height / getHeight());
+    public void setHeight(double height) {
+        scale(height / getHeight());
     }
     
     @Override
-    public Cone setBaseRadius(double radius) {
+    public void setBaseRadius(double radius) {
         this.r = radius;
-        return this;
     }
     
     @Override
-    public Cone setApex(double x, double y, double z) {
+    public void setApex(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
     
     @Override
-    public Cone setDirection(double x, double y, double z) {
+    public void setDirection(double x, double y, double z) {
         this.dx = x;
         this.dy = y;
         this.dz = z;
-        return this;
     }
     
 }

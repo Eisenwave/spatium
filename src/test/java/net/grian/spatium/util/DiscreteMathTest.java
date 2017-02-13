@@ -1,5 +1,6 @@
 package net.grian.spatium.util;
 
+import net.grian.spatium.Spatium;
 import org.jetbrains.annotations.Contract;
 import org.junit.Test;
 
@@ -9,6 +10,12 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 public class DiscreteMathTest {
+    
+    @Test
+    public void entropy() throws Exception {
+        double entropy = DiscreteMath.entropy(.65, .11, .05, .05, .04, .04, .04, .02);
+        assertEquals(entropy, 1.8565868237673904, Spatium.EPSILON);
+    }
     
     @Test
     public void primeFactors() throws Exception {

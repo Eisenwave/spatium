@@ -79,39 +79,35 @@ public class Triangle3Impl implements Triangle3 {
     //SETTERS
 
     @Override
-    public Triangle3 setA(Vector3 point) {
+    public void setA(Vector3 point) {
         this.ax = point.getX();
         this.ay = point.getY();
         this.az = point.getZ();
-        return this;
     }
 
     @Override
-    public Triangle3 setB(Vector3 point) {
+    public void setB(Vector3 point) {
         this.bx = point.getX();
         this.by = point.getY();
         this.bz = point.getZ();
-        return this;
     }
 
     @Override
-    public Triangle3 setC(Vector3 point) {
+    public void setC(Vector3 point) {
         this.cx = point.getX();
         this.cy = point.getY();
         this.cz = point.getZ();
-        return this;
     }
 
     @Override
-    public Triangle3 move(double x, double y, double z) {
+    public void move(double x, double y, double z) {
         ax += x; ay += y; az += z;
         bx += x; by += y; az += z;
         cx += x; cy += y; cz += z;
-        return this;
     }
 
     @Override
-    public Triangle3 scale(double x, double y, double z) {
+    public void scale(double x, double y, double z) {
         final double
             cenX = (ax + bx + cx) / 3,
             cenY = (ay + by + cy) / 3,
@@ -120,11 +116,10 @@ public class Triangle3Impl implements Triangle3 {
         ax = (ax - cenX) * x; bx = (bx - cenX) * x; cx = (cx = cenX) * x;
         ay = (ay - cenY) * y; by = (by - cenY) * y; cy = (cy = cenY) * y;
         az = (az - cenZ) * z; bz = (bz - cenZ) * z; cz = (cz = cenZ) * z;
-        return this;
     }
     
     @Override
-    public Triangle3 transform(Transformation t) {
+    public void transform(Transformation t) {
         {
             Vector3 vertex = getA();
             t.transform(vertex);
@@ -146,7 +141,6 @@ public class Triangle3Impl implements Triangle3 {
             this.cy = vertex.getY();
             this.cz = vertex.getZ();
         }
-        return this;
     }
     
     //MISC

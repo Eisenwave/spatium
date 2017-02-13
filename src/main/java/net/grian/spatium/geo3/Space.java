@@ -43,7 +43,6 @@ public interface Space {
      * Scales this space by a factor around its own center by given factor
      *
      * @param factor the scaling factor
-     * @return itself
      *
      * @implNote The implementation has to guarantee that: <ul>
      *     <li><tt>scale(factor).getVolume() "equals" getVolume()*factor</tt></li>
@@ -51,6 +50,6 @@ public interface Space {
      *     <li>the center of the space stays unaffected by scaling</li>
      * </ul>
      */
-    abstract Space scale(double factor);
+    abstract void scale(double factor);
     
 }

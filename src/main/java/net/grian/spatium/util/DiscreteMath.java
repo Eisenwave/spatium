@@ -1,5 +1,6 @@
 package net.grian.spatium.util;
 
+import net.grian.spatium.cache.CacheMath;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnegative;
@@ -10,6 +11,13 @@ import static net.grian.spatium.util.PrimArrays.*;
 
 public final class DiscreteMath {
 
+    public static double entropy(double... nums) {
+        double result = 0;
+        for (double num : nums)
+            result += num * FastMath.log2(num);
+        return -result;
+    }
+    
     @Contract(pure = true)
     public static boolean divisible(int num, int divisor) {
         return (num % divisor) == 0;

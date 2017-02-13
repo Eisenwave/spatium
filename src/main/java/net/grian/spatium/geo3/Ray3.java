@@ -241,18 +241,16 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @param z the z-coordinate of the point
-     * @return itself
      */
-    public abstract Ray3 setOrigin(double x, double y, double z);
+    public abstract void setOrigin(double x, double y, double z);
 
     /**
      * Sets the origin of the ray to a given point.
      *
      * @param point the point
-     * @return itself
      */
-    public default Ray3 setOrigin(Vector3 point) {
-        return setOrigin(point.getX(), point.getY(), point.getZ());
+    public default void setOrigin(Vector3 point) {
+        setOrigin(point.getX(), point.getY(), point.getZ());
     }
 
     /**
@@ -261,20 +259,18 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param x the x-coordinate of the vector
      * @param y the y-coordinate of the vector
      * @param z the z-coordinate of the vector
-     * @return itself
      */
-    public abstract Ray3 setDirection(double x, double y, double z);
+    public abstract void setDirection(double x, double y, double z);
 
     /**
      * Sets the length of this ray to a given length.
      *
      * @param t the new hypot
-     * @return itself
      */
-    public abstract Ray3 setLength(double t);
+    public abstract void setLength(double t);
 
-    public default Ray3 normalize() {
-        return setLength(1);
+    public default void normalize() {
+        setLength(1);
     }
 
     // MISC

@@ -177,18 +177,16 @@ public interface Plane extends Serializable, Cloneable {
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @param z the z-coordinate of the point
-     * @return itself
      */
-    abstract Plane setCenter(double x, double y, double z);
+    abstract void setCenter(double x, double y, double z);
 
     /**
      * Sets the center of this plane to a given point.
      *
      * @param point the point
-     * @return itself
      */
-    default Plane setCenter(Vector3 point) {
-        return setCenter(point.getX(), point.getY(), point.getZ());
+    default void setCenter(Vector3 point) {
+        setCenter(point.getX(), point.getY(), point.getZ());
     }
 
     /**
@@ -197,18 +195,16 @@ public interface Plane extends Serializable, Cloneable {
      * @param x the x-coordinate of the vector
      * @param y the y-coordinate of the vector
      * @param z the z-coordinate of the vector
-     * @return itself
      */
-    abstract Plane setNormal(double x, double y, double z);
+    abstract void setNormal(double x, double y, double z);
 
     /**
      * Sets the normal of this plane to a given vector.
      *
      * @param v the vector
-     * @return itself
      */
-    default Plane setNormal(Vector3 v) {
-        return setNormal(v.getX(), v.getY(), v.getZ());
+    default void setNormal(Vector3 v) {
+        setNormal(v.getX(), v.getY(), v.getZ());
     }
 
     // MISC

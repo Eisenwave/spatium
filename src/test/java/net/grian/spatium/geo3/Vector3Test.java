@@ -2,7 +2,6 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
-import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.util.PrimMath;
 import org.junit.Test;
@@ -24,8 +23,9 @@ public class Vector3Test {
     public void transformScale() throws Exception {
         Vector3 vector = Vector3.fromXYZ(1, 2, 3);
         Matrix transform = Matrix.fromScale(3, 2, 1);
-
-        assertEquals(Vector3.fromXYZ(3, 4, 3), vector.transform(transform));
+        vector.transform(transform);
+        
+        assertEquals(Vector3.fromXYZ(3, 4, 3), vector);
     }
 
     private final static Vector3
@@ -42,21 +42,22 @@ public class Vector3Test {
      *
      * @throws Exception if the test fails
      */
+    @SuppressWarnings("Duplicates")
     @Test
     public void transformRotX_followsRightHandRule() throws Exception {
         Vector3 vector = POS_Z.clone();
 
         Matrix rightHand = Matrix.fromRotX(Spatium.radians(90));
-        assertEquals(NEG_Y, vector.transform(rightHand));
-        assertEquals(NEG_Z, vector.transform(rightHand));
-        assertEquals(POS_Y, vector.transform(rightHand));
-        assertEquals(POS_Z, vector.transform(rightHand));
+        vector.transform(rightHand); assertEquals(NEG_Y, vector);
+        vector.transform(rightHand); assertEquals(NEG_Z, vector);
+        vector.transform(rightHand); assertEquals(POS_Y, vector);
+        vector.transform(rightHand); assertEquals(POS_Z, vector);
 
         Matrix leftHand = rightHand.getInverse();
-        assertEquals(POS_Y, vector.transform(leftHand));
-        assertEquals(NEG_Z, vector.transform(leftHand));
-        assertEquals(NEG_Y, vector.transform(leftHand));
-        assertEquals(POS_Z, vector.transform(leftHand));
+        vector.transform(leftHand); assertEquals(POS_Y, vector);
+        vector.transform(leftHand); assertEquals(NEG_Z, vector);
+        vector.transform(leftHand); assertEquals(NEG_Y, vector);
+        vector.transform(leftHand); assertEquals(POS_Z, vector);
     }
 
     /**
@@ -70,16 +71,16 @@ public class Vector3Test {
         Vector3 vector = POS_X.clone();
 
         Matrix rightHand = Matrix.fromRotY(Spatium.radians(90));
-        assertEquals(NEG_Z, vector.transform(rightHand));
-        assertEquals(NEG_X, vector.transform(rightHand));
-        assertEquals(POS_Z, vector.transform(rightHand));
-        assertEquals(POS_X, vector.transform(rightHand));
+        vector.transform(rightHand); assertEquals(NEG_Z, vector);
+        vector.transform(rightHand); assertEquals(NEG_X, vector);
+        vector.transform(rightHand); assertEquals(POS_Z, vector);
+        vector.transform(rightHand); assertEquals(POS_X, vector);
 
         Matrix leftHand = rightHand.getInverse();
-        assertEquals(POS_Z, vector.transform(leftHand));
-        assertEquals(NEG_X, vector.transform(leftHand));
-        assertEquals(NEG_Z, vector.transform(leftHand));
-        assertEquals(POS_X, vector.transform(leftHand));
+        vector.transform(leftHand); assertEquals(POS_Z, vector);
+        vector.transform(leftHand); assertEquals(NEG_X, vector);
+        vector.transform(leftHand); assertEquals(NEG_Z, vector);
+        vector.transform(leftHand); assertEquals(POS_X, vector);
     }
 
     /**
@@ -88,21 +89,22 @@ public class Vector3Test {
      *
      * @throws Exception if the test fails
      */
+    @SuppressWarnings("Duplicates")
     @Test
     public void transformRotZ_followsRightHandRule() throws Exception {
         Vector3 vector = POS_X.clone();
 
         Matrix rightHand = Matrix.fromRotZ(Spatium.radians(90));
-        assertEquals(POS_Y, vector.transform(rightHand));
-        assertEquals(NEG_X, vector.transform(rightHand));
-        assertEquals(NEG_Y, vector.transform(rightHand));
-        assertEquals(POS_X, vector.transform(rightHand));
+        vector.transform(rightHand); assertEquals(POS_Y, vector);
+        vector.transform(rightHand); assertEquals(NEG_X, vector);
+        vector.transform(rightHand); assertEquals(NEG_Y, vector);
+        vector.transform(rightHand); assertEquals(POS_X, vector);
 
         Matrix leftHand = rightHand.getInverse();
-        assertEquals(NEG_Y, vector.transform(leftHand));
-        assertEquals(NEG_X, vector.transform(leftHand));
-        assertEquals(POS_Y, vector.transform(leftHand));
-        assertEquals(POS_X, vector.transform(leftHand));
+        vector.transform(leftHand); assertEquals(NEG_Y, vector);
+        vector.transform(leftHand); assertEquals(NEG_X, vector);
+        vector.transform(leftHand); assertEquals(POS_Y, vector);
+        vector.transform(leftHand); assertEquals(POS_X, vector);
     }
     
     public void performance_Inverse() throws Exception {

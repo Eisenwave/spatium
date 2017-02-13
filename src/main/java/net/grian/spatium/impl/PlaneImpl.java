@@ -87,19 +87,17 @@ public class PlaneImpl implements Plane {
     // GETTERS
 
     @Override
-    public Plane setCenter(double x, double y, double z) {
+    public void setCenter(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
 
     @Override
-    public Plane setNormal(double x, double y, double z) {
+    public void setNormal(double x, double y, double z) {
         this.xn = x;
         this.yn = y;
         this.zn = z;
-        return this;
     }
 
     // MISC

@@ -196,13 +196,19 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
     public byte getVisibilityMask(int x, int y, int z) {
         byte result = 0;
 
-        if (x==0 || !contains(x-1, y, z)) result |= (1 << Direction.NEGATIVE_X.ordinal());
-        if (y==0 || !contains(x, y-1, z)) result |= (1 << Direction.NEGATIVE_Y.ordinal());
-        if (z==0 || !contains(x, y, z-1)) result |= (1 << Direction.NEGATIVE_Z.ordinal());
+        if (x==0 || !contains(x-1, y, z))
+            result |= (1 << Direction.NEGATIVE_X.ordinal());
+        if (y==0 || !contains(x, y-1, z))
+            result |= (1 << Direction.NEGATIVE_Y.ordinal());
+        if (z==0 || !contains(x, y, z-1))
+            result |= (1 << Direction.NEGATIVE_Z.ordinal());
 
-        if (x==sizeX-1 || !contains(x+1, y, z)) result |= (1 << Direction.POSITIVE_X.ordinal());
-        if (y==sizeY-1 || !contains(x, y+1, z)) result |= (1 << Direction.POSITIVE_Y.ordinal());
-        if (z==sizeZ-1 || !contains(x, y, z+1)) result |= (1 << Direction.POSITIVE_Z.ordinal());
+        if (x==sizeX-1 || !contains(x+1, y, z))
+            result |= (1 << Direction.POSITIVE_X.ordinal());
+        if (y==sizeY-1 || !contains(x, y+1, z))
+            result |= (1 << Direction.POSITIVE_Y.ordinal());
+        if (z==sizeZ-1 || !contains(x, y, z+1))
+            result |= (1 << Direction.POSITIVE_Z.ordinal());
 
         return result;
     }

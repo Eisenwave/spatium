@@ -59,38 +59,34 @@ public class Slab3Impl implements Slab3 {
     }
 
     @Override
-    public Slab3 setNormal(double x, double y, double z) {
+    public void setNormal(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
 
     @Override
-    public Slab3 setMinDepth(double depth) {
+    public void setMinDepth(double depth) {
         if (depth > dmax) throw new IllegalArgumentException("depth > max depth");
         this.dmin = depth;
-        return this;
     }
 
     @Override
-    public Slab3 setMaxDepth(double depth) {
+    public void setMaxDepth(double depth) {
         if (depth < dmin) throw new IllegalArgumentException("depth < min depth");
-        return this;
+        this.dmax = depth;
     }
 
     @Override
-    public Slab3 push(double depth) {
+    public void push(double depth) {
         dmin += depth;
         dmax += depth;
-        return this;
     }
 
     @Override
-    public Slab3 pull(double depth) {
+    public void pull(double depth) {
         dmin -= depth;
         dmax -= depth;
-        return this;
     }
 
     @Override

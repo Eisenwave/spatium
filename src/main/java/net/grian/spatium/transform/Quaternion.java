@@ -119,10 +119,13 @@ public interface Quaternion extends Serializable, Cloneable {
      * @return a new quaternion
      */
     static Quaternion fromRotation(Vector3 axis, double theta) {
-        double halfTheta = theta * 0.5f;
-        return fromXYZW(
-            axis.clone().multiply(Math.sin(halfTheta)),
-            Math.cos(halfTheta));
+        double
+            halfTheta = theta * 0.5f,
+            w = Math.cos(halfTheta);
+        Vector3 xyz = axis.clone();
+        xyz.multiply(Math.sin(halfTheta));
+        
+        return fromXYZW(xyz, w);
     }
 
     /**

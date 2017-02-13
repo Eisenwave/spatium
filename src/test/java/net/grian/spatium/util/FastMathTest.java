@@ -1,11 +1,8 @@
 package net.grian.spatium.util;
 
-import net.grian.spatium.cache.CacheMath;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class LenientMathTest {
+public class FastMathTest {
 
     @Test
     public void invSqrt() throws Exception {
@@ -15,7 +12,7 @@ public class LenientMathTest {
             double random = PrimMath.randomDouble(10000);
 
             double normal = 1 / Math.sqrt(random);
-            double fast = LenientMath.invSqrt(random);
+            double fast = FastMath.invSqrt(random);
 
             imprecision += Math.abs(normal - fast);
         }

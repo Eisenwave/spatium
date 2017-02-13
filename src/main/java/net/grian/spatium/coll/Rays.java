@@ -39,7 +39,7 @@ public final class Rays {
         Vector3
                 dirA = a.getDirection(),
                 dirB = b.getDirection(),
-                dirC = b.getOrigin().subtract(a.getOrigin()),
+                dirC = Vector3.between(a.getOrigin(), b.getOrigin()),
                 crossAB = dirA.cross(dirB),
                 crossCB = dirC.cross(dirB);
 
@@ -114,14 +114,18 @@ public final class Rays {
      */
     public static double cast(Ray3 ray, Plane plane) {
         double numerator, denominator;
-        Vector3 normal = plane.getNormal().normalize();
+        Vector3 normal = plane.getNormal();
+        normal.normalize();
 
-        denominator = normal.dot( ray.getDirection().normalize() );
+        Vector3 dir = ray.getDirection();
+        dir.normalize();
+        
+        denominator = normal.dot(dir);
         if (Spatium.equals(denominator, 0)) //ray and plane are parallel
             return Double.NaN;
 
         //calculate the distance between the linePoint and the line-plane intersection point
-        numerator = normal.dot( plane.getPoint().subtract(ray.getOrigin()) );
+        numerator = normal.dot( Vector3.between(ray.getOrigin(), plane.getPoint()) );
 
         return numerator / denominator;
     }
@@ -334,20 +338,30 @@ public final class Rays {
      */
     @Nonnull
     public static double[] pierce(Ray3 ray, Slab3 slab) {
-        Vector3 normal = slab.getNormal().normalize();
-        double denominator = normal.dot( ray.getDirection().normalize() );
-        //if (Spatium.equals(denominator, 0)) //ray and plane are parallel
-        //    return null;
-
-        Vector3 origin = ray.getOrigin();
-        if (denominator > 0) return new double[] {
-                normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
-                normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
-        };
-        else return new double[] {
-                normal.dot( slab.getMinPoint().subtract(origin) ) / denominator,
-                normal.dot( slab.getMaxPoint().subtract(origin) ) / denominator
-        };
+        Vector3 normal = slab.getNormal();
+        normal.normalize();
+        
+        double denominator;
+        {
+            Vector3 dir = ray.getDirection();
+            dir.normalize();
+            denominator = normal.dot(dir);
+        }
+        
+        Vector3 min, max;
+        {
+            Vector3 origin = ray.getOrigin();
+            min = slab.getMinPoint();
+            max = slab.getMaxPoint();
+            min.subtract(origin);
+            max.subtract(origin);
+        }
+        
+        double
+            tmin = normal.dot(min) / denominator,
+            tmax = normal.dot(max) / denominator;
+        
+        return denominator >= 0? new double[] {tmin, tmax} : new double[] {tmax, tmin};
     }
 
     /**

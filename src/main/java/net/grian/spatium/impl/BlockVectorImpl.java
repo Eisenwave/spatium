@@ -51,89 +51,80 @@ public class BlockVectorImpl implements BlockVector {
     // SETTERS
 
     @Override
-    public BlockVector set(int x, int y, int z) {
+    public void set(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
 
     @Override
-    public BlockVector setX(int x) {
+    public void setX(int x) {
         this.x = x;
-        return this;
     }
 
     @Override
-    public BlockVector setY(int y) {
+    public void setY(int y) {
         this.y = y;
-        return this;
     }
 
     @Override
-    public BlockVector setZ(int z) {
+    public void setZ(int z) {
         this.z = z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl add(int x, int y, int z) {
+    public void add(int x, int y, int z) {
         this.x += x;
         this.y += y;
         this.z += z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl subtract(int x, int y, int z) {
+    public void subtract(int x, int y, int z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl multiply(int x, int y, int z) {
+    public void multiply(int x, int y, int z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl multiply(double x, double y, double z) {
+    public void multiply(double x, double y, double z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl divide(int x, int y, int z) {
+    public void divide(int x, int y, int z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
-        return this;
     }
 
     @Override
-    public BlockVectorImpl divide(double x, double y, double z) {
+    public void divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;
-        return this;
     }
 
     public BlockVectorImpl getRelative(Direction direction, int offset) {
+        BlockVectorImpl clone = clone();
         switch(direction) {
-        case POSITIVE_X: return add( offset, 0, 0);
-        case NEGATIVE_X: return add(-offset, 0, 0);
-        case POSITIVE_Y: return add(0,  offset, 0);
-        case NEGATIVE_Y: return add(0, -offset, 0);
-        case POSITIVE_Z: return add(0, 0,  offset);
-        case NEGATIVE_Z: return add(0, 0, -offset);
-        default: return null;
+            case POSITIVE_X: clone.add( offset, 0, 0); break;
+            case NEGATIVE_X: clone.add(-offset, 0, 0); break;
+            case POSITIVE_Y: clone.add(0,  offset, 0); break;
+            case NEGATIVE_Y: clone.add(0, -offset, 0); break;
+            case POSITIVE_Z: clone.add(0, 0,  offset); break;
+            case NEGATIVE_Z: clone.add(0, 0, -offset); break;
         }
+        return clone;
     }
 
     // CHECKERS

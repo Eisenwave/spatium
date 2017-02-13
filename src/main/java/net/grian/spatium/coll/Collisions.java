@@ -44,8 +44,12 @@ public final class Collisions {
      * @return whether the points collide
      */
     public static boolean test(Plane a, Plane b) {
-        double dot = Math.abs(a.getNormal().normalize().dot(b.getNormal().normalize()));
-        return Spatium.equals(dot, 1);
+        Vector3 normalA = a.getNormal();
+        Vector3 normalB = b.getNormal();
+        normalA.normalize();
+        normalB.normalize();
+        
+        return Spatium.equals(Math.abs(normalA.dot(normalB)), 1);
     }
 
     /**
@@ -89,7 +93,11 @@ public final class Collisions {
         Matrix toLocalTransform = a.getTransform().getInverse();
         
         //more simple AABB & OBB intersection test
-        return test(a.toAABB(), b.clone().transform(toLocalTransform));
+        AxisAlignedBB3 localA = a.toAABB();
+        OrientedBB3 localB = b.clone();
+        localB.transform(toLocalTransform);
+        
+        return test(localA, localB);
     }
 
     /**
@@ -226,7 +234,7 @@ public final class Collisions {
      */
     public static boolean test(OrientedBB3 box, Sphere sphere) {
         //get the sphere center relative to the box center
-        Vector3 relCenter = sphere.getCenter().subtract(box.getCenter());
+        Vector3 relCenter = Vector3.between(box.getCenter(), sphere.getCenter());
         //turn that point from world space into object space
         relCenter.transform(box.getTransform());
         
@@ -255,7 +263,10 @@ public final class Collisions {
      * @return whether the sphere and the plane collide
      */
     public static boolean test(Sphere sphere, Plane plane) {
-        Ray3 sphereToPlane = Ray3.fromOD(sphere.getCenter(), plane.getNormal().multiply(-1));
+        Vector3 normal = plane.getNormal();
+        normal.negate();
+        
+        Ray3 sphereToPlane = Ray3.fromOD(sphere.getCenter(), normal);
         return sphereToPlane.getLengthSquared() <= sphere.getRadiusSquared();
     }
 

@@ -3,7 +3,6 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBB3Impl;
-import org.jetbrains.annotations.Contract;
 
 import java.io.Serializable;
 
@@ -198,18 +197,16 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param x the amount of x-movement
      * @param y the amount of y-movement
      * @param z the amount of z-movement
-     * @return itself
      */
-    public abstract AxisAlignedBB3 move(double x, double y, double z);
+    public abstract void move(double x, double y, double z);
 
     /**
      * Moves the bounding box by a given amount.
      *
      * @param v the movement
-     * @return itself
      */
-    public default AxisAlignedBB3 move(Vector3 v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    public default void move(Vector3 v) {
+        move(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -218,29 +215,26 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param x the x-scale factor
      * @param y the y-scale factor
      * @param z the z-scale factor
-     * @return itself
      */
-    public abstract AxisAlignedBB3 scale(double x, double y, double z);
+    public abstract void scale(double x, double y, double z);
 
     /**
      * Scales the bounding box around the origin.
      *
      * @param v the scale factors
-     * @return itself
      */
-    public default AxisAlignedBB3 scale(Vector3 v) {
-        return scale(v.getX(), v.getY(), v.getZ());
+    public default void scale(Vector3 v) {
+        scale(v.getX(), v.getY(), v.getZ());
     }
 
     /**
      * Scales the bounding box around the origin.
      *
      * @param factor the scale factor
-     * @return itself
      */
     @Override
-    public default AxisAlignedBB3 scale(double factor) {
-        return scale(factor, factor, factor);
+    public default void scale(double factor) {
+        scale(factor, factor, factor);
     }
 
     /**
@@ -250,19 +244,17 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param x the x-growth
      * @param y the y-growth
      * @param z the z-growth
-     * @return itself
      */
-    public abstract AxisAlignedBB3 grow(double x, double y, double z);
+    public abstract void grow(double x, double y, double z);
 
     /**
      * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,
      * the minimum point stays untouched.
      *
      * @param v the growth
-     * @return itself
      */
-    public default AxisAlignedBB3 grow(Vector3 v) {
-        return grow(v.getX(), v.getY(), v.getZ());
+    public default void grow(Vector3 v) {
+        grow(v.getX(), v.getY(), v.getZ());
     }
 
     // MISC

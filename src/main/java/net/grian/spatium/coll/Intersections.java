@@ -73,17 +73,17 @@ public final class Intersections {
                 an = a.getNormal(),
                 bn = b.getNormal(),
                 direction = an.cross(bn),
-                ldir = bn.cross(direction);
+                lineDir = bn.cross(direction);
 
-        double denominator = an.dot(ldir);
-        if (Math.abs(denominator) > Spatium.EPSILON) {
-            double t = an.dot( ac.subtract(bc) ) / denominator;
-            /* notice the mutation of bc and ldir, which does not matter though since the result is being returned at
-            this point */
-            Vector3 origin = bc.add(ldir.multiply(t));
-            return Ray3.fromOD(origin, direction);
-        }
-        else return null;
+        double denominator = an.dot(lineDir);
+        ac.subtract(bc);
+        
+        if (Math.abs(denominator) < Spatium.EPSILON) return null;
+        double t = an.dot(ac) / denominator;
+        lineDir.multiply(t);
+        bc.add(lineDir);
+        
+        return Ray3.fromOD(bc, direction);
     }
 
     /**
@@ -208,7 +208,10 @@ public final class Intersections {
      */
     public static Path3 of(Sphere sphere, Plane plane) {
         Vector3 sc = sphere.getCenter();
-        Ray3 sphereToPlane = Ray3.fromOD(sc, plane.getNormal().multiply(-1));
+        Vector3 negNormal = plane.getNormal();
+        negNormal.negate();
+        
+        Ray3 sphereToPlane = Ray3.fromOD(sc, negNormal);
         if (sphereToPlane.getLengthSquared() > sphere.getRadiusSquared()) return null;
 
         Vector3 center = sphereToPlane.getPoint(Rays.cast(sphereToPlane, plane));

@@ -51,7 +51,9 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
 
     @Override
     public default Vector3 getPoint() {
-        return getNormal().multiply(getDepth());
+        Vector3 normal = getNormal();
+        normal.multiply(getDepth());
+        return normal;
     }
 
     /**
@@ -120,16 +122,16 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
     public abstract AxisPlane setDepth(double depth);
 
     @Override
-    public default Plane setNormal(double x, double y, double z) {
+    public default void setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public default Plane setCenter(double x, double y, double z) {
+    public default void setCenter(double x, double y, double z) {
         switch (getAxis()) {
-            case X: return setDepth(x);
-            case Y: return setDepth(y);
-            case Z: return setDepth(z);
+            case X: setDepth(x); break;
+            case Y: setDepth(y); break;
+            case Z: setDepth(z); break;
             default: throw new IllegalStateException("no axis");
         }
     }

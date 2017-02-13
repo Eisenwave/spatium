@@ -39,7 +39,7 @@ public interface AxisSlab3 extends Slab3, Serializable, Cloneable {
     //SETTERS
 
     @Override
-    public default Slab3 setNormal(double x, double y, double z) {
+    public default void setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();
     }
 
@@ -47,18 +47,16 @@ public interface AxisSlab3 extends Slab3, Serializable, Cloneable {
      * Moves the slab positively on its axis.
      *
      * @param depth the additional depth
-     * @return itself
      */
     @Override
-    public abstract AxisSlab3 push(double depth);
+    public abstract void push(double depth);
 
     /**
      * Moves the slab negatively on its axis.
      *
      * @param depth the additional depth
-     * @return itself
      */
     @Override
-    public abstract AxisSlab3 pull(double depth);
+    public abstract void pull(double depth);
 
 }

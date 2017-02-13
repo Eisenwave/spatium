@@ -63,12 +63,16 @@ public class OrientedBB3Impl implements OrientedBB3 {
 
     @Override
     public Vector3 getMin() {
-        return getCenter().subtract(Matrix.product(trans, dx, dy, dz));
+        Vector3 result = getCenter();
+        result.subtract(Matrix.product(trans, dx, dy, dz));
+        return result;
     }
 
     @Override
     public Vector3 getMax() {
-        return getCenter().add(Matrix.product(trans, dx, dy, dz));
+        Vector3 result = getCenter();
+        result.add(Matrix.product(trans, dx, dy, dz));
+        return result;
     }
 
     @Override
@@ -81,8 +85,8 @@ public class OrientedBB3Impl implements OrientedBB3 {
         return trans.clone();
     }
 
-    public Vector3 applyTransform(Vector3 vector) {
-        return vector.transform(trans);
+    public void applyTransform(Vector3 vector) {
+        vector.transform(trans);
     }
 
     @Override
@@ -140,25 +144,22 @@ public class OrientedBB3Impl implements OrientedBB3 {
     //SETTERS
 
     @Override
-    public OrientedBB3 move(double x, double y, double z) {
+    public void move(double x, double y, double z) {
         this.cx += x;
         this.cy += y;
         this.cz += z;
-        return this;
     }
 
     @Override
-    public OrientedBB3 transform(Matrix transform) {
+    public void transform(Matrix transform) {
         this.trans = Matrix.product(this.trans, transform);
-        return this;
     }
     
     @Override
-    public OrientedBB3 scale(double factor) {
+    public void scale(double factor) {
         this.cx *= factor;
         this.cy *= factor;
         this.cz *= factor;
-        return this;
     }
     
     //MISC

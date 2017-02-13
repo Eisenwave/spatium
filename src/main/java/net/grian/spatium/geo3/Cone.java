@@ -99,42 +99,46 @@ public interface Cone extends Space, Cloneable, Serializable {
     @Override
     default boolean contains(double x, double y, double z) {
         double height = getHeight();
-        Vector3
-            apex = getApex(),
-            apexToPoint = Vector3.fromXYZ(x, y, z).subtract(apex),
-            axis = getDirection().normalize();
+        Vector3 apex = getApex();
+        
+        Vector3 apexToPoint = Vector3.fromXYZ(x, y, z);
+        apexToPoint.subtract(apex);
+        
+        Vector3 axis = getDirection();
+        axis.normalize();
         
         //distance (must be between 0 and height) of the point (projected onto cone axis) to the apex
         double coneDist = apexToPoint.dot(axis);
         if (coneDist < 0 || coneDist > height) return false;
+    
+        //note that apexToPoint and axis are being mutated here, although this is fine since they are not used after
+        axis.multiply(coneDist);
+        apexToPoint.subtract(axis);
         
         double
             //radius between at coneDist (between 0 and base radius)
             maxRadius = (coneDist / height) * getBaseRadius(),
-            //note that apexToPoint and dir are being mutated here which is irrelevant in this situation though
-            localRadius = apexToPoint
-                .subtract(axis.multiply(coneDist))
-                .getLength();
+            localRadius = apexToPoint.getLength();
         
         return localRadius <= maxRadius;
     }
     
     //SETTERS
     
-    abstract Cone setHeight(double height);
+    abstract void setHeight(double height);
     
-    abstract Cone setBaseRadius(double radius);
+    abstract void setBaseRadius(double radius);
     
-    abstract Cone setApex(double x, double y, double z);
+    abstract void setApex(double x, double y, double z);
     
-    default Cone setApex(Vector3 apex) {
-        return setApex(apex.getX(), apex.getY(), apex.getZ());
+    default void setApex(Vector3 apex) {
+        setApex(apex.getX(), apex.getY(), apex.getZ());
     }
     
-    abstract Cone setDirection(double x, double y, double z);
+    abstract void setDirection(double x, double y, double z);
     
-    default Cone setDirection(Vector3 dir) {
-        return setDirection(dir.getX(), dir.getY(), dir.getZ());
+    default void setDirection(Vector3 dir) {
+        setDirection(dir.getX(), dir.getY(), dir.getZ());
     }
     
 }

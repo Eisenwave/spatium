@@ -158,19 +158,19 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
 
     //SETTERS
 
-    abstract Triangle3 setA(Vector3 point);
+    abstract void setA(Vector3 point);
 
-    abstract Triangle3 setB(Vector3 point);
+    abstract void setB(Vector3 point);
 
-    abstract Triangle3 setC(Vector3 point);
+    abstract void setC(Vector3 point);
 
-    default Triangle3 setCenter(double x, double y, double z) {
+    default void setCenter(double x, double y, double z) {
         Vector3 p = getCenter();
-        return move(x - p.getX(), y - p.getY(), z - p.getZ());
+        move(x - p.getX(), y - p.getY(), z - p.getZ());
     }
 
-    default Triangle3 setCenter(Vector3 point) {
-        return setCenter(point.getX(), point.getY(), point.getZ());
+    default void setCenter(Vector3 point) {
+        setCenter(point.getX(), point.getY(), point.getZ());
     }
 
     //TRANSFORMATIONS
@@ -181,28 +181,25 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
      * @param x the x-translation
      * @param y the y-translation
      * @param z the z-translation
-     * @return itself
      */
-    abstract Triangle3 move(double x, double y, double z);
+    abstract void move(double x, double y, double z);
 
     /**
      * Translates all points of this triangle by a given amount.
      *
      * @param v the translation
-     * @return itself
      */
-    default Triangle3 move(Vector3 v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    default void move(Vector3 v) {
+        move(v.getX(), v.getY(), v.getZ());
     }
     
-    default Triangle3 transform(Matrix transform) {
+    default void transform(Matrix transform) {
         setA(Matrix.product(transform, getA()));
         setB(Matrix.product(transform, getB()));
         setC(Matrix.product(transform, getC()));
-        return this;
     }
 
-    default Triangle3 transform(Transformation t) {
+    default void transform(Transformation t) {
         Vector3 a = getA(), b = getB(), c = getC();
         t.transform(a);
         t.transform(b);
@@ -210,14 +207,13 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
         setA(a);
         setB(b);
         setC(c);
-        return this;
     }
     
-    abstract Triangle3 scale(double x, double y, double z);
+    abstract void scale(double x, double y, double z);
 
     @Override
-    default Triangle3 scale(double factor) {
-        return scale(factor, factor, factor);
+    default void scale(double factor) {
+        scale(factor, factor, factor);
     }
 
 }

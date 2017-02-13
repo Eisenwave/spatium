@@ -75,7 +75,7 @@ public class AxisCylinderImpl implements AxisCylinder {
     }
     
     @Override
-    public Space scale(double factor) {
+    public void scale(double factor) {
         throw new UnsupportedOperationException();
     }
     

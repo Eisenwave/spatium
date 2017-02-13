@@ -55,50 +55,49 @@ public interface BlockVector extends Serializable, Cloneable {
      * @param x the x-coordinate
      * @param y the y-coordinate
      * @param z the z-coordinate
-     * @return itself
      */
-    public abstract BlockVector set(int x, int y, int z);
+    public abstract void set(int x, int y, int z);
 
-    public abstract BlockVector setX(int x);
+    public abstract void setX(int x);
 
-    public abstract BlockVector setY(int y);
+    public abstract void setY(int y);
 
-    public abstract BlockVector setZ(int z);
+    public abstract void setZ(int z);
 
-    public abstract BlockVector add(int x, int y, int z);
+    public abstract void add(int x, int y, int z);
 
-    public default BlockVector add(BlockVector block) {
-        return add(block.getX(), block.getY(), block.getZ());
+    public default void add(BlockVector block) {
+        add(block.getX(), block.getY(), block.getZ());
     }
 
-    public abstract BlockVector subtract(int x, int y, int z);
+    public abstract void subtract(int x, int y, int z);
 
-    public default BlockVector subtract(BlockVector block) {
-        return subtract(block.getX(), block.getY(), block.getZ());
+    public default void subtract(BlockVector block) {
+        subtract(block.getX(), block.getY(), block.getZ());
     }
 
-    public abstract BlockVector multiply(int x, int y, int z);
+    public abstract void multiply(int x, int y, int z);
 
-    public default BlockVector multiply(int factor) {
-        return multiply(factor, factor, factor);
+    public default void multiply(int factor) {
+        multiply(factor, factor, factor);
     }
 
-    public abstract BlockVector multiply(double x, double y, double z);
+    public abstract void multiply(double x, double y, double z);
 
-    public default BlockVector multiply(double factor) {
-        return multiply(factor, factor, factor);
+    public default void multiply(double factor) {
+        multiply(factor, factor, factor);
     }
 
-    public abstract BlockVector divide(int x, int y, int z);
+    public abstract void divide(int x, int y, int z);
 
-    public default BlockVector divide(int factor) {
-        return divide(factor, factor, factor);
+    public default void divide(int factor) {
+        divide(factor, factor, factor);
     }
 
-    public abstract BlockVector divide(double x, double y, double z);
+    public abstract void divide(double x, double y, double z);
 
-    public default BlockVector divide(double divisor) {
-        return divide(divisor, divisor, divisor);
+    public default void divide(double divisor) {
+        divide(divisor, divisor, divisor);
     }
 
     // CHECKERS

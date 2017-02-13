@@ -61,39 +61,35 @@ public class AxisSlab33Impl implements AxisSlab3 {
     }
 
     @Override
-    public Slab3 setMinDepth(double depth) {
+    public void setMinDepth(double depth) {
         if (depth > max) {
             min = max;
             max = depth;
         }
         else
             min = depth;
-        return this;
     }
 
     @Override
-    public Slab3 setMaxDepth(double depth) {
+    public void setMaxDepth(double depth) {
         if (depth < min) {
             max = min;
             min = depth;
         }
         else
             max = depth;
-        return this;
     }
 
     @Override
-    public AxisSlab3 push(double depth) {
+    public void push(double depth) {
         min += depth;
         max += depth;
-        return this;
     }
 
     @Override
-    public AxisSlab3 pull(double depth) {
+    public void pull(double depth) {
         min += depth;
         max += depth;
-        return this;
     }
 
 }

@@ -99,10 +99,9 @@ public final class Transformations {
     }
 
     public static void scale(AxisAlignedBB3 box, double x, double y, double z, double factor) {
-        box
-                .move(-box.getMinX(), -box.getMinY(), -box.getMinZ())
-                .scale(factor)
-                .move(x, y, z);
+        box.move(-box.getMinX(), -box.getMinY(), -box.getMinZ());
+        box.scale(factor);
+        box.move(x, y, z);
     }
 
     /**
@@ -128,7 +127,9 @@ public final class Transformations {
      * @param yaw the yaw in degrees
      */
     public static void rotateYaw(Vector3 point, double x, double y, double z, double yaw) {
-        point.subtract(x, y, z).setYaw(yaw).add(x, y, z);
+        point.subtract(x, y, z);
+        point.setYaw(yaw);
+        point.add(x, y, z);
     }
 
     /**
@@ -141,7 +142,9 @@ public final class Transformations {
      * @param pitch the pitch in degrees
      */
     public static void rotatePitch(Vector3 point, double x, double y, double z, double pitch) {
-        point.subtract(x, y, z).setPitch(pitch).add(x, y, z);
+        point.subtract(x, y, z);
+        point.setPitch(pitch);
+        point.add(x, y, z);
     }
 
     /**
@@ -155,7 +158,9 @@ public final class Transformations {
      * @param pitch the pitch in degrees
      */
     public static void rotateYawPitch(Vector3 point, double x, double y, double z, double yaw, double pitch) {
-        point.subtract(x, y, z).setYawPitch(yaw, pitch).add(x, y, z);
+        point.subtract(x, y, z);
+        point.setYawPitch(yaw, pitch);
+        point.add(x, y, z);
     }
 
     /**
@@ -271,6 +276,7 @@ public final class Transformations {
      * @param axis the axis around which the point is to be rotated (unit vector)
      * @param theta the angle of the rotation in radians
      */
+    @SuppressWarnings("deprecation")
     @Deprecated
     public static void rotate(Vector3 point, Vector3 axis, double theta) {
         rotate(point, Quaternion.fromRotation(axis, theta));
@@ -336,13 +342,13 @@ public final class Transformations {
     public static void rotate3(Vector3 point, Vector3 axis, double theta) {
         Quaternion q = Quaternion.fromRotation(axis, theta);
         Vector3 qv = q.getVector();
-        Vector3 t = qv.cross(point).multiply(2);
-        point.set(
-                t.clone()
-                    .multiply(q.getW())
-                    .add(point)
-                    .add(qv.cross(t))
-        );
+        Vector3 t = qv.cross(point);
+        t.multiply(2);
+        
+        point.set(t);
+        point.multiply(q.getW());
+        point.add(point);
+        point.add(qv.cross(t));
     }
 
 }

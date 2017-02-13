@@ -123,65 +123,59 @@ public class Vector3Impl implements Vector3 {
     // SETTERS
 
     @Override
-    public Vector3 set(double x, double y, double z) {
+    public void set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
     }
 
     @Override
-    public Vector3 setX(double x) {
+    public void setX(double x) {
         this.x = x;
-        return this;
     }
 
     @Override
-    public Vector3 setY(double y) {
+    public void setY(double y) {
         this.y = y;
-        return this;
     }
 
     @Override
-    public Vector3 setZ(double z) {
+    public void setZ(double z) {
         this.z = z;
-        return this;
     }
 
     @Override
-    public Vector3 transform(Matrix m) {
+    public void transform(Matrix m) {
         if (m.getRows() != 3 || m.getColumns() != 3)
             throw new MatrixDimensionsException("matrix must be a 3x3 matrix");
 
-        return this.set(
+        set(
                 m.get(0,0)*x + m.get(0,1)*y + m.get(0,2)*z,
                 m.get(1,0)*x + m.get(1,1)*y + m.get(1,2)*z,
                 m.get(2,0)*x + m.get(2,1)*y + m.get(2,2)*z);
     }
 
     @Override
-    public Vector3 setYaw(double yaw) {
+    public void setYaw(double yaw) {
         double
         yaw2 = Math.toRadians(yaw),
         r = getLength();
 
         this.x = Math.sin(-yaw2) * r;
         this.z = Math.cos( yaw2) * r;
-        return this;
     }
 
     @Override
-    public Vector3 setPitch(double pitch) {
+    public void setPitch(double pitch) {
         double
         pitch2 = -Math.toRadians(pitch),
         r = getLength();
 
         this.y = Math.tan(pitch2) * r;
-        return this;
     }
 
     @Override
-    public Vector3 setRadiusYawPitch(double radius, double yaw, double pitch) {
+    public void setRadiusYawPitch(double radius, double yaw, double pitch) {
         double
         r = radius * getLength(),
         y = Math.toRadians(yaw),
@@ -190,72 +184,63 @@ public class Vector3Impl implements Vector3 {
         this.x = Math.sin(-y) * r;
         this.y = Math.tan( p) * r;
         this.z = Math.cos( y) * r;
-        return this;
     }
 
     @Override
-    public Vector3 add(double x, double y, double z) {
+    public void add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
-        return this;
     }
 
     @Override
-    public Vector3 subtract(double x, double y, double z) {
+    public void subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
-        return this;
     }
 
     @Override
-    public Vector3 multiply(double x, double y, double z) {
+    public void multiply(double x, double y, double z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
-        return this;
     }
 
     @Override
-    public Vector3 multiply(double factor) {
+    public void multiply(double factor) {
         this.x *= factor;
         this.y *= factor;
         this.z *= factor;
-        return this;
     }
 
     @Override
-    public Vector3 negate() {
+    public void negate() {
         this.x = -x;
         this.y = -y;
         this.z = -z;
-        return this;
     }
 
     @Override
-    public Vector3 divide(double x, double y, double z) {
+    public void divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;
-        return this;
     }
 
     @Override
-    public Vector3 divide(double divisor) {
+    public void divide(double divisor) {
         this.x /= divisor;
         this.y /= divisor;
         this.z /= divisor;
-        return this;
     }
 
     @Override
-    public Vector3 setLength(double length) {
+    public void setLength(double length) {
         double n = length / getLength();
         x *= n;
         y *= n;
         z *= n;
-        return this;
     }
 
     @Override

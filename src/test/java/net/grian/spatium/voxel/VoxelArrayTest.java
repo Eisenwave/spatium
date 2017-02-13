@@ -1,6 +1,5 @@
 package net.grian.spatium.voxel;
 
-import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.util.ColorMath;
 import net.grian.spatium.util.RuntimeUtil;
@@ -31,23 +30,13 @@ public class VoxelArrayTest {
     
     @Test
     public void memoryUsage() throws Exception {
-        Object[] trap = new Object[2];
-        {
-            System.gc();
-            double megsBefore = RuntimeUtil.usedMemory() / CacheMath.MILLION;
-            trap[0] = new int[10][10][10];
-            System.gc();
-            double megsAfter = RuntimeUtil.usedMemory() / CacheMath.MILLION;
-            System.out.println(megsBefore+" MB -> "+megsAfter+" MB");
-        }
-        {
-            System.gc();
-            double megsBefore = RuntimeUtil.usedMemory() / CacheMath.MILLION;
-            trap[1] = new int[10*10*10];
-            System.gc();
-            double megsAfter = RuntimeUtil.usedMemory() / CacheMath.MILLION;
-            System.out.println(megsBefore+" MB -> "+megsAfter+" MB");
-        }
+        int tests = 10000;
+        
+        long sizeA = RuntimeUtil.sizeOf(() -> new int[10][10], tests);
+        System.out.println(sizeA+" bytes");
+        
+        long sizeB = RuntimeUtil.sizeOf(() -> new int[10*10], tests);
+        System.out.println(sizeB+" bytes");
     }
 
     @Test

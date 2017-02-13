@@ -23,7 +23,6 @@ public interface Area {
      * Scales this object by a factor around its own center by given factor
      *
      * @param factor the scaling factor
-     * @return itself
      *
      * @implNote The implementation has to guarantee that: <ul>
      *     <li><tt>scale(factor).getArea() "equals" getArea()*factor</tt></li>
@@ -31,6 +30,6 @@ public interface Area {
      *     <li>the center of the object stays unaffected by scaling</li>
      * </ul>
      */
-    abstract Area scale(double factor);
+    abstract void scale(double factor);
     
 }

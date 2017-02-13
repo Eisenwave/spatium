@@ -46,7 +46,12 @@ public final class Projections {
      */
     public static Vector3 pointOnPlane(Plane plane, Vector3 point) {
         Vector3 normal = plane.getNormal();
-        return point.subtract( normal.multiply(point.dot(normal)) );
+        normal.multiply(point.dot(normal));
+        
+        Vector3 result = point.clone();
+        result.subtract(normal);
+        
+        return result;
     }
     
     /**
@@ -71,7 +76,8 @@ public final class Projections {
         if (Spatium.equals(normal.getX(), 0) && Spatium.equals(normal.getY(), 0))
             return orthoProjectZ(triangle.getA(), triangle.getB(), triangle.getC());
         
-        Vector3 axis = normal.cross(baseZ).normalize();
+        Vector3 axis = normal.cross(baseZ);
+        axis.normalize();
         Quaternion quaternion = Quaternion.fromRotation(axis, normal.angleTo(baseZ));
         
         return orthoProjectZ(
