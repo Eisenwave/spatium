@@ -122,8 +122,7 @@ public interface Quaternion extends Serializable, Cloneable {
         double
             halfTheta = theta * 0.5f,
             w = Math.cos(halfTheta);
-        Vector3 xyz = axis.clone();
-        xyz.multiply(Math.sin(halfTheta));
+        Vector3 xyz = axis.clone().multiply(Math.sin(halfTheta));
         
         return fromXYZW(xyz, w);
     }
@@ -167,10 +166,8 @@ public interface Quaternion extends Serializable, Cloneable {
      * @return a new transformed point
      */
     static Vector3 product(Quaternion q, Vector3 point) {
-        return product(
-            product(q, Quaternion.fromVector(point)),
-            Quaternion.inverse(q))
-            .getVector();
+        Quaternion p = Quaternion.fromVector(point);
+        return product(product(q, p), Quaternion.inverse(q)).getVector();
     }
 
     /**

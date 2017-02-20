@@ -92,17 +92,17 @@ public class Vector3Impl implements Vector3 {
     @Override
     public Vector3 cross(double x, double y, double z) {
         return new Vector3Impl(
-                (this.y * z - this.z * y),
-                (this.z * x - this.x * z),
-                (this.x * y - this.y * x));
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x);
     }
 
     @Override
     public double distanceTo(double x, double y, double z) {
         double
-        dx = this.x - x,
-        dy = this.y - y,
-        dz = this.z - z;
+            dx = this.x - x,
+            dy = this.y - y,
+            dz = this.z - z;
 
         return Math.sqrt(dx*dx + dy*dy + dz*dz);
     }
@@ -123,59 +123,69 @@ public class Vector3Impl implements Vector3 {
     // SETTERS
 
     @Override
-    public void set(double x, double y, double z) {
+    public Vector3 set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        return this;
     }
 
     @Override
-    public void setX(double x) {
+    public Vector3 setX(double x) {
         this.x = x;
+        return this;
     }
 
     @Override
-    public void setY(double y) {
+    public Vector3 setY(double y) {
         this.y = y;
+        return this;
     }
 
     @Override
-    public void setZ(double z) {
+    public Vector3 setZ(double z) {
         this.z = z;
+        return this;
     }
 
     @Override
-    public void transform(Matrix m) {
+    public Vector3 transform(Matrix m) {
         if (m.getRows() != 3 || m.getColumns() != 3)
             throw new MatrixDimensionsException("matrix must be a 3x3 matrix");
 
-        set(
+        return set(
                 m.get(0,0)*x + m.get(0,1)*y + m.get(0,2)*z,
                 m.get(1,0)*x + m.get(1,1)*y + m.get(1,2)*z,
                 m.get(2,0)*x + m.get(2,1)*y + m.get(2,2)*z);
     }
 
     @Override
-    public void setYaw(double yaw) {
+    public Vector3 setYaw(double yaw) {
         double
         yaw2 = Math.toRadians(yaw),
         r = getLength();
 
         this.x = Math.sin(-yaw2) * r;
         this.z = Math.cos( yaw2) * r;
+        return this;
     }
 
     @Override
-    public void setPitch(double pitch) {
+    public Vector3 setPitch(double pitch) {
         double
-        pitch2 = -Math.toRadians(pitch),
-        r = getLength();
-
-        this.y = Math.tan(pitch2) * r;
+            pitch2 = -Math.toRadians(pitch),
+            r = getLength(),
+            cos = Math.cos(pitch2),
+            tan = Math.tan(pitch2);
+        
+        this.x = cos * r;
+        this.y = tan * r;
+        this.z = cos * r;
+        return this;
     }
 
     @Override
-    public void setRadiusYawPitch(double radius, double yaw, double pitch) {
+    public Vector3 setRadiusYawPitch(double radius, double yaw, double pitch) {
         double
         r = radius * getLength(),
         y = Math.toRadians(yaw),
@@ -184,63 +194,63 @@ public class Vector3Impl implements Vector3 {
         this.x = Math.sin(-y) * r;
         this.y = Math.tan( p) * r;
         this.z = Math.cos( y) * r;
+        return this;
     }
 
     @Override
-    public void add(double x, double y, double z) {
+    public Vector3 add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
+        return this;
     }
 
     @Override
-    public void subtract(double x, double y, double z) {
+    public Vector3 subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
+        return this;
     }
 
     @Override
-    public void multiply(double x, double y, double z) {
+    public Vector3 multiply(double x, double y, double z) {
         this.x *= x;
         this.y *= y;
         this.z *= z;
+        return this;
     }
 
     @Override
-    public void multiply(double factor) {
+    public Vector3 multiply(double factor) {
         this.x *= factor;
         this.y *= factor;
         this.z *= factor;
+        return this;
     }
 
     @Override
-    public void negate() {
+    public Vector3 negate() {
         this.x = -x;
         this.y = -y;
         this.z = -z;
+        return this;
     }
 
     @Override
-    public void divide(double x, double y, double z) {
+    public Vector3 divide(double x, double y, double z) {
         this.x /= x;
         this.y /= y;
         this.z /= z;
+        return this;
     }
 
     @Override
-    public void divide(double divisor) {
+    public Vector3 divide(double divisor) {
         this.x /= divisor;
         this.y /= divisor;
         this.z /= divisor;
-    }
-
-    @Override
-    public void setLength(double length) {
-        double n = length / getLength();
-        x *= n;
-        y *= n;
-        z *= n;
+        return this;
     }
 
     @Override

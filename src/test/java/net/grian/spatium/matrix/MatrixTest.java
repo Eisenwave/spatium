@@ -1,12 +1,33 @@
 package net.grian.spatium.matrix;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.enums.Axis;
 import net.grian.spatium.util.PrimMath;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class MatrixTest {
+    
+    @Test
+    public void sum() {
+        Matrix matrix = Matrix.create(3, 3,
+            1, 2, 3,
+            4, 5, 6,
+            7, 8, 9);
+        Matrix expected = matrix.clone();
+        expected.scale(3);
+        
+        assertEquals(expected, Matrices.sum(matrix, matrix, matrix));
+    }
+    
+    @Test
+    public void rotationMatrix() {
+        double deg90 = Spatium.radians(90);
+        assertEquals(Matrix.fromRotX(deg90), Matrix.fromRot(Axis.X.vector(), deg90));
+        assertEquals(Matrix.fromRotY(deg90), Matrix.fromRot(Axis.Y.vector(), deg90));
+        assertEquals(Matrix.fromRotZ(deg90), Matrix.fromRot(Axis.Z.vector(), deg90));
+    }
     
     @Test
     public void floydWarshall() {
@@ -72,8 +93,9 @@ public class MatrixTest {
                     i = PrimMath.randomInt(63, 63),
                     j = PrimMath.randomInt(63, 63),
                     value = PrimMath.randomInt(Integer.MAX_VALUE);
+            matrix.set(i, j, value);
 
-            assertEquals(value, matrix.set(i, j, value).get(i, j), Spatium.EPSILON);
+            assertEquals(value, matrix.get(i, j), Spatium.EPSILON);
         }
     }
 
@@ -108,10 +130,12 @@ public class MatrixTest {
                 1, 4, 9, 16,
                 1, 8, 27, 64,
                 1, 16, 81, 256);
-
+    
+        matrix.swapRows(0, 3);
+        matrix.swapRows(1, 2);
         try {
-            assertArrayEquals(new double[]{1, 16, 81, 256}, matrix.swapRows(0, 3).getRow(0), Spatium.EPSILON);
-            assertArrayEquals(new double[]{1, 8, 27, 64}, matrix.swapRows(1, 2).getRow(1), Spatium.EPSILON);
+            assertArrayEquals(new double[]{1, 16, 81, 256}, matrix.getRow(0), Spatium.EPSILON);
+            assertArrayEquals(new double[]{1, 8, 27, 64}, matrix.getRow(1), Spatium.EPSILON);
         } catch (Throwable error) {
             System.out.println(matrix);
             throw error;
@@ -125,10 +149,12 @@ public class MatrixTest {
                 1, 4, 9, 16,
                 1, 8, 27, 64,
                 1, 16, 81, 256);
-
+    
+        matrix.swapColumns(0, 3);
+        matrix.swapColumns(1, 2);
         try {
-            assertArrayEquals(new double[]{4, 16, 64, 256}, matrix.swapColumns(0, 3).getColumn(0), Spatium.EPSILON);
-            assertArrayEquals(new double[]{3, 9, 27, 81}, matrix.swapColumns(1, 2).getColumn(1), Spatium.EPSILON);
+            assertArrayEquals(new double[]{4, 16, 64, 256}, matrix.getColumn(0), Spatium.EPSILON);
+            assertArrayEquals(new double[]{3, 9, 27, 81}, matrix.getColumn(1), Spatium.EPSILON);
         } catch (Throwable error) {
             System.out.println(matrix);
             throw error;
@@ -168,7 +194,8 @@ public class MatrixTest {
                 3, 9, 27, 81,
                 4, 16, 64, 256);
 
-        assertEquals(expected, actual.transpose());
+        actual.transpose();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -239,7 +266,8 @@ public class MatrixTest {
                  96, -104,  36, -4,
                 -72,  114, -48,  6,
                  32,  -56,  28, -4,
-                 -6,   11,  -6,  1).scale(1 / 24D);
+                 -6,   11,  -6,  1);
+        inverse.scale(1 / 24D);
 
         assertEquals(inverse, matrix.getInverse());
     }

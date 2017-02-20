@@ -101,11 +101,8 @@ public interface Cone extends Space, Cloneable, Serializable {
         double height = getHeight();
         Vector3 apex = getApex();
         
-        Vector3 apexToPoint = Vector3.fromXYZ(x, y, z);
-        apexToPoint.subtract(apex);
-        
-        Vector3 axis = getDirection();
-        axis.normalize();
+        Vector3 apexToPoint = Vector3.fromXYZ(x, y, z).subtract(apex);
+        Vector3 axis = getDirection().normalize();
         
         //distance (must be between 0 and height) of the point (projected onto cone axis) to the apex
         double coneDist = apexToPoint.dot(axis);

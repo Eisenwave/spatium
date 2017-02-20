@@ -88,70 +88,83 @@ public class PolarVector3Impl implements Vector3 {
     }
 
     @Override
-    public void set(double x, double y, double z) {
+    public Vector3 set(double x, double y, double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void setX(double x) {
+    public Vector3 setX(double x) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void setY(double y) {
+    public Vector3 setY(double y) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void setZ(double z) {
+    public Vector3 setZ(double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void transform(Matrix m) {
+    public Vector3 transform(Matrix m) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void add(double x, double y, double z) {
+    public Vector3 add(double x, double y, double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void subtract(double x, double y, double z) {
+    public Vector3 subtract(double x, double y, double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void multiply(double x, double y, double z) {
+    public Vector3 multiply(double x, double y, double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void divide(double x, double y, double z) {
+    public Vector3 divide(double x, double y, double z) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void setLength(double length) {
+    public Vector3 setLength(double length) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void setYaw(double yaw) {
+    public Vector3 setYaw(double yaw) {
         this.yaw = yaw;
+        return this;
     }
 
     @Override
-    public void setPitch(double pitch) {
+    public Vector3 setPitch(double pitch) {
         this.pitch = pitch;
+        return this;
     }
 
     @Override
-    public void setRadiusYawPitch(double radius, double yaw, double pitch) {
+    public Vector3 setRadiusYawPitch(double radius, double yaw, double pitch) {
         this.radius = radius;
         this.yaw = yaw;
         this.pitch = pitch;
+        return this;
     }
 
     @Override

@@ -31,6 +31,19 @@ public interface Vector2 {
         return Spatium.hypot(getX(), getY());
     }
     
+    /**
+     * Returns a vector of equal length perpendicular to this vector, so that:
+     * <ul>
+     *     <li>|v'| = |v|</tt></li>
+     *     <li><tt>v * v' = 0</tt></li>
+     * </ul>
+     *
+     * @return a perpendicular vector of equal length
+     */
+    default Vector2 getInverse() {
+        return fromXY(getY(), -getX());
+    }
+    
     //SETTERS
     
     abstract Vector2 setX(double x);
@@ -41,10 +54,6 @@ public interface Vector2 {
     
     default Vector2 setLength(double length) {
         return multiply(length / getLength());
-    }
-    
-    default Vector2 normalize() {
-        return setLength(1);
     }
     
     //OPERATIONS
@@ -71,6 +80,24 @@ public interface Vector2 {
     
     default Vector2 divide(double divisor) {
         return divide(divisor, divisor);
+    }
+    
+    /**
+     * Negates this vector, so that <tt>v' = -v</tt>
+     *
+     * @return itself
+     */
+    default Vector2 negate() {
+        return multiply(-1);
+    }
+    
+    /**
+     * Normalizes this vector, so that <tt>|v| = 1</tt>
+     *
+     * @return itself
+     */
+    default Vector2 normalize() {
+        return setLength(1);
     }
     
 }

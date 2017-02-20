@@ -4,6 +4,7 @@ import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
+import org.jetbrains.annotations.Contract;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -19,19 +20,9 @@ public interface Vector3 extends Serializable, Cloneable {
      *
      * @return a new Vector3
      */
+    @Contract(value = " -> !null", pure = true)
     static Vector3 zero() {
         return new Vector3Impl();
-    }
-
-    static Vector3 random(double length) {
-        Random rng = new Random();
-        double
-                x = rng.nextDouble(),
-                y = rng.nextDouble(),
-                z = rng.nextDouble(),
-                multi = length / Math.sqrt(x*x + y*y + z*z);
-
-        return fromXYZ(x*multi, y*multi, z*multi);
     }
 
     /**
@@ -42,6 +33,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z-coordinate
      * @return a new Vector3
      */
+    @Contract(value = "_, _, _ -> !null", pure = true)
     static Vector3 fromXYZ(double x, double y, double z) {
         return new Vector3Impl(x, y, z);
     }
@@ -65,9 +57,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @return a new Vector3
      */
     static Vector3 fromRadiusYawPitch(double radius, double yaw, double pitch) {
-        Vector3 result = fromYawPitch(yaw, pitch);
-        result.setLength(radius);
-        return result;
+        return fromYawPitch(yaw, pitch).setLength(radius);
     }
 
     /**
@@ -109,40 +99,6 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     static Vector3 between(double fx, double fy, double fz, double tx, double ty, double tz) {
         return new Vector3Impl(tx-fx, ty-fy, tz-fz);
-    }
-
-    /**
-     * Returns the sum of all the vectors's coordinates.
-     *
-     * @param vectors the vectors
-     * @return the sum of vectors
-     * @throws IllegalArgumentException if the array is empty
-     */
-    static Vector3 sum(Vector3... vectors) {
-        if (vectors.length == 0) throw new IllegalArgumentException("no vectors given");
-        if (vectors.length == 1) return vectors[0].clone();
-
-        double x = 0, y = 0, z = 0;
-        for (Vector3 v : vectors) {
-            x += v.getX();
-            y += v.getY();
-            z += v.getZ();
-        }
-
-        return Vector3.fromXYZ(x, y, z);
-    }
-
-    /**
-     * Returns the average of all the vector's coordinates.
-     *
-     * @param vectors the vectors
-     * @return average vector
-     * @throws IllegalArgumentException if the array is empty
-     */
-    static Vector3 average(Vector3... vectors) {
-        Vector3 result = sum(vectors);
-        result.divide(vectors.length);
-        return result;
     }
 
     // GETTERS
@@ -188,14 +144,18 @@ public interface Vector3 extends Serializable, Cloneable {
      *
      * @return the length of the vector
      */
-    abstract double getLength();
+    default double getLength() {
+        return Math.sqrt(getLengthSquared());
+    }
 
     /**
      * Returns the squared length of the vector.
      *
      * @return the squared length of the vector
      */
-    abstract double getLengthSquared();
+    default double getLengthSquared() {
+        return dot(this);
+    }
 
     /**
      * Returns the distance between this vector and a point.
@@ -205,7 +165,9 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z-coordinate
      * @return the distance to the point
      */
-    abstract double distanceTo(double x, double y, double z);
+    default double distanceTo(double x, double y, double z) {
+        return Vector3.between(getX(), getY(), getZ(), x, y, z).getLength();
+    }
 
     /**
      * Returns the distance between this vector and a point.
@@ -225,7 +187,9 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z-coordinate
      * @return the signed angle to another vector
      */
-    abstract double angleTo(double x, double y, double z);
+    default double angleTo(double x, double y, double z) {
+        return Math.acos(dot(x, y, z) / (getLength() * Spatium.hypot(x, y, z)));
+    }
 
     /**
      * Returns the signed angle between this vector and another vector.
@@ -290,7 +254,9 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z coordinate of the vector
      * @return the dot-product of this and another vector
      */
-    abstract double dot(double x, double y, double z);
+    default double dot(double x, double y, double z) {
+        return getX()*x + getY()*y + getZ()*z;
+    }
 
     /**
      * Returns the dot-product of this and another vector.
@@ -371,15 +337,15 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param y the y-coordinate
      * @param z the z-coordinate
      */
-    abstract void set(double x, double y, double z);
+    abstract Vector3 set(double x, double y, double z);
 
     /**
      * Sets the coordinates of this vector to the coordinates of another vector.
      *
      * @param v the vector
      */
-    default void set(Vector3 v) {
-        set(v.getX(), v.getY(), v.getZ());
+    default Vector3 set(Vector3 v) {
+        return set(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -387,28 +353,21 @@ public interface Vector3 extends Serializable, Cloneable {
      *
      * @param x the x of the vector
      */
-    abstract void setX(double x);
+    abstract Vector3 setX(double x);
 
     /**
      * Sets the y of the vector.
      *
      * @param y the y of the vector
      */
-    abstract void setY(double y);
+    abstract Vector3 setY(double y);
 
     /**
      * Sets the z of the vector.
      *
      * @param z the z of the vector
      */
-    abstract void setZ(double z);
-
-    /**
-     * Transforms this vector using a 3x3 matrix.
-     *
-     * @param m the transformation matrix
-     */
-    abstract void transform(Matrix m);
+    abstract Vector3 setZ(double z);
 
     // OPERATIONS
 
@@ -419,15 +378,16 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param y the y-coordinate
      * @param z the z-coordinate
      */
-    abstract void add(double x, double y, double z);
+    abstract Vector3 add(double x, double y, double z);
 
     /**
      * Adds another vector to this vector.
      *
      * @param v the vector
+     * @return itself
      */
-    default void add(Vector3 v) {
-        add(v.getX(), v.getY(), v.getZ());
+    default Vector3 add(Vector3 v) {
+        return add(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -436,16 +396,18 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param x the x-coordinate
      * @param y the y-coordinate
      * @param z the z-coordinate
+     * @return itself
      */
-    abstract void subtract(double x, double y, double z);
+    abstract Vector3 subtract(double x, double y, double z);
 
     /**
      * Subtracts another vector from this vector.
      *
      * @param v the vector to subtract
+     * @return itself
      */
-    default void subtract(Vector3 v) {
-        subtract(v.getX(), v.getY(), v.getZ());
+    default Vector3 subtract(Vector3 v) {
+        return subtract(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -454,22 +416,23 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param x the x factor
      * @param y the y factor
      * @param z the z factor
+     * @return itself
      */
-    abstract void multiply(double x, double y, double z);
+    abstract Vector3 multiply(double x, double y, double z);
 
     /**
      * Scales this vector by a factor.
      * @param factor the factor
      */
-    default void multiply(double factor) {
-        multiply(factor, factor, factor);
+    default Vector3 multiply(double factor) {
+        return multiply(factor, factor, factor);
     }
 
     /**
      * Negates the vector, making it point into the exact opposite direction while preserving length.
      */
-    default void negate() {
-        multiply(-1);
+    default Vector3 negate() {
+        return multiply(-1);
     }
 
     /**
@@ -479,15 +442,15 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param y the y divisor
      * @param z the z divisor
      */
-    abstract void divide(double x, double y, double z);
+    abstract Vector3 divide(double x, double y, double z);
 
     /**
      * Divides this vector by a divisor.
      *
      * @param divisor the divisor
      */
-    default void divide(double divisor) {
-        divide(divisor, divisor, divisor);
+    default Vector3 divide(double divisor) {
+        return divide(divisor, divisor, divisor);
     }
 
     /**
@@ -496,8 +459,8 @@ public interface Vector3 extends Serializable, Cloneable {
      * @see #getLength()
      * @see #setLength(double)
      */
-    default void normalize() {
-        setLength(1);
+    default Vector3 normalize() {
+        return setLength(1);
     }
 
     /**
@@ -506,11 +469,18 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param length the length of the vector
      * @see #normalize()
      */
-    default void setLength(double length) {
-        multiply(length / getLength());
+    default Vector3 setLength(double length) {
+        return multiply(length / getLength());
     }
 
-    //ROTATIONS
+    //TRANSFORMATIONS
+    
+    /**
+     * Transforms this vector using a 3x3 matrix.
+     *
+     * @param m the transformation matrix
+     */
+    abstract Vector3 transform(Matrix m);
     
     /**
      * Rotates this vector around the x-axis.
@@ -526,8 +496,8 @@ public interface Vector3 extends Serializable, Cloneable {
      *         parameter of {@link #transform(Matrix)} to ensure consistency.
      *     </p>
      */
-    default void rotateX(double angle) {
-        transform(Matrix.fromRotX(angle));
+    default Vector3 rotateX(double angle) {
+        return transform(Matrix.fromRotX(angle));
     }
     
     /**
@@ -544,8 +514,8 @@ public interface Vector3 extends Serializable, Cloneable {
      *         parameter of {@link #transform(Matrix)} to ensure consistency.
      *     </p>
      */
-    default void rotateY(double angle) {
-        transform(Matrix.fromRotY(angle));
+    default Vector3 rotateY(double angle) {
+        return transform(Matrix.fromRotY(angle));
     }
     
     /**
@@ -562,8 +532,8 @@ public interface Vector3 extends Serializable, Cloneable {
      *         parameter of {@link #transform(Matrix)} to ensure consistency.
      *     </p>
      */
-    default void rotateZ(double angle) {
-        transform(Matrix.fromRotZ(angle));
+    default Vector3 rotateZ(double angle) {
+        return transform(Matrix.fromRotZ(angle));
     }
     
     /**
@@ -572,7 +542,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param yaw the yaw
      */
     @MinecraftSpecific
-    abstract void setYaw(double yaw);
+    abstract Vector3 setYaw(double yaw);
 
     /**
      * Sets the pitch of this vector.
@@ -580,7 +550,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param pitch the pitch
      */
     @MinecraftSpecific
-    abstract void setPitch(double pitch);
+    abstract Vector3 setPitch(double pitch);
 
     /**
      * Sets the radius (hypot), yaw and pitch of this vector.
@@ -590,7 +560,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param pitch the pitch
      */
     @MinecraftSpecific
-    abstract void setRadiusYawPitch(double radius, double yaw, double pitch);
+    abstract Vector3 setRadiusYawPitch(double radius, double yaw, double pitch);
 
     /**
      * Sets the yaw and pitch of this vector but keeps the radius (hypot).
@@ -599,8 +569,8 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param pitch the pitch
      */
     @MinecraftSpecific
-    default void setYawPitch(double yaw, double pitch) {
-        setRadiusYawPitch(getLength(), yaw, pitch);
+    default Vector3 setYawPitch(double yaw, double pitch) {
+        return setRadiusYawPitch(getLength(), yaw, pitch);
     }
 
     // MISC

@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Contract;
  *     {@link #get(int, int)}, however the size of the matrix is final and can not be changed.
  * </p>
  * <p>
- *     Thus, mathematical operations are provided in the utility methods {@link #sum(Matrix, Matrix)} and
- *     {@link #product(Matrix, Matrix)}.
+ *     Thus, mathematical operations are provided in the utility methods {@link Matrices#sum(Matrix, Matrix)} and
+ *     {@link Matrices#product(Matrix, Matrix)}.
  * </p>
  */
 public interface Matrix {
@@ -145,6 +145,65 @@ public interface Matrix {
             sin,  cos,  0,
             0,      0,  1);
     }
+    
+    /**
+     * Returns a 2x2 counter-clockwise rotation matrix.
+     *
+     * @param angle the angle in radians
+     * @return a new rotation matrix
+     */
+    public static Matrix fromRot2(double angle) {
+        double sin = Math.sin(angle), cos = Math.cos(angle);
+        
+        return new Matrix2Impl(cos, -sin, sin, cos);
+    }
+    
+    /**
+     * <p>
+     *     Returns a new 3x3 rotation matrix representing a counter-clockwise rotation around a given axis.
+     * </p>
+     * <p>
+     *     This is done using the <a href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues
+     *     rotation formula</a>.
+     * </p>
+     *
+     * @param x the axis x
+     * @param y the axis y
+     * @param z the axis z
+     * @param angle the angle in radians
+     * @return a new rotation matrix
+     */
+    public static Matrix fromRot(double x, double y, double z, double angle) {
+        //cross product matrix of vector = (x, y, z), so that: K * v = K x v (for any vector v)
+        Matrix k = Matrix.create(3, 3,
+             0, -z,  y,
+             z,  0, -x,
+            -y,  x,  0);
+        
+        //R = I + sin(a)K + (1-cos(a))K^2
+        Matrix k2 = Matrices.square(k);
+        k.scale(Math.sin(angle));
+        k2.scale(1 - Math.cos(angle));
+        
+        return Matrices.sum(identity(3), k, k2);
+    }
+    
+    /**
+     * <p>
+     *     Returns a new 3x3 rotation matrix representing a counter-clockwise rotation around a given axis.
+     * </p>
+     * <p>
+     *     This is done using the <a href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues
+     *     rotation formula</a>.
+     * </p>
+     *
+     * @param axis the rotation axis
+     * @param angle the angle in radians
+     * @return a new rotation matrix
+     */
+    public static Matrix fromRot(Vector3 axis, double angle) {
+        return fromRot(axis.getX(), axis.getY(), axis.getZ(), angle);
+    }
 
     /* {{1,0,0},{0,x,-y},{0,y,x}} * {{x,0,y},{0,1,0},{-y,0,x}} * {{x,-y,0},{y,x,0},{0,0,1}} (x=cos, y=sin) */
 
@@ -210,62 +269,6 @@ public interface Matrix {
 
     //OPERATIONS
 
-    /**
-     * Adds another matrix to this matrix.
-     *
-     * @param a the first matrix
-     * @param b the second matrix
-     * @return the sum of the matrices
-     * @throws MatrixDimensionsException if the matrices are not equal in
-     * size
-     */
-    public static Matrix sum(Matrix a, Matrix b) {
-        if (!a.equalSize(b))
-            throw new MatrixDimensionsException(a, b);
-
-        final int row = a.getRows(), col = a.getColumns();
-        double[] result = new double[row * col];
-
-        for (int i = 0; i < row; i++)
-            for (int j = 0; j < col; j++)
-                result[i*col + j] = a.get(row, col) + b.get(row, col);
-
-        return create(row, col, result);
-    }
-
-    /**
-     * Returns the sum of several matrices.
-     *
-     * @param matrices the matrices
-     * @return the sum of the matrices
-     */
-    public static Matrix sum(Matrix... matrices) {
-        if (matrices.length == 0)
-            throw new IllegalArgumentException("no matrices given");
-        if (matrices.length == 1)
-            return matrices[0].clone();
-
-        Matrix result = matrices[0];
-        for (int i = 1; i < matrices.length; i++)
-            result = sum(result, matrices[i]);
-
-        return result;
-    }
-
-    public static Vector3 product(Matrix a, double x, double y, double z) {
-        if (a.getRows() != 3 || a.getColumns() != 3)
-            throw new MatrixDimensionsException("matrix must be 3x3");
-
-        return Vector3.fromXYZ(
-            a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
-            a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
-            a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
-    }
-
-    public static Vector3 product(Matrix a, Vector3 column) {
-        return product(a, column.getX(), column.getY(), column.getZ());
-    }
-
     /*
     public static Matrix product(double x, double y, double z, Matrix a) {
         return Matrix.fromPoints(1, 3,
@@ -274,119 +277,6 @@ public interface Matrix {
                 a.get(0,2)*x + a.get(1,2)*z + a.get(2,2)*z);
     }
     */
-
-    /**
-     * Returns the product of two matrices.
-     *
-     * @param a the first matrix
-     * @param b the second matrix
-     * @return the product of the matrices
-     * @throws MatrixDimensionsException if the rows of the first matrix do
-     * not equal the columns of the second matrix
-     */
-    public static Matrix product(Matrix a, Matrix b) {
-        if (a.getColumns() != b.getRows())
-            throw new MatrixDimensionsException(a, b);
-
-        final int
-        arow = a.getRows(), acol = a.getColumns(),
-        brow = b.getRows(), bcol = b.getColumns();
-        double[] result = new double[arow * bcol];
-
-        /* outer loop for acquiring the position (i, j) in the product matrix */
-        for (int i = 0; i < arow; i++) for (int j = 0; j < bcol; j++) {
-            final int index = i*bcol + j;
-
-            /* inner loop for calculating the result at (i, j) */
-            for (int k = 0, l = 0; k < acol && l < brow; k++, l++)
-                result[index] += a.get(i, k) * b.get(l, j);
-        }
-
-        return create(arow, bcol, result);
-    }
-
-    /**
-     * <p>
-     *     Returns the product of a series of matrices.
-     * </p>
-     * List of special cases:
-     * <ul>
-     *     <li>if the array contains no matrices, an exception is thrown
-     *     <li>if the array contains one matrix, the result is a clone of the matrix
-     * </ul>
-     *
-     * @param matrices the matrices
-     * @return the matrix
-     * @throws IllegalArgumentException if the array is empty
-     */
-    public static Matrix product(Matrix... matrices) {
-        if (matrices.length == 0) throw new IllegalArgumentException("no matrices given");
-        if (matrices.length == 1) return matrices[0].clone();
-        if (matrices.length == 2) return product(matrices[0], matrices[1]);
-
-        if (matrices.length > 8) {
-            Matrix first = matrices[0].clone();
-            Matrix result = product(matrices[0], matrices[1]);
-            if (first.equals(result)) return first;
-
-            for (int i = 2; i<matrices.length; i++)
-                result = product(result, matrices[i]);
-        }
-
-        Matrix result = product(matrices[0], matrices[1]);
-        for (int i = 2; i<matrices.length; i++)
-            result = product(result, matrices[i]);
-
-        return result;
-    }
-
-    /**
-     * Returns the square of the matrix.
-     *
-     * @param matrix the matrix
-     * @return the square of the matrix
-     */
-    public static Matrix square(Matrix matrix) {
-        return Matrix.product(matrix, matrix);
-    }
-
-    /**
-     * Returns the cube of the matrix.
-     *
-     * @param matrix the matrix
-     * @return the cube of the matrix
-     */
-    public static Matrix cube(Matrix matrix) {
-        return Matrix.product(Matrix.product(matrix, matrix), matrix);
-    }
-
-    /**
-     * Returns the matrix to a given power.
-     *
-     * @param matrix the matrix
-     * @return the matrix to a given power
-     * @throws MatrixException if the power is negative or <code>power == 0 & rows != columns</code>
-     */
-    public static Matrix pow(Matrix matrix, int power) {
-        if (power < 0)
-            throw new MatrixException("power must be positive");
-        if (power == 0) {
-            int m = matrix.getRows(), n = matrix.getColumns();
-            if (m != n) throw new MatrixDimensionsException("can not take 0th power of "+m+" x "+n+" matrix");
-            return identity(n);
-        }
-        if (power == 1) return matrix;
-        if (power == 2) return square(matrix);
-        if (power == 3) return cube(matrix);
-
-        Matrix result = square(matrix);
-        if (result.equals(matrix)) return matrix;
-
-        for (int i = 2; i<power; i++)
-            result = product(result, matrix);
-
-        return result;
-    }
     
     /**
      * <p>
@@ -525,6 +415,22 @@ public interface Matrix {
      * @return the determinant of this matrix
      */
     public abstract double getDeterminant();
+    
+    /**
+     * Returns the trace of this matrix.
+     *
+     * @return the trace of this matrix
+     */
+    public default double getTrace() {
+        final int n = getRows();
+        if (n != getColumns()) throw new MatrixDimensionsException("matrix must be square");
+        
+        int trace = 0;
+        for (int i = 0; i < n; i++)
+            trace += get(i, i);
+        
+        return trace;
+    }
 
     /**
      * Returns a matrix of equal size containing the cofactors of this matrix.
@@ -586,6 +492,42 @@ public interface Matrix {
             this.getRows()    == matrix.getRows() &&
             this.getColumns() == matrix.getColumns();
     }
+    
+    /**
+     * Returns whether this matrix is a square matrix.
+     *
+     * @return whether this matrix is a square matrix
+     */
+    public default boolean isSquare() {
+        return getRows() == getColumns();
+    }
+    
+    /**
+     * Tests whether this matrix has a given Eigenvector.
+     *
+     * @param v the vector
+     * @return whether v is an eigenvector
+     */
+    public default boolean hasEigenvector(Vector3 v) {
+        return Matrices.product(this, v).isMultipleOf(v);
+    }
+    
+    /**
+     * Tests whether this matrix has a given Eigenvalue.
+     *
+     * @param lambda the eigenvalue
+     * @return whether lambda is an eigenvalue
+     */
+    public default boolean hasEigenvalue(double lambda) {
+        if (!isSquare()) throw new MatrixDimensionsException("matrix must be square");
+        
+        int n = getRows();
+        Matrix subtrahend = identity(n);
+        subtrahend.scale(-lambda);
+        
+        double det = Matrices.sum(this, subtrahend).getDeterminant();
+        return Spatium.equals(det, 0);
+    }
 
     // SETTERS
 
@@ -595,9 +537,8 @@ public interface Matrix {
      * @param i the row index
      * @param j the column index
      * @param value the value
-     * @return itself
      */
-    public abstract Matrix set(int i, int j, double value);
+    public abstract void set(int i, int j, double value);
 
     /**
      * Swaps two values in the matrix.
@@ -606,42 +547,36 @@ public interface Matrix {
      * @param j0 the old column index
      * @param i1 the new row index
      * @param j1 the new column index
-     * @return itself
      */
-    public abstract Matrix swap(int i0, int j0, int i1, int j1);
+    public abstract void swap(int i0, int j0, int i1, int j1);
 
     /**
      * Swaps two rows in the matrix.
      *
      * @param i0 the old row index
      * @param i1 the new row index
-     * @return itself
      */
-    public abstract Matrix swapRows(int i0, int i1);
+    public abstract void swapRows(int i0, int i1);
 
     /**
      * Swaps two columns in the matrix.
      *
      * @param j0 the old column index
      * @param j1 the new column index
-     * @return itself
      */
-    public abstract Matrix swapColumns(int j0, int j1);
+    public abstract void swapColumns(int j0, int j1);
 
     /**
      * Transposes the matrix.
-     *
-     * @return itself
      */
-    public abstract Matrix transpose();
+    public abstract void transpose();
 
     /**
      * Scales the matrix by a factor.
      *
      * @param factor the factor
-     * @return itself
      */
-    public abstract Matrix scale(double factor);
+    public abstract void scale(double factor);
 
     // MISC
 

@@ -11,8 +11,7 @@ public class TransformationsTest {
 
     @Test
     public void quaternionRotate() throws Exception {
-        Vector3 axis = Vector3.fromXYZ(1, 0, 1);
-        axis.normalize();
+        Vector3 axis = Vector3.fromXYZ(1, 0, 1).normalize();
         
         Quaternion
             r0 =   Quaternion.fromRotation(axis, Spatium.radians(0)),

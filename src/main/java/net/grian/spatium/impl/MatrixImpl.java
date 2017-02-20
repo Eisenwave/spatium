@@ -156,7 +156,9 @@ public class MatrixImpl implements Matrix {
 
     @Override
     public MatrixImpl getAdjugate() {
-        return getCofactors().transpose();
+        MatrixImpl cofactors = getCofactors();
+        cofactors.transpose();
+        return cofactors;
     }
 
     @Override
@@ -167,7 +169,8 @@ public class MatrixImpl implements Matrix {
         for (int i = 0; i<rows; i++)
             det += adj.get(i, 0) * get(0, i);
 
-        return adj.scale(1 / det);
+        adj.scale(1 / det);
+        return adj;
     }
 
     private MatrixImpl cofactors2() {
@@ -216,15 +219,13 @@ public class MatrixImpl implements Matrix {
     // SETTERS
 
     @Override
-    public MatrixImpl set(int i, int j, double value) {
+    public void set(int i, int j, double value) {
         content[i*columns + j] = value;
-        return this;
     }
 
     @Override
-    public MatrixImpl swap(int i0, int j0, int i1, int j1) {
+    public void swap(int i0, int j0, int i1, int j1) {
         uswap(i0, j0, i1, j1);
-        return this;
     }
 
     private void uswap(int i0, int j0, int i1, int j1) {
@@ -236,7 +237,7 @@ public class MatrixImpl implements Matrix {
     }
 
     @Override
-    public MatrixImpl swapRows(int i0, int i1) {
+    public void swapRows(int i0, int i1) {
         validateRow(i0);
         validateRow(i1);
 
@@ -247,11 +248,10 @@ public class MatrixImpl implements Matrix {
             content[to] = content[from];
             content[from] = swap;
         }
-        return this;
     }
 
     @Override
-    public MatrixImpl swapColumns(int j0, int j1) {
+    public void swapColumns(int j0, int j1) {
         validateCol(j0);
         validateCol(j1);
 
@@ -262,23 +262,20 @@ public class MatrixImpl implements Matrix {
             content[to] = content[from];
             content[from] = swap;
         }
-        return this;
     }
 
     @Override
-    public MatrixImpl transpose() {
+    public void transpose() {
         for (int i = 1; i<rows; i++)
             for (int j = 0; j<=i; j++) {
                 uswap(i, j, j, i);
             }
-        return this;
     }
 
     @Override
-    public MatrixImpl scale(double factor) {
+    public void scale(double factor) {
         for (int k = 0; k<content.length; k++)
             content[k] *= factor;
-        return this;
     }
 
     // MISC

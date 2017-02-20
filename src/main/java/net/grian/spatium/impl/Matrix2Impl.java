@@ -4,40 +4,52 @@ import net.grian.spatium.matrix.Matrix;
 
 public class Matrix2Impl implements Matrix {
 
-    private final double[] content = new double[4];
+    private double a, b, c, d;
 
     public Matrix2Impl(double a, double b, double c, double d) {
-        content[0] = a;
-        content[1] = b;
-        content[2] = c;
-        content[3] = d;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
     }
 
     public Matrix2Impl() {}
 
     public Matrix2Impl(Matrix2Impl copyOf) {
-        this(copyOf.content[0], copyOf.content[1], copyOf.content[2], copyOf.content[3]);
+        this(copyOf.a, copyOf.b, copyOf.c, copyOf.d);
+    }
+    
+    private int indexOf(int i, int j) {
+        return i*2 + j;
     }
 
     @Override
     public double get(int i, int j) {
-        return content[i*2 + j];
+        switch (indexOf(i, j)) {
+            case 0: return a;
+            case 1: return b;
+            case 2: return c;
+            case 3: return d;
+            default: throw new IndexOutOfBoundsException("i="+i+", j="+j);
+        }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public double[] getRow(int i) {
         switch (i) {
-            case 0: return new double[] {content[0], content[1]};
-            case 1: return new double[] {content[2], content[3]};
+            case 0: return new double[] {a, b};
+            case 1: return new double[] {c, d};
             default: throw new IndexOutOfBoundsException(i+" must be 0-1");
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public double[] getColumn(int j) {
         switch (j) {
-            case 0: return new double[] {content[0], content[2]};
-            case 1: return new double[] {content[1], content[3]};
+            case 0: return new double[] {a, c};
+            case 1: return new double[] {b, d};
             default: throw new IndexOutOfBoundsException(j+" must be 0-1");
         }
     }
@@ -54,88 +66,103 @@ public class Matrix2Impl implements Matrix {
 
     @Override
     public double getDeterminant() {
-        return content[0]*content[3] - content[1]*content[2];
+        return a*d - c*b;
     }
-
+    
+    @Override
+    public double getTrace() {
+        return a + d;
+    }
+    
     @Override
     public Matrix getCofactors() {
-        return new Matrix2Impl(content[3], -content[2], -content[1], content[0]);
+        return new Matrix2Impl(d, -c, -b, a);
     }
 
     @Override
     public Matrix getAdjugate() {
-        return new Matrix2Impl(content[3], -content[1], -content[2], content[0]);
+        return new Matrix2Impl(d, -b, -c, a);
     }
 
     @Override
     public Matrix getInverse() {
-        return getAdjugate().scale(1 / getDeterminant());
+        Matrix adjugate = getAdjugate();
+        adjugate.scale(1 / getDeterminant());
+        return adjugate;
+    }
+    
+    public Matrix2Impl getSquare() {
+        double b_c = b * c;
+        
+        return new Matrix2Impl(
+            a*a + b_c,
+            a*b + b*d,
+            c*a + d*c,
+            b_c + d*d);
     }
 
     @Override
-    public Matrix set(int i, int j, double value) {
-        content[i*2 + j] = value;
-        return this;
+    public void set(int i, int j, double value) {
+        switch (indexOf(i, j)) {
+            case 0: a = value; break;
+            case 1: b = value; break;
+            case 2: c = value; break;
+            case 3: d = value; break;
+            default: throw new IndexOutOfBoundsException("i="+i+", j="+j);
+        }
     }
 
     @Override
-    public Matrix swap(int i0, int j0, int i1, int j1) {
-        final int from = i0*2 + j0, to = i1*2 + j1;
-
-        double swap = content[to];
-        content[to] = content[from];
-        content[from] = swap;
-        return this;
+    public void swap(int i0, int j0, int i1, int j1) {
+        double swap = get(i1, j1);
+        set(i1, j1, get(i0, j0));
+        set(j0, j0, swap);
     }
 
     @Override
-    public Matrix swapRows(int i0, int i1) {
+    public void swapRows(int i0, int i1) {
         validateRow(i0);
         validateRow(i1);
         if (i0 != i1) {
-            double c = content[2], d = content[3];
-            content[2] = content[0];
-            content[3] = content[1];
-            content[0] = c;
-            content[1] = d;
+            double cswap = c, dswap = d;
+            c = a;
+            d = b;
+            a = cswap;
+            b = dswap;
         }
-        return this;
     }
 
     @Override
-    public Matrix swapColumns(int j0, int j1) {
+    public void swapColumns(int j0, int j1) {
         validateCol(j0);
         validateCol(j1);
         if (j0 != j1) {
-            double b = content[1], d = content[3];
-            content[1] = content[0];
-            content[3] = content[2];
-            content[0] = b;
-            content[2] = d;
+            double bswap = b, dswap = d;
+            b = a;
+            d = c;
+            b = bswap;
+            c = dswap;
         }
-        return this;
     }
 
     @Override
-    public Matrix transpose() {
-        double c = content[2];
-        content[2] = content[1];
-        content[1] = c;
-        return this;
+    public void transpose() {
+        double swap = c;
+        c = b;
+        b = swap;
     }
 
     @Override
-    public Matrix scale(double factor) {
-        content[0] *= factor;
-        content[1] *= factor;
-        content[2] *= factor;
-        content[3] *= factor;
-        return this;
+    public void scale(double factor) {
+        a *= factor;
+        b *= factor;
+        c *= factor;
+        d *= factor;
     }
     
     @Override
     public String toString() {
-        return "[["+content[0]+","+content[1]+"],["+content[2]+","+content[3]+"]]";
+        return "[["+a+","+b+"],["+c+","+d+"]]";
     }
     
     @SuppressWarnings("CloneDoesntCallSuperClone")

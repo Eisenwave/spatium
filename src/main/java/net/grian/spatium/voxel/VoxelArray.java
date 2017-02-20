@@ -213,24 +213,6 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
         return result;
     }
 
-    /**
-     * Returns the total amount of visible voxels in this array.
-     *
-     * @return the amount of voxels
-     */
-    @SuppressWarnings("Duplicates")
-    @Override
-    public int size() {
-        int count = 0;
-
-        for (int x = 0; x<sizeX; x++)
-            for (int y = 0; y<sizeY; y++)
-                for (int z = 0; z<sizeZ; z++)
-                    if (contains(x, y, z)) count++;
-
-        return count;
-    }
-
     //CHECKERS
 
     /**

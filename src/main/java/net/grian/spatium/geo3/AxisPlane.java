@@ -51,9 +51,7 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
 
     @Override
     public default Vector3 getPoint() {
-        Vector3 normal = getNormal();
-        normal.multiply(getDepth());
-        return normal;
+        return getNormal().multiply(getDepth());
     }
 
     /**

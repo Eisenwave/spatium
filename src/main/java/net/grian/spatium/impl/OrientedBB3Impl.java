@@ -4,6 +4,7 @@ import net.grian.spatium.geo3.OrientedBB3;
 import net.grian.spatium.geo3.Slab3;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.matrix.Matrices;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -63,16 +64,12 @@ public class OrientedBB3Impl implements OrientedBB3 {
 
     @Override
     public Vector3 getMin() {
-        Vector3 result = getCenter();
-        result.subtract(Matrix.product(trans, dx, dy, dz));
-        return result;
+        return getCenter().subtract(Matrices.product(trans, dx, dy, dz));
     }
 
     @Override
     public Vector3 getMax() {
-        Vector3 result = getCenter();
-        result.add(Matrix.product(trans, dx, dy, dz));
-        return result;
+        return getCenter().add(Matrices.product(trans, dx, dy, dz));
     }
 
     @Override
@@ -152,7 +149,7 @@ public class OrientedBB3Impl implements OrientedBB3 {
 
     @Override
     public void transform(Matrix transform) {
-        this.trans = Matrix.product(this.trans, transform);
+        this.trans = Matrices.product(this.trans, transform);
     }
     
     @Override

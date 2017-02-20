@@ -11,15 +11,6 @@ import static org.junit.Assert.*;
 public class Vector3Test {
 
     @Test
-    public void random() throws Exception {
-        for (int i = 0; i<10000; i++) {
-            double length = PrimMath.randomDouble(1000);
-            Vector3 random = Vector3.random(length);
-            assertEquals(random.getLength(), length, Spatium.EPSILON);
-        }
-    }
-
-    @Test
     public void transformScale() throws Exception {
         Vector3 vector = Vector3.fromXYZ(1, 2, 3);
         Matrix transform = Matrix.fromScale(3, 2, 1);

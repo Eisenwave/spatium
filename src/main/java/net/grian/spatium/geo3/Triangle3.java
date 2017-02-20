@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.geo2.Area;
 import net.grian.spatium.impl.Triangle3Impl;
 import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.matrix.Matrices;
 import net.grian.spatium.transform.Transformation;
 
 import java.io.Serializable;
@@ -87,7 +88,7 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
     }
 
     default Vector3 getCenter() {
-        return Vector3.average(getA(), getB(), getC());
+        return Vectors3.average(getA(), getB(), getC());
     }
 
     /**
@@ -194,9 +195,9 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
     }
     
     default void transform(Matrix transform) {
-        setA(Matrix.product(transform, getA()));
-        setB(Matrix.product(transform, getB()));
-        setC(Matrix.product(transform, getC()));
+        setA(Matrices.product(transform, getA()));
+        setB(Matrices.product(transform, getB()));
+        setC(Matrices.product(transform, getC()));
     }
 
     default void transform(Transformation t) {

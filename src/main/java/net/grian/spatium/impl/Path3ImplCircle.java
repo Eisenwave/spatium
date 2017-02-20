@@ -41,17 +41,12 @@ public class Path3ImplCircle implements Path3 {
     @Override
     public Vector3 getPoint(double t) {
         Quaternion rotation = toRotation(t * CacheMath.TAU);
-        Vector3 result = Quaternion.product(rotation, getRelativeOrigin());
-        result.add(cx, cy, cz);
-        
-        return result;
+        return Quaternion.product(rotation, getRelativeOrigin()).add(cx, cy, cz);
     }
 
     @Override
     public Vector3 getOrigin() {
-        Vector3 origin = getCenter();
-        origin.add(getRelativeOrigin());
-        return origin;
+        return getCenter().add(getRelativeOrigin());
     }
 
     public Vector3 getCenter() {
@@ -59,9 +54,7 @@ public class Path3ImplCircle implements Path3 {
     }
 
     public Vector3 getRelativeOrigin() {
-        Vector3 result = Vector3.fromXYZ(nx, 0, -1/nz);
-        result.setLength(r);
-        return result;
+        return Vector3.fromXYZ(nx, 0, -1/nz).setLength(r);
     }
 
     @Override
