@@ -1,6 +1,7 @@
 package net.grian.spatium.cache;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.util.FastMath;
 
 public final class BinomCache {
 
@@ -15,7 +16,7 @@ public final class BinomCache {
         for (int i = 0; i<rows; i++) {
             cache[i] = new int[i + 1];
             for (int j = 0; j < i + 1; j++)
-                cache[i][j] = Spatium.choose(i, j);
+                cache[i][j] = FastMath.choose(i, j);
         }
     }
 
@@ -26,7 +27,7 @@ public final class BinomCache {
         if (n < rows)
             return cache[n][k];
         else
-            return Spatium.choose(n, k);
+            return FastMath.choose(n, k);
     }
 
     public int getCapacity() {
