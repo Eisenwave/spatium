@@ -3,7 +3,7 @@ package net.grian.spatium.iter;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Ray3;
 import net.grian.spatium.geo3.Vector3;
-import net.grian.spatium.geo3.Vectors3;
+import net.grian.spatium.geo3.Vectors;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -53,10 +53,10 @@ public class BlockIntervalIteratorTest {
      * @return a random ray
      */
     private static Ray3 randomRay(float min, float max) {
-        Vector3 a = Vectors3.random(max), b = Vectors3.random(max);
+        Vector3 a = Vectors.random(max), b = Vectors.random(max);
         while (a.distanceTo(b) < min) {
-            a = Vectors3.random(max);
-            b = Vectors3.random(max);
+            a = Vectors.random(max);
+            b = Vectors.random(max);
         }
 
         return Ray3.between(a, b);

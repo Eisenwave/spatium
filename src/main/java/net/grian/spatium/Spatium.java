@@ -1,6 +1,7 @@
 package net.grian.spatium;
 
 import net.grian.spatium.geo3.Vector3;
+import org.jetbrains.annotations.Contract;
 
 public final class Spatium {
 
@@ -21,7 +22,7 @@ public final class Spatium {
      *
      * @see #equals(float, float)
      */
-    public final static double EPSILON = 1E-5;
+    public final static double EPSILON = 1E-10;
 
     private final static double
             DEG_TO_RAD = Math.PI / 180,
@@ -29,14 +30,27 @@ public final class Spatium {
 
     /**
      * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
+     * {@link #EPSILON}.
+     * <p>
+     *     This handles the following (special) cases: <ul>
+     *         <li>a \u2248 b &lt;=&gt; abs(a-b) < {@link Spatium#EPSILON}</li>
+     *         <li>+\u221E = +\u221E</li>
+     *         <li>-\u221E != +\u221E</li>
+     *         <li>-\u221E = -\u221E</li>
+     *         <li>NaN = NaN</li>
+     *         <li>NaN != +-\u221E</li>
+     *     </ul>
+     * </p>
      *
      * @param a the first number
      * @param b the second number
      * @return whether the numbers are roughly the same
      */
+    @Contract(pure = true)
     public static boolean equals(float a, float b) {
-        return Math.abs(a - b) < EPSILON;
+        return
+            Double.compare(a, b) == 0 || //handles cases of infinity, NaN
+            Math.abs(a - b) < EPSILON;
     }
 
     /**
@@ -47,20 +61,36 @@ public final class Spatium {
      * @param b the second number
      * @return whether the numbers are roughly the same
      */
+    @Contract(pure = true)
     public static boolean equals(float a, float b, float c) {
         return equals(a, b) && equals(b, c);
     }
 
     /**
-     * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
-     * {@link #EPSILON}. This method is used for <i>fuzzy</i> {@link #equals(Object)} in classes such as {@link Vector3}.
+     * <p>
+     *     Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
+     *     {@link #EPSILON}.
+     * </p>
+     * <p>
+     *     This handles the following (special) cases: <ul>
+     *         <li>a \u2248 b &lt;=&gt; abs(a-b) < {@link Spatium#EPSILON}</li>
+     *         <li>+\u221E = +\u221E</li>
+     *         <li>-\u221E != +\u221E</li>
+     *         <li>-\u221E = -\u221E</li>
+     *         <li>NaN = NaN</li>
+     *         <li>NaN != +-\u221E</li>
+     *     </ul>
+     * </p>
      *
      * @param a the first number
      * @param b the second number
      * @return whether the numbers are roughly the same
      */
+    @Contract(pure = true)
     public static boolean equals(double a, double b) {
-        return Math.abs(a - b) < EPSILON;
+        return
+            Double.compare(a, b) == 0 || //handles cases of infinity, NaN
+            Math.abs(a - b) < EPSILON;
     }
 
     /**
@@ -71,6 +101,7 @@ public final class Spatium {
      * @param b the second number
      * @return whether the numbers are roughly the same
      */
+    @Contract(pure = true)
     public static boolean equals(double a, double b, double c) {
         return equals(a, b) && equals(b, c);
     }
@@ -82,6 +113,7 @@ public final class Spatium {
      * @param numbers the numbers
      * @return whether the numbers are roughly the same
      */
+    @Contract(pure = true)
     public static boolean equals(double... numbers) {
         if (numbers.length == 0) return false;
         if (numbers.length == 1) return true;
@@ -93,6 +125,18 @@ public final class Spatium {
             if (!Spatium.equals(first, numbers[i])) return false;
 
         return true;
+    }
+    
+    @Contract(pure = true)
+    public static boolean isZero(double number) {
+        return
+            Double.isFinite(number) &&
+            number > -EPSILON && number < EPSILON;
+    }
+    
+    @Contract(pure = true)
+    public static boolean isZero(float number) {
+        return number > -EPSILON && number < EPSILON;
     }
 
     //LENGTH
@@ -145,6 +189,7 @@ public final class Spatium {
      * @param k k
      * @return n choose k
      */
+    @Contract(pure = true)
     public static int choose(int n, int k) {
         if (n < 0) throw new IllegalArgumentException("n must be positive");
         if (k < 0) throw new IllegalArgumentException("k must be positive");
@@ -152,6 +197,7 @@ public final class Spatium {
         return internalChose(n, k);
     }
 
+    @Contract(pure = true)
     private static int internalChose(int n, int k) {
         int res = 1;
 
@@ -173,6 +219,7 @@ public final class Spatium {
      * @param radians the angle in radians
      * @return the angle in degrees
      */
+    @Contract(pure = true)
     public static double degrees(double radians) {
         return RAD_TO_DEG * radians;
     }
@@ -183,6 +230,7 @@ public final class Spatium {
      * @param degrees the angle in degrees
      * @return the angle in radians
      */
+    @Contract(pure = true)
     public static double radians(double degrees) {
         return DEG_TO_RAD * degrees;
     }

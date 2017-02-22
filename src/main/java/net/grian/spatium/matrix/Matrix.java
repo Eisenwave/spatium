@@ -350,26 +350,6 @@ public interface Matrix {
         return create(brow, bcol, content);
     }
 
-    /**
-     * Returns a new transposed version of a given matrix. This matrix will have the same amount of rows as the original
-     * has columns and the same amount of columns as the original has rows.
-     *
-     * @param matrix the matrix
-     * @return a new matrix
-     */
-    public static Matrix transpose(Matrix matrix) {
-        final int
-        row = matrix.getRows(),
-        col = matrix.getColumns();
-
-        Matrix result = create(col, row);
-
-        for (int i = 0; i<row; i++) for (int j = 0; j<col; j++)
-            result.set(j, i, matrix.get(i, j));
-
-        return result;
-    }
-
     // GETTERS
 
     /**
@@ -503,6 +483,19 @@ public interface Matrix {
     }
     
     /**
+     * Returns whether this matrix is invertible.
+     *
+     * @return whether this matrix is invertible
+     */
+    public default boolean isInvertible() {
+        try {
+            return getDeterminant() != 0;
+        } catch (MatrixDimensionsException ex) {
+            return false;
+        }
+    }
+    
+    /**
      * Tests whether this matrix has a given Eigenvector.
      *
      * @param v the vector
@@ -567,12 +560,34 @@ public interface Matrix {
     public abstract void swapColumns(int j0, int j1);
 
     /**
-     * Transposes the matrix.
+     * <p>
+     *     Transposes the matrix. For a Matrix <code>A\u2208\u211D<sup>n*n</sup></code> the transposed Matrix
+     *     <code>A<sup>T</sup></code> at position <code>i,j < n</code> is defined as:
+     *     <blockquote>
+     *         <code>A<sup>T</sup><sub>ij</sub> = A<sub>ji</sub></code>
+     *     </blockquote>
+     * </p>
+     * <p>
+     *     Note that this operation mutates this Matrix object. Since the dimensions of Matrix objects are fixed,
+     *     this can not be used to transpose a non-square Matrix.
+     * </p>
+     * <p>
+     *     <b>To transpose non-square matrices, {@link Matrices#transpose(Matrix)}.</b>
+     * </p>
+     *
+     * @throws MatrixDimensionsException if this matrix is non-square
      */
-    public abstract void transpose();
+    public default void transpose() {
+        int n = getRows();
+        if (n != getColumns()) throw new MatrixDimensionsException("use Matrices::transpose for non-square matrices");
+        
+        for (int i = 1; i<n; i++)
+            for (int j = 0; j<i; j++)
+                swap(i, j, j, i);
+    }
 
     /**
-     * Scales the matrix by a factor.
+     * Scales the matrix by a factor. This is equivalent to multiplying every entry in the matrix with the factor.
      *
      * @param factor the factor
      */

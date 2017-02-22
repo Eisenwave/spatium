@@ -1,5 +1,7 @@
 package net.grian.spatium.matrix;
 
+import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.geo3.Vector3;
 
 public final class Matrices {
@@ -196,6 +198,104 @@ public final class Matrices {
             result = product(result, matrix);
 
         return result;
+    }
+    
+    /**
+     * Returns a new transposed version of a given matrix. This matrix will have the same amount of rows as the original
+     * has columns and the same amount of columns as the original has rows.
+     *
+     * @param matrix the matrix
+     * @return a new matrix
+     */
+    public static Matrix transpose(Matrix matrix) {
+        final int
+            row = matrix.getRows(),
+            col = matrix.getColumns();
+        
+        Matrix result = Matrix.create(col, row);
+        
+        for (int i = 0; i<row; i++) for (int j = 0; j<col; j++)
+            result.set(j, i, matrix.get(i, j));
+        
+        return result;
+    }
+    
+    //EIGENVALUES, EIGENVECTORS
+    
+    /**
+     * <p>
+     *     Returns the two <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">eigenvalues</a> of a
+     *     2x2 matrix.
+     * </p>
+     * <p>
+     *     This method is an implementation of an
+     *     <a href="http://www.math.harvard.edu/archive/21b_fall_04/exhibits/2dmatrices/index.html">explicit formula</a>
+     *     from Harvard University.
+     * </p>
+     * <p>
+     *     The given matrix is not explicitly tested for having the right dimensions.
+     *     A larger or even non-square matrix may be passed in as long as it has at least 2 rows and columns.
+     * </p>
+     *
+     * @param a the matrix
+     * @return the two eigenvalues of the matrix
+     * @throws MatrixDimensionsException if the matrix has less than two rows or columns
+     */
+    public static double[] eigenvalues2(Matrix a) {
+        double
+            det = a.get(0,0)*a.get(1,1) - a.get(0,1)*a.get(1,0),
+            trace = a.getTrace(),
+            halfTrace = trace/2,
+            plusMinus = Math.sqrt(trace*trace/4 - det);
+        
+        return new double[] {halfTrace + plusMinus, halfTrace - plusMinus};
+    }
+    
+    /**
+     * <p>
+     *     Returns the two <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">eigenvectors</a> of a
+     *     2x2 matrix.
+     * </p>
+     * <p>
+     *     This method is an implementation of an
+     *     <a href="http://www.math.harvard.edu/archive/21b_fall_04/exhibits/2dmatrices/index.html">explicit formula</a>
+     *     from Harvard University.
+     * </p>
+     * <p>
+     *     The given matrix is not explicitly tested for having the right dimensions.
+     *     A larger or even non-square matrix may be passed in as long as it has at least 2 rows and columns.
+     * </p>
+     *
+     * @param m the matrix
+     * @return the two eigenvectors of the matrix
+     * @throws MatrixDimensionsException if the matrix has less than two rows or columns
+     */
+    public static Vector2[] eigenvectors2(Matrix m) {
+        double[] lambda = eigenvalues2(m);
+        double b = m.get(0, 1), c = m.get(1, 0);
+        
+        if (!Spatium.equals(c, 0)) {
+            double d = m.get(1, 1);
+    
+            return new Vector2[] {
+                Vector2.fromXY(lambda[0] - d, c),
+                Vector2.fromXY(lambda[1] - d, c)
+            };
+        }
+        else if (!Spatium.equals(b, 0)) {
+            double a = m.get(0, 0);
+        
+            return new Vector2[] {
+                Vector2.fromXY(b, lambda[0] - a),
+                Vector2.fromXY(b, lambda[1] - a)
+            };
+        }
+        else {
+            return new Vector2[] {
+                Vector2.fromXY(1, 0),
+                Vector2.fromXY(0, 1)
+            };
+        }
     }
     
 }

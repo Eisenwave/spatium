@@ -225,29 +225,20 @@ public class MatrixImpl implements Matrix {
 
     @Override
     public void swap(int i0, int j0, int i1, int j1) {
-        uswap(i0, j0, i1, j1);
-    }
-
-    private void uswap(int i0, int j0, int i1, int j1) {
         final int from = indexOf(i0, j0), to = indexOf(i1, j1);
-        
+    
         double swap = content[to];
         content[to] = content[from];
         content[from] = swap;
     }
-
+    
     @Override
     public void swapRows(int i0, int i1) {
         validateRow(i0);
         validateRow(i1);
 
-        for (int j = 0; j<columns; j++) {
-            final int from = indexOf(i0, j), to = indexOf(i1, j);
-
-            double swap = content[to];
-            content[to] = content[from];
-            content[from] = swap;
-        }
+        for (int j = 0; j<columns; j++)
+            swap(i0, j, i1, j);
     }
 
     @Override
@@ -255,21 +246,15 @@ public class MatrixImpl implements Matrix {
         validateCol(j0);
         validateCol(j1);
 
-        for (int i = 0; i<rows; i++) {
-            final int from = indexOf(i, j0), to = indexOf(i, j1);
-
-            double swap = content[to];
-            content[to] = content[from];
-            content[from] = swap;
-        }
+        for (int i = 0; i<rows; i++)
+            swap(i, j0, i, j1);
     }
 
     @Override
     public void transpose() {
         for (int i = 1; i<rows; i++)
-            for (int j = 0; j<=i; j++) {
-                uswap(i, j, j, i);
-            }
+            for (int j = 0; j<i; j++)
+                swap(i, j, j, i);
     }
 
     @Override

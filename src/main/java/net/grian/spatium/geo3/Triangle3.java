@@ -88,7 +88,7 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
     }
 
     default Vector3 getCenter() {
-        return Vectors3.average(getA(), getB(), getC());
+        return Vectors.average(getA(), getB(), getC());
     }
 
     /**

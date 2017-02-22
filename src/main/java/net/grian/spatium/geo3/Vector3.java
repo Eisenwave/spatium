@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
 import org.jetbrains.annotations.Contract;
@@ -308,6 +309,41 @@ public interface Vector3 extends Serializable, Cloneable {
                 Spatium.equals(getY(), v.getY()) &&
                 Spatium.equals(getZ(), v.getZ());
     }
+    
+    /**
+     * Returns whether this vector is a multiple of the vector <b>v</b>, meaning that:
+     * <blockquote>
+     *     <code>r * this = v</code>
+     * </blockquote>
+     * <p>
+     *     This is equivalent to whether this vector is parallel to another vector.
+     * </p>
+     *
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
+     * @return whether this vector is a multiple of v
+     */
+    default boolean isMultipleOf(double x, double y, double z) {
+        final double
+            thisX = getX(),
+            thisY = getY(),
+            thisZ = getZ();
+        
+        if (Spatium.isZero(thisX))
+            return Spatium.isZero(x) && Vectors.multiples(thisY, thisZ, y, z);
+        
+        else if (Spatium.isZero(thisY))
+            return Spatium.isZero(y) && Vectors.multiples(thisX, thisZ, x, z);
+        
+        else if (Spatium.isZero(thisZ))
+            return Spatium.isZero(z) && Vectors.multiples(thisX, thisY, x, y);
+        
+        else {
+            double ratio = thisX / x;
+            return Spatium.equals(ratio, thisY / y, thisZ / z);
+        }
+    }
 
     /**
      * Returns whether this vector is a multiple of the vector <b>v</b>, meaning that:
@@ -322,10 +358,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @return whether this vector is a multiple of v
      */
     default boolean isMultipleOf(Vector3 v) {
-        double r = this.getX() / v.getX();
-        return
-                Spatium.equals(this.getY() / v.getY(), r) &&
-                Spatium.equals(this.getZ() / v.getZ(), r);
+        return isMultipleOf(v.getX(), v.getY(), v.getZ());
     }
 
     // SETTERS

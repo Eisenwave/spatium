@@ -68,6 +68,14 @@ public class Vector2Impl implements Vector2 {
         return this;
     }
     
+    //MISC
+    
+    
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj) || obj instanceof Vector2 && equals((Vector2) obj);
+    }
+    
     @Override
     public String toString() {
         return "("+x+","+y+")";

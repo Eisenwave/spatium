@@ -23,6 +23,8 @@ public interface Vector2 {
             to.getY() - from.getY());
     }
     
+    //GETTERS
+    
     abstract double getX();
     
     abstract double getY();
@@ -42,6 +44,23 @@ public interface Vector2 {
      */
     default Vector2 getInverse() {
         return fromXY(getY(), -getX());
+    }
+    
+    //CHECKERS
+    
+    default boolean isMultipleOf(Vector2 v) {
+        final double thisX = getX(), thisY = getY();
+        
+        return
+            Spatium.isZero(thisX) ||
+            Spatium.isZero(thisY) ||
+            Spatium.equals(thisX / v.getX(), thisY / v.getY());
+    }
+    
+    default boolean equals(Vector2 v) {
+        return
+            Spatium.equals(getX(), v.getX()) &&
+            Spatium.equals(getY(), v.getY());
     }
     
     //SETTERS

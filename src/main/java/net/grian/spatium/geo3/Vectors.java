@@ -1,10 +1,23 @@
 package net.grian.spatium.geo3;
 
+import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.Vector2;
 import org.jetbrains.annotations.Contract;
 
-public final class Vectors3 {
+public final class Vectors {
     
-    private Vectors3() {}
+    private Vectors() {}
+    
+    public static boolean multiples(double ax, double ay, double bx, double by) {
+        return
+            Spatium.isZero(ax) && Spatium.isZero(bx) ||
+            Spatium.isZero(ay) && Spatium.isZero(by) ||
+            Spatium.equals(ax/bx, ay/by);
+    }
+    
+    public static boolean multiples(Vector2 a, Vector2 b) {
+        return multiples(a.getX(), a.getY(), b.getX(), b.getY());
+    }
     
     public static Vector3 random(double length) {
         double

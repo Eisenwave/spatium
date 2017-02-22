@@ -3,13 +3,30 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.matrix.Matrix;
-import net.grian.spatium.util.PrimMath;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class Vector3Test {
-
+    
+    @Test
+    public void isMultipleOf() throws Exception {
+        assertTrue(Vector3.fromXYZ(0, 0, 0).isMultipleOf(0, 0, 0));
+        assertTrue(Vector3.fromXYZ(1, 1, 1).isMultipleOf(1, 1, 1));
+        assertTrue(Vector3.fromXYZ(-42, 0, 0).isMultipleOf(9, 0, 0));
+        assertTrue(Vector3.fromXYZ(-4, -5, 0).isMultipleOf(4, 5, 0));
+        assertTrue(Vector3.fromXYZ(0, -5, 0).isMultipleOf(0, 100, 0));
+        assertTrue(Vector3.fromXYZ(0, -1, -9).isMultipleOf(0, 100, 900));
+        assertTrue(Vector3.fromXYZ(0.777, 0, 0.123).isMultipleOf(777, 0, 123));
+        
+        for (int i = 0; i<100_000; i++) {
+            Vector3 v = Vectors.random(1), v2 = v.clone().multiply(10);
+            if (!v.isMultipleOf(v2)) {
+                throw new AssertionError(v+" != r*"+v2);
+            }
+        }
+    }
+    
     @Test
     public void transformScale() throws Exception {
         Vector3 vector = Vector3.fromXYZ(1, 2, 3);

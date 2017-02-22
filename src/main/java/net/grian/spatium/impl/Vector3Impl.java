@@ -5,6 +5,7 @@ import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
+import net.grian.spatium.util.Strings;
 
 import java.util.Arrays;
 
@@ -262,6 +263,10 @@ public class Vector3Impl implements Vector3 {
     
     @Override
     public String toString() {
+        String x = Strings.valueOf(this.x, 8);
+        String y = Strings.valueOf(this.y, 8);
+        String z = Strings.valueOf(this.z, 8);
+        
         return "("+x+","+y+","+z+")";
     }
 
