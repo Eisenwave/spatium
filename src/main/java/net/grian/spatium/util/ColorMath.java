@@ -39,18 +39,22 @@ public final class ColorMath {
         return a<<24 | r<<16 | g<<8 | b;
     }
     
+    @Contract(pure = true)
     public static int fromRGB(float r, float g, float b, float a) {
         return fromRGB((int) (r*255), (int) (g*255), (int) (b*255), (int) (a*255));
     }
 
+    @Contract(pure = true)
     public static int fromRGB(float r, float g, float b) {
         return fromRGB(r, g, b, 1);
     }
 
+    @Contract(pure = true)
     public static int fromRGB(int r, int g, int b) {
         return fromRGB(r, g, b, 0xFF);
     }
 
+    @Contract(pure = true)
     public static int fromHSB(float h, float s, float b, float a) {
         return (fromHSB(h, s, b) & 0x00FFFFFF) | ((int) (a*255)<<24);
     }
@@ -78,6 +82,7 @@ public final class ColorMath {
      * @param transparency false if transparency is ignored
      * @return difference between colors
      */
+    @Contract(pure = true)
     public static int componentDifference(int a, int b, boolean transparency) {
         int difference = Math.abs(red(a)-red(b)) +Math.abs(green(a)-green(b)) + Math.abs(blue(a)-blue(b));
         if (transparency)
@@ -97,6 +102,7 @@ public final class ColorMath {
      *
      * @return the visual difference between the colors
      */
+    @Contract(pure = true)
     public static int visualDifference(int redA, int grnA, int bluA, int redB, int grnB, int bluB) {
         int redM = (redA + redB) >> 1,
             red = redA - redB,
@@ -123,6 +129,7 @@ public final class ColorMath {
      * @param b the second color
      * @return the visual difference between the colors
      */
+    @Contract(pure = true)
     public static int visualDifference(int a, int b) {
         return visualDifference(red(a), green(a), blue(a), red(b), green(b), blue(b));
     }
@@ -140,6 +147,7 @@ public final class ColorMath {
      * @param topA the top layer alpha
      * @return a new rendered color
      */
+    @Contract(pure = true)
     public static int stack(float btmR, float btmG, float btmB, float btmA,
                             float topR, float topG, float topB, float topA) {
         final float
@@ -166,10 +174,12 @@ public final class ColorMath {
      * @param topA the top layer alpha
      * @return a new rendered color
      */
+    @Contract(pure = true)
     public static int stack(int btmR, int btmG, int btmB, int btmA, int topR, int topG, int topB, int topA) {
         return stack(btmR/255F, btmG/255F, btmB/255F, btmA/255F, topR/255F, topG/255F, topB/255F, topA/255F);
     }
     
+    @Contract(pure = true)
     public static int blend(int a, int b, float weightA) {
         if (weightA < 0 || weightA > 1) throw new IllegalArgumentException("weight out of range (0-1)");
         float weightB = 1 - weightA;
@@ -183,6 +193,7 @@ public final class ColorMath {
         return fromRGB(red, grn, blu, alp);
     }
     
+    @Contract(pure = true)
     public static int scaleRGB(int rgb, float scale) {
         if (scale < 0 || scale > 1) throw new IllegalArgumentException("weight out of range (0-1)");
         
@@ -200,6 +211,7 @@ public final class ColorMath {
      * @param top the top layer color
      * @return a new rendered color
      */
+    @Contract(pure = true)
     public static int stack(int bottom, int top) {
         final int topAlpha = alpha(top);
         return topAlpha == 0? bottom : stack(
@@ -207,6 +219,7 @@ public final class ColorMath {
             red(top),    green(top),    blue(top),    topAlpha);
     }
 
+    @Contract(pure = true)
     public static int anaglyph(int r, int g, int b, int a) {
         return fromRGB(
             (r * 30 + g * 59 + b * 11) / 100,
@@ -214,7 +227,8 @@ public final class ColorMath {
             (r * 30 + b * 70) / 100,
             a);
     }
-
+    
+    @Contract(pure = true)
     public static int anaglyph(int rgb) {
         return anaglyph(red(rgb), green(rgb), blue(rgb), alpha(rgb));
     }
@@ -262,6 +276,7 @@ public final class ColorMath {
      * @param b the blue channel (0-0xFF)
      * @return the color's luminance
      */
+    @Contract(pure = true)
     public static int luminance2(int r, int b, int g) {
         return (r+r+r + b + g+g+g+g) >> 3;
     }
@@ -272,6 +287,7 @@ public final class ColorMath {
      * @param rgb an ARGB color
      * @return the color's luminance
      */
+    @Contract(pure = true)
     public static int luminance2(int rgb) {
         return luminance2(red(rgb), green(rgb), blue(rgb));
     }
@@ -282,6 +298,7 @@ public final class ColorMath {
      * @param rgb the color
      * @return the color's alpha channel
      */
+    @Contract(pure = true)
     public static int alpha(int rgb) {
         return rgb >> 24 & 0xFF;
     }
@@ -292,6 +309,7 @@ public final class ColorMath {
      * @param rgb the color
      * @return the color's red channel
      */
+    @Contract(pure = true)
     public static int red(int rgb) {
         return rgb >> 16 & 0xFF;
     }
@@ -302,6 +320,7 @@ public final class ColorMath {
      * @param rgb the color
      * @return the color's green channel
      */
+    @Contract(pure = true)
     public static int green(int rgb) {
         return rgb >> 8 & 0xFF;
     }
@@ -312,6 +331,7 @@ public final class ColorMath {
      * @param rgb the color
      * @return the color's blue channel
      */
+    @Contract(pure = true)
     public static int blue(int rgb) {
         return rgb & 0xFF;
     }
@@ -322,6 +342,7 @@ public final class ColorMath {
      * @param rgb the argb value
      * @return an array of bytes in ARGB order
      */
+    @Contract("_ -> !null")
     public static byte[] asByteArrayARGB(int rgb) {
         return new byte[] {(byte) alpha(rgb), (byte) red(rgb), (byte) green(rgb), (byte) blue(rgb)};
     }
@@ -332,24 +353,29 @@ public final class ColorMath {
      * @param rgb the argb value
      * @return an array of ints in ARGB order
      */
+    @Contract("_ -> !null")
     public static int[] split(int rgb) {
         return new int[] {alpha(rgb), red(rgb), green(rgb), blue(rgb)};
     }
 
     //PREDICATES
 
+    @Contract(pure = true)
     public static boolean isTransparent(int rgb) {
         return (rgb & 0xFF_000000) != 0xFF_000000;
     }
 
+    @Contract(pure = true)
     public static boolean isSolid(int rgb) {
         return (rgb & 0xFF_000000) == 0xFF_000000;
     }
 
+    @Contract(pure = true)
     public static boolean isVisible(int rgb) {
         return (rgb & 0xFF_000000) != 0;
     }
 
+    @Contract(pure = true)
     public static boolean isInvisible(int rgb) {
         return (rgb & 0xFF_000000) == 0;
     }

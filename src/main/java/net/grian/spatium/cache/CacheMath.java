@@ -1,7 +1,6 @@
 package net.grian.spatium.cache;
 
-import net.grian.spatium.Spatium;
-import org.jetbrains.annotations.Contract;
+import net.grian.spatium.util.FastMath;
 
 /**
  * <p>
@@ -74,7 +73,7 @@ public final class CacheMath {
     //MATH UTILITY
 
     public static int choose(int n, int k) {
-        return cacheBinom==null? Spatium.choose(n, k) : cacheBinom.choose(n, k);
+        return cacheBinom==null? FastMath.choose(n, k) : cacheBinom.choose(n, k);
     }
 
     public static double asin(double radians) {

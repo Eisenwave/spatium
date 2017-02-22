@@ -1,6 +1,28 @@
 package net.grian.spatium.util;
 
+import org.jetbrains.annotations.Contract;
+
 public class Polynomials {
+    
+    /**
+     * Returns the sum of two polynomials.
+     *
+     * @param a the first polynomial
+     * @param b the second polynomial
+     * @return the sum of the polynomials
+     */
+    @Contract(pure = true)
+    public static double[] sum(double[] a, double[] b) {
+        int l = Math.max(a.length, b.length);
+        double[] sum = new double[l];
+        
+        for (int i = 0; i < l; i++) {
+            if (i < a.length) sum[i] += a[i];
+            if (i < b.length) sum[i] += b[i];
+        }
+        
+        return sum;
+    }
     
     /**
      * Solves a polynomial of the form <tt>ax^2 + bx + c</tt>.

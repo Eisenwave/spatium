@@ -47,6 +47,7 @@ public interface Matrix {
      * @throws IllegalMatrixSizeException if the content array's hypot is not
      * equal to {@code rows * columns}
      */
+    @Contract(pure = true)
     public static Matrix create(int rows, int columns, double... content) {
         if (rows == 2 && columns == 2)
             return new Matrix2Impl(content[0], content[1], content[2], content[3]);
@@ -63,6 +64,7 @@ public interface Matrix {
      * @throws IllegalMatrixSizeException if either the amount of rows or the
      * amount of columns <= 0
      */
+    @Contract(pure = true)
     public static Matrix create(int rows, int columns) {
         if (rows == 2 && columns == 2) return new Matrix2Impl();
 
@@ -77,6 +79,7 @@ public interface Matrix {
      * @throws IllegalMatrixSizeException if either the amount of rows or the
      * amount of columns <= 0
      */
+    @Contract(pure = true)
     public static Matrix identity(int n) {
         if (n == 2) return new Matrix2Impl(1, 0, 0, 1);
 

@@ -1,6 +1,7 @@
 package net.grian.spatium.util;
 
 import net.grian.spatium.cache.CacheMath;
+import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
@@ -15,7 +16,21 @@ import net.grian.spatium.cache.CacheMath;
 public final class FastMath {
     
     private FastMath() {}
-
+    
+    /**
+     * <p>
+     *     Returns the inverted square root of x. (1 / \u221Ax)
+     * </p>
+     * <p>
+     *     This method is not guaranteed to be faster than inverting {@link Math#sqrt(double)}.
+     * </p>
+     * <p>
+     *     <b>Any performance boost is platform dependent! In fact, this method may perform worse than Java's sqrt.</b>
+     * </p>
+     *
+     * @param x the number
+     * @return the inverted sqrt of x
+     */
     public static float invSqrt(float x) {
         float halfX = 0.5f * x;
         int i = Float.floatToIntBits(x);
@@ -24,7 +39,21 @@ public final class FastMath {
         x *= (1.5f - halfX * x * x);
         return x;
     }
-
+    
+    /**
+     * <p>
+     *     Returns the inverted square root of x. (1 / \u221Ax)
+     * </p>
+     * <p>
+     *     This method is not guaranteed to be faster than inverting {@link Math#sqrt(double)}.
+     * </p>
+     * <p>
+     *     <b>Any performance boost is platform dependent! In fact, this method may perform worse than Java's sqrt.</b>
+     * </p>
+     *
+     * @param x the number
+     * @return the inverted sqrt of x
+     */
     public static double invSqrt(double x) {
         double halfX = 0.5d * x;
         long i = Double.doubleToLongBits(x);
@@ -35,17 +64,55 @@ public final class FastMath {
     }
     
     /**
-     * Returns the logarithm (base 2) of a number.
+     * <p>
+     *     Returns the natural logarithm (<i>lat. logarithmus naturalis</i>) of a number <b>n</b>. (<code>ln(n)</code>)
+     * </p>
+     * <p>
+     *     The <a href="https://en.wikipedia.org/wiki/Natural_logarithm">natural logarithm</a> is the logarithm to the
+     *     base <i>e</i> (<a href="https://en.wikipedia.org/wiki/E_(mathematical_constant)">Euler's Number</a>).
+     * </p>
      *
      * @param number the number
-     * @return the log (base 2) of the number
+     * @return the natural logarithm
+     */
+    public static double ln(double number) {
+        return Math.log(number);
+    }
+    
+    /**
+     * <p>
+     *     Returns the binary logarithm of a number <b>n</b>.
+     * </p>
+     * <p>
+     *     The <a href="https://en.wikipedia.org/wiki/Binary_logarithm">binary logarithm</a> is the logarithm to the
+     *     base 2. (<code>log<sub>2</sub>(n)</code>)
+     * </p>
+     *
+     * @param number the number
+     * @return the binary logarithm
      */
     public static double log2(double number) {
         return Math.log(number) / CacheMath.LN_2;
     }
     
     /**
-     * Returns the logarithm to a given base of a number.
+     * <p>
+     *     Returns the decimal logarithm of a number <b>n</b>.
+     * </p>
+     * <p>
+     *     The <a href="https://en.wikipedia.org/wiki/Common_logarithm">decimal logarithm</a> is the logarithm to the
+     *     base 10. (<code>log<sub>10</sub>(n)</code>)
+     * </p>
+     *
+     * @param number the number
+     * @return the decimal logarithm
+     */
+    public static double log10(double number) {
+        return Math.log10(number);
+    }
+    
+    /**
+     * Returns the logarithm to a given base <b>b</b> of a number <b>n</b>. (<code>log<sub>b</sub>(n)</code>)
      *
      * @param base the base
      * @param number the number
@@ -53,6 +120,37 @@ public final class FastMath {
      */
     public static double log(double base, double number) {
         return Math.log(number) / Math.log(base);
+    }
+    
+    /**
+     * Returns the binary coefficient of n and k or <i>n choose k</i>.
+     *
+     * @param n n
+     * @param k k
+     * @return n choose k
+     */
+    @Contract(pure = true)
+    public static int choose(int n, int k) {
+        if (n < 0) throw new IllegalArgumentException("n must be positive");
+        if (k < 0) throw new IllegalArgumentException("k must be positive");
+        if (n == 0 || n == k) return 1;
+        return internalChose(n, k);
+    }
+    
+    @Contract(pure = true)
+    private static int internalChose(int n, int k) {
+        int res = 1;
+        
+        // Since C(n, k) = C(n, n-k)
+        if (k > n - k)
+            k = n - k;
+        
+        for (int i = 0; i < k; i++) {
+            res *= (n - i);
+            res /= (i + 1);
+        }
+        
+        return res;
     }
 
 }

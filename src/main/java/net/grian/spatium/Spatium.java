@@ -17,16 +17,18 @@ public final class Spatium {
      *     ignored and seen as the result of floating point imprecision of mathematical operations.
      * </p>
      * <p>
-     *     For example, {@code 1E-10} and {@code 2E-10} are equal.
+     *     For example, {@code 1E-11} and {@code 2E-11} are equal.
      * </p>
      *
      * @see #equals(float, float)
      */
-    public final static double EPSILON = 1E-10;
-
-    private final static double
-            DEG_TO_RAD = Math.PI / 180,
-            RAD_TO_DEG = 180 / Math.PI;
+    public final static double
+        EPSILON = 1E-10,
+        HALF_EPSILON = EPSILON / 2;
+    
+    public final static double
+        DEG_TO_RAD = Math.PI / 180,
+        RAD_TO_DEG = 180 / Math.PI;
 
     /**
      * Checks whether the difference between two numbers {@code a,b} is smaller than the maximum precision
@@ -127,16 +129,38 @@ public final class Spatium {
         return true;
     }
     
+    /**
+     * <p>
+     *     Returns whether a numbers is approximately 0.
+     * </p>
+     * <p>
+     *     This method abides the same rules as {@link #equals(double...)}, thus the difference between the number
+     *     and 0 must be smaller than {@link #EPSILON}.
+     * </p>
+     *
+     * @param number the number
+     * @return whether the number is approximately 0
+     */
     @Contract(pure = true)
     public static boolean isZero(double number) {
-        return
-            Double.isFinite(number) &&
-            number > -EPSILON && number < EPSILON;
+        return number > -HALF_EPSILON && number < HALF_EPSILON;
     }
     
+    /**
+     * <p>
+     *     Returns whether a numbers is approximately 0.
+     * </p>
+     * <p>
+     *     This method abides the same rules as {@link #equals(double...)}, thus the difference between the number
+     *     and 0 must be smaller than {@link #EPSILON}.
+     * </p>
+     *
+     * @param number the number
+     * @return whether the number is approximately 0
+     */
     @Contract(pure = true)
     public static boolean isZero(float number) {
-        return number > -EPSILON && number < EPSILON;
+        return number > -HALF_EPSILON && number < HALF_EPSILON;
     }
 
     //LENGTH
@@ -181,36 +205,6 @@ public final class Spatium {
             lengthSquared += x * x;
 
         return Math.sqrt(lengthSquared);
-    }
-
-    /**
-     * Returns the binary coefficient of n and k or <i>n choose k</i>.
-     * @param n n
-     * @param k k
-     * @return n choose k
-     */
-    @Contract(pure = true)
-    public static int choose(int n, int k) {
-        if (n < 0) throw new IllegalArgumentException("n must be positive");
-        if (k < 0) throw new IllegalArgumentException("k must be positive");
-        if (n == 0 || n == k) return 1;
-        return internalChose(n, k);
-    }
-
-    @Contract(pure = true)
-    private static int internalChose(int n, int k) {
-        int res = 1;
-
-        // Since C(n, k) = C(n, n-k)
-        if (k > n - k)
-            k = n - k;
-
-        for (int i = 0; i < k; i++) {
-            res *= (n - i);
-            res /= (i + 1);
-        }
-
-        return res;
     }
 
     /**

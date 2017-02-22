@@ -4,11 +4,11 @@ import net.grian.spatium.geo2.Vector2;
 
 import java.util.Random;
 
-public class UnitRVG extends Random {
+public class VectorRandom extends Random {
     
-    public UnitRVG() {}
+    public VectorRandom() {}
     
-    public UnitRVG(long seed) {
+    public VectorRandom(long seed) {
         super(seed);
     }
     

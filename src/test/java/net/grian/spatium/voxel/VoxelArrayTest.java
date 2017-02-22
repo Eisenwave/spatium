@@ -28,6 +28,7 @@ public class VoxelArrayTest {
         Assert.assertEquals(3*5*7, array.size());
     }
     
+    /*
     @Test
     public void memoryUsage() throws Exception {
         int tests = 10000;
@@ -38,6 +39,7 @@ public class VoxelArrayTest {
         long sizeB = RuntimeUtil.sizeOf(() -> new int[10*10], tests);
         System.out.println(sizeB+" bytes");
     }
+    */
 
     @Test
     public void contains() throws Exception {
