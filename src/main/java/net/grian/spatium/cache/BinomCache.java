@@ -1,6 +1,5 @@
 package net.grian.spatium.cache;
 
-import net.grian.spatium.Spatium;
 import net.grian.spatium.util.FastMath;
 
 public final class BinomCache {

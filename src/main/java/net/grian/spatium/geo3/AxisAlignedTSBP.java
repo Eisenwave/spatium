@@ -94,10 +94,10 @@ public interface AxisAlignedTSBP extends Serializable, Cloneable {
 
     // SETTERS
 
-    public abstract AxisAlignedTSBP move(double x, double y, double z);
+    public abstract AxisAlignedTSBP translate(double x, double y, double z);
 
-    public default AxisAlignedTSBP move(Vector3 v) {
-        return move(v.getX(), v.getY(), v.getZ());
+    public default AxisAlignedTSBP translate(Vector3 v) {
+        return translate(v.getX(), v.getY(), v.getZ());
     }
 
     public abstract AxisAlignedTSBP setDepth(double d);

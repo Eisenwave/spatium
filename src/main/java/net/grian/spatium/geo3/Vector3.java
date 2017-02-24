@@ -2,13 +2,11 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
 import org.jetbrains.annotations.Contract;
 
 import java.io.Serializable;
-import java.util.Random;
 
 /**
  * A three-dimensional vector. Can be either karthesian or polar depending on
@@ -87,9 +85,9 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     static Vector3 between(Vector3 from, Vector3 to) {
         return new Vector3Impl(
-                to.getX() - from.getX(),
-                to.getY() - from.getY(),
-                to.getZ() - from.getZ());
+            to.getX() - from.getX(),
+            to.getY() - from.getY(),
+            to.getZ() - from.getZ());
     }
     
     /**
@@ -199,7 +197,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @return the signed angle to another vector
      */
     default double angleTo(Vector3 v) {
-        return angleTo(v.getX(), v.getY(), v.getZ());
+        return Math.acos(dot(v) / (getLength() * v.getLength()));
     }
 
     /**
@@ -231,9 +229,9 @@ public interface Vector3 extends Serializable, Cloneable {
         if (t < 0 || t > 1) throw new IllegalArgumentException("weight out of range ("+t+")");
         double k = 1-t;
         return Vector3.fromXYZ(
-                (this.getX() * k) + (point.getX() * t),
-                (this.getX() * k) + (point.getY() * t),
-                (this.getX() * k) + (point.getZ() * t));
+            (this.getX() * k) + (point.getX() * t),
+            (this.getY() * k) + (point.getY() * t),
+            (this.getZ() * k) + (point.getZ() * t));
     }
 
     /**
@@ -305,9 +303,9 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     default boolean equals(Vector3 v) {
         return
-                Spatium.equals(getX(), v.getX()) &&
-                Spatium.equals(getY(), v.getY()) &&
-                Spatium.equals(getZ(), v.getZ());
+            Spatium.equals(getX(), v.getX()) &&
+            Spatium.equals(getY(), v.getY()) &&
+            Spatium.equals(getZ(), v.getZ());
     }
     
     /**
@@ -359,6 +357,20 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     default boolean isMultipleOf(Vector3 v) {
         return isMultipleOf(v.getX(), v.getY(), v.getZ());
+    }
+    
+    default boolean isZero() {
+        return
+            Spatium.isZero(getX()) &&
+            Spatium.isZero(getY()) &&
+            Spatium.isZero(getZ());
+    }
+    
+    default boolean isFinite() {
+        return
+            Double.isFinite(getX()) &&
+            Double.isFinite(getY()) &&
+            Double.isFinite(getZ());
     }
 
     // SETTERS

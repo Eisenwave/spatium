@@ -269,7 +269,7 @@ public class AxisAlignedTSBPImpl implements AxisAlignedTSBP {
     // SETTERS
 
     @Override
-    public AxisAlignedTSBP move(double x, double y, double z) {
+    public AxisAlignedTSBP translate(double x, double y, double z) {
         boolean positive = dir.direction() == AxisDirection.POSITIVE;
 
         switch (getAxis()) {

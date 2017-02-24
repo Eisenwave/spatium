@@ -492,7 +492,7 @@ public interface Matrix {
      */
     public default boolean isInvertible() {
         try {
-            return getDeterminant() != 0;
+            return !Spatium.isZero(getDeterminant());
         } catch (MatrixDimensionsException ex) {
             return false;
         }
@@ -522,7 +522,7 @@ public interface Matrix {
         subtrahend.scale(-lambda);
         
         double det = Matrices.sum(this, subtrahend).getDeterminant();
-        return Spatium.equals(det, 0);
+        return !Spatium.isZero(det);
     }
 
     // SETTERS

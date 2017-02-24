@@ -51,6 +51,13 @@ public class ConeImpl implements Cone {
     }
     
     @Override
+    public void translate(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+    
+    @Override
     public void setHeight(double height) {
         scale(height / getHeight());
     }

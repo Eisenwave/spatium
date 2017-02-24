@@ -8,10 +8,8 @@ public interface Circle extends Area {
     
     abstract double getY();
     
-    abstract double getZ();
-    
-    default Vector3 getCenter() {
-        return Vector3.fromXYZ(getX(), getY(), getZ());
+    default Vector2 getCenter() {
+        return Vector2.fromXY(getX(), getY());
     }
     
     abstract double getRadius();
@@ -37,12 +35,10 @@ public interface Circle extends Area {
     
     abstract void setY(double y);
     
-    abstract void setZ(double z);
-    
-    abstract void setCenter(double x, double y, double z);
+    abstract void setCenter(double x, double y);
     
     default void setCenter(Vector3 center) {
-        setCenter(center.getX(), center.getY(), center.getZ());
+        setCenter(center.getX(), center.getY());
     }
     
     abstract void setRadius(double r);

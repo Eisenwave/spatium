@@ -1,6 +1,6 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.impl.OrientedBB3Impl;
+import net.grian.spatium.impl.OrientedBBImpl;
 import net.grian.spatium.matrix.Matrix;
 
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * An oriented cuboid bounding box.
  */
-public interface OrientedBB3 extends Space, Serializable, Cloneable {
+public interface OrientedBB extends Space, Serializable, Cloneable {
 
     /**
      * Constructs a new oriented bounding box from its center and dimensions.
@@ -22,8 +22,8 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB3 fromCD(Vector3 center, Vector3 u, Vector3 v, Vector3 w, double dx, double dy, double dz) {
-        return new OrientedBB3Impl(center, dx, dy, dz, u, v, w);
+    public static OrientedBB fromCD(Vector3 center, Vector3 u, Vector3 v, Vector3 w, double dx, double dy, double dz) {
+        return new OrientedBBImpl(center, dx, dy, dz, u, v, w);
     }
 
     /**
@@ -37,8 +37,8 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB3 fromCD(double x, double y, double z, double dx, double dy, double dz) {
-        return new OrientedBB3Impl(x, y, z, dx, dy, dz);
+    public static OrientedBB fromCD(double x, double y, double z, double dx, double dy, double dz) {
+        return new OrientedBBImpl(x, y, z, dx, dy, dz);
     }
 
     /**
@@ -50,7 +50,7 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB3 fromCD(Vector3 center, double dx, double dy, double dz) {
+    public static OrientedBB fromCD(Vector3 center, double dx, double dy, double dz) {
         return fromCD(center.getX(), center.getY(), center.getZ(), dx, dy, dz);
     }
 
@@ -60,7 +60,7 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
      * @param box the bounding box
      * @return a new oriented bounding box
      */
-    public static OrientedBB3 fromAABB(AxisAlignedBB3 box) {
+    public static OrientedBB fromAABB(AxisAlignedBB box) {
         return fromCD(box.getCenter(), box.getSizeX()/2, box.getSizeY()/2, box.getSizeZ()/2);
     }
 
@@ -138,10 +138,10 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
 
     //SETTERS
 
-    public abstract void move(double x, double y, double z);
+    public abstract void translate(double x, double y, double z);
 
-    public default void move(Vector3 v) {
-        move(v.getX(), v.getY(), v.getZ());
+    public default void translate(Vector3 v) {
+        translate(v.getX(), v.getY(), v.getZ());
     }
 
     public abstract void transform(Matrix transform);
@@ -163,15 +163,18 @@ public interface OrientedBB3 extends Space, Serializable, Cloneable {
     
     //MISC
     
-    abstract OrientedBB3 clone();
+    abstract OrientedBB clone();
     
     /**
      * Returns the bounding box as a AABB without its transformations.
      *
      * @return the untransformed aabb of this obb
      */
-    public default AxisAlignedBB3 toAABB() {
-        return AxisAlignedBB3.fromCenterDims(getCenter(), getSizeX()/2, getSizeY()/2, getSizeZ()/2);
+    public default AxisAlignedBB toAABB() {
+        Vector3 center = getCenter();
+        return AxisAlignedBB.fromCenterDims(
+            center.getX(), center.getY(), center.getZ(),
+            getSizeX()/2, getSizeY()/2, getSizeZ()/2);
     }
     
 }

@@ -110,9 +110,9 @@ public interface BlockVector extends Serializable, Cloneable {
      */
     public default boolean equals(BlockVector block) {
         return
-                this.getX() == block.getX() &&
-                this.getY() == block.getY() &&
-                this.getZ() == block.getZ();
+            this.getX() == block.getX() &&
+            this.getY() == block.getY() &&
+            this.getZ() == block.getZ();
     }
 
     // MISC

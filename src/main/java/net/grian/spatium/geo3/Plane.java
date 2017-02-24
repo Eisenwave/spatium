@@ -134,6 +134,18 @@ public interface Plane extends Serializable, Cloneable {
     default double signedDistanceTo(Vector3 point) {
         return signedDistanceTo(point.getX(), point.getY(), point.getZ());
     }
+    
+    default double angleTo(double x, double y, double z) {
+        return getNormal().angleTo(x, y, z);
+    }
+    
+    default double angleTo(Vector3 normal) {
+        return getNormal().angleTo(normal);
+    }
+    
+    default double angleTo(Plane plane) {
+        return angleTo(plane.getNormal());
+    }
 
     // CHECKERS
 
@@ -145,8 +157,8 @@ public interface Plane extends Serializable, Cloneable {
      */
     default boolean equals(Plane plane) {
         return
-                getPoint().equals(plane.getPoint()) &&
-                getNormal().equals(plane.getNormal());
+            contains(plane.getPoint()) &&
+            getNormal().isMultipleOf(plane.getNormal());
     }
 
     /**

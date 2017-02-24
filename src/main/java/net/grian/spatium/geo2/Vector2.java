@@ -36,8 +36,8 @@ public interface Vector2 {
     /**
      * Returns a vector of equal length perpendicular to this vector, so that:
      * <ul>
-     *     <li>|v'| = |v|</tt></li>
-     *     <li><tt>v * v' = 0</tt></li>
+     *     <li><code>|v'| = |v|</tt></code></li>
+     *     <li><code>v' * v = 0 &lt;=&gt; v' perpendicular to v</code> </li>
      * </ul>
      *
      * @return a perpendicular vector of equal length
@@ -48,13 +48,17 @@ public interface Vector2 {
     
     //CHECKERS
     
-    default boolean isMultipleOf(Vector2 v) {
+    default boolean isMultipleOf(double x, double y) {
         final double thisX = getX(), thisY = getY();
         
         return
             Spatium.isZero(thisX) ||
             Spatium.isZero(thisY) ||
-            Spatium.equals(thisX / v.getX(), thisY / v.getY());
+            Spatium.equals(thisX / x, thisY / y);
+    }
+    
+    default boolean isMultipleOf(Vector2 v) {
+        return isMultipleOf(v.getX(), v.getY());
     }
     
     default boolean equals(Vector2 v) {

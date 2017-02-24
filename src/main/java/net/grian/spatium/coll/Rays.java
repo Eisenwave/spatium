@@ -3,8 +3,8 @@ package net.grian.spatium.coll;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo3.*;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -118,7 +118,7 @@ public final class Rays {
         Vector3 dir = ray.getDirection().normalize();
         
         denominator = normal.dot(dir);
-        if (Spatium.equals(denominator, 0)) //ray and plane are parallel
+        if (Spatium.isZero(denominator)) //ray and plane are parallel
             return Double.NaN;
 
         //calculate the distance between the linePoint and the line-plane intersection point
@@ -191,14 +191,14 @@ public final class Rays {
      * @param box the bounding box
      * @return where the ray and the box collide or {@link Double#NaN}
      */
-    public static double cast(Ray3 ray, AxisAlignedBB3 box) {
+    public static double cast(Ray3 ray, AxisAlignedBB box) {
         double[] entryExit = pierce(ray, box);
         return entryExit==null? Double.NaN : entryExit[0];
     }
 
     /**
      * <p>
-     *     Tests where a {@link Ray3} and an {@link OrientedBB3} collide.
+     *     Tests where a {@link Ray3} and an {@link OrientedBB} collide.
      * </p>
      * <p>
      *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
@@ -213,7 +213,7 @@ public final class Rays {
      * @param box the bounding box
      * @return where the ray and the box collide or {@link Double#NaN}
      */
-    public static double cast(Ray3 ray, OrientedBB3 box) {
+    public static double cast(Ray3 ray, OrientedBB box) {
         double[] entryExit = pierce(ray, box);
         return entryExit==null? Double.NaN : entryExit[0];
     }
@@ -248,7 +248,7 @@ public final class Rays {
 
         double det = ab.dot(normal1);
         //ray is parallel to triangle
-        if (Spatium.equals(det, 0)) return Double.NaN;
+        if (Spatium.isZero(det)) return Double.NaN;
         double invDet = 1 / det;
 
         Vector3 ao = Vector3.between(a, origin);
@@ -263,7 +263,7 @@ public final class Rays {
 
         double t = ac.dot(normal2) * invDet;
 
-        return t>Spatium.EPSILON? t : Double.NaN;
+        return !Spatium.isZero(t)? t : Double.NaN;
     }
 
     //ENTRY AND EXIT RAY CASTS
@@ -286,6 +286,7 @@ public final class Rays {
      * @param sphere the sphere
      * @return where the ray and the point collide or {@link Double#NaN}
      */
+    @Nullable
     public static double[] pierce(Ray3 ray, Sphere sphere) {
         Vector3 center = sphere.getCenter();
 
@@ -333,7 +334,7 @@ public final class Rays {
      * @param slab the slab
      * @return the entry and exit points of the ray
      */
-    @Nonnull
+    @NotNull
     public static double[] pierce(Ray3 ray, Slab3 slab) {
         Vector3 normal = slab.getNormal().normalize();
         
@@ -385,7 +386,7 @@ public final class Rays {
      * @param slab the slab
      * @return the entry and exit points of the ray or null
      */
-    @Nonnull
+    @NotNull
     public static double[] pierce(Ray3 ray, AxisSlab3 slab) {
         double d;
         switch (slab.getAxis()) {
@@ -407,7 +408,7 @@ public final class Rays {
 
     /**
      * <p>
-     *     Tests where a {@link Ray3} enters and exits an {@link AxisAlignedBB3}.
+     *     Tests where a {@link Ray3} enters and exits an {@link AxisAlignedBB}.
      * </p>
      * <p>
      *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
@@ -423,7 +424,7 @@ public final class Rays {
      * @return the entry and exit points of the ray or null
      */
     @Nullable
-    public static double[] pierce(Ray3 ray, AxisAlignedBB3 box) {
+    public static double[] pierce(Ray3 ray, AxisAlignedBB box) {
 
         double tmin, tmax;
 
@@ -456,7 +457,7 @@ public final class Rays {
 
     /**
      * <p>
-     *     Tests where a {@link Ray3} enters and exits an {@link OrientedBB3}.
+     *     Tests where a {@link Ray3} enters and exits an {@link OrientedBB}.
      * </p>
      * <p>
      *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
@@ -472,7 +473,7 @@ public final class Rays {
      * @return the entry and exit points of the ray or null
      */
     @Nullable
-    public static double[] pierce(Ray3 ray, OrientedBB3 box) {
+    public static double[] pierce(Ray3 ray, OrientedBB box) {
         double tmin, tmax;
         {
             //x bounds
@@ -502,16 +503,16 @@ public final class Rays {
     }
 
     /**
-     * Tests where a moving {@link AxisAlignedBB3} enters and exits a static {@link AxisAlignedBB3}.
+     * Tests where a moving {@link AxisAlignedBB} enters and exits a static {@link AxisAlignedBB}.
      *
      * @param a the first, moving box
      * @param motion the motion of the first bounding box
      * @param b the second, static box
      * @return the collision
      */
-    public static RayPierceCollision<AxisAlignedBB3> pierce(AxisAlignedBB3 a, Vector3 motion, AxisAlignedBB3 b) {
+    public static RayPierceCollision<AxisAlignedBB> pierce(AxisAlignedBB a, Vector3 motion, AxisAlignedBB b) {
         //minkowski sum of a rotated 180 degrees around origin (a') and b
-        AxisAlignedBB3 minkowski = AxisAlignedBB3.fromPoints(
+        AxisAlignedBB minkowski = AxisAlignedBB.fromPoints(
                 b.getMinX()-a.getMaxX(),
                 b.getMinY()-a.getMaxY(),
                 b.getMinZ()-a.getMaxZ(),

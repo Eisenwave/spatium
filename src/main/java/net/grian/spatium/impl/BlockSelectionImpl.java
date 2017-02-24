@@ -95,7 +95,7 @@ public class BlockSelectionImpl implements BlockSelection {
     // SETTERS
 
     @Override
-    public void move(int x, int y, int z) {
+    public void translate(int x, int y, int z) {
         xmin += x;
         ymin += y;
         zmin += z;

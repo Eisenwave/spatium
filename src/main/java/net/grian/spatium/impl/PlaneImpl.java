@@ -81,7 +81,7 @@ public class PlaneImpl implements Plane {
     public boolean contains(double x, double y, double z) {
         //if the dot product of a vector from the center of the plane to the point and the plane normal are
         //orthogonal, the point lies in the plane
-        return Spatium.equals((x-this.x)*xn + (y-this.y)*yn + (z-this.z)*zn, 0) ;
+        return Spatium.isZero((x-this.x)*xn + (y-this.y)*yn + (z-this.z)*zn);
     }
 
     // GETTERS

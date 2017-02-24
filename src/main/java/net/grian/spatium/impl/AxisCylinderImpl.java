@@ -3,7 +3,6 @@ package net.grian.spatium.impl;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.geo3.AxisCylinder;
-import net.grian.spatium.geo3.Space;
 import net.grian.spatium.geo3.Vector3;
 
 public class AxisCylinderImpl implements AxisCylinder {
@@ -72,6 +71,16 @@ public class AxisCylinderImpl implements AxisCylinder {
             }
             default: throw new IllegalStateException("cylinder has no axis");
         }
+    }
+    
+    //TRANSFORMATIONS
+    
+    
+    @Override
+    public void translate(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
     }
     
     @Override

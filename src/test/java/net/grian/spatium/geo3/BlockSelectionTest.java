@@ -1,7 +1,5 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.geo3.AxisAlignedBB3;
-import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.util.PrimMath;
 import org.junit.Test;
 
@@ -41,7 +39,7 @@ public class BlockSelectionTest {
     public void toBoundingBox() throws Exception {
         BlockSelection selection = BlockSelection.fromPoints(1, 2, 3, 4, 5, 6);
 
-        assertEquals(AxisAlignedBB3.fromPoints(1, 2, 3, 5, 6, 7), selection.toBoundingBox());
+        assertEquals(AxisAlignedBB.fromPoints(1, 2, 3, 5, 6, 7), selection.toBoundingBox());
     }
 
     @Test

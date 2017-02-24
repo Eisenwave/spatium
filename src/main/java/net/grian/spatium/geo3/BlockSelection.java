@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.impl.BlockSelectionImpl;
+import net.grian.spatium.util.PrimMath;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -243,15 +244,20 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      * @param y the displacement in blocks on the y-axis
      * @param z the displacement in blocks on the z-axis
      */
-    public abstract void move(int x, int y, int z);
+    public abstract void translate(int x, int y, int z);
+    
+    @Override
+    default void translate(double x, double y, double z) {
+        translate((int) PrimMath.floor(x), (int) PrimMath.floor(x), (int) PrimMath.floor(x));
+    }
 
     /**
      * Moves the block selection.
      *
      * @param v a block vector representing the movement in blocks on x, y, z axes.
      */
-    public default void move(BlockVector v) {
-        move(v.getX(), v.getY(), v.getZ());
+    public default void translate(BlockVector v) {
+        translate(v.getX(), v.getY(), v.getZ());
     }
 
     public abstract void scale(int x, int y, int z);
@@ -297,8 +303,8 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      *
      * @return a new axis aligned bounding box
      */
-    public default AxisAlignedBB3 toBoundingBox() {
-        return AxisAlignedBB3.fromPoints(getMinX(), getMinY(), getMinZ(), getMaxX()+1, getMaxY()+1, getMaxZ()+1);
+    public default AxisAlignedBB toBoundingBox() {
+        return AxisAlignedBB.fromPoints(getMinX(), getMinY(), getMinZ(), getMaxX()+1, getMaxY()+1, getMaxZ()+1);
     }
 
     public abstract BlockSelection clone();

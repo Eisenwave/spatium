@@ -278,7 +278,7 @@ public final class Matrices {
         double[] lambda = eigenvalues2(m);
         double b = m.get(0, 1), c = m.get(1, 0);
         
-        if (!Spatium.equals(c, 0)) {
+        if (!Spatium.isZero(c)) {
             double d = m.get(1, 1);
     
             return new Vector2[] {
@@ -286,7 +286,7 @@ public final class Matrices {
                 Vector2.fromXY(lambda[1] - d, c)
             };
         }
-        else if (!Spatium.equals(b, 0)) {
+        else if (!Spatium.isZero(b)) {
             double a = m.get(0, 0);
         
             return new Vector2[] {

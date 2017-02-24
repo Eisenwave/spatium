@@ -20,6 +20,7 @@ public interface Triangle2 extends Area {
     
     abstract Vector2 getC();
     
+    @Override
     default Vector2 getCenter() {
         return getA().add(getB()).add(getC()).divide(3);
     }
@@ -73,6 +74,7 @@ public interface Triangle2 extends Area {
     
     //SETTERS
     
+    @Override
     abstract void translate(double x, double y);
     
     abstract void scale(double x, double y);

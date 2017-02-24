@@ -154,23 +154,12 @@ public interface Sphere extends Space, Serializable, Cloneable {
     public default void setCenter(Vector3 center) {
         setCenter(center.getX(), center.getY(), center.getZ());
     }
-
-    /**
-     * Translates the center of this sphere by given amount.
-     *
-     * @param x the x-translation
-     * @param y the y-translation
-     * @param z the z-translation
-     */
-    public abstract void move(double x, double y, double z);
-
-    /**
-     * Translates the center of this sphere by given amount.
-     *
-     * @param v the translation
-     */
-    public default void move(Vector3 v) {
-        move(v.getX(), v.getY(), v.getZ());
+    
+    @Override
+    public abstract void translate(double x, double y, double z);
+    
+    public default void translate(Vector3 v) {
+        translate(v.getX(), v.getY(), v.getZ());
     }
 
     /**

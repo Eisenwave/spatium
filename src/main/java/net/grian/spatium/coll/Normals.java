@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Plane;
 import net.grian.spatium.geo3.Sphere;
 import net.grian.spatium.geo3.Vector3;
@@ -34,7 +34,7 @@ public final class Normals {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 onAABB(AxisAlignedBB3 box, Vector3 point) {
+    public Vector3 onAABB(AxisAlignedBB box, Vector3 point) {
         return box.getClosestSide(point).vector();
     }
 

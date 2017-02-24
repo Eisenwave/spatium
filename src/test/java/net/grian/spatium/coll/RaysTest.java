@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Ray3;
 import net.grian.spatium.geo3.Sphere;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class RaysTest {
 
     @Test
     public void Ray_AABB() throws Exception {
-        AxisAlignedBB3 box = AxisAlignedBB3.fromPoints(-1, -1, -1, 1, 1, 1);
+        AxisAlignedBB box = AxisAlignedBB.fromPoints(-1, -1, -1, 1, 1, 1);
         Ray3 ray = Ray3.fromOD(-2, 0, 0, 1, 0, 0);
 
 

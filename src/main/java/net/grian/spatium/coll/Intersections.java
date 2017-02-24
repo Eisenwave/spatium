@@ -30,7 +30,7 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of two {@link AxisAlignedBB3}s. There is two possible scenarios:
+     * Returns the intersection of two {@link AxisAlignedBB}s. There is two possible scenarios:
      * <ul>
      *     <li>the boxes don't intersect, the result is null</li>
      *     <li>the boxes intersect or touch the result is another box</li>
@@ -40,11 +40,11 @@ public final class Intersections {
      * @param b the second bounding box
      * @return the intersection of the boxes or null
      */
-    public static AxisAlignedBB3 of(AxisAlignedBB3 a, AxisAlignedBB3 b) {
+    public static AxisAlignedBB of(AxisAlignedBB a, AxisAlignedBB b) {
         /* Test invoked first since it is a very inexpensive way of checking for no intersection */
         if (!Collisions.test(a, b)) return null;
 
-        return AxisAlignedBB3.fromPoints(
+        return AxisAlignedBB.fromPoints(
                 Math.max(a.getMinX(), b.getMinX()),
                 Math.max(a.getMinY(), b.getMinY()),
                 Math.max(a.getMinZ(), b.getMinZ()),
@@ -174,13 +174,13 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of a {@link Ray3} and an {@link AxisAlignedBB3} in the form of a point ({@link Vector3}).
+     * Returns the intersection of a {@link Ray3} and an {@link AxisAlignedBB} in the form of a point ({@link Vector3}).
      *
      * @param ray the ray
      * @param box the bounding box
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, AxisAlignedBB3 box) {
+    public static Vector3 of(Ray3 ray, AxisAlignedBB box) {
         return ray.getPoint(Rays.cast(ray, box));
     }
 
@@ -218,14 +218,14 @@ public final class Intersections {
     }
 
     /**
-     * Returns the intersection of an {@link AxisAlignedBB3} and an {@link AxisPlane} in the form of a
+     * Returns the intersection of an {@link AxisAlignedBB} and an {@link AxisPlane} in the form of a
      * {@link Path3} which represents the edge of the bounding box at the point of intersection.
      *
      * @param box the bounding box
      * @param plane the plane
      * @return a new linear path on the box or null
      */
-    public static Path3 of(AxisAlignedBB3 box, AxisPlane plane) {
+    public static Path3 of(AxisAlignedBB box, AxisPlane plane) {
         if (!Collisions.test(box, plane)) return null;
         double depth = plane.getDepth();
         Vector3 a, b, c, d;

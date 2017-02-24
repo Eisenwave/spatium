@@ -2,7 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
-import net.grian.spatium.impl.AxisAlignedBB3Impl;
+import net.grian.spatium.impl.AxisAlignedBBImpl;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import static net.grian.spatium.enums.Direction.*;
 /**
  * An axis aligned bounding box, or the cubical space between two points.
  */
-public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
+public interface AxisAlignedBB extends Space, Serializable, Cloneable {
 
     /**
      * Creates a new bounding box between two points.
@@ -25,27 +25,12 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param zb the z of the second point
      * @return a new bounding box
      */
-    public static AxisAlignedBB3 fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
-        return new AxisAlignedBB3Impl(xa, ya, za, xb, yb, zb);
+    public static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
+        return AxisAlignedBBImpl.fromPoints(xa, ya, za, xb, yb, zb);
     }
     
-    /**
-     * Creates a new bounding box from a center and the half-sizes on each axis.
-     *
-     * @param center the center
-     * @param x the half-x-size
-     * @param y the half-y-size
-     * @param z the half-z-size
-     * @return a new bounding box
-     */
-    public static AxisAlignedBB3 fromCenterDims(Vector3 center, double x, double y, double z) {
-        return new AxisAlignedBB3Impl(
-            center.getX() - x,
-            center.getY() - y,
-            center.getZ() - z,
-            center.getX() + x,
-            center.getY() + y,
-            center.getZ() + z);
+    public static AxisAlignedBB fromCenterDims(double x, double y, double z, double dx, double dy, double dz) {
+        return AxisAlignedBBImpl.fromCenterDims(x, y, z, dx, dy, dz);
     }
 
     /**
@@ -56,8 +41,8 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param size   the size of the cube
      * @return a new axis aligned bounding box
      */
-    public static AxisAlignedBB3 fromCenterDims(Vector3 center, double size) {
-        return fromCenterDims(center, size, size, size);
+    public static AxisAlignedBB fromCenterDims(Vector3 center, double size) {
+        return fromCenterDims(center.getX(), center.getY(), center.getZ(), size, size, size);
     }
 
     /**
@@ -67,7 +52,7 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
      * @param to   the second point
      * @return a new bounding box
      */
-    public static AxisAlignedBB3 between(Vector3 from, Vector3 to) {
+    public static AxisAlignedBB between(Vector3 from, Vector3 to) {
         return fromPoints(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
     }
 
@@ -154,7 +139,7 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
 
     // CHECKERS
     
-    public default boolean equals(AxisAlignedBB3 box) {
+    public default boolean equals(AxisAlignedBB box) {
         return
             Spatium.equals(this.getMinX(), box.getMinX()) &&
             Spatium.equals(this.getMinY(), box.getMinY()) &&
@@ -190,23 +175,16 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
     }
 
     // SETTERS
-
-    /**
-     * Moves the bounding box by a given amount.
-     *
-     * @param x the amount of x-movement
-     * @param y the amount of y-movement
-     * @param z the amount of z-movement
-     */
-    public abstract void move(double x, double y, double z);
+    
+    public abstract void translate(double x, double y, double z);
 
     /**
      * Moves the bounding box by a given amount.
      *
      * @param v the movement
      */
-    public default void move(Vector3 v) {
-        move(v.getX(), v.getY(), v.getZ());
+    public default void translate(Vector3 v) {
+        translate(v.getX(), v.getY(), v.getZ());
     }
 
     /**
@@ -259,6 +237,6 @@ public interface AxisAlignedBB3 extends Space, Serializable, Cloneable {
 
     // MISC
 
-    public abstract AxisAlignedBB3 clone();
+    public abstract AxisAlignedBB clone();
 
 }

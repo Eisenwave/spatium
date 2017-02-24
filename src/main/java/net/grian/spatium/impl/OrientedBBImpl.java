@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.geo3.OrientedBB3;
+import net.grian.spatium.geo3.OrientedBB;
 import net.grian.spatium.geo3.Slab3;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
@@ -9,7 +9,7 @@ import net.grian.spatium.matrix.Matrices;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class OrientedBB3Impl implements OrientedBB3 {
+public class OrientedBBImpl implements OrientedBB {
 
     private double
             cx, cy, cz, //center
@@ -22,7 +22,7 @@ public class OrientedBB3Impl implements OrientedBB3 {
     @Nonnull
     private Matrix trans;
 
-    private OrientedBB3Impl(double x, double y, double z, double dx, double dy, double dz, @Nonnull Matrix transform) {
+    private OrientedBBImpl(double x, double y, double z, double dx, double dy, double dz, @Nonnull Matrix transform) {
         if (dx < 0) throw new IllegalArgumentException("dx must be positive");
         if (dy < 0) throw new IllegalArgumentException("dy must be positive");
         if (dz < 0) throw new IllegalArgumentException("dz must be positive");
@@ -31,7 +31,7 @@ public class OrientedBB3Impl implements OrientedBB3 {
         this.trans = Objects.requireNonNull(transform);
     }
 
-    public OrientedBB3Impl(Vector3 center, double dx, double dy, double dz, Vector3 u, Vector3 v, Vector3 w) {
+    public OrientedBBImpl(Vector3 center, double dx, double dy, double dz, Vector3 u, Vector3 v, Vector3 w) {
         this(
                 center.getX(), center.getY(), center.getZ(),
                 dx, dy, dz,
@@ -45,14 +45,14 @@ public class OrientedBB3Impl implements OrientedBB3 {
         //this.wx = w.getX(); this.wy = w.getY(); this.wz = w.getZ();
     }
 
-    public OrientedBB3Impl(double x, double y, double z, double dx, double dy, double dz) {
+    public OrientedBBImpl(double x, double y, double z, double dx, double dy, double dz) {
         this(
                 x, y, z,
                 dx, dy, dz,
                 Matrix.identity(3));
     }
     
-    public OrientedBB3Impl(OrientedBB3Impl copyOf) {
+    public OrientedBBImpl(OrientedBBImpl copyOf) {
         this.cx = copyOf.cx;
         this.cy = copyOf.cy;
         this.cz = copyOf.cz;
@@ -141,7 +141,7 @@ public class OrientedBB3Impl implements OrientedBB3 {
     //SETTERS
 
     @Override
-    public void move(double x, double y, double z) {
+    public void translate(double x, double y, double z) {
         this.cx += x;
         this.cy += y;
         this.cz += z;
@@ -163,13 +163,13 @@ public class OrientedBB3Impl implements OrientedBB3 {
     
     
     @Override
-    public OrientedBB3 clone() {
-        return new OrientedBB3Impl(this);
+    public OrientedBB clone() {
+        return new OrientedBBImpl(this);
     }
     
     @Override
     public String toString() {
-        return OrientedBB3.class.getSimpleName()+
+        return OrientedBB.class.getSimpleName()+
                 "{center="+getCenter()+
                 ",dims="+getDimensions()+
                 ",transform="+getTransform()+"}";

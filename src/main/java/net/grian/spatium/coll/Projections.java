@@ -75,7 +75,7 @@ public final class Projections {
         Vector3 normal = triangle.getNormal();
         Vector3 baseZ = Axis.Z.vector();
         
-        if (Spatium.equals(normal.getX(), 0) && Spatium.equals(normal.getY(), 0))
+        if (Spatium.isZero(normal.getX()) && Spatium.isZero(normal.getY()))
             return orthoProjectZ(triangle.getA(), triangle.getB(), triangle.getC());
         
         Vector3 axis = normal.cross(baseZ).normalize();

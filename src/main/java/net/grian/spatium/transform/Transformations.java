@@ -1,7 +1,7 @@
 package net.grian.spatium.transform;
 
 import net.grian.spatium.enums.Axis;
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
@@ -66,8 +66,8 @@ public final class Transformations {
      * @param y the y-amount of the translation
      * @param z the z-amount of the translation
      */
-    public static void translate(AxisAlignedBB3 box, double x, double y, double z) {
-        box.move(x, y, z);
+    public static void translate(AxisAlignedBB box, double x, double y, double z) {
+        box.translate(x, y, z);
     }
 
     //SCALE
@@ -98,10 +98,10 @@ public final class Transformations {
         );
     }
 
-    public static void scale(AxisAlignedBB3 box, double x, double y, double z, double factor) {
-        box.move(-box.getMinX(), -box.getMinY(), -box.getMinZ());
+    public static void scale(AxisAlignedBB box, double x, double y, double z, double factor) {
+        box.translate(-box.getMinX(), -box.getMinY(), -box.getMinZ());
         box.scale(factor);
-        box.move(x, y, z);
+        box.translate(x, y, z);
     }
 
     /**

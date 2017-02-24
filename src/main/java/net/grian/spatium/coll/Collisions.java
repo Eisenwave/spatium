@@ -62,13 +62,13 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether two {@link AxisAlignedBB3}s collide/intersect.
+     * Tests whether two {@link AxisAlignedBB}s collide/intersect.
      *
      * @param a the first bounding box
      * @param b the second bounding box
      * @return whether the boxes collide/intersect
      */
-    public static boolean test(AxisAlignedBB3 a, AxisAlignedBB3 b) {
+    public static boolean test(AxisAlignedBB a, AxisAlignedBB b) {
         return
             a.getMinX() <= b.getMaxX() &&
             a.getMaxX() >= b.getMinX() &&
@@ -79,20 +79,20 @@ public final class Collisions {
     }
     
     /**
-     * Tests whether two {@link OrientedBB3}s collide/intersect.
+     * Tests whether two {@link OrientedBB}s collide/intersect.
      *
      * @param a the first bounding box
      * @param b the second bounding box
      * @return whether the boxes collide/intersect
      */
-    public static boolean test(OrientedBB3 a, OrientedBB3 b) {
+    public static boolean test(OrientedBB a, OrientedBB b) {
         //inverse transform matrix of a allows for conversion of second box to local space of first box
         //due to this, the first box can be seen as an AABB after transforming second box
         Matrix toLocalTransform = a.getTransform().getInverse();
         
         //more simple AABB & OBB intersection test
-        AxisAlignedBB3 localA = a.toAABB();
-        OrientedBB3 localB = b.clone();
+        AxisAlignedBB localA = a.toAABB();
+        OrientedBB localB = b.clone();
         localB.transform(toLocalTransform);
         
         return test(localA, localB);
@@ -140,24 +140,24 @@ public final class Collisions {
     //HETERO - TESTS
     
     /**
-     * Tests whether an {@link AxisAlignedBB3} and a point ({@link Vector3}) collide.
+     * Tests whether an {@link AxisAlignedBB} and a point ({@link Vector3}) collide.
      *
      * @param box the bounding box
      * @param point the point
      * @return whether the box and the point collide
      */
-    public static boolean test(AxisAlignedBB3 box, Vector3 point) {
+    public static boolean test(AxisAlignedBB box, Vector3 point) {
         return box.contains(point);
     }
 
     /**
-     * Tests whether an {@link AxisAlignedBB3} and an {@link AxisPlane} collide.
+     * Tests whether an {@link AxisAlignedBB} and an {@link AxisPlane} collide.
      *
      * @param box the bounding box
      * @param plane the plane
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB3 box, AxisPlane plane) {
+    public static boolean test(AxisAlignedBB box, AxisPlane plane) {
         double d = plane.getDepth();
         switch (plane.getAxis()) {
             case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
@@ -168,25 +168,25 @@ public final class Collisions {
     }
     
     /**
-     * Tests whether an {@link AxisAlignedBB3} and a {@link Sphere} collide.
+     * Tests whether an {@link AxisAlignedBB} and a {@link Sphere} collide.
      *
      * @param box the bounding box
      * @param sphere the sphere
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB3 box, Sphere sphere) {
+    public static boolean test(AxisAlignedBB box, Sphere sphere) {
         Vector3 closestPoint = clamp(sphere.getCenter(), box);
         return sphere.contains(closestPoint);
     }
     
     /**
-     * Tests whether an {@link AxisAlignedBB3} and a {@link OrientedBB3} collide.
+     * Tests whether an {@link AxisAlignedBB} and a {@link OrientedBB} collide.
      *
      * @param aabb the axis aligned box
      * @param obb the oriented box
      * @return whether the boxes collide
      */
-    public static boolean test(AxisAlignedBB3 aabb, OrientedBB3 obb) {
+    public static boolean test(AxisAlignedBB aabb, OrientedBB obb) {
         Vector3 closestPoint = clamp(obb.getCenter(), aabb);
         return obb.contains(closestPoint);
         
@@ -211,7 +211,7 @@ public final class Collisions {
     }
     
     @Contract(value = "_, _, _, _ -> !null", pure = true)
-    private static Vector3 clamp(double x, double y, double z, AxisAlignedBB3 bounds) {
+    private static Vector3 clamp(double x, double y, double z, AxisAlignedBB bounds) {
         return Vector3.fromXYZ(
             PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
             PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()),
@@ -219,25 +219,25 @@ public final class Collisions {
     }
     
     @Contract(value = "_, _ -> !null", pure = true)
-    private static Vector3 clamp(Vector3 point, AxisAlignedBB3 bounds) {
+    private static Vector3 clamp(Vector3 point, AxisAlignedBB bounds) {
         return clamp(point.getX(), point.getY(), point.getZ(), bounds);
     }
     
     /**
-     * Tests whether a {@link OrientedBB3} and a {@link Sphere} collide.
+     * Tests whether a {@link OrientedBB} and a {@link Sphere} collide.
      *
      * @param box the bounding box
      * @param sphere the sphere
      * @return whether the box and the sphere collide
      */
-    public static boolean test(OrientedBB3 box, Sphere sphere) {
+    public static boolean test(OrientedBB box, Sphere sphere) {
         //get the sphere center relative to the box center
         Vector3 relCenter = Vector3.between(box.getCenter(), sphere.getCenter());
         //turn that point from world space into object space
         relCenter.transform(box.getTransform());
         
         double dx = box.getSizeX()/2, dy = box.getSizeY()/2, dz = box.getSizeZ()/2;
-        AxisAlignedBB3 aabb = AxisAlignedBB3.fromPoints(-dx, -dy, -dz, dx, dy, dz);
+        AxisAlignedBB aabb = AxisAlignedBB.fromPoints(-dx, -dy, -dz, dx, dy, dz);
         
         return test(aabb, Sphere.fromCenterAndRadius(relCenter, sphere.getRadius()));
     }
@@ -334,6 +334,11 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray3 ray, Slab3 slab) {
+        /* Ray::pierce will return two finite numbers if there is an intersection due to the ray eventually hitting one
+        of the two slab planes.
+        However, a ray may also intersect a plane by being parallel to the slab and lying between the slab planes.
+        In this case, the two returned values should be (+inf and -inf).
+        Else the returned values are (+inf, +inf) or (-inf, -inf). */
         double[] entryExit = Rays.pierce(ray, slab);
         return
             Double.isFinite(entryExit[0]) ||
@@ -351,13 +356,13 @@ public final class Collisions {
     public static boolean test(Ray3 ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return
-                !(Spatium.equals(ray.getDirY(), 0) &&  Spatium.equals(ray.getDirZ(), 0)) ||
+                !(Spatium.isZero(ray.getDirY()) &&  Spatium.isZero(ray.getDirZ())) ||
                 Spatium.equals(ray.getOriginX(), plane.getDepth());
             case Y: return
-                !(Spatium.equals(ray.getDirZ(), 0) &&  Spatium.equals(ray.getDirX(), 0)) ||
+                !(Spatium.isZero(ray.getDirZ()) &&  Spatium.isZero(ray.getDirX())) ||
                 Spatium.equals(ray.getOriginY(), plane.getDepth());
             case Z: return
-                !(Spatium.equals(ray.getDirX(), 0) &&  Spatium.equals(ray.getDirY(), 0)) ||
+                !(Spatium.isZero(ray.getDirX()) &&  Spatium.isZero(ray.getDirY())) ||
                 Spatium.equals(ray.getOriginZ(), plane.getDepth());
             default: throw new IllegalArgumentException("plane has no axis");
         }
@@ -375,26 +380,26 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB3} collide.
+     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB} collide.
      *
      *
      * @param ray the ray
      * @param box the bounding box
      * @return whether the ray and the box collide
      */
-    public static boolean test(Ray3 ray, AxisAlignedBB3 box) {
+    public static boolean test(Ray3 ray, AxisAlignedBB box) {
         return Double.isFinite(Rays.cast(ray, box));
     }
     
     /**
-     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB3} collide.
+     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB} collide.
      *
      *
      * @param ray the ray
      * @param box the bounding box
      * @return whether the ray and the box collide
      */
-    public static boolean test(Ray3 ray, OrientedBB3 box) {
+    public static boolean test(Ray3 ray, OrientedBB box) {
         return Double.isFinite(Rays.cast(ray, box));
     }
 

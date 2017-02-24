@@ -1,6 +1,5 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.geo2.Area;
 import net.grian.spatium.impl.Triangle3Impl;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.Matrices;
@@ -11,7 +10,7 @@ import java.io.Serializable;
 /**
  * A 3D-Triangle3 defined by 3 points.
  */
-public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
+public interface Triangle3 extends Polygon3, Serializable, Cloneable {
 
     static Triangle3 fromPoints(Vector3 a, Vector3 b, Vector3 c) {
         return new Triangle3Impl(a, b, c);
@@ -106,7 +105,6 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
      *
      * @return the area of the triangle
      */
-    @Override
     default double getArea() {
         final double
             ab = getLengthAB(), bc = getLengthBC(), ca = getLengthCA(),
@@ -115,7 +113,6 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
         return Math.sqrt(s * (s-ab) * (s-bc) * (s-ca));
     }
     
-    @Override
     default double getCircumference() {
         return getLengthAB() + getLengthBC() + getLengthCA();
     }
@@ -167,7 +164,7 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
 
     default void setCenter(double x, double y, double z) {
         Vector3 p = getCenter();
-        move(x - p.getX(), y - p.getY(), z - p.getZ());
+        translate(x - p.getX(), y - p.getY(), z - p.getZ());
     }
 
     default void setCenter(Vector3 point) {
@@ -183,15 +180,15 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
      * @param y the y-translation
      * @param z the z-translation
      */
-    abstract void move(double x, double y, double z);
+    abstract void translate(double x, double y, double z);
 
     /**
      * Translates all points of this triangle by a given amount.
      *
      * @param v the translation
      */
-    default void move(Vector3 v) {
-        move(v.getX(), v.getY(), v.getZ());
+    default void translate(Vector3 v) {
+        translate(v.getX(), v.getY(), v.getZ());
     }
     
     default void transform(Matrix transform) {
@@ -211,8 +208,7 @@ public interface Triangle3 extends Polygon3, Area, Serializable, Cloneable {
     }
     
     abstract void scale(double x, double y, double z);
-
-    @Override
+    
     default void scale(double factor) {
         scale(factor, factor, factor);
     }

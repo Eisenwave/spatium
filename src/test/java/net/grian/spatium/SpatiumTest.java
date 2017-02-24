@@ -25,6 +25,15 @@ public class SpatiumTest {
     }
     
     @Test
+    public void java_equals_specialCases() throws Exception {
+        assertTrue(POS_INF == POS_INF);
+        assertTrue(NEG_INF == NEG_INF);
+        
+        assertFalse(NEG_INF == POS_INF);
+        assertFalse(NAN == POS_INF);
+    }
+    
+    @Test
     public void equals_specialCases() throws Exception {
         assertTrue(Spatium.equals(POS_INF, POS_INF));
         assertTrue(Spatium.equals(NEG_INF, NEG_INF));
@@ -32,7 +41,6 @@ public class SpatiumTest {
         
         assertFalse(Spatium.equals(NEG_INF, POS_INF));
         assertFalse(Spatium.equals(NAN, POS_INF));
-        assertFalse(Spatium.equals(NEG_INF, POS_INF));
     }
     
 }

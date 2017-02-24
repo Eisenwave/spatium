@@ -52,4 +52,34 @@ public interface Space {
      */
     abstract void scale(double factor);
     
+    /**
+     * Translates this object by a given amount. This is equivalent to translating every point of this object's volume
+     * by the same amount on all axes.
+     *
+     * @param x the translation on the x-axis
+     * @param y the translation on the y-axis
+     * @param z the translation on the z-axis
+     *
+     * @implNote The implementation has to guarantee that:<ul>
+     *     <li>shape is being preserved</li>
+     *     <li>the object volume / size is being preserved</li>
+     * </ul>
+     */
+    abstract void translate(double x, double y, double z);
+    
+    /**
+     * Translates this object by a given amount. This is equivalent to translating every point of this object's volume
+     * by the same amount on all axes.
+     *
+     * @param v the translation on all axes
+     *
+     * @implNote The implementation has to guarantee that:<ul>
+     *     <li>shape is being preserved</li>
+     *     <li>the object volume / size is being preserved</li>
+     * </ul>
+     */
+    default void translate(Vector3 v) {
+        translate(v.getX(), v.getY(), v.getZ());
+    }
+    
 }

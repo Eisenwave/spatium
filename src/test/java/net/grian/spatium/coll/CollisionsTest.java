@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Ray3;
 import net.grian.spatium.geo3.Sphere;
 import net.grian.spatium.geo3.Vector3;
@@ -13,13 +13,13 @@ public class CollisionsTest {
     @Test
     public void AABB_AABB() throws Exception {
         assertFalse(Collisions.test(
-                AxisAlignedBB3.fromPoints(0, 0, 0, 1, 1, 1),
-                AxisAlignedBB3.fromPoints(2, 2, 2, 3, 3, 3)
+                AxisAlignedBB.fromPoints(0, 0, 0, 1, 1, 1),
+                AxisAlignedBB.fromPoints(2, 2, 2, 3, 3, 3)
         ));
 
         assertTrue(Collisions.test(
-                AxisAlignedBB3.fromPoints(0, 0, 0, 1, 1, 1),
-                AxisAlignedBB3.fromPoints(0.5F, 0.5F, 0.5F, 1.5F, 1.5F, 1.5F)
+                AxisAlignedBB.fromPoints(0, 0, 0, 1, 1, 1),
+                AxisAlignedBB.fromPoints(0.5F, 0.5F, 0.5F, 1.5F, 1.5F, 1.5F)
         ));
     }
 
@@ -27,12 +27,12 @@ public class CollisionsTest {
     public void Ray_AABB() throws Exception {
         assertFalse(Collisions.test(
                 Ray3.fromOD(0, 0, 0, 1, 0, 1),
-                AxisAlignedBB3.fromPoints(10, 10, 10, 11, 11, 11)
+                AxisAlignedBB.fromPoints(10, 10, 10, 11, 11, 11)
         ));
 
         assertTrue(Collisions.test(
                 Ray3.fromOD(0, 0, 0, 1, 1, 1),
-                AxisAlignedBB3.fromPoints(10, 10, 10, 11, 11, 11)
+                AxisAlignedBB.fromPoints(10, 10, 10, 11, 11, 11)
         ));
     }
 

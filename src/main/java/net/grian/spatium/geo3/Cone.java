@@ -27,6 +27,11 @@ public interface Cone extends Space, Cloneable, Serializable {
      */
     abstract Vector3 getApex();
     
+    /**
+     * Returns a ray between the cone's apex and the cone's center of base.
+     *
+     * @return the cone direction
+     */
     abstract Vector3 getDirection();
     
     /**
@@ -107,15 +112,12 @@ public interface Cone extends Space, Cloneable, Serializable {
         //distance (must be between 0 and height) of the point (projected onto cone axis) to the apex
         double coneDist = apexToPoint.dot(axis);
         if (coneDist < 0 || coneDist > height) return false;
-    
-        //note that apexToPoint and axis are being mutated here, although this is fine since they are not used after
-        axis.multiply(coneDist);
-        apexToPoint.subtract(axis);
         
         double
+            //note that apexToPoint and axis are being mutated here, although this is fine since they are not used after
             //radius between at coneDist (between 0 and base radius)
             maxRadius = (coneDist / height) * getBaseRadius(),
-            localRadius = apexToPoint.getLength();
+            localRadius = apexToPoint.subtract(axis.multiply(coneDist)).getLength();
         
         return localRadius <= maxRadius;
     }
@@ -137,5 +139,7 @@ public interface Cone extends Space, Cloneable, Serializable {
     default void setDirection(Vector3 dir) {
         setDirection(dir.getX(), dir.getY(), dir.getZ());
     }
+    
+    
     
 }

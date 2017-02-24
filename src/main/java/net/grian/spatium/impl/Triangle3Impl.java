@@ -100,7 +100,7 @@ public class Triangle3Impl implements Triangle3 {
     }
 
     @Override
-    public void move(double x, double y, double z) {
+    public void translate(double x, double y, double z) {
         ax += x; ay += y; az += z;
         bx += x; by += y; az += z;
         cx += x; cy += y; cz += z;
