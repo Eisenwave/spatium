@@ -1,8 +1,22 @@
 package net.grian.spatium.geo2;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.Vector3;
+import net.grian.spatium.impl.CircleImpl;
 
 public interface Circle extends Area {
+    
+    //CONSTRUCTORS
+    
+    static Circle fromCenterRadius(double x, double y, double r) {
+        return new CircleImpl(x, y, r);
+    }
+    
+    static Circle fromCenterRadius(Vector2 center, double r) {
+        return fromCenterRadius(center.getX(), center.getY(), r);
+    }
+    
+    //GETTERS
     
     abstract double getX();
     
@@ -29,6 +43,23 @@ public interface Circle extends Area {
         return Math.PI * r * r;
     }
     
+    //CHECKERS
+    
+    default boolean equals(Circle circle) {
+        return
+            Spatium.equals(getX(), circle.getX()) &&
+            Spatium.equals(getY(), circle.getY()) &&
+            Spatium.equals(getRadius(), circle.getRadius());
+    }
+    
+    default boolean contains(double x, double y) {
+        return Spatium.hypot(x-getX(), y-getY()) <= getRadius();
+    }
+    
+    default boolean contains(Vector2 point) {
+        return contains(point.getX(), point.getY());
+    }
+    
     //SETTERS
     
     abstract void setX(double x);
@@ -45,11 +76,6 @@ public interface Circle extends Area {
     
     default void setDiameter(double d) {
         setRadius(d / 2);
-    }
-    
-    @Override
-    default void scale(double factor) {
-        setRadius(getRadius() * factor);
     }
     
 }

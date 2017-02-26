@@ -103,22 +103,33 @@ public class SphereImpl implements Sphere {
     }
 
     @Override
-    public void scale(double factor) {
+    public void scaleCentric(double factor) {
         if (factor < 0) throw new IllegalArgumentException("factor < 0");
         this.r *= factor;
-    }
-
-    @Override
-    public void translate(double x, double y, double z) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
     }
 
     @Override
     public void setRadius(double radius) {
         if (radius < 0) throw new IllegalArgumentException("radius < 0");
         this.r = radius;
+    }
+    
+    //TRANSFORMATIONS
+    
+    
+    @Override
+    public void scale(double factor) {
+        this.x *= factor;
+        this.y *= factor;
+        this.z *= factor;
+        this.r *= Math.abs(factor);
+    }
+    
+    @Override
+    public void translate(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
     }
 
     // MISC

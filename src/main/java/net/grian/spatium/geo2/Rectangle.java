@@ -65,8 +65,16 @@ public interface Rectangle extends Area {
             Spatium.equals(getMaxY(), rectangle.getMaxY());
     }
     
-    //SETTERS
+    // SETTERS
     
+    abstract void setDimensions(double x, double y);
     
+    // TRANSFORMATIONS
+    
+    abstract void scale(double x, double y);
+    
+    default void scale(double factor) {
+        scale(factor, factor);
+    }
     
 }

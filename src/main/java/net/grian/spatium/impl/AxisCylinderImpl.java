@@ -75,6 +75,13 @@ public class AxisCylinderImpl implements AxisCylinder {
     
     //TRANSFORMATIONS
     
+    @Override
+    public void scale(double factor) {
+        this.x *= factor;
+        this.y *= factor;
+        this.z *= factor;
+        this.r *= Math.abs(factor);
+    }
     
     @Override
     public void translate(double x, double y, double z) {
@@ -84,7 +91,7 @@ public class AxisCylinderImpl implements AxisCylinder {
     }
     
     @Override
-    public void scale(double factor) {
+    public void scaleCentric(double factor) {
         throw new UnsupportedOperationException();
     }
     

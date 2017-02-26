@@ -138,25 +138,33 @@ public class OrientedBBImpl implements OrientedBB {
                 Math.abs(relPoint.getZ()) <= dz;
     }
 
-    //SETTERS
-
+    //TRANSFORMATIONS
+    
+    
+    @Override
+    public void scale(double factor) {
+        this.dx *= factor;
+        this.dy *= factor;
+        this.dz *= factor;
+    }
+    
     @Override
     public void translate(double x, double y, double z) {
         this.cx += x;
         this.cy += y;
         this.cz += z;
     }
-
-    @Override
-    public void transform(Matrix transform) {
-        this.trans = Matrices.product(this.trans, transform);
-    }
     
     @Override
-    public void scale(double factor) {
+    public void scaleCentric(double factor) {
         this.cx *= factor;
         this.cy *= factor;
         this.cz *= factor;
+    }
+    
+    @Override
+    public void transform(Matrix transform) {
+        this.trans = Matrices.product(this.trans, transform);
     }
     
     //MISC

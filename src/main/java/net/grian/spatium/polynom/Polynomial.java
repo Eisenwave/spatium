@@ -4,7 +4,7 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.PolynomialImpl;
 
 /**
- * A non-resizable wrapper class for polynomials.
+ * A resizable wrapper class for polynomials.
  */
 public interface Polynomial {
     

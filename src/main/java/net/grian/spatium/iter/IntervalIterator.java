@@ -11,9 +11,9 @@ public class IntervalIterator implements Iterator<Vector3> {
     private int i;
 
     public IntervalIterator(Ray3 ray, double interval) {
-        this.x = ray.getOriginX();
-        this.y = ray.getOriginY();
-        this.z = ray.getOriginZ();
+        this.x = ray.getOrgX();
+        this.y = ray.getOrgY();
+        this.z = ray.getOrgZ();
         this.xi = interval * ray.getDirX();
         this.yi = interval * ray.getDirY();
         this.zi = interval * ray.getDirZ();

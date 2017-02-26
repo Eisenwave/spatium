@@ -236,6 +236,10 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
     }
 
     // SETTERS
+    
+    abstract void setDimensions(int x, int y, int z);
+    
+    // TRANSFORMATIONS
 
     /**
      * Moves the block selection.
@@ -259,13 +263,30 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
     public default void translate(BlockVector v) {
         translate(v.getX(), v.getY(), v.getZ());
     }
-
-    public abstract void scale(int x, int y, int z);
-
+    
+    public abstract void scale(double x, double y, double z);
+    
     public default void scale(BlockVector v) {
         scale(v.getX(), v.getY(), v.getZ());
     }
-
+    
+    @Override
+    default void scale(double factor) {
+        scale(factor, factor,factor);
+    }
+    
+    default void scaleCentric(double x, double y, double z) {
+        setDimensions(
+            (int) PrimMath.floor(getSizeX()*x),
+            (int) PrimMath.floor(getSizeY()*y),
+            (int) PrimMath.floor(getSizeZ()*z));
+    }
+    
+    @Override
+    default void scaleCentric(double factor) {
+        scaleCentric(factor, factor, factor);
+    }
+    
     public abstract void grow(int x, int y, int z);
 
     public default void grow(BlockVector v) {

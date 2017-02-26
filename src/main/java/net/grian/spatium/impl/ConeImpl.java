@@ -44,22 +44,8 @@ public class ConeImpl implements Cone {
     }
     
     @Override
-    public void scale(double factor) {
-        dx *= factor;
-        dy *= factor;
-        dz *= factor;
-    }
-    
-    @Override
-    public void translate(double x, double y, double z) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
-    }
-    
-    @Override
     public void setHeight(double height) {
-        scale(height / getHeight());
+        scaleCentric(height / getHeight());
     }
     
     @Override
@@ -79,6 +65,33 @@ public class ConeImpl implements Cone {
         this.dx = x;
         this.dy = y;
         this.dz = z;
+    }
+    
+    //TRANSFORMATIONS
+    
+    
+    @Override
+    public void scale(double factor) {
+        this.x *= factor;
+        this.y *= factor;
+        this.z *= factor;
+        this.dx *= factor;
+        this.dy *= factor;
+        this.dz *= factor;
+    }
+    
+    @Override
+    public void scaleCentric(double factor) {
+        dx *= factor;
+        dy *= factor;
+        dz *= factor;
+    }
+    
+    @Override
+    public void translate(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
     }
     
 }

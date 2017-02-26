@@ -80,8 +80,10 @@ public interface Triangle2 extends Area {
     abstract void scale(double x, double y);
     
     @Override
-    default void scale(double factor) {
-        scale(factor, factor);
+    default void scaleCentric(double factor) {
+        scaleCentric(factor, factor);
     }
+    
+    abstract void scaleCentric(double x, double y);
     
 }

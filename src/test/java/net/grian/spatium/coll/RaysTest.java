@@ -11,7 +11,7 @@ public class RaysTest {
 
     @Test
     public void Ray_Sphere() throws Exception {
-        Sphere sphere = Sphere.fromCenterAndRadius(0, 0, 0, 10);
+        Sphere sphere = Sphere.fromCenterRadius(0, 0, 0, 10);
 
         Ray3 ray0 = Ray3.fromOD(-20, 0, 0, 5, 0, 0);
         System.out.println(Arrays.toString(Rays.pierce(ray0, sphere)));

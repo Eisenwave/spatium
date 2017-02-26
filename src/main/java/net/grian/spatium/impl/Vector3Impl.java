@@ -186,7 +186,7 @@ public class Vector3Impl implements Vector3 {
     }
 
     @Override
-    public Vector3 setRadiusYawPitch(double radius, double yaw, double pitch) {
+    public Vector3 setLengthYawPitch(double radius, double yaw, double pitch) {
         double
         r = radius * getLength(),
         y = Math.toRadians(yaw),

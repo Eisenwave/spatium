@@ -49,8 +49,26 @@ public class RectangleImpl implements Rectangle {
         return Vector2.fromXY(x, y);
     }
     
+    // SETTERS
+    
     @Override
-    public void scale(double factor) {
+    public void setDimensions(double x, double y) {
+        this.dx = Math.abs(x);
+        this.dy = Math.abs(y);
+    }
+    
+    // TRANSFORMATIONS
+    
+    @Override
+    public void scale(double x, double y) {
+        this.x *= x;
+        this.y *= y;
+        this.dx *= Math.abs(x);
+        this.dy *= Math.abs(y);
+    }
+    
+    @Override
+    public void scaleCentric(double factor) {
         factor = Math.abs(factor);
         dx *= factor;
         dy *= factor;

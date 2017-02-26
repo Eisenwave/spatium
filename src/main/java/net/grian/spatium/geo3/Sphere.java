@@ -24,7 +24,7 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @param radius the radius
      * @return a new sphere
      */
-    public static Sphere fromCenterAndRadius(Vector3 center, double radius) {
+    public static Sphere fromCenterRadius(Vector3 center, double radius) {
         return new SphereImpl(center, radius);
     }
 
@@ -37,7 +37,7 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @param radius the radius
      * @return a new sphere
      */
-    public static Sphere fromCenterAndRadius(double x, double y, double z, double radius) {
+    public static Sphere fromCenterRadius(double x, double y, double z, double radius) {
         return new SphereImpl(x, y, z, radius);
     }
 
@@ -169,7 +169,7 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @param factor the factor
      */
     @Override
-    public default void scale(double factor) {
+    public default void scaleCentric(double factor) {
         setRadius(getRadius() * factor);
     }
 

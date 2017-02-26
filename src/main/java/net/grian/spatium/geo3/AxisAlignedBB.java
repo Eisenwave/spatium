@@ -25,11 +25,11 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param zb the z of the second point
      * @return a new bounding box
      */
-    public static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
+    static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
         return AxisAlignedBBImpl.fromPoints(xa, ya, za, xb, yb, zb);
     }
     
-    public static AxisAlignedBB fromCenterDims(double x, double y, double z, double dx, double dy, double dz) {
+    static AxisAlignedBB fromCenterDims(double x, double y, double z, double dx, double dy, double dz) {
         return AxisAlignedBBImpl.fromCenterDims(x, y, z, dx, dy, dz);
     }
 
@@ -41,7 +41,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param size   the size of the cube
      * @return a new axis aligned bounding box
      */
-    public static AxisAlignedBB fromCenterDims(Vector3 center, double size) {
+    static AxisAlignedBB fromCenterDims(Vector3 center, double size) {
         return fromCenterDims(center.getX(), center.getY(), center.getZ(), size, size, size);
     }
 
@@ -52,48 +52,48 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param to   the second point
      * @return a new bounding box
      */
-    public static AxisAlignedBB between(Vector3 from, Vector3 to) {
+    static AxisAlignedBB between(Vector3 from, Vector3 to) {
         return fromPoints(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
     }
 
     // GETTERS
 
-    public abstract double getMinX();
+    abstract double getMinX();
 
-    public abstract double getMinY();
+    abstract double getMinY();
 
-    public abstract double getMinZ();
+    abstract double getMinZ();
 
-    public abstract double getMaxX();
+    abstract double getMaxX();
 
-    public abstract double getMaxY();
+    abstract double getMaxY();
 
-    public abstract double getMaxZ();
+    abstract double getMaxZ();
 
-    public default double getSizeX() {
+    default double getSizeX() {
         return getMaxX() - getMinX();
     }
 
-    public default double getSizeY() {
+    default double getSizeY() {
         return getMaxY() - getMinY();
     }
 
-    public default double getSizeZ() {
+    default double getSizeZ() {
         return getMaxZ() - getMinZ();
     }
 
-    public default Vector3 getCenter() {
+    default Vector3 getCenter() {
         return Vector3.fromXYZ(
             (getMinX() + getMaxX()) * 0.5f,
             (getMinY() + getMaxY()) * 0.5f,
             (getMinZ() + getMaxZ()) * 0.5f);
     }
 
-    public default Vector3 getMin() {
+    default Vector3 getMin() {
         return Vector3.fromXYZ(getMinX(), getMinY(), getMinZ());
     }
 
-    public default Vector3 getMax() {
+    default Vector3 getMax() {
         return Vector3.fromXYZ(getMaxX(), getMaxY(), getMaxZ());
     }
 
@@ -102,22 +102,22 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      *
      * @return the dimensions of the bounding box in a new vector
      */
-    public default Vector3 getDimensions() {
+    default Vector3 getDimensions() {
         return Vector3.fromXYZ(getSizeX(), getSizeY(), getSizeZ());
     }
 
     @Override
-    public default double getVolume() {
+    default double getVolume() {
         return getSizeX() * getSizeY() * getSizeZ();
     }
 
     @Override
-    public default double getSurfaceArea() {
+    default double getSurfaceArea() {
         double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
 
-    public default Direction getClosestSide(Vector3 point) {
+    default Direction getClosestSide(Vector3 point) {
         Vector3 center = getCenter();
         final double
             x = point.getX() - center.getX(),
@@ -136,10 +136,19 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
                 return z >= 0 ? POSITIVE_Z : NEGATIVE_Z;
         }
     }
+    
+    //SETTERS
+    
+    default void setCenter(double x, double y, double z) {
+        Vector3 center = getCenter();
+        translate(x-center.getX(), y-center.getY(), z-center.getZ());
+    }
+    
+    abstract void setDimensions(double x, double y, double z);
 
     // CHECKERS
     
-    public default boolean equals(AxisAlignedBB box) {
+    default boolean equals(AxisAlignedBB box) {
         return
             Spatium.equals(this.getMinX(), box.getMinX()) &&
             Spatium.equals(this.getMinY(), box.getMinY()) &&
@@ -148,44 +157,16 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
             Spatium.equals(this.getMaxY(), box.getMaxY()) &&
             Spatium.equals(this.getMaxZ(), box.getMaxZ());
     }
-
-    /**
-     * Returns whether this bounding box contains a point of given coordinates.
-     *
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
-     * @return whether this bounding box contains a point of given coordinates
-     */
-    public default boolean contains(double x, double y, double z) {
+    
+    @Override
+    default boolean contains(double x, double y, double z) {
         return
             x >= getMinX() && x <= getMaxX() &&
             y >= getMinY() && y <= getMaxY() &&
             z >= getMinZ() && z <= getMaxZ();
     }
 
-    /**
-     * Returns whether this bounding box contains a point of given coordinates.
-     *
-     * @param point the point
-     * @return whether this bounding box contains a point of given coordinates
-     */
-    public default boolean contains(Vector3 point) {
-        return contains(point.getX(), point.getY(), point.getZ());
-    }
-
-    // SETTERS
-    
-    public abstract void translate(double x, double y, double z);
-
-    /**
-     * Moves the bounding box by a given amount.
-     *
-     * @param v the movement
-     */
-    public default void translate(Vector3 v) {
-        translate(v.getX(), v.getY(), v.getZ());
-    }
+    // TRANSFORMATIONS
 
     /**
      * Scales the bounding box around the origin.
@@ -194,27 +175,21 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param y the y-scale factor
      * @param z the z-scale factor
      */
-    public abstract void scale(double x, double y, double z);
-
-    /**
-     * Scales the bounding box around the origin.
-     *
-     * @param v the scale factors
-     */
-    public default void scale(Vector3 v) {
+    abstract void scale(double x, double y, double z);
+    
+    default void scale(Vector3 v) {
         scale(v.getX(), v.getY(), v.getZ());
     }
-
-    /**
-     * Scales the bounding box around the origin.
-     *
-     * @param factor the scale factor
-     */
-    @Override
-    public default void scale(double factor) {
+    
+    default void scale(double factor) {
         scale(factor, factor, factor);
     }
-
+    
+    @Override
+    default void scaleCentric(double factor) {
+        setDimensions(getSizeX(), getSizeY(), getSizeZ());
+    }
+    
     /**
      * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,
      * the minimum point stays untouched.
@@ -223,7 +198,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param y the y-growth
      * @param z the z-growth
      */
-    public abstract void grow(double x, double y, double z);
+    abstract void grow(double x, double y, double z);
 
     /**
      * Expands the bounding box into positive direction. This will only affect the maximum point of the bounding box,
@@ -231,12 +206,12 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      *
      * @param v the growth
      */
-    public default void grow(Vector3 v) {
+    default void grow(Vector3 v) {
         grow(v.getX(), v.getY(), v.getZ());
     }
 
     // MISC
 
-    public abstract AxisAlignedBB clone();
+    abstract AxisAlignedBB clone();
 
 }

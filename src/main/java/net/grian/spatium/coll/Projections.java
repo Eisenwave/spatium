@@ -2,14 +2,38 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
+import net.grian.spatium.geo2.Circle;
+import net.grian.spatium.geo2.Ray2;
 import net.grian.spatium.geo2.Triangle2;
-import net.grian.spatium.geo3.Plane;
-import net.grian.spatium.geo3.Ray3;
-import net.grian.spatium.geo3.Triangle3;
-import net.grian.spatium.geo3.Vector3;
+import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.geo3.*;
 import net.grian.spatium.transform.Quaternion;
+import org.jetbrains.annotations.NotNull;
 
 public final class Projections {
+    
+    /**
+     * Returns where the point ({@link Vector2}) is being projected onto the {@link Ray2}.
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray2#setLength(double)} (mutation) or {@link Ray2#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param point the point
+     * @return the ray multiplier
+     */
+    public static double pointOnRay(Ray2 ray, Vector2 point) {
+        Vector2
+            direction = ray.getDirection(),
+            originToPoint = Vector2.between(ray.getOrigin(), point);
+        
+        return originToPoint.dot(direction) / direction.getLengthSquared();
+    }
 
     /**
      * Returns where the point ({@link Vector3}) is being projected onto the {@link Ray3}.
@@ -28,8 +52,8 @@ public final class Projections {
      */
     public static double pointOnRay(Ray3 ray, Vector3 point) {
         Vector3
-                direction = ray.getDirection(),
-                originToPoint = Vector3.between(ray.getOrigin(), point);
+            direction = ray.getDirection(),
+            originToPoint = Vector3.between(ray.getOrigin(), point);
 
         return originToPoint.dot(direction) / direction.getLengthSquared();
 
@@ -102,6 +126,36 @@ public final class Projections {
      */
     private static Triangle2 orthoProjectZ(Vector3 a, Vector3 b, Vector3 c) {
         return Triangle2.fromPoints(a.getX(), a.getY(), b.getX(), b.getY(), c.getX(), c.getY());
+    }
+    
+    @NotNull
+    public static Vector2 align(Vector3 point, Axis axis) {
+        switch (axis) {
+            case X: return Vector2.fromXY(point.getY(), point.getZ());
+            case Y: return Vector2.fromXY(point.getX(), point.getZ());
+            case Z: return Vector2.fromXY(point.getX(), point.getY());
+            default: throw new IllegalArgumentException("invalid axis: "+axis);
+        }
+    }
+    
+    @NotNull
+    public static Ray2 align(Ray3 ray, Axis axis) {
+        return Ray2.fromOD(
+            align(ray.getOrigin(), axis),
+            align(ray.getDirection(), axis));
+    }
+    
+    @NotNull
+    public static Triangle2 align(Triangle3 triangle, Axis axis) {
+        return Triangle2.fromPoints(
+            align(triangle.getA(), axis),
+            align(triangle.getB(), axis),
+            align(triangle.getC(), axis));
+    }
+    
+    @NotNull
+    public static Circle align(Sphere sphere, Axis axis) {
+        return Circle.fromCenterRadius(align(sphere.getCenter(), axis), sphere.getRadius());
     }
 
 }

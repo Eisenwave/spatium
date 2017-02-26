@@ -2,6 +2,9 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
+import net.grian.spatium.geo2.Circle;
+import net.grian.spatium.geo2.Ray2;
+import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.geo3.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,9 +77,29 @@ public final class Rays {
     public static double cast(Ray3 ray, Vector3 point) {
         return ray.containsAt(point);
     }
-
+    
     /**
-     * Tests where a {@link Ray3} and a Point ({@link Sphere}) collide.
+     * Tests where a {@link Ray2} and a {@link Circle} collide.
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray3#setLength(double)} (mutation) or {@link Ray3#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param circle the circle
+     * @return where the ray and the point collide or {@link Double#NaN}
+     */
+    public static double cast(Ray2 ray, Circle circle) {
+        double[] entryExit = pierce(ray, circle);
+        return entryExit==null? Double.NaN : entryExit[0];
+    }
+    
+    /**
+     * Tests where a {@link Ray3} and a {@link Sphere} collide.
      * <p>
      *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
      *     object collide with each other.
@@ -146,9 +169,9 @@ public final class Rays {
      */
     public static double cast(Ray3 ray, AxisPlane plane) {
         switch (plane.getAxis()) {
-            case X: return (ray.getOriginX() - plane.getDepth()) / ray.getDirX();
-            case Y: return (ray.getOriginY() - plane.getDepth()) / ray.getDirY();
-            case Z: return (ray.getOriginZ() - plane.getDepth()) / ray.getDirZ();
+            case X: return (ray.getOrgX() - plane.getDepth()) / ray.getDirX();
+            case Y: return (ray.getOrgY() - plane.getDepth()) / ray.getDirY();
+            case Z: return (ray.getOrgZ() - plane.getDepth()) / ray.getDirZ();
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
@@ -267,6 +290,48 @@ public final class Rays {
     }
 
     //ENTRY AND EXIT RAY CASTS
+    
+    /**
+     * <p>
+     *     Tests where a {@link Ray2} enters and exits a {@link Circle} collide. Unlike most algorithms, this one
+     *     neither cancels early when the ray is inside the circle, nor when the sphere is behind the ray origin.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray2#setLength(double)} (mutation) or {@link Ray2#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param circle the circle
+     * @return where the ray and the point collide or {@link Double#NaN}
+     */
+    @Nullable
+    public static double[] pierce(Ray2 ray, Circle circle) {
+        Vector2 center = circle.getCenter();
+    
+        //the ray multiplier
+        double tm = Projections.pointOnRay(ray, center);
+        //closest point on the line to the circle center
+        Vector2 base = ray.getPoint(tm);
+    
+        double r = circle.getRadius();
+        double dis = base.distanceTo(center);
+        //closest point is outside radius
+        if (dis > r) return null;
+    
+        double l = ray.getLength();
+        //the +- offset of the ray
+        //0 if ray pierces the surface of sphere, 1 if ray passes through center
+        double dt = Math.cos(dis / r * CacheMath.HALF_PI) * r / l;
+    
+        return tm >= 0?
+            new double[] {tm - dt, tm + dt} :
+            new double[] {tm + dt, tm - dt};
+    }
 
     /**
      * <p>
@@ -295,7 +360,9 @@ public final class Rays {
         Vector3 base = ray.getPoint(tm);
 
         double r = sphere.getRadius();
+        //closest point on the line to the circle center
         double d = base.distanceTo(center);
+        //closest point is outside radius
         if (d > r) return null;
 
         double l = ray.getLength();
@@ -397,14 +464,54 @@ public final class Rays {
         }
 
         if (d >= 0) return new double[] {
-                (slab.getMinDepth() - ray.getOriginX()) / d,
-                (slab.getMaxDepth() - ray.getOriginX()) / d
+                (slab.getMinDepth() - ray.getOrgX()) / d,
+                (slab.getMaxDepth() - ray.getOrgX()) / d
         };
         else return new double[]{
-                (slab.getMaxDepth() - ray.getOriginX()) / d,
-                (slab.getMinDepth() - ray.getOriginX()) / d
+                (slab.getMaxDepth() - ray.getOrgX()) / d,
+                (slab.getMinDepth() - ray.getOrgX()) / d
         };
     }
+    
+    /*
+     * <p>
+     *     Tests where a {@link Ray3} enters and exits an {@link Rectangle}.
+     * </p>
+     * <p>
+     *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray3#setLength(double)}.
+     * </p>
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return the entry and exit points of the ray or null
+    @Nullable
+    public static double[] pierce(Ray3 ray, Rectangle box) {
+        
+        double tmin, tmax;
+        
+        {//x-slab collision
+            final double div = 1 / ray.getDirX();
+            tmin = ((div >= 0? box.getMinX() : box.getMaxX()) - ray.getOriginX()) * div;
+            tmax = ((div >= 0? box.getMaxX() : box.getMinX()) - ray.getOriginX()) * div;
+        }
+        {//y-slab collision
+            final double div = 1 / ray.getDirY();
+            double tymin = ((div >= 0? box.getMinY() : box.getMaxY()) - ray.getOriginY()) * div;
+            double tymax = ((div >= 0? box.getMaxY() : box.getMinY()) - ray.getOriginY()) * div;
+            
+            if (tmin > tymax || tymin > tmax) return null;
+            if (tymin > tmin) tmin = tymin;
+            if (tymax < tmax) tmax = tymax;
+        }
+        
+        return new double[] {tmin, tmax};
+    }
+    REPLACE RAY3 WITH RAY2 ONCE CREATED */
 
     /**
      * <p>
@@ -430,13 +537,13 @@ public final class Rays {
 
         {//x-slab collision
             final double div = 1 / ray.getDirX();
-            tmin = ((div >= 0? box.getMinX() : box.getMaxX()) - ray.getOriginX()) * div;
-            tmax = ((div >= 0? box.getMaxX() : box.getMinX()) - ray.getOriginX()) * div;
+            tmin = ((div >= 0? box.getMinX() : box.getMaxX()) - ray.getOrgX()) * div;
+            tmax = ((div >= 0? box.getMaxX() : box.getMinX()) - ray.getOrgX()) * div;
         }
         {//y-slab collision
             final double div = 1 / ray.getDirY();
-            double tymin = ((div >= 0? box.getMinY() : box.getMaxY()) - ray.getOriginY()) * div;
-            double tymax = ((div >= 0? box.getMaxY() : box.getMinY()) - ray.getOriginY()) * div;
+            double tymin = ((div >= 0? box.getMinY() : box.getMaxY()) - ray.getOrgY()) * div;
+            double tymax = ((div >= 0? box.getMaxY() : box.getMinY()) - ray.getOrgY()) * div;
             
             if (tmin > tymax || tymin > tmax) return null;
             if (tymin > tmin) tmin = tymin;
@@ -444,8 +551,8 @@ public final class Rays {
         }
         {//z-slab collision
             final double div = 1 / ray.getDirZ();
-            double tzmin = ((div >= 0? box.getMinZ() : box.getMaxZ()) - ray.getOriginZ()) * div;
-            double tzmax = ((div >= 0? box.getMaxZ() : box.getMinZ()) - ray.getOriginZ()) * div;
+            double tzmin = ((div >= 0? box.getMinZ() : box.getMaxZ()) - ray.getOrgZ()) * div;
+            double tzmax = ((div >= 0? box.getMaxZ() : box.getMinZ()) - ray.getOrgZ()) * div;
             
             if (tmin > tzmax || tzmin > tmax) return null;
             if (tzmin > tmin) tmin = tzmin;
@@ -500,6 +607,40 @@ public final class Rays {
         }
 
         return new double[] {tmin, tmax};
+    }
+    
+    /**
+     * <p>
+     *     Tests where a {@link Ray3} enters and exits an {@link AxisCylinder}.
+     * </p>
+     * <p>
+     *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray3#setLength(double)}.
+     * </p>
+     *
+     * @param ray the ray
+     * @param cylinder the cylinder
+     * @return the entry and exit points of the ray or null
+     */
+    @Nullable
+    public static double[] pierce(Ray3 ray, AxisCylinder cylinder) {
+        //min and max collision points of ray with the planes of the cylinder disks:
+        //if the ray is parallel to the cylinder slab AND the origin is not inside it, we can cancel early
+        double[] t = pierce(ray, cylinder.getSlab());
+        
+        //if the ray is parallel to the slab, tmin and tmax will be infinite
+        //however, should the ray origin lie in between the cylinder planes, tmin will be neg.inf. and tmax will be
+        //pos.inf (or the other way around)
+        //otherwise, both tmin and tmax will be pos.inf or neg.inf and we can cancel right away
+        if (!Double.isFinite(t[0]) && t[0] == t[1])
+            return null;
+        
+        //now we have to check where the 2D ray collides with the cylinder circle
+        return null;
     }
 
     /**

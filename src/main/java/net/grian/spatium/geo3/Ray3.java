@@ -1,6 +1,5 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.Spatium;
 import net.grian.spatium.coll.Projections;
 import net.grian.spatium.impl.Ray3Impl;
 import net.grian.spatium.iter.BlockIntervalIterator;
@@ -25,7 +24,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param zd the z-coordinate of the direction
      * @return a new ray
      */
-    public static Ray3 fromOD(double xo, double yo, double zo, double xd, double yd, double zd) {
+    static Ray3 fromOD(double xo, double yo, double zo, double xd, double yd, double zd) {
         return new Ray3Impl(xo, yo, zo, xd, yd, zd);
     }
 
@@ -36,7 +35,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param dir the direction
      * @return a new ray
      */
-    public static Ray3 fromOD(Vector3 origin, Vector3 dir) {
+    static Ray3 fromOD(Vector3 origin, Vector3 dir) {
         return new Ray3Impl(origin, dir);
     }
 
@@ -49,7 +48,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param to the second point
      * @return a new ray
      */
-    public static Ray3 between(Vector3 from, Vector3 to) {
+    static Ray3 between(Vector3 from, Vector3 to) {
         return fromOD(from, Vector3.between(from, to));
     }
 
@@ -64,7 +63,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param tz the target x
      * @return a new ray
      */
-    public static Ray3 between(double ox, double oy, double oz, double tx, double ty, double tz) {
+    static Ray3 between(double ox, double oy, double oz, double tx, double ty, double tz) {
         return fromOD(ox, oy, oz, tx-ox, ty-oy, tz-oz);
     }
 
@@ -75,64 +74,64 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      *
      * @return the x-coordinate of the origin of this ray
      */
-    public abstract double getOriginX();
+    abstract double getOrgX();
 
     /**
      * Returns the y-coordinate of the origin of this ray.
      *
      * @return the y-coordinate of the origin of this ray
      */
-    public abstract double getOriginY();
+    abstract double getOrgY();
 
     /**
      * Returns the z-coordinate of the origin of this ray.
      *
      * @return the z-coordinate of the origin of this ray
      */
-    public abstract double getOriginZ();
+    abstract double getOrgZ();
 
     /**
      * Returns the x-coordinate of the direction of this ray.
      *
      * @return the x-coordinate of the direction of this ray
      */
-    public abstract double getDirX();
+    abstract double getDirX();
 
     /**
      * Returns the y-coordinate of the direction of this ray.
      *
      * @return the y-coordinate of the direction of this ray
      */
-    public abstract double getDirY();
+    abstract double getDirY();
 
     /**
      * Returns the z-coordinate of the direction of this ray.
      *
      * @return the z-coordinate of the direction of this ray
      */
-    public abstract double getDirZ();
+    abstract double getDirZ();
 
     /**
      * Returns the length of this ray.
      *
      * @return the length of this ray
      */
-    public abstract double getLength();
+    abstract double getLength();
 
     /**
      * Returns the squared length of this ray.
      *
      * @return the squared length of this ray
      */
-    public abstract double getLengthSquared();
+    abstract double getLengthSquared();
 
     /**
      * Returns the origin of this ray in a new vector.
      *
      * @return the origin of this ray in a new vector
      */
-    public default Vector3 getOrigin() {
-        return Vector3.fromXYZ(getOriginX(), getOriginY(), getOriginZ());
+    default Vector3 getOrigin() {
+        return Vector3.fromXYZ(getOrgX(), getOrgY(), getOrgZ());
     }
 
     /**
@@ -140,7 +139,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      *
      * @return the direction of this ray in a new vector
      */
-    public default Vector3 getDirection() {
+    default Vector3 getDirection() {
         return Vector3.fromXYZ(getDirX(), getDirY(), getDirZ());
     }
 
@@ -150,26 +149,12 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      *
      * @return the end of this ray in a new vector
      */
-    public default Vector3 getEnd() {
-        return Vector3.fromXYZ(getOriginX() + getDirX(), getOriginY() + getDirY(), getOriginZ() + getDirZ());
-    }
-
-    /**
-     * Returns the closest point on this ray to another ray. Note that this
-     * point can be further away from the origin of the ray than the hypot
-     * of the ray, the ray is treated as if it were infinitely long.
-     *
-     * @deprecated use {@link Projections#pointOnRay(Ray3, Vector3)}
-     * @param point the point
-     * @return the closest point on this ray to another point
-     */
-    @Deprecated
-    public default Vector3 closestPointTo(Vector3 point) {
-        return getPoint(Projections.pointOnRay(this, point));
+    default Vector3 getEnd() {
+        return Vector3.fromXYZ(getOrgX() + getDirX(), getOrgY() + getDirY(), getOrgZ() + getDirZ());
     }
 
     @Override
-    public default Vector3[] getControlPoints() {
+    default Vector3[] getControlPoints() {
         return new Vector3[] {getOrigin(), getEnd()};
     }
 
@@ -183,7 +168,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param z the z-coordinate of the point
      * @return whether the ray is equal to the given point at any point
      */
-    public abstract boolean contains(double x, double y, double z);
+    abstract boolean contains(double x, double y, double z);
 
     /**
      * Returns whether the ray is equal to the given point at any point.
@@ -191,7 +176,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param point the point
      * @return whether the ray is equal to the given point at any point
      */
-    public default boolean contains(Vector3 point) {
+    default boolean contains(Vector3 point) {
         return contains(point.getX(), point.getY(), point.getZ());
     }
 
@@ -203,7 +188,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param z the z-coordinate of the point
      * @return the ray multiplier or {@link Double#NaN} if there is no collision
      */
-    public abstract double containsAt(double x, double y, double z);
+    abstract double containsAt(double x, double y, double z);
 
     /**
      * Tests at which point of the ray the ray collides with another point.
@@ -211,7 +196,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param point the point
      * @return the ray multiplier or {@link Double#NaN} if there is no collision
      */
-    public default double containsAt(Vector3 point) {
+    default double containsAt(Vector3 point) {
         return containsAt(point.getX(), point.getY(), point.getZ());
     }
 
@@ -222,15 +207,10 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param ray the ray
      * @return whether this ray is equal to the ray
      */
-    public default boolean equals(Ray3 ray) {
+    default boolean equals(Ray3 ray) {
         return
-            Spatium.equals(this.getOriginX(), ray.getOriginX()) &&
-            Spatium.equals(this.getOriginY(), ray.getOriginY()) &&
-            Spatium.equals(this.getOriginZ(), ray.getOriginZ()) &&
-            Spatium.equals(this.getDirX(), ray.getDirX()) &&
-            Spatium.equals(this.getDirY(), ray.getDirY()) &&
-            Spatium.equals(this.getDirZ(), ray.getDirZ());
-                
+            getOrigin().equals(ray.getOrigin()) &&
+            getDirection().isMultipleOf(ray.getDirection());
     }
 
     // SETTERS
@@ -242,14 +222,14 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param y the y-coordinate of the point
      * @param z the z-coordinate of the point
      */
-    public abstract void setOrigin(double x, double y, double z);
+    abstract void setOrigin(double x, double y, double z);
 
     /**
      * Sets the origin of the ray to a given point.
      *
      * @param point the point
      */
-    public default void setOrigin(Vector3 point) {
+    default void setOrigin(Vector3 point) {
         setOrigin(point.getX(), point.getY(), point.getZ());
     }
 
@@ -260,18 +240,54 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param y the y-coordinate of the vector
      * @param z the z-coordinate of the vector
      */
-    public abstract void setDirection(double x, double y, double z);
+    abstract void setDirection(double x, double y, double z);
 
     /**
      * Sets the length of this ray to a given length.
      *
      * @param t the new hypot
      */
-    public abstract void setLength(double t);
+    abstract void setLength(double t);
 
-    public default void normalize() {
+    default void normalize() {
         setLength(1);
     }
+    
+    //TRANSFORMATIONS
+    
+    default void scaleOrigin(double x, double y, double z) {
+        setDirection(getOrgX()*x, getOrgY()*y, getOrgZ()*z);
+    }
+    
+    default void scaleDirection(double x, double y, double z) {
+        setDirection(getOrgX()*x, getOrgY()*y, getOrgZ()*z);
+    }
+    
+    default void scaleOrigin(double factor) {
+        scaleOrigin(factor, factor, factor);
+    }
+    
+    default void scaleDirection(double factor) {
+        scaleDirection(factor, factor, factor);
+    }
+    
+    default void scale(double x, double y, double z) {
+        scaleOrigin(x, y, z);
+        scaleDirection(x, y, z);
+    }
+    
+    default void scale(double factor) {
+        scale(factor, factor, factor);
+    }
+    
+    /**
+     * Translates the ray origin by a given amount on each axis.
+     *
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
+     */
+    abstract void translate(double x, double y, double z);
 
     // MISC
 
@@ -294,7 +310,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param interval the interval of iteration
      * @return a new interval iterator
      */
-    public default Iterator<Vector3> intervalIterator(double interval) {
+    default Iterator<Vector3> intervalIterator(double interval) {
         return new IntervalIterator(this, interval);
     }
 
@@ -316,7 +332,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      *
      * @return a new interval iterator
      */
-    public default Iterator<BlockVector> blockIntervalIterator() {
+    default Iterator<BlockVector> blockIntervalIterator() {
         return new BlockIntervalIterator(this);
     }
 
@@ -327,7 +343,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @return an array containing points on this ray
      */
     @Override
-    public default Vector3[] getPoints(int amount) {
+    default Vector3[] getPoints(int amount) {
         if (amount < 0) throw new IllegalArgumentException("amount < 0");
         if (amount == 0) return new Vector3[0];
         if (amount == 1) return new Vector3[] {getOrigin()};
@@ -343,8 +359,6 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
         return result;
     }
 
-    public abstract Ray3 clone();
-
-
+    abstract Ray3 clone();
 
 }

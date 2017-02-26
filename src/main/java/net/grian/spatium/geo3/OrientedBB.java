@@ -159,7 +159,7 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
     }
     
     @Override
-    public abstract void scale(double factor);
+    public abstract void scaleCentric(double factor);
     
     //MISC
     

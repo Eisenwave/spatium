@@ -7,8 +7,12 @@ import java.io.Serializable;
 
 public interface AxisSlab3 extends Slab3, Serializable, Cloneable {
 
-    public static AxisSlab3 create(Axis axis, double min, double max) {
+    public static AxisSlab3 fromMinMax(Axis axis, double min, double max) {
         return new AxisSlab33Impl(axis, min, max);
+    }
+    
+    public static AxisSlab3 fromPoints(Axis axis, double a, double b) {
+        return fromMinMax(axis, Math.min(a, b), Math.max(a, b));
     }
 
     /**

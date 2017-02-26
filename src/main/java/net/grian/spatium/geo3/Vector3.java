@@ -413,6 +413,53 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z of the vector
      */
     abstract Vector3 setZ(double z);
+    
+    /**
+     * Sets the length of the vector.
+     *
+     * @param length the length of the vector
+     * @see #normalize()
+     */
+    default Vector3 setLength(double length) {
+        return multiply(length / getLength());
+    }
+    
+    /**
+     * Sets the yaw of this vector.
+     *
+     * @param yaw the yaw
+     */
+    @MinecraftSpecific
+    abstract Vector3 setYaw(double yaw);
+    
+    /**
+     * Sets the pitch of this vector.
+     *
+     * @param pitch the pitch
+     */
+    @MinecraftSpecific
+    abstract Vector3 setPitch(double pitch);
+    
+    /**
+     * Sets the radius (hypot), yaw and pitch of this vector.
+     *
+     * @param radius the radius
+     * @param yaw the yaw
+     * @param pitch the pitch
+     */
+    @MinecraftSpecific
+    abstract Vector3 setLengthYawPitch(double radius, double yaw, double pitch);
+    
+    /**
+     * Sets the yaw and pitch of this vector but keeps the radius (hypot).
+     *
+     * @param yaw the yaw
+     * @param pitch the pitch
+     */
+    @MinecraftSpecific
+    default Vector3 setYawPitch(double yaw, double pitch) {
+        return setLengthYawPitch(getLength(), yaw, pitch);
+    }
 
     // OPERATIONS
 
@@ -472,14 +519,7 @@ public interface Vector3 extends Serializable, Cloneable {
     default Vector3 multiply(double factor) {
         return multiply(factor, factor, factor);
     }
-
-    /**
-     * Negates the vector, making it point into the exact opposite direction while preserving length.
-     */
-    default Vector3 negate() {
-        return multiply(-1);
-    }
-
+    
     /**
      * Divides the coordinates of this vector.
      *
@@ -497,6 +537,13 @@ public interface Vector3 extends Serializable, Cloneable {
     default Vector3 divide(double divisor) {
         return divide(divisor, divisor, divisor);
     }
+    
+    /**
+     * Negates the vector, making it point into the exact opposite direction while preserving length.
+     */
+    default Vector3 negate() {
+        return multiply(-1);
+    }
 
     /**
      * Divides the vector through its own length / Sets the length of the vector to 1.
@@ -506,16 +553,6 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     default Vector3 normalize() {
         return setLength(1);
-    }
-
-    /**
-     * Sets the length of the vector.
-     *
-     * @param length the length of the vector
-     * @see #normalize()
-     */
-    default Vector3 setLength(double length) {
-        return multiply(length / getLength());
     }
 
     //TRANSFORMATIONS
@@ -579,43 +616,6 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     default Vector3 rotateZ(double angle) {
         return transform(Matrix.fromRotZ(angle));
-    }
-    
-    /**
-     * Sets the yaw of this vector.
-     *
-     * @param yaw the yaw
-     */
-    @MinecraftSpecific
-    abstract Vector3 setYaw(double yaw);
-
-    /**
-     * Sets the pitch of this vector.
-     *
-     * @param pitch the pitch
-     */
-    @MinecraftSpecific
-    abstract Vector3 setPitch(double pitch);
-
-    /**
-     * Sets the radius (hypot), yaw and pitch of this vector.
-     *
-     * @param radius the radius
-     * @param yaw the yaw
-     * @param pitch the pitch
-     */
-    @MinecraftSpecific
-    abstract Vector3 setRadiusYawPitch(double radius, double yaw, double pitch);
-
-    /**
-     * Sets the yaw and pitch of this vector but keeps the radius (hypot).
-     *
-     * @param yaw the yaw
-     * @param pitch the pitch
-     */
-    @MinecraftSpecific
-    default Vector3 setYawPitch(double yaw, double pitch) {
-        return setRadiusYawPitch(getLength(), yaw, pitch);
     }
 
     // MISC

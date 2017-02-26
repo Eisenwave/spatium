@@ -4,6 +4,7 @@ import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Space;
 import net.grian.spatium.iter.BlockIterator;
+import net.grian.spatium.util.PrimMath;
 
 import java.util.Iterator;
 
@@ -91,8 +92,15 @@ public class BlockSelectionImpl implements BlockSelection {
                 y >= ymin && y <= ymax &&
                 z >= zmin && z <= zmax;
     }
-
+    
     // SETTERS
+    
+    @Override
+    public void setDimensions(int x, int y, int z) {
+        //TODO implement
+    }
+    
+    // TRANSFORMATIONS
 
     @Override
     public void translate(int x, int y, int z) {
@@ -105,39 +113,36 @@ public class BlockSelectionImpl implements BlockSelection {
     }
 
     @Override
-    public void scale(int x, int y, int z) {
+    public void scale(double x, double y, double z) {
         if (x >= 0) {
             xmin *= x;
             xmax *= x;
         } else {
-            xmin = xmax * x;
+            xmin = (int) PrimMath.floor(xmax * x);
             xmax *= x;
         }
         if (y >= 0) {
             ymin *= y;
             ymax *= y;
         } else {
-            ymin = ymax * y;
+            ymin = (int) PrimMath.floor(ymax * y);
             ymax *= y;
         }
         if (z >= 0) {
             zmin *= z;
             zmax *= z;
         } else {
-            zmin = zmax * z;
+            zmin = (int) PrimMath.floor(zmax * z);
             zmax *= z;
         }
-    }
-    
-    @Override
-    public void scale(double factor) {
-        scale((int) factor, (int) factor, (int) factor);
     }
     
     @Override
     public void grow(int x, int y, int z) {
         //TODO implement this
     }
+    
+    //MISC
 
     @Override
     public String toString() {

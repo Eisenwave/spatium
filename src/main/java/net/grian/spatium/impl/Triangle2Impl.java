@@ -49,7 +49,21 @@ public class Triangle2Impl implements Triangle2 {
     }
     
     @Override
+    public void scale(double factor) {
+        this.ax *= factor; this.ay *= factor;
+        this.bx *= factor; this.by *= factor;
+        this.cx *= factor; this.cy *= factor;
+    }
+    
+    @Override
     public void scale(double x, double y) {
+        this.ax *= x; this.ay *= y;
+        this.bx *= x; this.by *= y;
+        this.cx *= x; this.cy *= y;
+    }
+    
+    @Override
+    public void scaleCentric(double x, double y) {
         final double
             cenX = (ax + bx + cx) / 3,
             cenY = (ay + by + cy) / 3;

@@ -100,7 +100,7 @@ public final class Transformations {
 
     public static void scale(AxisAlignedBB box, double x, double y, double z, double factor) {
         box.translate(-box.getMinX(), -box.getMinY(), -box.getMinZ());
-        box.scale(factor);
+        box.scaleCentric(factor);
         box.translate(x, y, z);
     }
 

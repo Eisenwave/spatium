@@ -30,7 +30,23 @@ public interface Vector2 {
     abstract double getY();
     
     default double getLength() {
-        return Spatium.hypot(getX(), getY());
+        return Math.sqrt(dot(this));
+    }
+    
+    default double getLengthSquared() {
+        return dot(this);
+    }
+    
+    default double dot(Vector2 v) {
+        return getX()*v.getX() + getY()*v.getY();
+    }
+    
+    default double distanceTo(double x, double y) {
+        return Spatium.hypot(x-getX(), y-getY());
+    }
+    
+    default double distanceTo(Vector2 point) {
+        return distanceTo(point.getX(), point.getY());
     }
     
     /**

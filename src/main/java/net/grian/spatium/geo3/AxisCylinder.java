@@ -7,16 +7,64 @@ import java.io.Serializable;
 
 public interface AxisCylinder extends Space, Cloneable, Serializable {
     
+    //GETTERS
+    
+    /**
+     * Returns the axis that this cylinder's base/bottom and top are aligned to.
+     *
+     * @return the cylinder axis
+     */
     abstract Axis getAxis();
     
+    /**
+     * Returns the x-coordinate of the center of the cylinder bottom.
+     *
+     * @return the cylinder bottom x
+     */
     abstract double getBaseX();
     
+    /**
+     * Returns the y-coordinate of the center of the cylinder bottom.
+     *
+     * @return the cylinder bottom y
+     */
     abstract double getBaseY();
     
+    /**
+     * Returns the z-coordinate of the center of the cylinder bottom.
+     *
+     * @return the cylinder bottom z
+     */
     abstract double getBaseZ();
     
+    default double getTopX() {
+        return getBaseX() + getHeight();
+    }
+    
+    default double getTopY() {
+        return getBaseY() + getHeight();
+    }
+    
+    default double getTopZ() {
+        return getBaseZ() + getHeight();
+    }
+    
+    /**
+     * Returns the center of the cylinder bottom/base.
+     *
+     * @return the center of the cylinder bottom/base
+     */
     default Vector3 getBase() {
         return Vector3.fromXYZ(getBaseX(), getBaseY(), getBaseZ());
+    }
+    
+    /**
+     * Returns the center of the cylinder top.
+     *
+     * @return the center of the cylinder top
+     */
+    default Vector3 getTop() {
+        return Vector3.fromXYZ(getTopX(), getTopY(), getTopZ());
     }
     
     /**
@@ -54,6 +102,29 @@ public interface AxisCylinder extends Space, Cloneable, Serializable {
         
         return twoPiR*r + twoPiR*getHeight();
     }
+    
+    /**
+     * <p>
+     *     Returns a slab that entirely contains this cylinder.
+     * </p>
+     * <p>
+     *     This slab is a pair of parallel planes which's to planes are the planes in which the cylinder disks lie.
+     * </p>
+     *
+     * @return the cylinder slab
+     */
+    default AxisSlab3 getSlab() {
+        Axis axis = getAxis();
+        
+        switch (axis) {
+            case X: return AxisSlab3.fromPoints(axis, getBaseX(), getTopX());
+            case Y: return AxisSlab3.fromPoints(axis, getBaseX(), getTopX());
+            case Z: return AxisSlab3.fromPoints(axis, getBaseX(), getTopX());
+            default: throw new IllegalStateException("cylinder has no axis");
+        }
+    }
+    
+    //CHECKERS
     
     @Override
     default boolean contains(double x, double y, double z) {

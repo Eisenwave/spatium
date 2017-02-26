@@ -35,17 +35,17 @@ public class Ray3Impl implements Ray3 {
     // GETTERS
 
     @Override
-    public double getOriginX() {
+    public double getOrgX() {
         return xo;
     }
 
     @Override
-    public double getOriginY() {
+    public double getOrgY() {
         return yo;
     }
 
     @Override
-    public double getOriginZ() {
+    public double getOrgZ() {
         return zo;
     }
 
@@ -121,7 +121,24 @@ public class Ray3Impl implements Ray3 {
         this.yd *= m;
         this.zd *= m;
     }
-
+    
+    //TRANSFORMATIONS
+    
+    @Override
+    public void scaleDirection(double factor) {
+        this.xd *= factor;
+        this.yd *= factor;
+        this.zd *= factor;
+    }
+    
+    @Override
+    public void translate(double x, double y, double z) {
+        this.xo += x;
+        this.yo += y;
+        this.zo += z;
+    }
+    
+    
     // CHECKERS
 
     @Override
@@ -149,17 +166,6 @@ public class Ray3Impl implements Ray3 {
 
         else
             return Double.NaN;
-    }
-
-    @Override
-    public boolean equals(Ray3 ray) {
-        return
-                Spatium.equals(xo, ray.getOriginX()) &&
-                Spatium.equals(yo, ray.getOriginY()) &&
-                Spatium.equals(zo, ray.getOriginZ()) &&
-                Spatium.equals(xd, ray.getDirX()) &&
-                Spatium.equals(yd, ray.getDirY()) &&
-                Spatium.equals(zd, ray.getDirZ());
     }
 
     // MISC

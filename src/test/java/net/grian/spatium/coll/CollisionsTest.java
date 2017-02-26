@@ -51,7 +51,7 @@ public class CollisionsTest {
 
     @Test
     public void Ray_Sphere() throws Exception {
-        Sphere sphere = Sphere.fromCenterAndRadius(Vector3.fromXYZ(0, 0, 0), 1);
+        Sphere sphere = Sphere.fromCenterRadius(Vector3.fromXYZ(0, 0, 0), 1);
 
         assertFalse(Collisions.test(
                 Ray3.fromOD(-2, 0, 0, 0, 1, 0),

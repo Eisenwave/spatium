@@ -111,6 +111,15 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     // SETTERS
+    
+    @Override
+    public void setDimensions(double x, double y, double z) {
+        this.dx = Math.abs(x) / 2;
+        this.dy = Math.abs(y) / 2;
+        this.dz = Math.abs(z) / 2;
+    }
+    
+    // TRANSFORMATIONS
 
     @Override
     public void translate(double x, double y, double z) {
@@ -118,7 +127,15 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
         this.y += y;
         this.z += z;
     }
-
+    
+    @Override
+    public void scaleCentric(double factor) {
+        double abs = Math.abs(factor);
+        this.dx *= abs;
+        this.dy *= abs;
+        this.dz *= abs;
+    }
+    
     @Override
     public void scale(double x, double y, double z) {
         if (x < 0) {

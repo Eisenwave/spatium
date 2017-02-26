@@ -1,6 +1,10 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.Circle;
+import net.grian.spatium.geo2.Ray2;
+import net.grian.spatium.geo2.Rectangle;
+import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.geo3.*;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.util.PrimMath;
@@ -168,6 +172,18 @@ public final class Collisions {
     }
     
     /**
+     * Tests whether an {@link Rectangle} and a {@link Circle} collide.
+     *
+     * @param box the rectangle
+     * @param circle the circle
+     * @return whether the box and the sphere collide
+     */
+    public static boolean test(Rectangle box, Circle circle) {
+        Vector2 closestPoint = clamp(circle.getCenter(), box);
+        return circle.contains(closestPoint);
+    }
+    
+    /**
      * Tests whether an {@link AxisAlignedBB} and a {@link Sphere} collide.
      *
      * @param box the bounding box
@@ -210,7 +226,17 @@ public final class Collisions {
         */
     }
     
-    @Contract(value = "_, _, _, _ -> !null", pure = true)
+    private static Vector2 clamp(double x, double y, Rectangle bounds) {
+        return Vector2.fromXY(
+            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
+            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()));
+    }
+    
+    private static Vector2 clamp(Vector2 point, Rectangle bounds) {
+        return clamp(point.getX(), point.getY(), bounds);
+    }
+    
+    @Contract("_, _, _, _ -> !null")
     private static Vector3 clamp(double x, double y, double z, AxisAlignedBB bounds) {
         return Vector3.fromXYZ(
             PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
@@ -218,7 +244,7 @@ public final class Collisions {
             PrimMath.clamp(bounds.getMinZ(), z, bounds.getMaxZ()));
     }
     
-    @Contract(value = "_, _ -> !null", pure = true)
+    @Contract("_, _ -> !null")
     private static Vector3 clamp(Vector3 point, AxisAlignedBB bounds) {
         return clamp(point.getX(), point.getY(), point.getZ(), bounds);
     }
@@ -239,7 +265,7 @@ public final class Collisions {
         double dx = box.getSizeX()/2, dy = box.getSizeY()/2, dz = box.getSizeZ()/2;
         AxisAlignedBB aabb = AxisAlignedBB.fromPoints(-dx, -dy, -dz, dx, dy, dz);
         
-        return test(aabb, Sphere.fromCenterAndRadius(relCenter, sphere.getRadius()));
+        return test(aabb, Sphere.fromCenterRadius(relCenter, sphere.getRadius()));
     }
     
     /**
@@ -357,15 +383,36 @@ public final class Collisions {
         switch (plane.getAxis()) {
             case X: return
                 !(Spatium.isZero(ray.getDirY()) &&  Spatium.isZero(ray.getDirZ())) ||
-                Spatium.equals(ray.getOriginX(), plane.getDepth());
+                Spatium.equals(ray.getOrgX(), plane.getDepth());
             case Y: return
                 !(Spatium.isZero(ray.getDirZ()) &&  Spatium.isZero(ray.getDirX())) ||
-                Spatium.equals(ray.getOriginY(), plane.getDepth());
+                Spatium.equals(ray.getOrgY(), plane.getDepth());
             case Z: return
                 !(Spatium.isZero(ray.getDirX()) &&  Spatium.isZero(ray.getDirY())) ||
-                Spatium.equals(ray.getOriginZ(), plane.getDepth());
+                Spatium.equals(ray.getOrgZ(), plane.getDepth());
             default: throw new IllegalArgumentException("plane has no axis");
         }
+    }
+    
+    /**
+     * Tests whether a {@link Ray2} and a {@link Circle} collide.
+     *
+     * @param ray the ray
+     * @param circle the circle
+     * @return whether the ray and the plane collide
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean test(Ray2 ray, Circle circle) {
+        Vector2
+            origin = ray.getOrigin(),
+            center = circle.getCenter();
+        double radius = circle.getRadius();
+        
+        if (center.distanceTo(origin) <= radius) return true;
+        
+        Vector2 closestPoint = ray.getPoint( Projections.pointOnRay(ray, center) );
+        
+        return center.distanceTo(closestPoint) <= circle.getRadius();
     }
 
     /**
@@ -376,7 +423,16 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray3 ray, Sphere sphere) {
-        return Double.isFinite(Rays.cast(ray, sphere));
+        Vector3
+            origin = ray.getOrigin(),
+            center = sphere.getCenter();
+        double radius = sphere.getRadius();
+    
+        if (center.distanceTo(origin) <= radius) return true;
+    
+        Vector3 closestPoint = ray.getPoint( Projections.pointOnRay(ray, center) );
+    
+        return center.distanceTo(closestPoint) <= sphere.getRadius();
     }
 
     /**
