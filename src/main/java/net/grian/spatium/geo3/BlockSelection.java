@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.function.Int3Consumer;
 import net.grian.spatium.impl.BlockSelectionImpl;
 import net.grian.spatium.util.PrimMath;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -22,6 +23,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      * @param zb the z of the second point
      * @return a new block selection
      */
+    @NotNull
     public static BlockSelection fromPoints(int xa, int ya, int za, int xb, int yb, int zb) {
         return new BlockSelectionImpl(xa, ya, za, xb, yb, zb);
     }
@@ -34,6 +36,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      * @param size the size of the cube
      * @return a new block selection
      */
+    @NotNull
     public static BlockSelection createCube(BlockVector center, int size) {
         return new BlockSelectionImpl(
             center.getX() - size,
@@ -51,6 +54,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
      * @param to the second point
      * @return a new block selection
      */
+    @NotNull
     public static BlockSelection between(BlockVector from, BlockVector to) {
         return fromPoints(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
     }

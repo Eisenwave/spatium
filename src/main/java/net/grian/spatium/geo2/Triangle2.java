@@ -1,13 +1,17 @@
 package net.grian.spatium.geo2;
 
+import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.Triangle2Impl;
+import org.jetbrains.annotations.NotNull;
 
 public interface Triangle2 extends Area {
     
+    @NotNull
     static Triangle2 fromPoints(Vector2 a, Vector2 b, Vector2 c) {
         return new Triangle2Impl(a, b, c);
     }
     
+    @NotNull
     static Triangle2 fromPoints(double ax, double ay, double bx, double by, double cx, double cy) {
         return new Triangle2Impl(ax, ay, bx, by, cx, cy);
     }
@@ -72,7 +76,37 @@ public interface Triangle2 extends Area {
         return getLengthAB() + getLengthBC() + getLengthCA();
     }
     
-    //SETTERS
+    // CHECKERS
+    
+    default boolean contains(double x, double y) {
+        Vector2
+            a = getA(),
+            ac = getC().subtract(a),
+            ab = getB().subtract(a),
+            ap = Vector2.fromXY(x, y).subtract(x, y);
+    
+        double
+            ac_ac = ac.dot(ac),
+            ac_ab = ac.dot(ab),
+            ac_ap = ac.dot(ap),
+            ab_ab = ab.dot(ab),
+            ab_ap = ab.dot(ap),
+            div = 1 / (ac_ac * ab_ab - ac_ab * ac_ab),
+            u = (ab_ab * ac_ap - ac_ab * ab_ap) * div,
+            v = (ac_ac * ab_ap - ac_ab * ac_ap) * div;
+    
+        return (u >= 0) && (v >= 0) && (u + v < 1);
+    }
+    
+    // SETTERS
+    
+    abstract void setA(Vector2 point);
+    
+    abstract void setB(Vector2 point);
+    
+    abstract void setC(Vector2 point);
+    
+    // TRANSFORMATIONS
     
     @Override
     abstract void translate(double x, double y);

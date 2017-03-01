@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBBImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -25,10 +26,12 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param zb the z of the second point
      * @return a new bounding box
      */
+    @NotNull
     static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
         return AxisAlignedBBImpl.fromPoints(xa, ya, za, xb, yb, zb);
     }
     
+    @NotNull
     static AxisAlignedBB fromCenterDims(double x, double y, double z, double dx, double dy, double dz) {
         return AxisAlignedBBImpl.fromCenterDims(x, y, z, dx, dy, dz);
     }
@@ -41,6 +44,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param size   the size of the cube
      * @return a new axis aligned bounding box
      */
+    @NotNull
     static AxisAlignedBB fromCenterDims(Vector3 center, double size) {
         return fromCenterDims(center.getX(), center.getY(), center.getZ(), size, size, size);
     }
@@ -52,6 +56,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param to   the second point
      * @return a new bounding box
      */
+    @NotNull
     static AxisAlignedBB between(Vector3 from, Vector3 to) {
         return fromPoints(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
     }
@@ -176,10 +181,6 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * @param z the z-scale factor
      */
     abstract void scale(double x, double y, double z);
-    
-    default void scale(Vector3 v) {
-        scale(v.getX(), v.getY(), v.getZ());
-    }
     
     default void scale(double factor) {
         scale(factor, factor, factor);

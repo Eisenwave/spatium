@@ -40,8 +40,8 @@ public class PlaneImpl implements Plane {
 
     public PlaneImpl(Vector3 center, Vector3 normal) {
         this(
-                center.getX(), center.getY(), center.getZ(),
-                normal.getX(), normal.getY(), normal.getZ());
+            center.getX(), center.getY(), center.getZ(),
+            normal.getX(), normal.getY(), normal.getZ());
     }
 
     public PlaneImpl(Vector3 point, Vector3 t, Vector3 r) {

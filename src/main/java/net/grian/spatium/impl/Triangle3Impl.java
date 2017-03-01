@@ -28,6 +28,13 @@ public class Triangle3Impl implements Triangle3 {
     public Triangle3Impl() {
         this(0,0,0,0,0,0,0,0,0);
     }
+    
+    public Triangle3Impl(Triangle3Impl copyOf) {
+        this(
+            copyOf.ax, copyOf.ay, copyOf.az,
+            copyOf.bx, copyOf.by, copyOf.bz,
+            copyOf.cx, copyOf.cy, copyOf.cz);
+    }
 
     //GETTERS
 
@@ -145,6 +152,11 @@ public class Triangle3Impl implements Triangle3 {
     
     //MISC
     
+    
+    @Override
+    public Triangle3 clone() {
+        return new Triangle3Impl(this);
+    }
     
     @Override
     public String toString() {

@@ -12,6 +12,12 @@ public class CircleImpl implements Circle {
         this.r = r;
     }
     
+    public CircleImpl(CircleImpl copyOf) {
+        this.x = copyOf.x;
+        this.y = copyOf.y;
+        this.r = copyOf.r;
+    }
+    
     @Override
     public double getX() {
         return x;
@@ -66,6 +72,21 @@ public class CircleImpl implements Circle {
     public void translate(double x, double y) {
         this.x += x;
         this.y += y;
+    }
+    
+    // MISC
+    
+    @Override
+    public Object clone() {
+        return new CircleImpl(this);
+    }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+
+            "{x="+getX()+
+            ",y="+getY()+
+            ",r="+getRadius()+"}";
     }
     
 }

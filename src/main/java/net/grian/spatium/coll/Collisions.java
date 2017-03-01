@@ -1,10 +1,7 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo2.Circle;
-import net.grian.spatium.geo2.Ray2;
-import net.grian.spatium.geo2.Rectangle;
-import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.util.PrimMath;
@@ -37,7 +34,29 @@ public final class Collisions {
     public static boolean test(Vector3 a, Vector3 b) {
         return a.equals(b);
     }
-
+    
+    /**
+     * Tests whether two rays collide. This is equivalent to testing whether the two points are in the same position.
+     *
+     * @param a the first ray
+     * @param b the second ray
+     * @return whether the rays collide
+     */
+    public static boolean test(Ray2 a, Ray2 b) {
+        return !a.getDirection().isMultipleOf(b.getDirection());
+    }
+    
+    /**
+     * Returns whether two {@link AxisPlane}s collide/intersect.
+     *
+     * @param a the first plane
+     * @param b the second plane
+     * @return whether the planes collide intersect
+     */
+    public static boolean test(AxisPlane a, AxisPlane b) {
+        return a.getAxis() != b.getAxis() || Spatium.equals(a.getDepth(), b.getDepth());
+    }
+    
     /**
      * Tests whether two {@link Plane}s collide. This is equivalent to testing whether to planes are not parallel. This
      * means that two planes which are mathematically identical and collide with each other at infinitely many points
@@ -48,10 +67,21 @@ public final class Collisions {
      * @return whether the points collide
      */
     public static boolean test(Plane a, Plane b) {
-        Vector3 normalA = a.getNormal().normalize();
-        Vector3 normalB = b.getNormal().normalize();
+        Vector3 normalA = a.getNormal();
+        Vector3 normalB = b.getNormal();
         
-        return Spatium.equals(Math.abs(normalA.dot(normalB)), 1);
+        return !normalA.isMultipleOf(normalB);
+    }
+    
+    /**
+     * Tests whether two {@link Circle}s collide/intersect.
+     *
+     * @param a the first sphere
+     * @param b the second sphere
+     * @return whether the spheres collide/intersect.
+     */
+    public static boolean test(Circle a, Circle b) {
+        return a.getCenter().distanceTo(b.getCenter()) <= a.getRadius() + b.getRadius();
     }
 
     /**
@@ -64,7 +94,7 @@ public final class Collisions {
     public static boolean test(Sphere a, Sphere b) {
         return a.getCenter().distanceTo(b.getCenter()) <= a.getRadius() + b.getRadius();
     }
-
+    
     /**
      * Tests whether two {@link AxisAlignedBB}s collide/intersect.
      *
@@ -127,18 +157,7 @@ public final class Collisions {
      * @return whether the triangles collide/intersect
      */
     public static boolean test(Triangle3 a, Triangle3 b) {
-        return Intersections.of(a, b) != null;
-    }
-
-    /**
-     * Returns whether two {@link AxisPlane}s collide/intersect.
-     *
-     * @param a the first plane
-     * @param b the second plane
-     * @return whether the planes collide intersect
-     */
-    public static boolean test(AxisPlane a, AxisPlane b) {
-        return a.getAxis() != b.getAxis() || Spatium.equals(a.getDepth(), b.getDepth());
+        return Intersections.triangleTriangle(a, b) != null;
     }
 
     //HETERO - TESTS
@@ -172,27 +191,27 @@ public final class Collisions {
     }
     
     /**
-     * Tests whether an {@link Rectangle} and a {@link Circle} collide.
+     * Tests whether an {@link Rectangle} and a {@link Area} collide.
      *
      * @param box the rectangle
-     * @param circle the circle
+     * @param area the area
      * @return whether the box and the sphere collide
      */
-    public static boolean test(Rectangle box, Circle circle) {
-        Vector2 closestPoint = clamp(circle.getCenter(), box);
-        return circle.contains(closestPoint);
+    public static boolean test(Rectangle box, Area area) {
+        Vector2 closestPoint = Vectors.clamp(area.getCenter(), box);
+        return area.contains(closestPoint);
     }
     
     /**
      * Tests whether an {@link AxisAlignedBB} and a {@link Sphere} collide.
      *
      * @param box the bounding box
-     * @param sphere the sphere
+     * @param space the sphere
      * @return whether the box and the sphere collide
      */
-    public static boolean test(AxisAlignedBB box, Sphere sphere) {
-        Vector3 closestPoint = clamp(sphere.getCenter(), box);
-        return sphere.contains(closestPoint);
+    public static boolean test(AxisAlignedBB box, Sphere space) {
+        Vector3 closestPoint = Vectors.clamp(space.getCenter(), box);
+        return space.contains(closestPoint);
     }
     
     /**
@@ -203,7 +222,7 @@ public final class Collisions {
      * @return whether the boxes collide
      */
     public static boolean test(AxisAlignedBB aabb, OrientedBB obb) {
-        Vector3 closestPoint = clamp(obb.getCenter(), aabb);
+        Vector3 closestPoint = Vectors.clamp(obb.getCenter(), aabb);
         return obb.contains(closestPoint);
         
         /*
@@ -224,29 +243,6 @@ public final class Collisions {
         //if t is smaller, the closest point is inside the aabb and the boxes intersect
         return t <= 1 + Spatium.EPSILON;
         */
-    }
-    
-    private static Vector2 clamp(double x, double y, Rectangle bounds) {
-        return Vector2.fromXY(
-            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
-            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()));
-    }
-    
-    private static Vector2 clamp(Vector2 point, Rectangle bounds) {
-        return clamp(point.getX(), point.getY(), bounds);
-    }
-    
-    @Contract("_, _, _, _ -> !null")
-    private static Vector3 clamp(double x, double y, double z, AxisAlignedBB bounds) {
-        return Vector3.fromXYZ(
-            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
-            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()),
-            PrimMath.clamp(bounds.getMinZ(), z, bounds.getMaxZ()));
-    }
-    
-    @Contract("_, _ -> !null")
-    private static Vector3 clamp(Vector3 point, AxisAlignedBB bounds) {
-        return clamp(point.getX(), point.getY(), point.getZ(), bounds);
     }
     
     /**

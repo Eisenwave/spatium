@@ -11,6 +11,11 @@ public class Vector2Impl implements Vector2 {
         this.y = y;
     }
     
+    public Vector2Impl(Vector2Impl copyOf) {
+        this.x = copyOf.x;
+        this.y = copyOf.y;
+    }
+    
     @Override
     public double getX() {
         return x;
@@ -70,7 +75,6 @@ public class Vector2Impl implements Vector2 {
     
     //MISC
     
-    
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj) || obj instanceof Vector2 && equals((Vector2) obj);
@@ -81,4 +85,8 @@ public class Vector2Impl implements Vector2 {
         return "("+x+","+y+")";
     }
     
+    @Override
+    public Vector2 clone() {
+        return new Vector2Impl(this);
+    }
 }

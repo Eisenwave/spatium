@@ -2,6 +2,7 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
+import net.grian.spatium.util.FastMath;
 import net.grian.spatium.util.Strings;
 
 import java.util.Arrays;
@@ -127,7 +128,7 @@ public class MatrixImpl implements Matrix {
         for (int i = 0; i<columns; i++) {
             pasteWithoutRowCol(canvas, i, 0);
 
-            result += get(i, 0) * minusOnePow(i) * canvas.determinantRecursive();
+            result += get(i, 0) * FastMath.minusOnePow(i) * canvas.determinantRecursive();
         }
 
         return result;
@@ -146,7 +147,7 @@ public class MatrixImpl implements Matrix {
 
         for (int i = 0; i<rows; i++) for (int j = 0; j<columns; j++) {
             pasteWithoutRowCol(canvas, i, j);
-            double cofactor = minusOnePow(i+j) * canvas.uncheckedDeterminant();
+            double cofactor = FastMath.minusOnePow(i+j) * canvas.uncheckedDeterminant();
 
             result.set(i, j, cofactor);
         }
@@ -206,16 +207,6 @@ public class MatrixImpl implements Matrix {
         }
     }
 
-    /**
-     * Returns -1 to an integer power.
-     *
-     * @param power the power
-     * @return -1 to an integer power
-     */
-    private static int minusOnePow(int power) {
-        return power%2 == 0 ? 1 : -1;
-    }
-
     // SETTERS
 
     @Override
@@ -269,8 +260,7 @@ public class MatrixImpl implements Matrix {
     public boolean equals(Object obj) {
         return obj instanceof Matrix && equals((Matrix) obj);
     }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
+    
     @Override
     public MatrixImpl clone() {
         return new MatrixImpl(this);

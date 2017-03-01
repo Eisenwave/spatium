@@ -4,6 +4,7 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.geo3.AxisCylinder;
 import net.grian.spatium.geo3.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class AxisCylinderImpl implements AxisCylinder {
     

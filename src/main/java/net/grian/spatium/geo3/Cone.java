@@ -2,19 +2,23 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.ConeImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
 public interface Cone extends Space, Cloneable, Serializable {
     
+    @NotNull
     static Cone fromApexDirRadius(double x, double y, double z, double dx, double dy, double dz, double r) {
         return new ConeImpl(x, y, z, dx, dy, dz, r);
     }
     
+    @NotNull
     static Cone fromApexDirRadius(Vector3 apex, Vector3 dir, double r) {
         return fromApexDirRadius(apex.getX(), apex.getY(), apex.getZ(), dir.getX(), dir.getY(), dir.getZ(), r);
     }
     
+    @NotNull
     static Cone fromApexDirAperture(Vector3 apex, Vector3 dir, double aperture) {
         double r = dir.getLength() * Math.atan(aperture / 2);
         return fromApexDirRadius(apex.getX(), apex.getY(), apex.getZ(), dir.getX(), dir.getY(), dir.getZ(), r);

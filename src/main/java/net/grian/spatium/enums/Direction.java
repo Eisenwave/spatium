@@ -5,7 +5,6 @@ import net.grian.spatium.geo3.Vector3;
 
 import static net.grian.spatium.enums.Axis.*;
 import static net.grian.spatium.enums.Direction.AxisDirection.*;
-import static net.grian.spatium.enums.Face.*;
 
 /**
  * <p>
@@ -19,12 +18,12 @@ import static net.grian.spatium.enums.Face.*;
  * @see Face
  */
 public enum Direction {
-    NEGATIVE_X(Vector3.fromXYZ(-1,  0,  0), NEGATIVE, X, WEST),
-    POSITIVE_X(Vector3.fromXYZ( 1,  0,  0), POSITIVE, X, EAST),
-    NEGATIVE_Y(Vector3.fromXYZ( 0, -1,  0), NEGATIVE, Y, DOWN),
-    POSITIVE_Y(Vector3.fromXYZ( 0,  1,  0), POSITIVE, Y, UP),
-    NEGATIVE_Z(Vector3.fromXYZ( 0,  0, -1), NEGATIVE, Z, NORTH),
-    POSITIVE_Z(Vector3.fromXYZ( 0,  0,  1), POSITIVE, Z, SOUTH);
+    NEGATIVE_X(Vector3.fromXYZ(-1,  0,  0), NEGATIVE, X, Face.WEST),
+    POSITIVE_X(Vector3.fromXYZ( 1,  0,  0), POSITIVE, X, Face.EAST),
+    NEGATIVE_Y(Vector3.fromXYZ( 0, -1,  0), NEGATIVE, Y, Face.DOWN),
+    POSITIVE_Y(Vector3.fromXYZ( 0,  1,  0), POSITIVE, Y, Face.UP),
+    NEGATIVE_Z(Vector3.fromXYZ( 0,  0, -1), NEGATIVE, Z, Face.NORTH),
+    POSITIVE_Z(Vector3.fromXYZ( 0,  0,  1), POSITIVE, Z, Face.SOUTH);
 
     private final Axis axis;
     private final AxisDirection direction;

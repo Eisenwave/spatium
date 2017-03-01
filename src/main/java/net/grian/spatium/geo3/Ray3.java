@@ -4,6 +4,7 @@ import net.grian.spatium.coll.Projections;
 import net.grian.spatium.impl.Ray3Impl;
 import net.grian.spatium.iter.BlockIntervalIterator;
 import net.grian.spatium.iter.IntervalIterator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param zd the z-coordinate of the direction
      * @return a new ray
      */
+    @NotNull
     static Ray3 fromOD(double xo, double yo, double zo, double xd, double yd, double zd) {
         return new Ray3Impl(xo, yo, zo, xd, yd, zd);
     }
@@ -35,6 +37,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param dir the direction
      * @return a new ray
      */
+    @NotNull
     static Ray3 fromOD(Vector3 origin, Vector3 dir) {
         return new Ray3Impl(origin, dir);
     }
@@ -48,6 +51,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param to the second point
      * @return a new ray
      */
+    @NotNull
     static Ray3 between(Vector3 from, Vector3 to) {
         return fromOD(from, Vector3.between(from, to));
     }
@@ -63,6 +67,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param tz the target x
      * @return a new ray
      */
+    @NotNull
     static Ray3 between(double ox, double oy, double oz, double tx, double ty, double tz) {
         return fromOD(ox, oy, oz, tx-ox, ty-oy, tz-oz);
     }

@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.impl.OrientedBBImpl;
 import net.grian.spatium.matrix.Matrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -22,7 +23,8 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB fromCD(Vector3 center, Vector3 u, Vector3 v, Vector3 w, double dx, double dy, double dz) {
+    @NotNull
+    static OrientedBB fromCD(Vector3 center, Vector3 u, Vector3 v, Vector3 w, double dx, double dy, double dz) {
         return new OrientedBBImpl(center, dx, dy, dz, u, v, w);
     }
 
@@ -37,7 +39,8 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB fromCD(double x, double y, double z, double dx, double dy, double dz) {
+    @NotNull
+    static OrientedBB fromCD(double x, double y, double z, double dx, double dy, double dz) {
         return new OrientedBBImpl(x, y, z, dx, dy, dz);
     }
 
@@ -50,7 +53,8 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      * @param dz the half-size on the z-axis
      * @return a new oriented bounding box
      */
-    public static OrientedBB fromCD(Vector3 center, double dx, double dy, double dz) {
+    @NotNull
+    static OrientedBB fromCD(Vector3 center, double dx, double dy, double dz) {
         return fromCD(center.getX(), center.getY(), center.getZ(), dx, dy, dz);
     }
 
@@ -60,7 +64,8 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      * @param box the bounding box
      * @return a new oriented bounding box
      */
-    public static OrientedBB fromAABB(AxisAlignedBB box) {
+    @NotNull
+    static OrientedBB fromAABB(AxisAlignedBB box) {
         return fromCD(box.getCenter(), box.getSizeX()/2, box.getSizeY()/2, box.getSizeZ()/2);
     }
 
@@ -71,95 +76,95 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      *
      * @return the minimum point of the box after applying rotation
      */
-    public abstract Vector3 getMin();
+    abstract Vector3 getMin();
 
     /**
      * Returns the maximum point of the box after applying rotation.
      *
      * @return the maximum point of the box after applying rotation
      */
-    public abstract Vector3 getMax();
+    abstract Vector3 getMax();
 
     /**
      * Returns the center of the bounding box
      *
      * @return the center of the bounding box
      */
-    public abstract Vector3 getCenter();
+    abstract Vector3 getCenter();
 
-    public abstract Matrix getTransform();
+    abstract Matrix getTransform();
 
-    public abstract Slab3 getSlabX();
+    abstract Slab3 getSlabX();
 
-    public abstract Slab3 getSlabY();
+    abstract Slab3 getSlabY();
 
-    public abstract Slab3 getSlabZ();
+    abstract Slab3 getSlabZ();
 
     /**
      * Returns the size of the bounding box on the (local) x-axis.
      *
      * @return the size on the x-axis
      */
-    public abstract double getSizeX();
+    abstract double getSizeX();
 
     /**
      * Returns the size of the bounding box on the (local) y-axis.
      *
      * @return the size on the y-axis
      */
-    public abstract double getSizeY();
+    abstract double getSizeY();
 
     /**
      * Returns the size of the bounding box on the (local) z-axis.
      *
      * @return the size on the z-axis
      */
-    public abstract double getSizeZ();
+    abstract double getSizeZ();
 
     /**
      * Returns the (local) x, y, z dimensions of the bounding box.
      *
      * @return the dimensions of the box
      */
-    public default Vector3 getDimensions() {
+    default Vector3 getDimensions() {
         return Vector3.fromXYZ(getSizeX(), getSizeY(), getSizeZ());
     }
 
     @Override
-    public default double getVolume() {
+    default double getVolume() {
         return getSizeX() * getSizeY() * getSizeZ();
     }
 
     @Override
-    public default double getSurfaceArea() {
+    default double getSurfaceArea() {
         double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
 
     //SETTERS
 
-    public abstract void translate(double x, double y, double z);
+    abstract void translate(double x, double y, double z);
 
-    public default void translate(Vector3 v) {
+    default void translate(Vector3 v) {
         translate(v.getX(), v.getY(), v.getZ());
     }
 
-    public abstract void transform(Matrix transform);
+    abstract void transform(Matrix transform);
 
-    public default void rotateX(double angle) {
+    default void rotateX(double angle) {
         transform(Matrix.fromRotX(angle));
     }
 
-    public default void rotateY(double angle) {
+    default void rotateY(double angle) {
         transform(Matrix.fromRotY(angle));
     }
 
-    public default void rotateZ(double angle) {
+    default void rotateZ(double angle) {
         transform(Matrix.fromRotZ(angle));
     }
     
     @Override
-    public abstract void scaleCentric(double factor);
+    abstract void scaleCentric(double factor);
     
     //MISC
     
@@ -170,7 +175,7 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      *
      * @return the untransformed aabb of this obb
      */
-    public default AxisAlignedBB toAABB() {
+    default AxisAlignedBB toAABB() {
         Vector3 center = getCenter();
         return AxisAlignedBB.fromCenterDims(
             center.getX(), center.getY(), center.getZ(),

@@ -1,7 +1,9 @@
 package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
@@ -17,6 +19,42 @@ public final class Intersections {
     private Intersections() {}
 
     //AUTO INTERSECTIONS
+    
+    /**
+     * Returns the intersection of a {@link Ray2} and a {@link Ray2} in the form of a point ({@link Vector2}).
+     *
+     * @param a the first ray
+     * @param b the second ray
+     * @return a new point of intersection
+     */
+    @Nullable
+    public static Vector2 rayRay(Ray2 a, Ray2 b) {
+        double t = Rays.cast(a, b);
+        return Double.isFinite(t)? a.getPoint(t) : null;
+    }
+    
+    /**
+     * Returns the intersection of two line segments in the form of a point ({@link Vector2}).
+     *
+     * @param a1 the org. of the first line segment
+     * @param a2 the end of hte first line segment
+     * @param b1 the org. of the second line segment
+     * @param b2 the end of hte second line segment
+     * @param infinite whether an intersection on the infinite versions of the lines is allowed
+     * @return a new point of intersection
+     */
+    @Nullable
+    public static Vector2 lineSegLineSeg(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, boolean infinite) {
+        Ray2
+            a = Ray2.between(a1, a2),
+            b = Ray2.between(b1, b2);
+        
+        double t = Rays.cast(a, b);
+        
+        return Double.isFinite(t) && ( infinite || (t >= 0 && t <= 1) )?
+            a.getPoint(t) :
+            null;
+    }
 
     /**
      * Returns the intersection of a {@link Ray3} and a {@link Ray3} in the form of a point ({@link Vector3}).
@@ -25,8 +63,10 @@ public final class Intersections {
      * @param b the second ray
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 a, Ray3 b) {
-        return a.getPoint(Rays.cast(a, b));
+    @Nullable
+    public static Vector3 rayRay(Ray3 a, Ray3 b) {
+        double t = Rays.cast(a, b);
+        return Double.isFinite(t)? a.getPoint(t) : null;
     }
 
     /**
@@ -40,7 +80,8 @@ public final class Intersections {
      * @param b the second bounding box
      * @return the intersection of the boxes or null
      */
-    public static AxisAlignedBB of(AxisAlignedBB a, AxisAlignedBB b) {
+    @Nullable
+    public static AxisAlignedBB boxBox(AxisAlignedBB a, AxisAlignedBB b) {
         /* Test invoked first since it is a very inexpensive way of checking for no intersection */
         if (!Collisions.test(a, b)) return null;
 
@@ -66,19 +107,20 @@ public final class Intersections {
      * @param b the second plane
      * @return the intersection of the planes or null
      */
-    public static Ray3 of(Plane a, Plane b) {
+    @Nullable
+    public static Ray3 planePlane(Plane a, Plane b) {
         Vector3
-                ac = a.getPoint(),
-                bc = b.getPoint(),
-                an = a.getNormal(),
-                bn = b.getNormal(),
-                direction = an.cross(bn),
-                lineDir = bn.cross(direction);
+            ac = a.getPoint(),
+            bc = b.getPoint(),
+            an = a.getNormal(),
+            bn = b.getNormal(),
+            direction = an.cross(bn),
+            lineDir = bn.cross(direction);
 
         double denominator = an.dot(lineDir);
         ac.subtract(bc);
         
-        if (Math.abs(denominator) < Spatium.EPSILON) return null;
+        if (Spatium.isZero(denominator)) return null;
         double t = an.dot(ac) / denominator;
         bc.add(lineDir.multiply(t));
         
@@ -98,7 +140,8 @@ public final class Intersections {
      * @param b the second plane
      * @return the intersection of the planes or null
      */
-    public static Ray3 of(AxisPlane a, AxisPlane b) {
+    @Nullable
+    public static Ray3 planePlane(AxisPlane a, AxisPlane b) {
         switch (a.getAxis()) {
             case X: switch (b.getAxis()) {
                 case X: return null;
@@ -132,8 +175,9 @@ public final class Intersections {
      * @param b the second triangle
      * @return the origin and end of the intersection
      */
-    public static Vector3[] of(Triangle3 a, Triangle3 b) {
-        Vector3[] segment = Intersections.of(a, b.getPlane()); //points on plane in which b lies
+    @Nullable
+    public static Vector3[] triangleTriangle(Triangle3 a, Triangle3 b) {
+        Vector3[] segment = trianglePlane(a, b.getPlane()); //points on plane in which b lies
         if (segment == null) return null;
         return b.contains(segment[0]) || b.contains(segment[1]) ? segment : null;
     }
@@ -147,8 +191,10 @@ public final class Intersections {
      * @param plane the plane
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, Plane plane) {
-        return ray.getPoint(Rays.cast(ray, plane));
+    @Nullable
+    public static Vector3 rayPlane(Ray3 ray, Plane plane) {
+        double t = Rays.cast(ray, plane);
+        return Double.isFinite(t)? ray.getPoint(t) : null;
     }
 
     /**
@@ -158,8 +204,23 @@ public final class Intersections {
      * @param plane the plane
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, AxisPlane plane) {
-        return ray.getPoint(Rays.cast(ray, plane));
+    @Nullable
+    public static Vector3 rayPlane(Ray3 ray, AxisPlane plane) {
+        double t = Rays.cast(ray, plane);
+        return Double.isFinite(t)? ray.getPoint(t) : null;
+    }
+    
+    /**
+     * Returns the intersection of a {@link Ray2} and a {@link Circle} in the form of a point ({@link Vector3}).
+     *
+     * @param ray the ray
+     * @param circle the sphere
+     * @return a new point of intersection
+     */
+    @Nullable
+    public static Ray2 rayCircle(Ray2 ray, Circle circle) {
+        double[] t = Rays.pierce(ray, circle);
+        return t==null? null : Ray2.between( ray.getPoint(t[0]), ray.getPoint(t[1]) );
     }
 
     /**
@@ -169,8 +230,23 @@ public final class Intersections {
      * @param sphere the sphere
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, Sphere sphere) {
-        return ray.getPoint(Rays.cast(ray, sphere));
+    @Nullable
+    public static Ray3 raySphere(Ray3 ray, Sphere sphere) {
+        double[] t = Rays.pierce(ray, sphere);
+        return t==null? null : Ray3.between( ray.getPoint(t[0]), ray.getPoint(t[1]) );
+    }
+    
+    /**
+     * Returns the intersection of a {@link Ray2} and an {@link Rectangle} in the form of a line segment ({@link Ray2}).
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return a new point of intersection
+     */
+    @Nullable
+    public static Ray2 rayBox(Ray2 ray, Rectangle box) {
+        double[] t = Rays.pierce(ray, box);
+        return t==null? null : Ray2.between( ray.getPoint(t[0]), ray.getPoint(t[1]) );
     }
 
     /**
@@ -180,8 +256,10 @@ public final class Intersections {
      * @param box the bounding box
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, AxisAlignedBB box) {
-        return ray.getPoint(Rays.cast(ray, box));
+    @Nullable
+    public static Ray3 rayBox(Ray3 ray, AxisAlignedBB box) {
+        double[] t = Rays.pierce(ray, box);
+        return t==null? null : Ray3.between( ray.getPoint(t[0]), ray.getPoint(t[1]) );
     }
 
     /**
@@ -191,8 +269,10 @@ public final class Intersections {
      * @param triangle the triangle
      * @return a new point of intersection
      */
-    public static Vector3 of(Ray3 ray, Triangle3 triangle) {
-        return ray.getPoint(Rays.cast(ray, triangle));
+    @Nullable
+    public static Vector3 rayTriangle(Ray3 ray, Triangle3 triangle) {
+        double t = Rays.cast(ray, triangle);
+        return Double.isFinite(t)? ray.getPoint(t) : null;
     }
 
     //OTHER INTERSECTIONS
@@ -205,7 +285,8 @@ public final class Intersections {
      * @param plane the plane
      * @return a new circular path on the sphere or null
      */
-    public static Path3 of(Sphere sphere, Plane plane) {
+    @Nullable
+    public static Path3 spherePlane(Sphere sphere, Plane plane) {
         Vector3 sc = sphere.getCenter();
         Vector3 negNormal = plane.getNormal().negate();
         
@@ -225,7 +306,8 @@ public final class Intersections {
      * @param plane the plane
      * @return a new linear path on the box or null
      */
-    public static Path3 of(AxisAlignedBB box, AxisPlane plane) {
+    @Nullable
+    public static Path3 boxPlane(AxisAlignedBB box, AxisPlane plane) {
         if (!Collisions.test(box, plane)) return null;
         double depth = plane.getDepth();
         Vector3 a, b, c, d;
@@ -271,7 +353,8 @@ public final class Intersections {
      * @param plane the plane
      * @return two points of intersection or null
      */
-    public static Vector3[] of(Triangle3 triangle, Plane plane) {
+    @Nullable
+    public static Vector3[] trianglePlane(Triangle3 triangle, Plane plane) {
         Ray3     //3 rays which the triangle consists of
                 rayAB = Ray3.between(triangle.getA(), triangle.getB()),
                 rayAC = Ray3.between(triangle.getA(), triangle.getC()),

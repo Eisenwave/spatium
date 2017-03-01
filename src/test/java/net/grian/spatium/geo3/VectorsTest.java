@@ -22,7 +22,7 @@ public class VectorsTest {
     public void random() throws Exception {
         for (int i = 0; i<10000; i++) {
             double length = PrimMath.randomDouble(1000);
-            Vector3 random = Vectors.random(length);
+            Vector3 random = Vectors.random3(length);
             assertEquals(random.getLength(), length, Spatium.EPSILON);
         }
     }

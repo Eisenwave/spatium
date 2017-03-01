@@ -4,6 +4,7 @@ import net.grian.spatium.impl.Path3ImplBezier;
 import net.grian.spatium.impl.Path3ImplCircle;
 import net.grian.spatium.impl.Path3ImplLinear;
 import net.grian.spatium.impl.Ray3Impl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -18,7 +19,8 @@ public interface Path3 extends Serializable, Cloneable {
      * @param normal the normal vector
      * @return a new path
      */
-    public static Path3 circle(Sphere sphere, Vector3 normal) {
+    @NotNull
+    static Path3 circle(Sphere sphere, Vector3 normal) {
         return new Path3ImplCircle(sphere, normal);
     }
 
@@ -32,7 +34,8 @@ public interface Path3 extends Serializable, Cloneable {
      * @param normal the normal vector
      * @return a new path
      */
-    public static Path3 circle(Vector3 center, double radius, Vector3 normal) {
+    @NotNull
+    static Path3 circle(Vector3 center, double radius, Vector3 normal) {
         return new Path3ImplCircle(center, radius, normal);
     }
 
@@ -43,7 +46,8 @@ public interface Path3 extends Serializable, Cloneable {
      * @param to the end
      * @return a new path
      */
-    public static Path3 line(Vector3 from, Vector3 to) {
+    @NotNull
+    static Path3 line(Vector3 from, Vector3 to) {
         return new Ray3Impl(from, to);
     }
 
@@ -53,7 +57,8 @@ public interface Path3 extends Serializable, Cloneable {
      * @param points the points
      * @return a new path
      */
-    public static Path3 linear(Vector3... points) {
+    @NotNull
+    static Path3 linear(Vector3... points) {
         return new Path3ImplLinear(points);
     }
 
@@ -64,7 +69,8 @@ public interface Path3 extends Serializable, Cloneable {
      * @param points the points
      * @return a new path
      */
-    public static Path3 bezier(Vector3... points) {
+    @NotNull
+    static Path3 bezier(Vector3... points) {
         return new Path3ImplBezier(points);
     }
 
@@ -81,21 +87,22 @@ public interface Path3 extends Serializable, Cloneable {
      * @param t the path multiplier in range from 0 to 1
      * @return a new point on this path
      */
-    public abstract Vector3 getPoint(double t);
+    @NotNull
+    abstract Vector3 getPoint(double t);
 
     /**
      * Returns the length of this path.
      *
      * @return the length of this path
      */
-    public abstract double getLength();
+    abstract double getLength();
 
     /**
      * Returns the squared hypot of this path.
      *
      * @return the squared hypot of this path
      */
-    public abstract double getLengthSquared();
+    abstract double getLengthSquared();
 
     /**
      * Returns whether this path is closed. This is equivalent to checking whether the origin of the path is the
@@ -103,7 +110,7 @@ public interface Path3 extends Serializable, Cloneable {
      *
      * @return whether this path is closed
      */
-    public default boolean isClosed() {
+    default boolean isClosed() {
         return getOrigin().equals(getEnd());
     }
 
@@ -112,7 +119,7 @@ public interface Path3 extends Serializable, Cloneable {
      *
      * @return the origin of this path
      */
-    public default Vector3 getOrigin() {
+    default Vector3 getOrigin() {
         return getPoint(0);
     }
 
@@ -121,7 +128,7 @@ public interface Path3 extends Serializable, Cloneable {
      *
      * @return the middle point of this path
      */
-    public default Vector3 getMidPoint() {
+    default Vector3 getMidPoint() {
         return getPoint(0.5f);
     }
 
@@ -130,7 +137,7 @@ public interface Path3 extends Serializable, Cloneable {
      *
      * @return the end of this path
      */
-    public default Vector3 getEnd() {
+    default Vector3 getEnd() {
         return getPoint(1);
     }
 
@@ -156,7 +163,7 @@ public interface Path3 extends Serializable, Cloneable {
      *
      * @return a new non-empty array of points relevant to the construction of the curve
      */
-    public abstract Vector3[] getControlPoints();
+    abstract Vector3[] getControlPoints();
 
     /**
      * Returns an even amount of equally distributed points on this path.
@@ -164,7 +171,7 @@ public interface Path3 extends Serializable, Cloneable {
      * @param amount the amount of points
      * @return a new array containing the points
      */
-    public default Vector3[] getPoints(int amount) {
+    default Vector3[] getPoints(int amount) {
         if (amount < 0) throw new IllegalArgumentException("negative amount");
         if (amount == 1) return new Vector3[] {getMidPoint()};
         if (amount == 2) return new Vector3[] {getOrigin(), getEnd()};

@@ -1,22 +1,28 @@
 package net.grian.spatium.geo2;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo3.Vectors;
 import net.grian.spatium.impl.Vector2Impl;
+import org.jetbrains.annotations.NotNull;
 
 public interface Vector2 {
     
+    @NotNull
     static Vector2 zero() {
         return new Vector2Impl(0, 0);
     }
     
+    @NotNull
     static Vector2 fromXY(double x, double y) {
         return new Vector2Impl(x, y);
     }
     
+    @NotNull
     static Vector2 fromRadiusAngle(double angle) {
         return fromXY(Math.cos(angle), Math.sin(angle));
     }
     
+    @NotNull
     static Vector2 between(Vector2 from, Vector2 to) {
         return fromXY(
             to.getX() - from.getX(),
@@ -65,22 +71,25 @@ public interface Vector2 {
     //CHECKERS
     
     default boolean isMultipleOf(double x, double y) {
-        final double thisX = getX(), thisY = getY();
-        
-        return
-            Spatium.isZero(thisX) ||
-            Spatium.isZero(thisY) ||
-            Spatium.equals(thisX / x, thisY / y);
+        return Vectors.multiples(getX(), getY(), x, y);
     }
     
     default boolean isMultipleOf(Vector2 v) {
-        return isMultipleOf(v.getX(), v.getY());
+        return Vectors.multiples(this, v);
     }
     
     default boolean equals(Vector2 v) {
         return
             Spatium.equals(getX(), v.getX()) &&
             Spatium.equals(getY(), v.getY());
+    }
+    
+    default boolean isFinite() {
+        return Double.isFinite(getX()) && Double.isFinite(getY());
+    }
+    
+    default boolean isZero() {
+        return Spatium.isZero(getX()) && Spatium.isZero(getY());
     }
     
     //SETTERS
@@ -95,7 +104,7 @@ public interface Vector2 {
         return multiply(length / getLength());
     }
     
-    //OPERATIONS
+    // OPERATIONS
     
     abstract Vector2 add(double x, double y);
     
@@ -138,5 +147,9 @@ public interface Vector2 {
     default Vector2 normalize() {
         return setLength(1);
     }
+    
+    // MISC
+    
+    abstract Vector2 clone();
     
 }

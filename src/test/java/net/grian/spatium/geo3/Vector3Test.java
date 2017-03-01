@@ -20,7 +20,7 @@ public class Vector3Test {
         assertTrue(Vector3.fromXYZ(0.777, 0, 0.123).isMultipleOf(777, 0, 123));
         
         for (int i = 0; i<100_000; i++) {
-            Vector3 v = Vectors.random(1), v2 = v.clone().multiply(10);
+            Vector3 v = Vectors.random3(1), v2 = v.clone().multiply(10);
             if (!v.isMultipleOf(v2)) {
                 throw new AssertionError(v+" != r*"+v2);
             }

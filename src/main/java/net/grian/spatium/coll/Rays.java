@@ -2,13 +2,10 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
-import net.grian.spatium.geo2.Circle;
-import net.grian.spatium.geo2.Ray2;
-import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import net.grian.spatium.util.PrimMath;
+import org.jetbrains.annotations.*;
 
 /**
  * <p>
@@ -22,6 +19,48 @@ import javax.annotation.Nullable;
 public final class Rays {
 
     private Rays() {}
+    
+    /**
+     * <p>
+     *     Tests where two {@link Ray2}s collide. This will always yield a real result unless the directional vectors
+     *     of the rays are parallel.
+     * </p>
+     * <p>
+     *     This algorithm may also be used to check where line segments intersect:
+     * </p>
+     * <p>
+     *     Let X be the line segment between points A, B and let Y be the line segment between C, D. Let R<sub>x</sub>
+     *     be the ray representing X and let R<sub>y</sub> be the ray representing Y.
+     *     <blockquote>
+     *         <code>R<sub>x</sub> = (A, B-A)</code>
+     *         <br><code>R<sub>y</sub> = (C, D-C)</code>
+     *     </blockquote>
+     *     The point of intersection may be obtained by invoking
+     *     <code>R<sub>x</sub>.getPoint( cast(R<sub>x</sub>, R<sub>y</sub>) )</code>
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray2#setLength(double)} (mutation) or {@link Ray2#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param a the first ray
+     * @param b the second ray
+     * @return the ray multiplier or {@link Double#NaN}
+     */
+    public static double cast(Ray2 a, Ray2 b) {
+        //c := ( -dir(a).y, dir(a).x ) = "inverse of a's direction"
+        //d := org(a) - org(b) = "orgB to orgA"
+        //t := (d * c) / (dir(b) * c)
+        
+        Vector2 inverse = a.getDirection().getInverse();
+        Vector2 orgB_orgA = Vector2.between(b.getOrigin(), a.getOrigin());
+        
+        return orgB_orgA.dot(inverse) / b.getDirection().dot(inverse);
+    }
 
     /**
      * Tests where two {@link Ray3}s collide.
@@ -136,16 +175,15 @@ public final class Rays {
      * @return where the ray and the plane collide or {@link Double#NaN}
      */
     public static double cast(Ray3 ray, Plane plane) {
-        double numerator, denominator;
         Vector3 normal = plane.getNormal().normalize();
         Vector3 dir = ray.getDirection().normalize();
         
-        denominator = normal.dot(dir);
+        double denominator = normal.dot(dir);
         if (Spatium.isZero(denominator)) //ray and plane are parallel
             return Double.NaN;
 
         //calculate the distance between the linePoint and the line-plane intersection point
-        numerator = normal.dot( Vector3.between(ray.getOrigin(), plane.getPoint()) );
+        double numerator = normal.dot( Vector3.between(ray.getOrigin(), plane.getPoint()) );
 
         return numerator / denominator;
     }
@@ -239,6 +277,47 @@ public final class Rays {
     public static double cast(Ray3 ray, OrientedBB box) {
         double[] entryExit = pierce(ray, box);
         return entryExit==null? Double.NaN : entryExit[0];
+    }
+    
+    /**
+     * <p>
+     *     Tests where a {@link Ray2} and a {@link Triangle2} collide.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray2#setLength(double)} (mutation) or {@link Ray2#getPoint(double)} (no mutation).
+     * </p>
+     * Source:<a href="https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm">
+     * Möller–Trumbore intersection algorithm</a>
+     *
+     * @param ray the ray
+     * @param triangle the triangle
+     * @return where the box and the point collide or {@link Double#NaN}
+     */
+    public static double cast(Ray2 ray, Triangle2 triangle) {
+        Vector2
+            a = triangle.getA(),
+            b = triangle.getB(),
+            c = triangle.getC();
+        
+        double
+            t1 = cast(ray, Ray2.between(a, b)),
+            t2 = cast(ray, Ray2.between(a, c)),
+            t3 = cast(ray, Ray2.between(b, c));
+        
+        return realMin(t1, realMin(t2, t3));
+    }
+    
+    private static double realMin(double a, double b) {
+        boolean finA = Double.isFinite(a), finB = Double.isFinite(b);
+        
+        if (finA && finB) return a < b? a : b;
+        else if (finA) return a;
+        else return b;
     }
 
     /**
@@ -473,9 +552,9 @@ public final class Rays {
         };
     }
     
-    /*
+    /**
      * <p>
-     *     Tests where a {@link Ray3} enters and exits an {@link Rectangle}.
+     *     Tests where a {@link Ray2} enters and exits an {@link Rectangle}.
      * </p>
      * <p>
      *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
@@ -483,35 +562,34 @@ public final class Rays {
      * </p>
      * <p>
      *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
-     *     {@link Ray3#setLength(double)}.
+     *     {@link Ray2#setLength(double)}.
      * </p>
      *
      * @param ray the ray
      * @param box the bounding box
      * @return the entry and exit points of the ray or null
+     */
     @Nullable
-    public static double[] pierce(Ray3 ray, Rectangle box) {
+    public static double[] pierce(Ray2 ray, Rectangle box) {
         
-        double tmin, tmax;
-        
-        {//x-slab collision
-            final double div = 1 / ray.getDirX();
-            tmin = ((div >= 0? box.getMinX() : box.getMaxX()) - ray.getOriginX()) * div;
-            tmax = ((div >= 0? box.getMaxX() : box.getMinX()) - ray.getOriginX()) * div;
-        }
-        {//y-slab collision
-            final double div = 1 / ray.getDirY();
-            double tymin = ((div >= 0? box.getMinY() : box.getMaxY()) - ray.getOriginY()) * div;
-            double tymax = ((div >= 0? box.getMaxY() : box.getMinY()) - ray.getOriginY()) * div;
+        //x-slab collision
+        final double
+            divX = 1 / ray.getDirX(),
+            txmin = ((divX >= 0? box.getMinX() : box.getMaxX()) - ray.getOrgX()) * divX,
+            txmax = ((divX >= 0? box.getMaxX() : box.getMinX()) - ray.getOrgX()) * divX;
             
-            if (tmin > tymax || tymin > tmax) return null;
-            if (tymin > tmin) tmin = tymin;
-            if (tymax < tmax) tmax = tymax;
-        }
+        //y-slab collision
+        final double
+            divY = 1 / ray.getDirY(),
+            tymin = ((divY >= 0? box.getMinY() : box.getMaxY()) - ray.getOrgY()) * divY,
+            tymax = ((divY >= 0? box.getMaxY() : box.getMinY()) - ray.getOrgY()) * divY;
+    
+        if (txmin > tymax || tymin > txmax) return null;
         
-        return new double[] {tmin, tmax};
+        return new double[] {
+            Math.max(txmin, tymin),
+            Math.min(txmax, tymax)};
     }
-    REPLACE RAY3 WITH RAY2 ONCE CREATED */
 
     /**
      * <p>
@@ -651,7 +729,8 @@ public final class Rays {
      * @param b the second, static box
      * @return the collision
      */
-    public static RayPierceCollision<AxisAlignedBB> pierce(AxisAlignedBB a, Vector3 motion, AxisAlignedBB b) {
+    @Nullable
+    public static double[] pierce(AxisAlignedBB a, Vector3 motion, AxisAlignedBB b) {
         //minkowski sum of a rotated 180 degrees around origin (a') and b
         AxisAlignedBB minkowski = AxisAlignedBB.fromPoints(
                 b.getMinX()-a.getMaxX(),
@@ -662,10 +741,8 @@ public final class Rays {
                 b.getMaxZ()-a.getMinZ());
 
         Ray3 ray = Ray3.fromOD(0, 0, 0, motion.getX(), motion.getY(), motion.getZ());
-        double[] pierce = pierce(ray, minkowski);
-        if (pierce == null) return new RayPierceCollision<>(ray, b);
-
-        return new RayPierceCollision<>(CollisionEngine.CollisionResult.POSITIVE, ray, b, pierce[0], pierce[1]);
+        
+        return pierce(ray, minkowski);
     }
 
 }

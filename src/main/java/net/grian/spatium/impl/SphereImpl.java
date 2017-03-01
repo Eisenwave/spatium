@@ -94,7 +94,23 @@ public class SphereImpl implements Sphere {
     }
 
     // SETTERS
-
+    
+    
+    @Override
+    public void setX(double x) {
+        this.x = x;
+    }
+    
+    @Override
+    public void setY(double y) {
+        this.y = y;
+    }
+    
+    @Override
+    public void setZ(double z) {
+        this.z = z;
+    }
+    
     @Override
     public void setCenter(double x, double y, double z) {
         this.x = x;
@@ -133,16 +149,15 @@ public class SphereImpl implements Sphere {
     }
 
     // MISC
-
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName()+"{center="+getCenter()+",r="+getRadius()+"}";
-    }
-
+    
     @Override
     public Sphere clone() {
         return new SphereImpl(this);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+"{center="+getCenter()+",r="+getRadius()+"}";
+    }
+    
 }

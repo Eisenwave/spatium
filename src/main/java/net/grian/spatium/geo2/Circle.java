@@ -3,15 +3,18 @@ package net.grian.spatium.geo2;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.CircleImpl;
+import org.jetbrains.annotations.NotNull;
 
 public interface Circle extends Area {
     
     //CONSTRUCTORS
     
+    @NotNull
     static Circle fromCenterRadius(double x, double y, double r) {
         return new CircleImpl(x, y, r);
     }
     
+    @NotNull
     static Circle fromCenterRadius(Vector2 center, double r) {
         return fromCenterRadius(center.getX(), center.getY(), r);
     }

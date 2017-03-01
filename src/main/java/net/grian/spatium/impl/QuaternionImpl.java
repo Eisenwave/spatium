@@ -1,7 +1,9 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.transform.Quaternion;
 import net.grian.spatium.geo3.Vector3;
+import net.grian.spatium.util.Strings;
 
 
 public class QuaternionImpl implements Quaternion {
@@ -198,6 +200,12 @@ public class QuaternionImpl implements Quaternion {
 
     @Override
     public String toString() {
+        String
+            w = Strings.valueOf(this.w, 6),
+            x = Strings.valueOf(this.x, 6),
+            y = Strings.valueOf(this.y, 6),
+            z = Strings.valueOf(this.z, 6);
+        
         return "("+w+" + "+x+"i + "+y+"j + "+z+"k)";
     }
 }

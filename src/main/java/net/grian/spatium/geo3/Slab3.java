@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Slab3Impl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -34,7 +35,8 @@ public interface Slab3 extends Serializable, Cloneable {
      * @param dmax the maximum d value
      * @return a new slab
      */
-    public static Slab3 create(double a, double b, double c, double dmin, double dmax) {
+    @NotNull
+    static Slab3 create(double a, double b, double c, double dmin, double dmax) {
         return new Slab3Impl(a, b, c, dmin, dmax);
     }
 
@@ -50,7 +52,8 @@ public interface Slab3 extends Serializable, Cloneable {
      * @param dmax the maximum d value
      * @return a new slab
      */
-    public static Slab3 create(Vector3 normal, double dmin, double dmax) {
+    @NotNull
+    static Slab3 create(Vector3 normal, double dmin, double dmax) {
         return new Slab3Impl(normal.getX(), normal.getY(), normal.getZ(), dmin, dmax);
     }
 
@@ -62,7 +65,8 @@ public interface Slab3 extends Serializable, Cloneable {
      * @param normal the normal
      * @return a new slab
      */
-    public static Slab3 fromPointsNormal(Vector3 a, Vector3 b, Vector3 normal) {
+    @NotNull
+    static Slab3 fromPointsNormal(Vector3 a, Vector3 b, Vector3 normal) {
         double da = normal.dot(a), db = normal.dot(b);
 
         return new Slab3Impl(normal, Math.min(da, db), Math.max(da, db));
@@ -75,69 +79,69 @@ public interface Slab3 extends Serializable, Cloneable {
      *
      * @return the slab normal
      */
-    public abstract Vector3 getNormal();
+    abstract Vector3 getNormal();
 
     /**
      * Returns the minimum plane.
      *
      * @return the minimum plane
      */
-    public abstract Plane getMin();
+    abstract Plane getMin();
 
     /**
      * Returns the maximum plane.
      *
      * @return the maximum plane
      */
-    public abstract Plane getMax();
+    abstract Plane getMax();
 
     /**
      * Returns some point on the minimum plane.
      *
      * @return some point on the minimum plane
      */
-    public abstract Vector3 getMinPoint();
+    abstract Vector3 getMinPoint();
 
     /**
      * Returns some point on the maximum plane.
      *
      * @return some point on the maximum plane
      */
-    public abstract Vector3 getMaxPoint();
+    abstract Vector3 getMaxPoint();
 
-    public abstract double getMinDepth();
+    abstract double getMinDepth();
 
-    public abstract double getMaxDepth();
+    abstract double getMaxDepth();
 
     /**
      * Returns the thickness of the slab. This is the distance between the two planes which enclose the slab.
      *
      * @return the thickness of the slab
      */
-    public default double getThickness() {
+    default double getThickness() {
         return (getMaxDepth() - getMinDepth()) / getNormal().getLength();
     }
 
     //CHECKERS
 
-    public default boolean equals(Slab3 slab) {
+    default boolean equals(Slab3 slab) {
         return
-                this.getNormal().isMultipleOf(slab.getNormal()) &&
-                Spatium.equals(this.getMinDepth(), slab.getMinDepth()) &&
-                Spatium.equals(this.getMaxDepth(), slab.getMaxDepth());
+            this.getNormal().isMultipleOf(slab.getNormal()) &&
+            Spatium.equals(this.getMinDepth(), slab.getMinDepth()) &&
+            Spatium.equals(this.getMaxDepth(), slab.getMaxDepth());
     }
 
-    public default boolean contains(double x, double y, double z) {
+    default boolean contains(double x, double y, double z) {
         Vector3 n = getNormal();
         double invLength = 1 / n.getLength();
         double dot = n.dot(x, y, z);
 
         return
-                (dot - getMinDepth()) * invLength >= 0 &&  //signed distance to min plane positive or 0
-                (dot - getMaxDepth()) * invLength <= 0;    //signed distance to max plane negative or 0
+            (dot - getMinDepth()) * invLength >= 0 &&  //signed distance to min plane positive or 0
+            (dot - getMaxDepth()) * invLength <= 0;    //signed distance to max plane negative or 0
     }
 
-    public default boolean contains(Vector3 point) {
+    default boolean contains(Vector3 point) {
         return contains(point.getX(), point.getY(), point.getZ());
     }
 
@@ -150,33 +154,33 @@ public interface Slab3 extends Serializable, Cloneable {
      * @param y the y-coordinate of the normal
      * @param z the z-coordinate of the normal
      */
-    public abstract void setNormal(double x, double y, double z);
+    abstract void setNormal(double x, double y, double z);
 
     /**
      * Sets the normal of the slab to a specified vector.
      *
      * @param normal the normal vector
      */
-    public default void setNormal(Vector3 normal) {
+    default void setNormal(Vector3 normal) {
         setNormal(normal.getX(), normal.getY(), normal.getZ());
     }
 
-    public abstract void setMinDepth(double depth);
+    abstract void setMinDepth(double depth);
 
-    public abstract void setMaxDepth(double depth);
+    abstract void setMaxDepth(double depth);
 
     /**
      * Moves the slab into the direction of its normal vector.
      *
      * @param depth the additional depth
      */
-    public abstract void push(double depth);
+    abstract void push(double depth);
 
     /**
      * Moves the slab into the opposite direction of its normal vector.
      *
      * @param depth the additional depth
      */
-    public abstract void pull(double depth);
+    abstract void pull(double depth);
 
 }

@@ -14,6 +14,10 @@ public class RectangleImpl implements Rectangle {
         this.dy = dy;
     }
     
+    public RectangleImpl(RectangleImpl copyOf) {
+        this(copyOf.x, copyOf.y, copyOf.dx, copyOf.dy);
+    }
+    
     @Override
     public double getMinX() {
         return x - dx;
@@ -78,6 +82,20 @@ public class RectangleImpl implements Rectangle {
     public void translate(double x, double y) {
         this.x += x;
         this.y += y;
+    }
+    
+    // MISC
+    
+    @Override
+    public Rectangle clone() {
+        return new RectangleImpl(this);
+    }
+    
+    @Override
+    public String toString() {
+        return getClass()+
+            "{min="+getMin()+
+            ",max="+getMaxX()+"}";
     }
     
 }

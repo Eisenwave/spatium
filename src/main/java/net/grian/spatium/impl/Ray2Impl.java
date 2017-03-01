@@ -93,10 +93,18 @@ public class Ray2Impl implements Ray2 {
         this.dy *= factor;
     }
     
-    
+    // MISC
     
     @Override
     public Ray2 clone() {
         return new Ray2Impl(this);
     }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+
+            "{org="+getOrigin()+
+            ",dir="+getDirection()+"}";
+    }
+    
 }

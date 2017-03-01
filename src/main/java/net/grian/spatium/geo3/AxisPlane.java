@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
 import net.grian.spatium.impl.AxisPlaneImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -20,7 +21,8 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      *
      * @return a new axis plane
      */
-    public static AxisPlane create(Axis axis, double depth) {
+    @NotNull
+    static AxisPlane create(Axis axis, double depth) {
         return new AxisPlaneImpl(axis, depth);
     }
 
@@ -31,7 +33,8 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      *
      * @return the axis of this plane
      */
-    public abstract Axis getAxis();
+    @NotNull
+    abstract Axis getAxis();
 
     /**
      * Returns the depth <b>d</b> of the plane, as seen in the general form:
@@ -47,10 +50,10 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @return the depth of the plane
      */
     @Override
-    public abstract double getDepth();
+    abstract double getDepth();
 
     @Override
-    public default Vector3 getPoint() {
+    default Vector3 getPoint() {
         return getNormal().multiply(getDepth());
     }
 
@@ -61,13 +64,13 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @return the normal vector of the plane
      */
     @Override
-    public default Vector3 getNormal() {
+    default Vector3 getNormal() {
         return getAxis().vector();
     }
 
     //CHECKERS
 
-    public default boolean equals(AxisPlane plane) {
+    default boolean equals(AxisPlane plane) {
         return this.getAxis() == plane.getAxis() && Spatium.equals(this.getDepth(), plane.getDepth());
     }
 
@@ -80,7 +83,7 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @return whether this plane contains the point
      */
     @Override
-    public default boolean contains(double x, double y, double z) {
+    default boolean contains(double x, double y, double z) {
         switch (getAxis()) {
             case X: return Spatium.equals(getDepth(), x);
             case Y: return Spatium.equals(getDepth(), y);
@@ -96,7 +99,7 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @return whether this plane contains the point
      */
     @Override
-    public default boolean contains(Vector3 point) {
+    default boolean contains(Vector3 point) {
         return contains(point.getX(), point.getY(), point.getZ());
     }
 
@@ -108,7 +111,7 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @param axis the axis
      * @return itself
      */
-    public abstract AxisPlane setAxis(Axis axis);
+    abstract AxisPlane setAxis(Axis axis);
 
     /**
      * Changes the depth <b>d</b> of the plane.
@@ -117,15 +120,15 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      * @return itself
      * @see #getDepth()
      */
-    public abstract AxisPlane setDepth(double depth);
+    abstract AxisPlane setDepth(double depth);
 
     @Override
-    public default void setNormal(double x, double y, double z) {
+    default void setNormal(double x, double y, double z) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public default void setCenter(double x, double y, double z) {
+    default void setCenter(double x, double y, double z) {
         switch (getAxis()) {
             case X: setDepth(x); break;
             case Y: setDepth(y); break;
@@ -141,7 +144,7 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
      *
      * @return a new plane
      */
-    public default Plane toPlane() {
+    default Plane toPlane() {
         switch (getAxis()) {
             case X: return Plane.fromGeneral(1, 0, 0, getDepth());
             case Y: return Plane.fromGeneral(0, 1, 0, getDepth());
@@ -150,6 +153,6 @@ public interface AxisPlane extends Plane, Serializable, Cloneable {
         }
     }
 
-    public abstract AxisPlane clone();
+    abstract AxisPlane clone();
 
 }

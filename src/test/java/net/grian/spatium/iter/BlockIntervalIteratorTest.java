@@ -53,10 +53,10 @@ public class BlockIntervalIteratorTest {
      * @return a random ray
      */
     private static Ray3 randomRay(float min, float max) {
-        Vector3 a = Vectors.random(max), b = Vectors.random(max);
+        Vector3 a = Vectors.random3(max), b = Vectors.random3(max);
         while (a.distanceTo(b) < min) {
-            a = Vectors.random(max);
-            b = Vectors.random(max);
+            a = Vectors.random3(max);
+            b = Vectors.random3(max);
         }
 
         return Ray3.between(a, b);

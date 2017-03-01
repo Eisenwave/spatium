@@ -1,10 +1,26 @@
 package net.grian.spatium.geo2;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.impl.RectangleImpl;
+import org.jetbrains.annotations.NotNull;
 
 public interface Rectangle extends Area {
     
-    //GETTERS
+    @NotNull
+    static Rectangle fromCenterDims(double x, double y, double dx, double dy) {
+        return new RectangleImpl(x, y, dx, dy);
+    }
+    
+    @NotNull
+    static Rectangle fromPoints(double x0, double y0, double x1, double y1) {
+        return fromCenterDims(
+            (x0 + x1) / 2,
+            (y0 + y1) / 2,
+            Math.abs(x1-x0) / 2,
+            Math.abs(y1-y0) / 2);
+    }
+    
+    // GETTERS
     
     abstract double getMinX();
     

@@ -155,26 +155,4 @@ public final class Distances {
         v.normalize();
     }
 
-    /**
-     * Normalizes a vector.
-     *
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
-     * @return a normalized vector
-     */
-    public static Vector3 normalizeCubical(double x, double y, double z) {
-        double length = hypotCubical(x, y, z);
-        return Vector3.fromXYZ(x/length, y/length, z/length);
-    }
-
-    /**
-     * Normalizes a vector.
-     *
-     * @param v the vector
-     */
-    public static void normalizeCubical(Vector3 v) {
-        v.divide( hypotCubical(v) );
-    }
-
 }

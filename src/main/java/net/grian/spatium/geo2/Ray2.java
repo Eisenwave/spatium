@@ -1,28 +1,33 @@
 package net.grian.spatium.geo2;
 
 import net.grian.spatium.impl.Ray2Impl;
+import org.jetbrains.annotations.NotNull;
 
 public interface Ray2 extends Transformable2 {
     
-    //CONSTRUCTORS
+    // CONSTRUCTORS
     
+    @NotNull
     static Ray2 fromOD(double x, double y, double dx, double dy) {
         return new Ray2Impl(x, y, dx, dy);
     }
     
+    @NotNull
     static Ray2 fromOD(Vector2 origin, Vector2 direction) {
         return fromOD(origin.getX(), origin.getY(), direction.getX(), direction.getY());
     }
     
+    @NotNull
     static Ray2 between(double x0, double y0, double x1, double y1) {
         return fromOD(x0, y0, x1-x0, y1-y0);
     }
     
+    @NotNull
     static Ray2 between(Vector2 a, Vector2 b) {
         return between(a.getX(), a.getY(), b.getX(), b.getY());
     }
     
-    //GETTERS
+    // GETTERS
     
     abstract double getOrgX();
     
@@ -56,7 +61,7 @@ public interface Ray2 extends Transformable2 {
         return getOrigin().add(getDirection().multiply(t));
     }
     
-    //SETTERS
+    // SETTERS
     
     abstract void setOrigin(double x, double y);
     
@@ -78,7 +83,7 @@ public interface Ray2 extends Transformable2 {
     
     abstract void setLength(double length);
     
-    //TRANSFORMATIONS
+    // TRANSFORMATIONS
     
     default void scaleDirection(double x, double y) {
         setDirection(getDirX()*x, getDirY()*y);
@@ -112,7 +117,7 @@ public interface Ray2 extends Transformable2 {
         setEnd(getEnd().multiply(factor));
     }
     
-    //MISC
+    // MISC
     
     abstract Ray2 clone();
     

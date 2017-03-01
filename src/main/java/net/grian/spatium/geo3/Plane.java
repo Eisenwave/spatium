@@ -1,6 +1,7 @@
 package net.grian.spatium.geo3;
 
 import net.grian.spatium.impl.PlaneImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public interface Plane extends Serializable, Cloneable {
      * @param r the second vector
      * @return a new plane
      */
+    @NotNull
     static Plane fromPointVectors(Vector3 point, Vector3 t, Vector3 r) {
         return new PlaneImpl(point, t, r);
     }
@@ -29,6 +31,7 @@ public interface Plane extends Serializable, Cloneable {
      * @param zn the z of the normal
      * @return a new plane
      */
+    @NotNull
     static Plane fromPointNormal(double xc, double yc, double zc, double xn, double yn, double zn) {
         return new PlaneImpl(xc, yc, zc, xn, yn, zn);
     }
@@ -40,6 +43,7 @@ public interface Plane extends Serializable, Cloneable {
      * @param normal the normal vector
      * @return a new plane
      */
+    @NotNull
     static Plane fromPointNormal(Vector3 center, Vector3 normal) {
         return new PlaneImpl(center, normal);
     }
@@ -56,6 +60,7 @@ public interface Plane extends Serializable, Cloneable {
      * @param d the depth
      * @return a new plane
      */
+    @NotNull
     static Plane fromGeneral(double a, double b, double c, double d) {
         return new PlaneImpl(a, b, c, d);
     }
@@ -221,6 +226,6 @@ public interface Plane extends Serializable, Cloneable {
 
     // MISC
 
-    public abstract Plane clone();
+    abstract Plane clone();
 
 }

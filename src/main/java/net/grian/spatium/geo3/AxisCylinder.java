@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public interface AxisCylinder extends Space, Cloneable, Serializable {
      *
      * @return the cylinder axis
      */
+    @NotNull
     abstract Axis getAxis();
     
     /**
@@ -65,6 +67,15 @@ public interface AxisCylinder extends Space, Cloneable, Serializable {
      */
     default Vector3 getTop() {
         return Vector3.fromXYZ(getTopX(), getTopY(), getTopZ());
+    }
+    
+    /**
+     * Returns the center of this cylinder.
+     *
+     * @return the center of this cylinder
+     */
+    default Vector3 getCenter() {
+        return getBase().add(getTop()).divide(2);
     }
     
     /**

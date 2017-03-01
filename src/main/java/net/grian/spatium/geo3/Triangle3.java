@@ -4,6 +4,7 @@ import net.grian.spatium.impl.Triangle3Impl;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.Matrices;
 import net.grian.spatium.transform.Transformation;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -11,11 +12,13 @@ import java.io.Serializable;
  * A 3D-Triangle3 defined by 3 points.
  */
 public interface Triangle3 extends Polygon3, Serializable, Cloneable {
-
+    
+    @NotNull
     static Triangle3 fromPoints(Vector3 a, Vector3 b, Vector3 c) {
         return new Triangle3Impl(a, b, c);
     }
-
+    
+    @NotNull
     static Triangle3 fromPoints(
             double ax, double ay, double az,
             double bx, double by, double bz,
@@ -28,11 +31,26 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
     }
 
     //GETTERS
-
+    
+    /**
+     * Returns the first triangle vertex.
+     *
+     * @return the first triangle vertex
+     */
     abstract Vector3 getA();
-
+    
+    /**
+     * Returns the second triangle vertex.
+     *
+     * @return the second triangle vertex
+     */
     abstract Vector3 getB();
-
+    
+    /**
+     * Returns the third triangle vertex.
+     *
+     * @return the third triangle vertex
+     */
     abstract Vector3 getC();
     
     @Override
@@ -48,6 +66,11 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
     @Override
     default int getVertexCount() {
         return 3;
+    }
+    
+    @Override
+    default Vector3[] getVertices() {
+        return new Vector3[] {getA(), getB(), getC()};
     }
 
     /**
@@ -75,10 +98,6 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
      */
     default double getLengthCA() {
         return Vector3.between(getC(), getA()).getLength();
-    }
-
-    default Vector3[] getPoints() {
-        return new Vector3[] {getA(), getB(), getC()};
     }
 
     default Vector3 getNormal() {
@@ -147,9 +166,9 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
             ac_ap = ac.dot(ap),
             ab_ab = ab.dot(ab),
             ab_ap = ab.dot(ap),
-            invDenom = 1 / (ac_ac * ab_ab - ac_ab * ac_ab),
-            u = (ab_ab * ac_ap - ac_ab * ab_ap) * invDenom,
-            v = (ac_ac * ab_ap - ac_ab * ac_ap) * invDenom;
+            div = 1 / (ac_ac * ab_ab - ac_ab * ac_ab),
+            u = (ab_ab * ac_ap - ac_ab * ab_ap) * div,
+            v = (ac_ac * ab_ap - ac_ab * ac_ap) * div;
 
         return (u >= 0) && (v >= 0) && (u + v < 1);
     }
@@ -212,5 +231,9 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
     default void scale(double factor) {
         scale(factor, factor, factor);
     }
+    
+    // MISC
+    
+    abstract Triangle3 clone();
 
 }

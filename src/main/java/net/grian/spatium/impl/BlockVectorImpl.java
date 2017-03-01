@@ -47,6 +47,26 @@ public class BlockVectorImpl implements BlockVector {
     public int getZ() {
         return z;
     }
+    
+    public BlockVectorImpl getRelative(Direction direction, int offset) {
+        BlockVectorImpl clone = clone();
+        switch(direction) {
+            case POSITIVE_X: clone.add( offset, 0, 0); break;
+            case NEGATIVE_X: clone.add(-offset, 0, 0); break;
+            case POSITIVE_Y: clone.add(0,  offset, 0); break;
+            case NEGATIVE_Y: clone.add(0, -offset, 0); break;
+            case POSITIVE_Z: clone.add(0, 0,  offset); break;
+            case NEGATIVE_Z: clone.add(0, 0, -offset); break;
+        }
+        return clone;
+    }
+    
+    // CHECKERS
+    
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BlockVector && equals((BlockVector) obj);
+    }
 
     // SETTERS
 
@@ -72,6 +92,8 @@ public class BlockVectorImpl implements BlockVector {
         this.z = z;
     }
 
+    // OPERATIONS
+    
     @Override
     public void add(int x, int y, int z) {
         this.x += x;
@@ -114,26 +136,6 @@ public class BlockVectorImpl implements BlockVector {
         this.z /= z;
     }
 
-    public BlockVectorImpl getRelative(Direction direction, int offset) {
-        BlockVectorImpl clone = clone();
-        switch(direction) {
-            case POSITIVE_X: clone.add( offset, 0, 0); break;
-            case NEGATIVE_X: clone.add(-offset, 0, 0); break;
-            case POSITIVE_Y: clone.add(0,  offset, 0); break;
-            case NEGATIVE_Y: clone.add(0, -offset, 0); break;
-            case POSITIVE_Z: clone.add(0, 0,  offset); break;
-            case NEGATIVE_Z: clone.add(0, 0, -offset); break;
-        }
-        return clone;
-    }
-
-    // CHECKERS
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof BlockVector && equals((BlockVector) obj);
-    }
-
     // MISC
 
     @Override
@@ -141,6 +143,7 @@ public class BlockVectorImpl implements BlockVector {
         return new BlockVectorImpl(this);
     }
 
+    @Override
     public int[] toArray() {
         return new int[] {x, y, z};
     }

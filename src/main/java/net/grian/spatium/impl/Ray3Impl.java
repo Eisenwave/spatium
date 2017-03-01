@@ -169,16 +169,15 @@ public class Ray3Impl implements Ray3 {
     }
 
     // MISC
-
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName()+"{o="+getOrigin()+",d="+getDirection()+"}";
-    }
-
+    
     @Override
     public Ray3Impl clone() {
         return new Ray3Impl(this);
+    }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName()+"{o="+getOrigin()+",d="+getDirection()+"}";
     }
 
 }

@@ -19,6 +19,12 @@ public interface Area extends Transformable2 {
      */
     abstract double getCircumference();
     
+    abstract boolean contains(double x, double y);
+    
+    default boolean contains(Vector2 point) {
+        return contains(point.getX(), point.getY());
+    }
+    
     /**
      * <p>
      *     Returns the center of this area.

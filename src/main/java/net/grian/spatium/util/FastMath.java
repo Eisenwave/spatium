@@ -31,6 +31,7 @@ public final class FastMath {
      * @param x the number
      * @return the inverted sqrt of x
      */
+    @Contract(pure = true)
     public static float invSqrt(float x) {
         float halfX = 0.5f * x;
         int i = Float.floatToIntBits(x);
@@ -54,6 +55,7 @@ public final class FastMath {
      * @param x the number
      * @return the inverted sqrt of x
      */
+    @Contract(pure = true)
     public static double invSqrt(double x) {
         double halfX = 0.5d * x;
         long i = Double.doubleToLongBits(x);
@@ -75,6 +77,7 @@ public final class FastMath {
      * @param number the number
      * @return the natural logarithm
      */
+    @Contract(pure = true)
     public static double ln(double number) {
         return Math.log(number);
     }
@@ -91,6 +94,7 @@ public final class FastMath {
      * @param number the number
      * @return the binary logarithm
      */
+    @Contract(pure = true)
     public static double log2(double number) {
         return Math.log(number) / CacheMath.LN_2;
     }
@@ -107,6 +111,7 @@ public final class FastMath {
      * @param number the number
      * @return the decimal logarithm
      */
+    @Contract(pure = true)
     public static double log10(double number) {
         return Math.log10(number);
     }
@@ -118,8 +123,20 @@ public final class FastMath {
      * @param number the number
      * @return the logarithm of the number
      */
+    @Contract(pure = true)
     public static double log(double base, double number) {
         return Math.log(number) / Math.log(base);
+    }
+    
+    /**
+     * Returns the n-th power of -1.
+     *
+     * @param exp the exponent
+     * @return the n-th power of -1
+     */
+    @Contract(pure = true)
+    public static int minusOnePow(int exp) {
+        return exp%2 == 0 ? 1 : -1;
     }
     
     /**

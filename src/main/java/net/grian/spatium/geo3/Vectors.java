@@ -1,8 +1,11 @@
 package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.geo2.Rectangle;
 import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.util.PrimMath;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class Vectors {
     
@@ -19,14 +22,58 @@ public final class Vectors {
         return multiples(a.getX(), a.getY(), b.getX(), b.getY());
     }
     
-    public static Vector3 random(double length) {
-        double
-            x = Math.random(),
-            y = Math.random(),
-            z = Math.random(),
-            multi = length / Math.sqrt(x*x + y*y + z*z);
-        
-        return Vector3.fromXYZ(x*multi, y*multi, z*multi);
+    @NotNull
+    public static Vector2 clamp(double x, double y, Rectangle bounds) {
+        return Vector2.fromXY(
+            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
+            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()));
+    }
+    
+    @NotNull
+    public static Vector2 clamp(Vector2 point, Rectangle bounds) {
+        return clamp(point.getX(), point.getY(), bounds);
+    }
+    
+    @NotNull
+    public static Vector3 clamp(double x, double y, double z, AxisAlignedBB bounds) {
+        return Vector3.fromXYZ(
+            PrimMath.clamp(bounds.getMinX(), x, bounds.getMaxX()),
+            PrimMath.clamp(bounds.getMinY(), y, bounds.getMaxY()),
+            PrimMath.clamp(bounds.getMinZ(), z, bounds.getMaxZ()));
+    }
+    
+    @NotNull
+    public static Vector3 clamp(Vector3 point, AxisAlignedBB bounds) {
+        return clamp(point.getX(), point.getY(), point.getZ(), bounds);
+    }
+    
+    private static VectorRandom RVG;
+    
+    @NotNull
+    private static VectorRandom initRVG() {
+        return RVG==null? RVG=new VectorRandom() : RVG;
+    }
+    
+    /**
+     * Returns a vector with given length and random direction.
+     *
+     * @param length the length of the vector
+     * @return a new random vector
+     */
+    @NotNull
+    public static Vector2 random2(double length) {
+        return initRVG().nextVector2(length);
+    }
+    
+    /**
+     * Returns a vector with given length and random direction.
+     *
+     * @param length the length of the vector
+     * @return a new random vector
+     */
+    @NotNull
+    public static Vector3 random3(double length) {
+        return initRVG().nextVector3(length);
     }
     
     /**
@@ -37,7 +84,20 @@ public final class Vectors {
      * @return the sum of vectors
      * @throws IllegalArgumentException if the array is empty
      */
-    @Contract(value = "_, _ -> !null", pure = true)
+    @NotNull
+    public static Vector2 sum(Vector2 a, Vector2 b) {
+        return Vector2.fromXY(a.getX()+b.getX(), a.getY()+b.getY());
+    }
+    
+    /**
+     * Returns the sum of two vectors.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @return the sum of vectors
+     * @throws IllegalArgumentException if the array is empty
+     */
+    @NotNull
     public static Vector3 sum(Vector3 a, Vector3 b) {
         return Vector3.fromXYZ(a.getX()+b.getX(), a.getY()+b.getY(), a.getZ()+b.getZ());
     }
@@ -46,11 +106,30 @@ public final class Vectors {
      * Returns the sum of all the vectors's coordinates.
      *
      * @param vectors the vectors
-     * @return the sum of vectors
-     * @throws IllegalArgumentException if the array is empty
+     * @return the sum of vectors or {@link Vector2#zero()}
+     */
+    public static Vector2 sum(Vector2... vectors) {
+        if (vectors.length == 0) return Vector2.zero();
+        if (vectors.length == 1) return vectors[0].clone();
+        if (vectors.length == 2) return sum(vectors[0], vectors[1]);
+        
+        double x = 0, y = 0;
+        for (Vector2 v : vectors) {
+            x += v.getX();
+            y += v.getY();
+        }
+        
+        return Vector2.fromXY(x, y);
+    }
+    
+    /**
+     * Returns the sum of all the vectors's coordinates.
+     *
+     * @param vectors the vectors
+     * @return the sum of vector or {@link Vector3#zero()}
      */
     public static Vector3 sum(Vector3... vectors) {
-        if (vectors.length == 0) throw new IllegalArgumentException("no vectors given");
+        if (vectors.length == 0) return Vector3.zero();
         if (vectors.length == 1) return vectors[0].clone();
         if (vectors.length == 2) return sum(vectors[0], vectors[1]);
         

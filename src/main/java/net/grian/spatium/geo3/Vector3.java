@@ -5,6 +5,7 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -19,7 +20,7 @@ public interface Vector3 extends Serializable, Cloneable {
      *
      * @return a new Vector3
      */
-    @Contract(value = " -> !null", pure = true)
+    @NotNull
     static Vector3 zero() {
         return new Vector3Impl();
     }
@@ -32,7 +33,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param z the z-coordinate
      * @return a new Vector3
      */
-    @Contract(value = "_, _, _ -> !null", pure = true)
+    @NotNull
     static Vector3 fromXYZ(double x, double y, double z) {
         return new Vector3Impl(x, y, z);
     }
@@ -43,6 +44,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param block the block coordinates
      * @return a new Vector3
      */
+    @NotNull
     static Vector3 fromBlock(BlockVector block) {
         return new Vector3Impl(block);
     }
@@ -55,6 +57,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param pitch the pitch
      * @return a new Vector3
      */
+    @NotNull
     static Vector3 fromRadiusYawPitch(double radius, double yaw, double pitch) {
         return fromYawPitch(yaw, pitch).setLength(radius);
     }
@@ -66,6 +69,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @param pitch the pitch
      * @return a new Vector3
      */
+    @NotNull
     static Vector3 fromYawPitch(double yaw, double pitch) {
         double
 		x = Math.sin(-yaw),
@@ -76,13 +80,13 @@ public interface Vector3 extends Serializable, Cloneable {
     }
 
     /**
-     * Creates a new Vector3 between two points. The vector will be pointing
-     * from {@code from} to {@code to}.
+     * Creates a new Vector3 between two points. The vector will be pointing from {@code from} to {@code to}.
      *
      * @param from the first point
      * @param to the second point
      * @return a new Vector3 between these points
      */
+    @NotNull
     static Vector3 between(Vector3 from, Vector3 to) {
         return new Vector3Impl(
             to.getX() - from.getX(),
@@ -91,11 +95,11 @@ public interface Vector3 extends Serializable, Cloneable {
     }
     
     /**
-     * Creates a new Vector3 between two points. The vector will be pointing
-     * from {@code from} to {@code to}.
+     * Creates a new Vector3 between two points. The vector will be pointing from {@code from} to {@code to}.
      *
      * @return a new Vector3 between these points
      */
+    @NotNull
     static Vector3 between(double fx, double fy, double fz, double tx, double ty, double tz) {
         return new Vector3Impl(tx-fx, ty-fy, tz-fz);
     }

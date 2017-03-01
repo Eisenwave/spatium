@@ -20,6 +20,8 @@ public class Triangle2Impl implements Triangle2 {
         this(a.getX(), a.getY(), b.getX(), b.getY(), c.getX(), c.getY());
     }
     
+    // GETTERS
+    
     @Override
     public Vector2 getA() {
         return Vector2.fromXY(ax, ay);
@@ -41,6 +43,28 @@ public class Triangle2Impl implements Triangle2 {
             (ax + bx + cx) /3,
             (ay + by + cy) /3);
     }
+    
+    // SETTERS
+    
+    @Override
+    public void setA(Vector2 point) {
+        this.ax = point.getX();
+        this.ay = point.getY();
+    }
+    
+    @Override
+    public void setB(Vector2 point) {
+        this.bx = point.getX();
+        this.by = point.getY();
+    }
+    
+    @Override
+    public void setC(Vector2 point) {
+        this.cx = point.getX();
+        this.cy = point.getY();
+    }
+    
+    // TRANSFORMATIONS
     
     @Override
     public void translate(double x, double y) {
