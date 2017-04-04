@@ -19,7 +19,7 @@ public class ComplexImplEuler implements Complex {
     }
 
     public ComplexImplEuler(ComplexImplCartesian copyOf) {
-        this.r = copyOf.getRadius();
+        this.r = copyOf.getModulo();
         this.phi = copyOf.getAngle();
     }
 
@@ -36,12 +36,12 @@ public class ComplexImplEuler implements Complex {
     }
 
     @Override
-    public double getRadius() {
+    public double getModulo() {
         return r;
     }
 
     @Override
-    public double getRadiusSquared() {
+    public double getModuloSquared() {
         return r * r;
     }
 
@@ -64,7 +64,7 @@ public class ComplexImplEuler implements Complex {
         ComplexImplCartesian z = toCartesian();
         z.setReal(a);
         
-        this.r = z.getRadius();
+        this.r = z.getModulo();
         this.phi = z.getAngle();
         return this;
     }
@@ -74,13 +74,13 @@ public class ComplexImplEuler implements Complex {
         ComplexImplCartesian z = toCartesian();
         z.setImaginary(b);
         
-        this.r = z.getRadius();
+        this.r = z.getModulo();
         this.phi = z.getAngle();
         return this;
     }
 
     @Override
-    public Complex setRadius(double r) {
+    public Complex setModulo(double r) {
         this.r = r;
         return this;
     }
@@ -112,7 +112,7 @@ public class ComplexImplEuler implements Complex {
 
     @Override
     public Complex multiply(Complex z) {
-        this.r *= z.getRadius();
+        this.r *= z.getModulo();
         this.phi += z.getAngle();
         return this;
     }
@@ -125,7 +125,7 @@ public class ComplexImplEuler implements Complex {
 
     @Override
     public Complex divide(Complex z) {
-        this.r /= z.getRadius();
+        this.r /= z.getModulo();
         this.phi -= z.getAngle();
         return this;
     }

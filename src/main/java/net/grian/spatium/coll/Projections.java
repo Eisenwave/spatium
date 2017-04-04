@@ -2,12 +2,10 @@ package net.grian.spatium.coll;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.enums.Axis;
-import net.grian.spatium.geo2.Circle;
-import net.grian.spatium.geo2.Ray2;
-import net.grian.spatium.geo2.Triangle2;
-import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
 import net.grian.spatium.transform.Quaternion;
+import net.grian.spatium.util.PrimMath;
 import org.jetbrains.annotations.NotNull;
 
 public final class Projections {
@@ -60,6 +58,26 @@ public final class Projections {
         //Vector3 dir = ray.getDirection();
         //return dir.dot(point) / dir.dot(dir);
     }
+    
+    public static double[] polygonOnRay(Ray2 ray, Vector2... poly) {
+        Vector2
+            origin = ray.getOrigin(),
+            direction = ray.getDirection();
+        double[] t = new double[poly.length];
+        double divisor = direction.getLengthSquared();
+        
+        
+        for (int i = 0; i < t.length; i++) {
+            Vector2 originToPoint = Vector2.between(origin, poly[i]);
+            t[i] = originToPoint.dot(direction) / divisor;
+        }
+        
+        return new double[] {PrimMath.min(t), PrimMath.max(t)};
+    }
+    
+    public static double[] polygonOnRay(Ray2 ray, Polygon2 poly) {
+        return polygonOnRay(ray, poly.getVertices());
+    }
 
     /**
      * Returns where the point ({@link Vector3}) is being projected onto the {@link Plane}.
@@ -97,18 +115,19 @@ public final class Projections {
      */
     public static Triangle2 flatten(Triangle3 triangle) {
         Vector3 normal = triangle.getNormal();
-        Vector3 baseZ = Axis.Z.vector();
+        //Vector3 axisZ = Axis.Z.vector();
         
         if (Spatium.isZero(normal.getX()) && Spatium.isZero(normal.getY()))
             return orthoProjectZ(triangle.getA(), triangle.getB(), triangle.getC());
         
-        Vector3 axis = normal.cross(baseZ).normalize();
-        Quaternion quaternion = Quaternion.fromRotation(axis, normal.angleTo(baseZ));
+        /* Vector3 axis = normal.cross(axisZ).normalize();
+        Quaternion quaternion = Quaternion.fromRotation(axis, normal.angleTo(axisZ)); */
+        Quaternion q = Quaternion.fromRotation(normal, Axis.Z.vector());
         
         return orthoProjectZ(
-            Quaternion.product(quaternion, triangle.getA()),
-            Quaternion.product(quaternion, triangle.getB()),
-            Quaternion.product(quaternion, triangle.getC()));
+            Quaternion.product(q, triangle.getA()),
+            Quaternion.product(q, triangle.getB()),
+            Quaternion.product(q, triangle.getC()));
     }
     
     /**

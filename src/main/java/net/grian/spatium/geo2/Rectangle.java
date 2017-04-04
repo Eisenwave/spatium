@@ -4,7 +4,7 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.RectangleImpl;
 import org.jetbrains.annotations.NotNull;
 
-public interface Rectangle extends Area {
+public interface Rectangle extends Area, Polygon2 {
     
     @NotNull
     static Rectangle fromCenterDims(double x, double y, double dx, double dy) {
@@ -18,6 +18,11 @@ public interface Rectangle extends Area {
             (y0 + y1) / 2,
             Math.abs(x1-x0) / 2,
             Math.abs(y1-y0) / 2);
+    }
+    
+    @NotNull
+    static Rectangle between(Vector2 a, Vector2 b) {
+        return fromCenterDims(a.getX(), a.getY(), b.getX(), b.getY());
     }
     
     // GETTERS
@@ -38,17 +43,19 @@ public interface Rectangle extends Area {
         return Vector2.fromXY(getMinX(), getMinY());
     }
     
-    @Override
-    default Vector2 getCenter() {
-        return Vector2.fromXY(getMinX()+getMaxX(), getMinY()+getMaxY()).divide(2);
-    }
-    
     default double getWidth() {
         return getMaxX() - getMinX();
     }
     
     default double getHeight() {
         return getMaxY() - getMinY();
+    }
+    
+    // AREA IMPL
+    
+    @Override
+    default Vector2 getCenter() {
+        return Vector2.fromXY(getMinX()+getMaxX(), getMinY()+getMaxY()).divide(2);
     }
     
     @Override
@@ -59,6 +66,45 @@ public interface Rectangle extends Area {
     @Override
     default double getCircumference() {
         return (getWidth() + getHeight()) * 2;
+    }
+    
+    // POLYGON IMPL
+    
+    @Override
+    default int getVertexCount() {
+        return 4;
+    }
+    
+    @Override
+    default Vector2 getVertex(int index) {
+        switch (index) {
+            case 0: return Vector2.fromXY(getMinX(), getMinY());
+            case 1: return Vector2.fromXY(getMinX(), getMaxY());
+            case 2: return Vector2.fromXY(getMaxX(), getMaxY());
+            case 3: return Vector2.fromXY(getMaxX(), getMinY());
+            default: throw new IndexOutOfBoundsException("index must be in range 0-3");
+        }
+    }
+    
+    @Override
+    default Ray2 getEdge(int index) {
+        Vector2 org = getVertex(index);
+        double dx = 0, dy = 0;
+        
+        switch (index) {
+            case 0: dy = getHeight(); break;
+            case 1: dx = getWidth(); break;
+            case 2: dy = -getHeight(); break;
+            case 3: dx = -getWidth(); break;
+            default: throw new IndexOutOfBoundsException("index must be in range 0-3");
+        }
+        
+        return Ray2.fromOD(org.getX(), org.getY(), dx, dy);
+    }
+    
+    @Override
+    default Rectangle getBoundaries() {
+        return clone();
     }
     
     //CHECKERS
@@ -87,10 +133,17 @@ public interface Rectangle extends Area {
     
     // TRANSFORMATIONS
     
-    abstract void scale(double x, double y);
+    default void scale(double x, double y) {
+        setDimensions(getWidth()*x, getHeight()*y);
+    }
     
+    @Override
     default void scale(double factor) {
         scale(factor, factor);
     }
+    
+    // MISC
+    
+    abstract Rectangle clone();
     
 }

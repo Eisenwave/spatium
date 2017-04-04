@@ -2,6 +2,7 @@ package net.grian.spatium.enums;
 
 import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.geo3.Vector3;
+import org.jetbrains.annotations.Contract;
 
 import static net.grian.spatium.enums.Axis.*;
 import static net.grian.spatium.enums.Direction.AxisDirection.*;
@@ -42,6 +43,7 @@ public enum Direction {
      *
      * @return a vector pointing straight into this direction
      */
+    @Contract(pure = true)
     public Vector3 vector() {
         return vector.clone();
     }
@@ -53,8 +55,9 @@ public enum Direction {
      *
      * @return the opposite direction
      */
+    @Contract(pure = true)
     public Direction opposite() {
-        return valueOf(axis, direction.opposite());
+        return direction.opposite().withAxis(axis());
     }
 
     /**
@@ -62,6 +65,7 @@ public enum Direction {
      *
      * @return the axis that this direction is on
      */
+    @Contract(pure = true)
     public Axis axis() {
         return axis;
     }
@@ -71,6 +75,7 @@ public enum Direction {
      *
      * @return the axis that this direction is on
      */
+    @Contract(pure = true)
     @MinecraftSpecific
     public Face face() {
         return face;
@@ -81,34 +86,59 @@ public enum Direction {
      * towards.
      * @return the direction on the axis of this direction
      */
+    @Contract(pure = true)
     public AxisDirection direction() {
         return direction;
     }
 
+    @Contract(pure = true)
     public static Direction valueOf(Axis axis, AxisDirection direction) {
-        if (direction == POSITIVE) switch (axis) {
-        case X: return POSITIVE_X;
-        case Y: return POSITIVE_Y;
-        case Z: return POSITIVE_Z;
-        }
-        else switch (axis) {
-        case X: return NEGATIVE_X;
-        case Y: return NEGATIVE_Y;
-        case Z: return NEGATIVE_Z;
-        }
-
-        throw new IllegalArgumentException(axis+", "+direction);
+        return direction.withAxis(axis);
     }
-
+    
+    /**
+     * The direction on an axis (positive or negative).
+     */
     public static enum AxisDirection {
-        POSITIVE,
-        NEGATIVE;
+        POSITIVE(POSITIVE_X, POSITIVE_Y, POSITIVE_Z),
+        NEGATIVE(NEGATIVE_X, NEGATIVE_Y, NEGATIVE_Z);
 
+        private final Direction[] directions;
+        
+        private AxisDirection(Direction x, Direction y, Direction z) {
+            this.directions = new Direction[]{x, y, z};
+        }
+        
+        @Contract(pure = true)
         public AxisDirection opposite() {
             if (this==POSITIVE) return NEGATIVE;
             else return POSITIVE;
         }
+        
+        @Contract(pure = true)
+        public Direction withAxis(Axis axis) {
+            return directions[axis.ordinal()];
+        }
 
     }
+    
+    /*
+    int sum(int a, int b, boolean even) {
+        int sum = 0;
+        for (int i = a; i <= b; i++)
+            if ((i%2 == 0) == even)
+                a += i;
+        return sum;
+    }
+    
+    int sum2(int a, int b, boolean even) {
+        int sum = 0;
+        int start = (a%2==0) == even? a : a+1;
+        for (int i = start; i <= b; i += 2)
+            if ((i%2 == 0) == even)
+                a += i;
+        return sum;
+    }
+    */
 
 }

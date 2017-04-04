@@ -8,6 +8,8 @@ import net.grian.spatium.impl.PolynomialImpl;
  */
 public interface Polynomial {
     
+    // CONSTRUCTORS
+    
     static Polynomial create(int degree) {
         return new PolynomialImpl(degree);
     }
@@ -15,6 +17,8 @@ public interface Polynomial {
     static Polynomial create(double... coefficients) {
         return new PolynomialImpl(coefficients);
     }
+    
+    // GETTERS
     
     /**
      * Returns the degree of the polynomial.

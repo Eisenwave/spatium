@@ -40,17 +40,23 @@ public interface Space extends Transformable3 {
     }
     
     /**
-     * Scales this space by a factor around its own center by given factor
+     * <p>
+     *     Returns the center of this space.
+     * </p>
+     * <p>
+     *     The center is defined as the average of all points this space consists of. (center of mass)
+     * </p>
+     * <p>
+     *     The center is allowed to lie outside the space. (for instance in the case of a donut)
+     * </p>
      *
-     * @param factor the scaling factor
-     *
-     * @implNote The implementation has to guarantee that: <ul>
-     *     <li><tt>scale(factor).getVolume() "equals" getVolume()*factor</tt></li>
-     *     <li><tt>scale(factor).getSurfaceArea() "equals" getSurfaceArea()*factor</tt></li>
-     *     <li>the center of the space stays unaffected by scaling</li>
-     * </ul>
+     * @return the center of this area
      */
+    abstract Vector3 getCenter();
+    
     @Override
-    abstract void scaleCentric(double factor);
+    default void scaleCentric(double factor) {
+        scaleAround(getCenter(), factor);
+    }
     
 }

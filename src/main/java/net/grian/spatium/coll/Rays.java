@@ -4,7 +4,6 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
-import net.grian.spatium.util.PrimMath;
 import org.jetbrains.annotations.*;
 
 /**
@@ -57,7 +56,7 @@ public final class Rays {
         //t := (d * c) / (dir(b) * c)
         
         Vector2 inverse = a.getDirection().getInverse();
-        Vector2 orgB_orgA = Vector2.between(b.getOrigin(), a.getOrigin());
+        Vector2 orgB_orgA = a.getOrigin().subtract(b.getOrigin());
         
         return orgB_orgA.dot(inverse) / b.getDirection().dot(inverse);
     }
@@ -79,23 +78,21 @@ public final class Rays {
      */
     public static double cast(Ray3 a, Ray3 b) {
         Vector3
-                dirA = a.getDirection(),
-                dirB = b.getDirection(),
-                dirC = Vector3.between(a.getOrigin(), b.getOrigin()),
-                crossAB = dirA.cross(dirB),
-                crossCB = dirC.cross(dirB);
+            dirA = a.getDirection(),
+            dirB = b.getDirection(),
+            orgA_orgB = b.getOrigin().subtract(a.getOrigin()),
+            //the normal of the plane in which the two planes lie
+            normal = dirA.cross(dirB);
 
-        double
-                absPlanarFactor = Math.abs(dirC.dot(crossAB)),
-                sqrLength = crossAB.getLengthSquared();
-
-        //is coplanar, and not parallel
-        if (absPlanarFactor < Spatium.EPSILON && sqrLength > Spatium.EPSILON) {
-            return crossCB.dot(crossAB) / sqrLength;
-        }
-        else {
+        //early cancel of the rays do not lie in the same plane (not coplanar)
+        if (!orgA_orgB.isOrthogonalTo(normal))
             return Double.NaN;
-        }
+        double sqrLength = normal.getLengthSquared();
+
+        //if dot product is zero, vectors are parallel
+        return sqrLength > Spatium.EPSILON ?
+            orgA_orgB.cross(dirB).dot(normal) / sqrLength :
+            Double.NaN;
     }
 
     /**
@@ -114,7 +111,9 @@ public final class Rays {
      * @return where the ray and the point collide or {@link Double#NaN}
      */
     public static double cast(Ray3 ray, Vector3 point) {
-        return ray.containsAt(point);
+        return Vectors.ratio(
+            Vector3.between(ray.getOrigin(), point),
+            ray.getDirection());
     }
     
     /**
@@ -182,7 +181,7 @@ public final class Rays {
         if (Spatium.isZero(denominator)) //ray and plane are parallel
             return Double.NaN;
 
-        //calculate the distance between the linePoint and the line-plane intersection point
+        //calculate the distance between the origin and the line-plane intersection point
         double numerator = normal.dot( Vector3.between(ray.getOrigin(), plane.getPoint()) );
 
         return numerator / denominator;
@@ -234,7 +233,29 @@ public final class Rays {
     public static double cast(Ray3 ray, Slab3 slab) {
         return pierce(ray, slab)[0];
     }
-
+    
+    /**
+     * <p>
+     *     Tests where a {@link Ray2} and an {@link Rectangle} collide.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray2#setLength(double)} (mutation) or {@link Ray2#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param box the bounding box
+     * @return where the ray and the box collide or {@link Double#NaN}
+     */
+    public static double cast(Ray2 ray, Rectangle box) {
+        double[] entryExit = pierce(ray, box);
+        return entryExit==null? Double.NaN : entryExit[0];
+    }
+    
     /**
      * <p>
      *     Tests where a {@link Ray3} and an {@link AxisPlane} collide.
@@ -543,12 +564,12 @@ public final class Rays {
         }
 
         if (d >= 0) return new double[] {
-                (slab.getMinDepth() - ray.getOrgX()) / d,
-                (slab.getMaxDepth() - ray.getOrgX()) / d
+            (slab.getMinDepth() - ray.getOrgX()) / d,
+            (slab.getMaxDepth() - ray.getOrgX()) / d
         };
-        else return new double[]{
-                (slab.getMaxDepth() - ray.getOrgX()) / d,
-                (slab.getMinDepth() - ray.getOrgX()) / d
+        else return new double[] {
+            (slab.getMaxDepth() - ray.getOrgX()) / d,
+            (slab.getMinDepth() - ray.getOrgX()) / d
         };
     }
     

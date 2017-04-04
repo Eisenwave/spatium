@@ -1,11 +1,11 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.Spatium;
+import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
-import net.grian.spatium.util.Strings;
 
 import java.util.Arrays;
 
@@ -47,16 +47,29 @@ public class Vector3Impl implements Vector3 {
     public double getZ() {
         return z;
     }
-
-    @SuppressWarnings("SuspiciousNameCombination")
+    
     @Override
     public double getYaw() {
-        return Spatium.degrees(-Math.atan2(x, z));
+        return Spatium.degrees( getYawRad() );
     }
 
     @Override
     public double getPitch() {
-        return Spatium.degrees(Math.atan(y / Math.sqrt(x*x + z*z)));
+        return Spatium.degrees( getPitchRad() );
+    }
+    
+    @SuppressWarnings("SuspiciousNameCombination")
+    public double getYawRad() {
+        return -Math.atan2(x, z);
+    }
+    
+    @SuppressWarnings("SuspiciousNameCombination")
+    public double getPitchRad() {
+        /* singularity is not being handled explicitly anymore since Math.atan handles it automatically
+        final double dot = x*x + z*z;
+        if (Spatium.isZero(dot))
+            return y >= 0? -CacheMath.HALF_PI : CacheMath.HALF_PI; */
+        return -Math.atan( y / Spatium.hypot(x, z) );
     }
 
     @Override
@@ -110,17 +123,27 @@ public class Vector3Impl implements Vector3 {
 
     @Override
     public double angleTo(double x, double y, double z) {
-        return Math.acos( dot(x, y, z) / (this.getLength() * Math.sqrt(x*x + y*y + z*z)));
+        //v1 * v2 = cos(theta) * |v1| * |v2|
+        //theta = acos( v1*v2 / (|v1| * |v2|) )
+        return Math.acos( dot(x, y, z) / (this.getLength() * Math.sqrt(x*x + y*y + z*z)) );
     }
 
     @Override
     public Vector3 midPoint(Vector3 v, double t) {
         return new Vector3Impl(
-                this.getX() + (v.getX() - this.getX()) * t,
-                this.getX() + (v.getY() - this.getY()) * t,
-                this.getX() + (v.getZ() - this.getZ()) * t);
+            this.getX() + (v.getX() - this.getX()) * t,
+            this.getX() + (v.getY() - this.getY()) * t,
+            this.getX() + (v.getZ() - this.getZ()) * t);
     }
-
+    
+    @Override
+    public Vector3 midPoint(Vector3 point) {
+        return new Vector3Impl(
+            (x+point.getX()) / 2,
+            (y+point.getY()) / 2,
+            (z+point.getZ()) / 2);
+    }
+    
     // SETTERS
 
     @Override
@@ -162,39 +185,51 @@ public class Vector3Impl implements Vector3 {
 
     @Override
     public Vector3 setYaw(double yaw) {
-        double
-        yaw2 = Math.toRadians(yaw),
-        r = getLength();
-
-        this.x = Math.sin(-yaw2) * r;
-        this.z = Math.cos( yaw2) * r;
+        final double
+            yaw2 = Spatium.radians(yaw),
+            xz = Spatium.hypot(x, z);
+        this.x = Math.sin(-yaw2) * xz;
+        this.z = Math.cos( yaw2) * xz;
         return this;
     }
 
     @Override
     public Vector3 setPitch(double pitch) {
-        double
-            pitch2 = -Math.toRadians(pitch),
+        final double
             r = getLength(),
-            cos = Math.cos(pitch2),
-            tan = Math.tan(pitch2);
-        
-        this.x = cos * r;
-        this.y = tan * r;
-        this.z = cos * r;
+            pitch2 = Spatium.radians(pitch),
+            xz = r * Math.cos(pitch2),
+            factor = xz / Spatium.hypot(x, z);
+        this.x *= factor;
+        this.z *= factor;
+        this.y = -Math.tan(pitch2) * xz;
         return this;
+        //return setRYP(getLength(), getYawRad(), Spatium.radians(pitch));
     }
 
     @Override
-    public Vector3 setLengthYawPitch(double radius, double yaw, double pitch) {
-        double
-        r = radius * getLength(),
-        y = Math.toRadians(yaw),
-        p = -Math.toRadians(pitch);
-
-        this.x = Math.sin(-y) * r;
-        this.y = Math.tan( p) * r;
-        this.z = Math.cos( y) * r;
+    public Vector3 setLengthYawPitch(double r, double yaw, double pitch) {
+        return setRYP(r, Spatium.radians(yaw), Spatium.radians(pitch));
+    }
+    
+    /**
+     * Internal method for adjusting yaw and pitch.
+     *
+     * @param r the radius
+     * @param yaw the yaw
+     * @param pitch the pitch
+     */
+    private Vector3 setRYP(double r, double yaw, double pitch) {
+        if (Spatium.equals(Math.abs(pitch), CacheMath.HALF_PI)) {
+            this.x = 0;
+            this.z = 0;
+            this.y = pitch>=0? -r : r;
+        } else {
+            r *= Math.cos(pitch);
+            this.x = Math.sin(-yaw) * r;
+            this.z = Math.cos( yaw) * r;
+            this.y = -Math.tan(pitch) * Spatium.hypot(x, z);
+        }
         return this;
     }
 
@@ -237,7 +272,16 @@ public class Vector3Impl implements Vector3 {
         this.z = -z;
         return this;
     }
-
+    
+    @Override
+    public Vector3 normalize() {
+        final double length = getLength();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+        return this;
+    }
+    
     @Override
     public Vector3 divide(double x, double y, double z) {
         this.x /= x;
@@ -263,9 +307,11 @@ public class Vector3Impl implements Vector3 {
     
     @Override
     public String toString() {
+        /*
         String x = Strings.valueOf(this.x, 8);
         String y = Strings.valueOf(this.y, 8);
         String z = Strings.valueOf(this.z, 8);
+        */
         
         return "("+x+","+y+","+z+")";
     }

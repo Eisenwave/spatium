@@ -1,7 +1,10 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.geo2.Ray2;
+import net.grian.spatium.geo2.Rectangle;
 import net.grian.spatium.geo2.Triangle2;
 import net.grian.spatium.geo2.Vector2;
+import net.grian.spatium.util.PrimMath;
 
 public class Triangle2Impl implements Triangle2 {
     
@@ -14,6 +17,15 @@ public class Triangle2Impl implements Triangle2 {
         this.by = by;
         this.cx = cx;
         this.cy = cy;
+    }
+    
+    public Triangle2Impl(Triangle2Impl copyOf) {
+        this.ax = copyOf.ax;
+        this.ay = copyOf.ay;
+        this.bx = copyOf.bx;
+        this.by = copyOf.by;
+        this.cx = copyOf.cx;
+        this.cy = copyOf.cy;
     }
     
     public Triangle2Impl(Vector2 a, Vector2 b, Vector2 c) {
@@ -42,6 +54,25 @@ public class Triangle2Impl implements Triangle2 {
         return Vector2.fromXY(
             (ax + bx + cx) /3,
             (ay + by + cy) /3);
+    }
+    
+    @Override
+    public Ray2 getEdge(int index) {
+        switch (index) {
+            case 0: return Ray2.between(ax, ay, bx, by);
+            case 1: return Ray2.between(bx, by, cx, cy);
+            case 2: return Ray2.between(cx, cy, ax, ay);
+            default: throw new IndexOutOfBoundsException(index+" must be in range 0-2");
+        }
+    }
+    
+    @Override
+    public Rectangle getBoundaries() {
+        return Rectangle.fromPoints(
+            PrimMath.min(ax, bx, cx),
+            PrimMath.min(ay, by, cy),
+            PrimMath.max(ax, bx, cx),
+            PrimMath.max(ay, by, cy));
     }
     
     // SETTERS
@@ -73,13 +104,6 @@ public class Triangle2Impl implements Triangle2 {
     }
     
     @Override
-    public void scale(double factor) {
-        this.ax *= factor; this.ay *= factor;
-        this.bx *= factor; this.by *= factor;
-        this.cx *= factor; this.cy *= factor;
-    }
-    
-    @Override
     public void scale(double x, double y) {
         this.ax *= x; this.ay *= y;
         this.bx *= x; this.by *= y;
@@ -94,6 +118,14 @@ public class Triangle2Impl implements Triangle2 {
         
         ax = (ax - cenX) * x; bx = (bx - cenX) * x; cx = (cx = cenX) * x;
         ay = (ay - cenY) * y; by = (by - cenY) * y; cy = (cy = cenY) * y;
+    }
+    
+    // MISC
+    
+    
+    @Override
+    public Triangle2 clone() {
+        return new Triangle2Impl(this);
     }
     
     @Override

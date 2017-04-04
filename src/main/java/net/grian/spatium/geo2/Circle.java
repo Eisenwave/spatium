@@ -56,7 +56,8 @@ public interface Circle extends Area {
     }
     
     default boolean contains(double x, double y) {
-        return Spatium.hypot(x-getX(), y-getY()) <= getRadius();
+        final double dx = x-getX(), dy = y-getY(), r = getRadius();
+        return dx*dx + dy*dy <= r*r;
     }
     
     default boolean contains(Vector2 point) {
@@ -79,6 +80,24 @@ public interface Circle extends Area {
     
     default void setDiameter(double d) {
         setRadius(d / 2);
+    }
+    
+    // TRANSFORMATIONS
+    
+    @Override
+    default void scale(double factor) {
+        setCenter(getX()*factor, getY()*factor);
+        setRadius(getRadius() * factor);
+    }
+    
+    @Override
+    default void scaleCentric(double factor) {
+        setRadius(getRadius() * factor);
+    }
+    
+    @Override
+    default void translate(double x, double y) {
+        setCenter(getX()+x, getY()+y);
     }
     
 }

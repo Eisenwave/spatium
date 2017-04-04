@@ -69,11 +69,7 @@ public interface AxisCylinder extends Space, Cloneable, Serializable {
         return Vector3.fromXYZ(getTopX(), getTopY(), getTopZ());
     }
     
-    /**
-     * Returns the center of this cylinder.
-     *
-     * @return the center of this cylinder
-     */
+    @Override
     default Vector3 getCenter() {
         return getBase().add(getTop()).divide(2);
     }

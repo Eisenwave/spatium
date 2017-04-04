@@ -5,6 +5,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ColorMathTest {
+    
+    /*
+    @Test
+    public void xyz() throws Exception {
+        float[] magenta = ColorMath.xyz(ColorMath.SOLID_MAGENTA);
+        assertArrayEquals(new float[] {0.5792F, 0.2831F, 0.7281F}, magenta, 1E-5F);
+    }
+    */
 
     private final static int
     SOLID = ColorMath.fromRGB(1F, 1F, 1F, 1F),

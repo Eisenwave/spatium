@@ -2,6 +2,8 @@ package net.grian.spatium.polynom;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class PolynomialsTest {
@@ -14,5 +16,19 @@ public class PolynomialsTest {
         
         assertTrue(Polynomials.sum(a, b).isZero());
     }
+    
+    @Test
+    public void solve_quadratic() throws Exception {
+        double[] solution = Polynomials.solve(-1, 7, 8);
+        System.out.println(Arrays.toString(solution));
+    }
+    
+    /*
+    @Test
+    public void solve_cubic() throws Exception {
+        double[] solution = Polynomials.solve(1, -4, -9, 36);
+        System.out.println(Arrays.toString(solution));
+    }
+    */
     
 }

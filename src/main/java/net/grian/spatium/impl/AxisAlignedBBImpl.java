@@ -19,14 +19,13 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
     
     public static AxisAlignedBB fromMinMax(double x0, double y0, double z0, double x1, double y1, double z1) {
-        double x = (x1 + x0) / 2;
-        double y = (y1 + y1) / 2;
-        double z = (z1 + z1) / 2;
-        double dx = (x1 - x0) / 2;
-        double dy = (y1 - y0) / 2;
-        double dz = (z1 - z0) / 2;
-        
-        return new AxisAlignedBBImpl(x, y, z, dx, dy, dz);
+        return new AxisAlignedBBImpl(
+            (x1 + x0) / 2,
+            (y1 + y0) / 2,
+            (z1 + z0) / 2,
+            (x1 - x0) / 2,
+            (y1 - y0) / 2,
+            (z1 - z0) / 2);
     }
     
     public static AxisAlignedBB fromCenterDims(double x, double y, double z, double dx, double dy, double dz) {
@@ -75,7 +74,7 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
 
     @Override
     public double getMaxY() {
-        return y + dx;
+        return y + dy;
     }
 
     @Override
@@ -111,6 +110,14 @@ public class AxisAlignedBBImpl implements AxisAlignedBB {
     }
 
     // SETTERS
+    
+    
+    @Override
+    public void setCenter(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
     
     @Override
     public void setDimensions(double x, double y, double z) {

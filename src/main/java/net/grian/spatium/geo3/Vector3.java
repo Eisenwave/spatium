@@ -4,7 +4,6 @@ import net.grian.spatium.anno.MinecraftSpecific;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Vector3Impl;
 import net.grian.spatium.matrix.Matrix;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -59,24 +58,7 @@ public interface Vector3 extends Serializable, Cloneable {
      */
     @NotNull
     static Vector3 fromRadiusYawPitch(double radius, double yaw, double pitch) {
-        return fromYawPitch(yaw, pitch).setLength(radius);
-    }
-
-    /**
-     * Creates a new non-normalized Vector3 from a yaw and a pitch.
-     *
-     * @param yaw the yaw
-     * @param pitch the pitch
-     * @return a new Vector3
-     */
-    @NotNull
-    static Vector3 fromYawPitch(double yaw, double pitch) {
-        double
-		x = Math.sin(-yaw),
-		y = Math.tan(-pitch),
-		z = Math.cos(yaw);
-
-        return fromXYZ(x, y, z);
+        return Vectors.rypToXYZ(radius, Spatium.radians(yaw), Spatium.radians(pitch));
     }
 
     /**
@@ -246,7 +228,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @see #midPoint(Vector3, double)
      */
     default Vector3 midPoint(Vector3 point) {
-        return midPoint(point, 0.5f);
+        return midPoint(point, 0.5);
     }
 
     /**
@@ -304,6 +286,7 @@ public interface Vector3 extends Serializable, Cloneable {
      *
      * @param v the vector
      * @return whether this vector equals another vector
+     * @see Spatium#equals(double, double)
      */
     default boolean equals(Vector3 v) {
         return
@@ -327,24 +310,7 @@ public interface Vector3 extends Serializable, Cloneable {
      * @return whether this vector is a multiple of v
      */
     default boolean isMultipleOf(double x, double y, double z) {
-        final double
-            thisX = getX(),
-            thisY = getY(),
-            thisZ = getZ();
-        
-        if (Spatium.isZero(thisX))
-            return Spatium.isZero(x) && Vectors.multiples(thisY, thisZ, y, z);
-        
-        else if (Spatium.isZero(thisY))
-            return Spatium.isZero(y) && Vectors.multiples(thisX, thisZ, x, z);
-        
-        else if (Spatium.isZero(thisZ))
-            return Spatium.isZero(z) && Vectors.multiples(thisX, thisY, x, y);
-        
-        else {
-            double ratio = thisX / x;
-            return Spatium.equals(ratio, thisY / y, thisZ / z);
-        }
+        return Vectors.multiples(getX(), getY(), getZ(), x, y, z);
     }
 
     /**
@@ -363,6 +329,34 @@ public interface Vector3 extends Serializable, Cloneable {
         return isMultipleOf(v.getX(), v.getY(), v.getZ());
     }
     
+    /**
+     * Returns whether this vector is orthogonal (perpendicular) to another vector.
+     *
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
+     * @return whether this vector is orthogonal to the vector
+     */
+    default boolean isOrthogonalTo(double x, double y, double z) {
+        return Spatium.isZero( dot(x, y, z) );
+    }
+    
+    /**
+     * Returns whether this vector is orthogonal (perpendicular) to another vector.
+     *
+     * @param v the vector
+     * @return whether this vector is orthogonal to the vector
+     */
+    default boolean isOrthogonalTo(Vector3 v) {
+        return Spatium.isZero( dot(v) );
+    }
+    
+    /**
+     * Returns whether all coordinates of this vector are zero.
+     *
+     * @return whether this vector is zero
+     * @see Spatium#isZero(double)
+     */
     default boolean isZero() {
         return
             Spatium.isZero(getX()) &&
@@ -370,11 +364,26 @@ public interface Vector3 extends Serializable, Cloneable {
             Spatium.isZero(getZ());
     }
     
+    /**
+     * Returns whether all coordinates of this vector are finite.
+     *
+     * @return whether this vector is finite
+     * @see Double#isFinite(double)
+     */
     default boolean isFinite() {
         return
             Double.isFinite(getX()) &&
             Double.isFinite(getY()) &&
             Double.isFinite(getZ());
+    }
+    
+    /**
+     * Returns whether the vectors is a unit vector.
+     *
+     * @return whether this vector is a unit vecotr
+     */
+    default boolean isUnit() {
+        return Spatium.equals(1, getLengthSquared());
     }
 
     // SETTERS
@@ -431,7 +440,7 @@ public interface Vector3 extends Serializable, Cloneable {
     /**
      * Sets the yaw of this vector.
      *
-     * @param yaw the yaw
+     * @param yaw the yaw in degrees
      */
     @MinecraftSpecific
     abstract Vector3 setYaw(double yaw);
@@ -439,7 +448,7 @@ public interface Vector3 extends Serializable, Cloneable {
     /**
      * Sets the pitch of this vector.
      *
-     * @param pitch the pitch
+     * @param pitch the pitch in degrees
      */
     @MinecraftSpecific
     abstract Vector3 setPitch(double pitch);
@@ -583,7 +592,12 @@ public interface Vector3 extends Serializable, Cloneable {
      *     </p>
      */
     default Vector3 rotateX(double angle) {
-        return transform(Matrix.fromRotX(angle));
+        final Matrix rot = Matrix.fromRotX(angle);
+        double x = getX(), y = getY(), z = getZ();
+        return set(
+            x,
+            y*rot.get(1, 1) + z*rot.get(1, 2),
+            z*rot.get(2, 1) + z*rot.get(2, 2));
     }
     
     /**
@@ -601,7 +615,12 @@ public interface Vector3 extends Serializable, Cloneable {
      *     </p>
      */
     default Vector3 rotateY(double angle) {
-        return transform(Matrix.fromRotY(angle));
+        final Matrix rot = Matrix.fromRotY(angle);
+        double x = getX(), y = getY(), z = getZ();
+        return set(
+            x*rot.get(0, 0) + z*rot.get(0, 2),
+            y,
+            x*rot.get(2, 0) + z*rot.get(2, 2));
     }
     
     /**
@@ -619,7 +638,12 @@ public interface Vector3 extends Serializable, Cloneable {
      *     </p>
      */
     default Vector3 rotateZ(double angle) {
-        return transform(Matrix.fromRotZ(angle));
+        final Matrix rot = Matrix.fromRotY(angle);
+        double x = getX(), y = getY(), z = getZ();
+        return set(
+            x*rot.get(0, 0) + y*rot.get(0, 1),
+            x*rot.get(1, 0) + y*rot.get(1, 1),
+            z);
     }
 
     // MISC

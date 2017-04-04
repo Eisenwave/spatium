@@ -18,17 +18,17 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
     /**
      * Creates a new bounding box between two points.
      *
-     * @param xa the x of the first point
-     * @param ya the y of the first point
-     * @param za the z of the first point
-     * @param xb the x of the second point
-     * @param yb the y of the second point
-     * @param zb the z of the second point
+     * @param x0 the x of the first point
+     * @param y0 the y of the first point
+     * @param z0 the z of the first point
+     * @param x1 the x of the second point
+     * @param y1 the y of the second point
+     * @param z1 the z of the second point
      * @return a new bounding box
      */
     @NotNull
-    static AxisAlignedBB fromPoints(double xa, double ya, double za, double xb, double yb, double zb) {
-        return AxisAlignedBBImpl.fromPoints(xa, ya, za, xb, yb, zb);
+    static AxisAlignedBB fromPoints(double x0, double y0, double z0, double x1, double y1, double z1) {
+        return AxisAlignedBBImpl.fromPoints(x0, y0, z0, x1, y1, z1);
     }
     
     @NotNull
@@ -41,7 +41,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * be twice as long as the specified size.
      *
      * @param center the center of the cube
-     * @param size   the size of the cube
+     * @param size the half length of one side of the cube
      * @return a new axis aligned bounding box
      */
     @NotNull
@@ -53,7 +53,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
      * Creates a new bounding box between two points.
      *
      * @param from the first point
-     * @param to   the second point
+     * @param to the second point
      * @return a new bounding box
      */
     @NotNull
@@ -87,6 +87,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
         return getMaxZ() - getMinZ();
     }
 
+    @Override
     default Vector3 getCenter() {
         return Vector3.fromXYZ(
             (getMinX() + getMaxX()) * 0.5f,
@@ -121,7 +122,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
         double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
-
+    
     default Direction getClosestSide(Vector3 point) {
         Vector3 center = getCenter();
         final double
@@ -188,7 +189,7 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
     
     @Override
     default void scaleCentric(double factor) {
-        setDimensions(getSizeX(), getSizeY(), getSizeZ());
+        setDimensions(getSizeX()*factor, getSizeY()*factor, getSizeZ()*factor);
     }
     
     /**

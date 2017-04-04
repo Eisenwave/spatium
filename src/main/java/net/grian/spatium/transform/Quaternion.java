@@ -3,8 +3,10 @@ package net.grian.spatium.transform;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.QuaternionImpl;
+import org.jetbrains.annotations.*;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 /**
  * <p>
@@ -27,6 +29,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param w the scale
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromXYZW(double x, double y, double z, double w) {
         return new QuaternionImpl(x, y, z, w);
     }
@@ -39,6 +42,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param w the scale
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromXYZW(Vector3 vector, double w) {
         return new QuaternionImpl(vector, w);
     }
@@ -57,6 +61,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param vector the vector
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromVector(Vector3 vector) {
         return fromXYZW(vector, 0);
     }
@@ -69,17 +74,18 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param z the rotation around the z-axis in radians
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromEulerRad(double x, double y, double z) {
         double
-                halfYaw = x * 0.5f,
-                halfPitch = y * 0.5f,
-                halfRoll = z * 0.5f,
-                sinYaw   = Math.sin(halfYaw),
-                cosYaw   = Math.cos(halfYaw),
-                sinPitch = Math.sin(halfPitch),
-                cosPitch = Math.cos(halfPitch),
-                sinRoll  = Math.sin(halfRoll),
-                cosRoll  = Math.cos(halfRoll);
+            halfYaw =   x * 0.5f,
+            halfPitch = y * 0.5f,
+            halfRoll =  z * 0.5f,
+            sinYaw   = Math.sin(halfYaw),
+            cosYaw   = Math.cos(halfYaw),
+            sinPitch = Math.sin(halfPitch),
+            cosPitch = Math.cos(halfPitch),
+            sinRoll  = Math.sin(halfRoll),
+            cosRoll  = Math.cos(halfRoll);
 
         return fromXYZW(
                 cosYaw * cosPitch * cosRoll + sinYaw * sinPitch * sinRoll,
@@ -102,13 +108,14 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param theta the angle of rotation in radians
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromRotation(double ax, double ay, double az, double theta) {
         double
-                halfTheta = theta * 0.5,
-                t = Math.sin(halfTheta),
-                w = Math.cos(halfTheta);
+            halfTheta = theta * 0.5,
+            sin = Math.sin(halfTheta),
+            cos = Math.cos(halfTheta);
 
-        return fromXYZW(ax * t, ay * t, az * t, w);
+        return fromXYZW(ax*sin, ay*sin, az*sin, cos);
     }
     
     /**
@@ -118,6 +125,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param theta the angle of rotation in radians
      * @return a new quaternion
      */
+    @NotNull
     static Quaternion fromRotation(Vector3 axis, double theta) {
         double
             halfTheta = theta * 0.5f,
@@ -126,6 +134,32 @@ public interface Quaternion extends Serializable, Cloneable {
         
         return fromXYZW(xyz, w);
     }
+    
+    /**
+     * Returns a new Quaternion which rotates one axis onto another axis.
+     *
+     * @param from the initial axis
+     * @param to the the axis onto which the point is being rotated
+     * @return a new quaternion
+     */
+    @NotNull
+    static Quaternion fromRotation(Vector3 from, Vector3 to) {
+        Vector3 axis = from.cross(to).normalize();
+        
+        return fromRotation(axis, from.angleTo(to));
+    }
+    
+    /**
+     * Returns the identity rotation <code>R<sub>0</sub></code>
+     *
+     * @return the identity rotation
+     */
+    @NotNull
+    static Quaternion identity() {
+        return new QuaternionImpl(0, 0, 0, 1);
+    }
+    
+    // OPERATIONS
 
     /**
      * <p>
@@ -141,16 +175,17 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param b the second quaternion (rotation)
      * @return a new quaternion (rotation)
      */
+    @NotNull
     static Quaternion product(Quaternion a, Quaternion b) {
         double
-                lx = a.getX(), ly = a.getY(), lz = a.getZ(), lw = a.getW(),
-                rx = b.getX(), ry = b.getY(), rz = b.getZ(), rw = b.getW();
+            lx = a.getX(), ly = a.getY(), lz = a.getZ(), lw = a.getW(),
+            rx = b.getX(), ry = b.getY(), rz = b.getZ(), rw = b.getW();
 
         return Quaternion.fromXYZW(
-                lw*rx + lx*rw + ly*rz - lz*ry,
-                lw*ry - lx*rz + ly*rw + lz*rx,
-                lw*rz + lx*ry - ly*rx + lz*rw,
-                lw*rw - lx*rx - ly*ry - lz*rz);
+            lw*rx + lx*rw + ly*rz - lz*ry,
+            lw*ry - lx*rz + ly*rw + lz*rx,
+            lw*rz + lx*ry - ly*rx + lz*rw,
+            lw*rw - lx*rx - ly*ry - lz*rz);
     }
     
     /**
@@ -165,9 +200,10 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param point the point
      * @return a new transformed point
      */
+    @NotNull
     static Vector3 product(Quaternion q, Vector3 point) {
         Quaternion p = Quaternion.fromVector(point);
-        return product(product(q, p), Quaternion.inverse(q)).getVector();
+        return product(product(q, p), inverse(q)).getVector();
     }
 
     /**
@@ -177,6 +213,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param q the quaternion to conjugate
      * @return the complex conjugate of the quaternion
      */
+    @NotNull
     static Quaternion conjugate(Quaternion q) {
         return fromXYZW(-q.getX(), -q.getY(), -q.getZ(), q.getW());
     }
@@ -197,6 +234,7 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param q the quaternion to negate
      * @return the inverse of the quaternion
      */
+    @NotNull
     static Quaternion inverse(Quaternion q) {
         double t = 1 / q.getLengthSquared();
         return Quaternion.fromXYZW(
@@ -204,15 +242,6 @@ public interface Quaternion extends Serializable, Cloneable {
             q.getY() * -t,
             q.getZ() * -t,
             q.getW() *  t);
-    }
-
-    /**
-     * Returns the identity rotation <code>R<sub>0</sub></code>
-     *
-     * @return the identity rotation
-     */
-    static Quaternion identity() {
-        return new QuaternionImpl(0, 0, 0, 1);
     }
 
     // GETTERS
@@ -246,9 +275,9 @@ public interface Quaternion extends Serializable, Cloneable {
     abstract double getW();
 
     /**
-     * Returns the hypot of the quaternion.
+     * Returns the length of the quaternion.
      *
-     * @return the hypot of the quaternion
+     * @return the length of the quaternion
      */
     abstract double getLength();
 
@@ -283,6 +312,15 @@ public interface Quaternion extends Serializable, Cloneable {
             default: throw new IndexOutOfBoundsException("quaternion does not have "+index+"th number");
         }
     }
+    
+    /**
+     * Returns the dot product of this and another quaternion.
+     *
+     * @return the dot product
+     */
+    default double dot(double x, double y, double z, double w) {
+        return getX()*x + getY()*y + getZ()*z + getW()*w;
+    }
 
     /**
      * Returns the dot product of this and another quaternion.
@@ -290,16 +328,18 @@ public interface Quaternion extends Serializable, Cloneable {
      * @param q the quaternion
      * @return the dot product
      */
-    abstract double dot(Quaternion q);
+    default double dot(Quaternion q) {
+        return dot(q.getX(), q.getY(), q.getZ(), q.getW());
+    }
 
     // CHECKERS
 
     default boolean equals(Quaternion q) {
         return
-                Spatium.equals(this.getX(), q.getX()) &&
-                Spatium.equals(this.getY(), q.getY()) &&
-                Spatium.equals(this.getZ(), q.getZ()) &&
-                Spatium.equals(this.getW(), q.getW());
+            Spatium.equals(this.getX(), q.getX()) &&
+            Spatium.equals(this.getY(), q.getY()) &&
+            Spatium.equals(this.getZ(), q.getZ()) &&
+            Spatium.equals(this.getW(), q.getW());
     }
 
     // SETTERS

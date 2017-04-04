@@ -1,5 +1,6 @@
 package net.grian.spatium.geo2;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.impl.Ray2Impl;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +51,7 @@ public interface Ray2 extends Transformable2 {
     }
     
     default double getLength() {
-        return getOrigin().getLength();
+        return getDirection().getLength();
     }
     
     default double getLengthSquared() {
@@ -59,6 +60,28 @@ public interface Ray2 extends Transformable2 {
     
     default Vector2 getPoint(double t) {
         return getOrigin().add(getDirection().multiply(t));
+    }
+    
+    // CHECKERS
+    
+    default boolean equals(Ray2 ray) {
+        return
+            contains(ray.getOrigin()) &&
+            getDirection().isMultipleOf(ray.getDirection());
+    }
+    
+    default boolean contains(double x, double y) {
+        return Vector2.between(getOrgX(), getOrgY(), x, y).isMultipleOf(getDirX(), getDirY());
+        
+        /* this code is no longer in use since it does not account for dirX or dirY being 0
+        return Spatium.equals(
+            (x - getOrgX()) / getDirX(),
+            (y - getOrgY()) / getDirY());
+        */
+    }
+    
+    default boolean contains(Vector2 point) {
+        return contains(point.getX(), point.getY());
     }
     
     // SETTERS
@@ -81,7 +104,13 @@ public interface Ray2 extends Transformable2 {
         setDirection(v.getX(), v.getY());
     }
     
-    abstract void setLength(double length);
+    default void setLength(double length) {
+        scaleDirection(length / getLength());
+    }
+    
+    default void normalize() {
+        setLength(1);
+    }
     
     // TRANSFORMATIONS
     

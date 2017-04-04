@@ -52,26 +52,6 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
      * @return the third triangle vertex
      */
     abstract Vector3 getC();
-    
-    @Override
-    default Vector3 getVertex(int index) {
-        switch (index) {
-            case 0: return getA();
-            case 1: return getB();
-            case 2: return getC();
-            default: throw new IndexOutOfBoundsException(Integer.toString(index));
-        }
-    }
-    
-    @Override
-    default int getVertexCount() {
-        return 3;
-    }
-    
-    @Override
-    default Vector3[] getVertices() {
-        return new Vector3[] {getA(), getB(), getC()};
-    }
 
     /**
      * Returns the length of side <b>c</b> or <b>AB</b> of this triangle.
@@ -99,23 +79,9 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
     default double getLengthCA() {
         return Vector3.between(getC(), getA()).getLength();
     }
-
-    default Vector3 getNormal() {
-        Vector3 a = getA();
-        return Vector3.between(a, getB()).cross(Vector3.between(a, getC()));
-    }
-
+    
     default Vector3 getCenter() {
         return Vectors.average(getA(), getB(), getC());
-    }
-
-    /**
-     * Returns the plane in which this triangle lies.
-     *
-     * @return the plane in which this triangle lies
-     */
-    default Plane getPlane() {
-        return Plane.fromPointNormal(getA(), getNormal());
     }
 
     /**
@@ -136,6 +102,45 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
         return getLengthAB() + getLengthBC() + getLengthCA();
     }
     
+    // POLYGON IMPL
+    
+    @Override
+    default int getVertexCount() {
+        return 3;
+    }
+    
+    @Override
+    default Vector3 getVertex(int index) {
+        switch (index) {
+            case 0: return getA();
+            case 1: return getB();
+            case 2: return getC();
+            default: throw new IndexOutOfBoundsException(Integer.toString(index));
+        }
+    }
+    
+    @Override
+    default AxisAlignedBB getBoundaries() {
+        Vector3[] minMax = Vectors.minMax(getA(), getB(), getC());
+        return AxisAlignedBB.between(minMax[0], minMax[1]);
+    }
+    
+    @Override
+    default Vector3[] getVertices() {
+        return new Vector3[] {getA(), getB(), getC()};
+    }
+    
+    @Override
+    default Vector3 getNormal() {
+        Vector3 a = getA();
+        return Vector3.between(a, getB()).cross(Vector3.between(a, getC()));
+    }
+    
+    @Override
+    default Plane getPlane() {
+        return Plane.fromPointNormal(getA(), getNormal());
+    }
+    
     //CHECKERS
 
     default boolean equals(Triangle3 triangle) {
@@ -154,6 +159,9 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
      * @return whether this triangle contains the point
      */
     default boolean contains(Vector3 point) {
+        if (!getBoundaries().contains(point))
+            return false;
+        
         Vector3
             a = getA(),
             ac = Vector3.between(a, getC()),
@@ -199,7 +207,11 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
      * @param y the y-translation
      * @param z the z-translation
      */
-    abstract void translate(double x, double y, double z);
+    default void translate(double x, double y, double z) {
+        setA(getA().add(x, y, z));
+        setB(getB().add(x, y, z));
+        setC(getC().add(x, y, z));
+    }
 
     /**
      * Translates all points of this triangle by a given amount.
@@ -226,7 +238,11 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
         setC(c);
     }
     
-    abstract void scale(double x, double y, double z);
+    default void scale(double x, double y, double z) {
+        setA(getA().multiply(x, y, z));
+        setB(getB().multiply(x, y, z));
+        setC(getC().multiply(x, y, z));
+    }
     
     default void scale(double factor) {
         scale(factor, factor, factor);

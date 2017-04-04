@@ -1,10 +1,10 @@
 package net.grian.spatium.geo2;
 
-import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.Triangle2Impl;
+import net.grian.spatium.util.PrimMath;
 import org.jetbrains.annotations.NotNull;
 
-public interface Triangle2 extends Area {
+public interface Triangle2 extends Area, Polygon2 {
     
     @NotNull
     static Triangle2 fromPoints(Vector2 a, Vector2 b, Vector2 c) {
@@ -76,9 +76,55 @@ public interface Triangle2 extends Area {
         return getLengthAB() + getLengthBC() + getLengthCA();
     }
     
+    // POLYGON IMPL
+    
+    @Override
+    default int getVertexCount() {
+        return 3;
+    }
+    
+    @Override
+    default Vector2 getVertex(int index) {
+        switch (index) {
+            case 0: return getA();
+            case 1: return getB();
+            case 2: return getC();
+            default: throw new IndexOutOfBoundsException(index+" must be in range 0-2");
+        }
+    }
+    
+    @Override
+    default Ray2 getEdge(int index) {
+        switch (index) {
+            case 0: return Ray2.between(getA(), getB());
+            case 1: return Ray2.between(getB(), getC());
+            case 2: return Ray2.between(getC(), getA());
+            default: throw new IndexOutOfBoundsException(index+" must be in range 0-2");
+        }
+    }
+    
+    @Override
+    default Vector2[] getVertices() {
+        return new Vector2[] {getA(), getB(), getC()};
+    }
+    
+    @Override
+    default Rectangle getBoundaries() {
+        final Vector2 a = getA(), b = getB(), c = getC();
+        return Rectangle.fromPoints(
+            PrimMath.min(a.getX(), b.getX(), c.getX()),
+            PrimMath.min(a.getY(), b.getY(), c.getY()),
+            PrimMath.max(a.getX(), b.getX(), c.getX()),
+            PrimMath.max(a.getY(), b.getY(), c.getY()));
+    }
+    
     // CHECKERS
     
+    @Override
     default boolean contains(double x, double y) {
+        if (!getBoundaries().contains(x, y))
+            return false;
+        
         Vector2
             a = getA(),
             ac = getC().subtract(a),
@@ -114,10 +160,19 @@ public interface Triangle2 extends Area {
     abstract void scale(double x, double y);
     
     @Override
+    default void scale(double factor) {
+        scale(factor, factor);
+    }
+    
+    @Override
     default void scaleCentric(double factor) {
         scaleCentric(factor, factor);
     }
     
     abstract void scaleCentric(double x, double y);
+    
+    // MISC
+    
+    abstract Triangle2 clone();
     
 }

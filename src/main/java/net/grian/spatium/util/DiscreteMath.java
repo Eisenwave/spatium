@@ -1,6 +1,5 @@
 package net.grian.spatium.util;
 
-import net.grian.spatium.cache.CacheMath;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnegative;
@@ -10,7 +9,45 @@ import java.util.List;
 import static net.grian.spatium.util.PrimArrays.*;
 
 public final class DiscreteMath {
+    
+    /**
+     * Returns the sum of all numbers from 0 to n.
+     *
+     * @param n the maximum number
+     * @return the sum of all numbers from 0 to n
+     */
+    @Contract(pure = true)
+    public static int sumRange(int n) {
+        if (n == 0) return 0;
+        if (n < 0) return -sumRange(-n);
+        return (n * (n+1)) / 2;
+    }
+    
+    /**
+     * Returns the sum of all numbers from 0 to n.
+     *
+     * @param a the minimum of the range
+     * @param b the maximum of the range
+     * @return the sum of all numbers from 0 to n
+     */
+    @Contract(pure = true)
+    public static int sumRange(int a, int b) {
+        if (a == -b) return 0;
+        if (a == b) return a;
+        
+        final int min = Math.min(a, b), max = Math.max(a, b);
+        if (max == 0) return 0;
+        if (min == 0) return sumRange(max);
+        
+        // if both are positive/negative, subtract the overlap, else just add them together
+        final int summand = min<0 == max<0?
+            min - sumRange(min) :
+            sumRange(min);
+        
+        return sumRange(max) + summand;
+    }
 
+    @Contract(pure = true)
     public static double entropy(double... nums) {
         double result = 0;
         for (double num : nums)
@@ -135,11 +172,6 @@ public final class DiscreteMath {
         }
         
         return table;
-    }
-
-    private static void invert(int[] nums) {
-        for (int i = 0; i<nums.length; i++)
-            nums[i] = -nums[i];
     }
 
 }

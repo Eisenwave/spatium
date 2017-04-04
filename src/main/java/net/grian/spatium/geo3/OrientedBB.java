@@ -1,5 +1,6 @@
 package net.grian.spatium.geo3;
 
+import net.grian.spatium.anno.Normalized;
 import net.grian.spatium.impl.OrientedBBImpl;
 import net.grian.spatium.matrix.Matrix;
 import org.jetbrains.annotations.NotNull;
@@ -84,21 +85,42 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
      * @return the maximum point of the box after applying rotation
      */
     abstract Vector3 getMax();
-
-    /**
-     * Returns the center of the bounding box
-     *
-     * @return the center of the bounding box
-     */
+    
+    @Override
     abstract Vector3 getCenter();
-
-    abstract Matrix getTransform();
-
+    
+    /**
+     * Returns the OBB's local x-axis in world space.
+     *
+     * @return the local x-axis
+     */
+    @Normalized
+    abstract Vector3 getAxisX();
+    
+    /**
+     * Returns the OBB's local y-axis in world space.
+     *
+     * @return the local y-axis
+     */
+    @Normalized
+    abstract Vector3 getAxisY();
+    
+    /**
+     * Returns the OBB's local z-axis in world space.
+     *
+     * @return the local z-axis
+     */
+    @Normalized
+    abstract Vector3 getAxisZ();
+    
     abstract Slab3 getSlabX();
-
+    
     abstract Slab3 getSlabY();
-
+    
     abstract Slab3 getSlabZ();
+    
+    @Normalized
+    abstract Matrix getTransform();
 
     /**
      * Returns the size of the bounding box on the (local) x-axis.
@@ -140,15 +162,41 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
         double x = getSizeX(), y = getSizeY(), z = getSizeZ();
         return (x * y + x * z + y * z) * 2;
     }
-
-    //SETTERS
-
-    abstract void translate(double x, double y, double z);
-
-    default void translate(Vector3 v) {
-        translate(v.getX(), v.getY(), v.getZ());
+    
+    abstract AxisAlignedBB getBoundaries();
+    
+    // CHECKERS
+    
+    @Override
+    default boolean contains(double x, double y, double z) {
+        Matrix objectToWorld = getTransform().getInverse();
+        Vector3 point = Vector3.fromXYZ(x, y, z).transform(objectToWorld);
+        return toAABB().contains(point);
     }
+    
+    // SETTERS
+    
+    abstract void setCenter(double x, double y, double z);
+    
+    default void setCenter(Vector3 center) {
+        setCenter(center.getX(), center.getY(), center.getZ());
+    }
+    
+    abstract void setDimensions(double x, double y, double z);
 
+    // TRANSFORMATIONS
+
+    @Override
+    default void translate(double x, double y, double z) {
+        setCenter(getCenter().add(x, y, z));
+    }
+    
+    @Override
+    default void scale(double factor) {
+        Vector3 d = getDimensions();
+        setDimensions(d.getX()*factor, d.getY()*factor, d.getZ()*factor);
+    }
+    
     abstract void transform(Matrix transform);
 
     default void rotateX(double angle) {

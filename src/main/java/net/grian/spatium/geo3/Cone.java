@@ -32,11 +32,29 @@ public interface Cone extends Space, Cloneable, Serializable {
     abstract Vector3 getApex();
     
     /**
-     * Returns a ray between the cone's apex and the cone's center of base.
+     * <p>
+     *     Returns a vector between the cone's apex and the cone's center of base.
+     * </p>
+     * <p>
+     *     Note that the axis is NOT guaranteed to be normalized and its length is NOT equal to the cone height.
+     * </p>
      *
      * @return the cone direction
      */
-    abstract Vector3 getDirection();
+    abstract Vector3 getAxis();
+    
+    default Vector3 getCenter() {
+        final Vector3
+            apex = getApex(),
+            axis = getAxis().setLength(getHeight()),
+            baseCen = apex.clone().add(axis),
+            offset = Vectors.ortho(axis).setLength(getBaseRadius());
+        
+        return Vectors.average(
+            apex,
+            baseCen.clone().add(offset),
+            baseCen.add(offset.negate()));
+    }
     
     /**
      * <p>
@@ -50,6 +68,10 @@ public interface Cone extends Space, Cloneable, Serializable {
      * @return the aperture of this cone in radians
      */
     abstract double getAperture();
+    
+    default Vector3 getBaseCenter() {
+        return getApex().add(getAxis().setLength(getHeight()));
+    }
     
     /**
      * Returns the radius of the base of this cone.
@@ -95,7 +117,7 @@ public interface Cone extends Space, Cloneable, Serializable {
     
     @Override
     default double getVolume() {
-        return (1.0/3.0) * getBaseArea() * getHeight();
+        return getBaseArea() * getHeight() / 3;
     }
     
     @Override
@@ -111,7 +133,7 @@ public interface Cone extends Space, Cloneable, Serializable {
         Vector3 apex = getApex();
         
         Vector3 apexToPoint = Vector3.fromXYZ(x, y, z).subtract(apex);
-        Vector3 axis = getDirection().normalize();
+        Vector3 axis = getAxis().normalize();
         
         //distance (must be between 0 and height) of the point (projected onto cone axis) to the apex
         double coneDist = apexToPoint.dot(axis);
@@ -144,6 +166,21 @@ public interface Cone extends Space, Cloneable, Serializable {
         setDirection(dir.getX(), dir.getY(), dir.getZ());
     }
     
+    // TRANSFORMATIONS
     
+    @Override
+    default void translate(double x, double y, double z) {
+        setApex(getApex().add(x, y, z));
+    }
+    
+    @Override
+    default void scale(double factor) {
+        setApex(getApex().multiply(factor));
+        setHeight(getHeight() * factor);
+    }
+    
+    // MISC
+    
+    abstract Cone clone();
     
 }

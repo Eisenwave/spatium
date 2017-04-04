@@ -67,12 +67,8 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @return the z-coordinate of the center of this sphere
      */
     abstract double getZ();
-
-    /**
-     * Returns the center of this sphere.
-     *
-     * @return the center of this sphere
-     */
+    
+    @Override
     default Vector3 getCenter() {
         return Vector3.fromXYZ(getX(), getY(), getZ());
     }
@@ -111,6 +107,10 @@ public interface Sphere extends Space, Serializable, Cloneable {
         double r = getRadius();
         return 4 * Math.PI * r*r;
     }
+    
+    default AxisAlignedBB getBoundaries() {
+        return AxisAlignedBB.fromCenterDims(getCenter(), getRadius());
+    }
 
     // CHECKERS
 
@@ -123,7 +123,12 @@ public interface Sphere extends Space, Serializable, Cloneable {
      * @return whether this sphere contains the point
      */
     default boolean contains(double x, double y, double z) {
-        return Spatium.hypot(x-getX(), y-getY(), z-getZ()) <= getRadius();
+        final double
+            dx = x-getX(),
+            dy = y-getY(),
+            dz = z-getZ(),
+            r = getRadius();
+        return dx*dx + dy*dy + dz*dz <= r*r;
     }
 
     /**
@@ -211,7 +216,9 @@ public interface Sphere extends Space, Serializable, Cloneable {
     // TRANSFORMATIONS
     
     @Override
-    abstract void translate(double x, double y, double z);
+    default void translate(double x, double y, double z) {
+        setCenter(getCenter().add(x, y, z));
+    }
 
     /**
      * Scales this sphere by a factor. This is equivalent to multiplying the

@@ -167,7 +167,8 @@ public final class Intersections {
 
     /**
      * <p>
-     *     Returns the intersection of a {@link Triangle3} and an {@link Triangle3} in the form of a {@link Vector3}[].
+     *     Returns the intersection of a {@link Triangle3} and an {@link Triangle3} in the form of a line segment
+     *     ({@link Vector3}[]).
      * </p>
      * Source: <a href="http://www.realtimerendering.com/intersections.html">Martin Held<a/>
      *

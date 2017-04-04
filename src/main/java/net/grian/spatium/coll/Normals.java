@@ -4,6 +4,7 @@ import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Plane;
 import net.grian.spatium.geo3.Sphere;
 import net.grian.spatium.geo3.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public final class Normals {
 
@@ -21,7 +22,8 @@ public final class Normals {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 onSphere(Sphere sphere, Vector3 point) {
+    @NotNull
+    public static Vector3 onSphere(Sphere sphere, Vector3 point) {
         return Vector3.between(sphere.getCenter(), point);
     }
 
@@ -34,7 +36,8 @@ public final class Normals {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 onAABB(AxisAlignedBB box, Vector3 point) {
+    @NotNull
+    public static Vector3 onAABB(AxisAlignedBB box, Vector3 point) {
         return box.getClosestSide(point).vector();
     }
 
@@ -51,7 +54,8 @@ public final class Normals {
      * @param point the point
      * @return the surface normal
      */
-    public Vector3 onPlane(Plane plane, Vector3 point) {
+    @NotNull
+    public static Vector3 onPlane(Plane plane, Vector3 point) {
         Vector3 normal = plane.getNormal();
         if (plane.signedDistanceTo(point) < 0)
             normal.negate();
@@ -66,7 +70,8 @@ public final class Normals {
      * @param normal the normal vector
      * @return the reflection vector
      */
-    public Vector3 reflect(Vector3 incident, Vector3 normal) {
+    @NotNull
+    public static Vector3 reflect(Vector3 incident, Vector3 normal) {
         Vector3 d = incident.clone();
         Vector3 n = normal.clone().normalize();
         n.multiply(2 * d.dot(n));

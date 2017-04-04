@@ -3,6 +3,7 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.matrix.Matrix;
+import net.grian.spatium.util.PrimMath;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -113,6 +114,81 @@ public class Vector3Test {
         vector.transform(leftHand); assertEquals(NEG_X, vector);
         vector.transform(leftHand); assertEquals(POS_Y, vector);
         vector.transform(leftHand); assertEquals(POS_X, vector);
+    }
+    
+    private final static double
+        //weaker epsilon than default in spatium since yaw/pitch get/set leads to massive imprecision
+        WEAK_EPSILON = Spatium.EPSILON;
+    private final static int
+        YAW_PITCH_TESTS = 10_000;
+    
+    @Test
+    public void getSetYaw_equivalency() throws Exception {
+        final Vector3 test = Vector3.fromXYZ(1, 1, 1);
+        final double
+            expLength = test.getLength(),
+            expPitch = test.getPitch();
+        
+        for (int i = 0; i < YAW_PITCH_TESTS; i++) {
+            Vector3 v = test.clone();
+            double expYaw = Math.random() * 360;
+            v.setYaw(expYaw);
+            
+            double
+                actualYaw = (v.getYaw()+360)%360,
+                actualPitch = v.getPitch(),
+                actualLength = v.getLength();
+            
+            assertEquals(expYaw, actualYaw, WEAK_EPSILON);
+            assertEquals(expPitch, actualPitch, WEAK_EPSILON);
+            assertEquals(expLength, actualLength, WEAK_EPSILON);
+        }
+    }
+    
+    @Test
+    public void getSetPitch_equivalency() throws Exception {
+        final Vector3 test = Vector3.fromXYZ(1, 1, 1);
+        final double
+            expYaw = (test.getYaw()+360)%360,
+            expLength = test.getLength();
+        
+        for (int i = 0; i < YAW_PITCH_TESTS; i++) {
+            Vector3 v = test.clone();
+            double expPitch = Math.random() * 180 - 90;
+            v.setPitch(expPitch);
+            
+            double
+                actualYaw = (v.getYaw()+360)%360,
+                actualPitch = v.getPitch(),
+                actualLength = v.getLength();
+            
+            try {
+                assertEquals(expYaw, actualYaw, WEAK_EPSILON);
+                assertEquals(expPitch, actualPitch, WEAK_EPSILON);
+                assertEquals(expLength, actualLength, WEAK_EPSILON);
+            } catch (AssertionError ex) {
+                System.out.println("i: "+i);
+                System.out.println("expYaw: "+expYaw);
+                System.out.println("actualYaw: "+actualYaw);
+                System.out.println("expPitch: "+expPitch);
+                System.out.println("actualPitch: "+actualPitch);
+                System.out.println("v: "+v);
+                throw ex;
+            }
+        }
+    }
+    
+    @Test
+    public void getYawPitch_singularityHandling() throws Exception {
+        Vector3 up = Vector3.fromXYZ(0, 1, 0);
+        assertTrue( Double.isFinite(up.getYaw()) );
+        assertTrue( Spatium.equals(up.getPitch(), -90) );
+        assertEquals(up, up.clone().setYaw(90));
+    
+        Vector3 down = Vector3.fromXYZ(0, -1, 0);
+        assertTrue( Double.isFinite(down.getYaw()) );
+        assertTrue( Spatium.equals(down.getPitch(), 90) );
+        assertEquals(down, down.clone().setYaw(90));
     }
     
     public void performance_Inverse() throws Exception {

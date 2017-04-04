@@ -52,17 +52,17 @@ public class QuaternionImpl implements Quaternion {
 
     @Override
     public double getLength() {
-        return Math.sqrt(getLengthSquared());
+        return Math.sqrt(dot(x, y, z, w));
     }
 
     @Override
     public double getLengthSquared() {
-        return x*x + y*y + z*z + w*w;
+        return dot(x, y, z, w);
     }
 
     @Override
-    public double dot(Quaternion q) {
-        return x * q.getX() + y * q.getY() + z * q.getZ() + w * q.getW();
+    public double dot(double x, double y, double z, double w) {
+        return this.x*x + this.y*y + this.z*z + this.w*w;
     }
 
     @Override

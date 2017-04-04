@@ -2,6 +2,7 @@ package net.grian.spatium.geo3;
 
 import net.grian.spatium.Spatium;
 import net.grian.spatium.util.PrimMath;
+import net.grian.spatium.util.TestUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,5 +27,25 @@ public class VectorsTest {
             assertEquals(random.getLength(), length, Spatium.EPSILON);
         }
     }
+    
+    /*
+    @Test
+    public void multiples_performance() throws Exception {
+        Vector3[] vectors = new Vector3[10_000_000];
+        for (int i = 0; i < vectors.length; i++)
+            vectors[i] = Vectors.random3(5);
+        
+        long time1 = TestUtil.millisOf(() -> {
+            for (Vector3 v : vectors)
+                Vectors.multiples(v, v);
+        });
+        long time2 = TestUtil.millisOf(() -> {
+            for (Vector3 v : vectors)
+                Vectors.multiples2(v, v);
+        });
+        
+        System.out.println(time1 + " " + time2);
+    }
+    */
     
 }

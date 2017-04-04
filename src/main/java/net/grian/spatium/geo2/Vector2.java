@@ -3,6 +3,7 @@ package net.grian.spatium.geo2;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.geo3.Vectors;
 import net.grian.spatium.impl.Vector2Impl;
+import net.grian.spatium.matrix.Matrix;
 import org.jetbrains.annotations.NotNull;
 
 public interface Vector2 {
@@ -20,6 +21,11 @@ public interface Vector2 {
     @NotNull
     static Vector2 fromRadiusAngle(double angle) {
         return fromXY(Math.cos(angle), Math.sin(angle));
+    }
+    
+    @NotNull
+    static Vector2 between(double x0, double y0, double x1, double y1) {
+        return fromXY(x1-x0, y1-y0);
     }
     
     @NotNull
@@ -43,14 +49,36 @@ public interface Vector2 {
         return dot(this);
     }
     
+    /**
+     * Returns the (clockwise) angle to the x-axis of this vector.
+     *
+     * @return the angle
+     */
+    default double getAngle() {
+        return Math.atan2(getY(), getX());
+    }
+    
     default double dot(Vector2 v) {
         return getX()*v.getX() + getY()*v.getY();
     }
     
+    /**
+     * Returns the distance of this vector to a given point.
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return the distance to the point
+     */
     default double distanceTo(double x, double y) {
         return Spatium.hypot(x-getX(), y-getY());
     }
     
+    /**
+     * Returns the distance of this vector to a given point.
+     *
+     * @param point the point
+     * @return the distance to the point
+     */
     default double distanceTo(Vector2 point) {
         return distanceTo(point.getX(), point.getY());
     }
@@ -100,8 +128,27 @@ public interface Vector2 {
     
     abstract Vector2 set(double x, double y);
     
+    /**
+     * Sets the length of this vector.
+     *
+     * @param length the length
+     * @return itself
+     */
     default Vector2 setLength(double length) {
         return multiply(length / getLength());
+    }
+    
+    /**
+     * Sets the (clockwise) angle to the x-axis of this vector.
+     *
+     * @param angle the angle in radians
+     * @return itself
+     */
+    default Vector2 setAngle(double angle) {
+        final double r = getLength();
+        return set(
+            Math.cos(angle) * r,
+            Math.sin(angle) * r);
     }
     
     // OPERATIONS
@@ -148,8 +195,40 @@ public interface Vector2 {
         return setLength(1);
     }
     
+    // TRANSFORMATIONS
+    
+    /**
+     * Rotates the vector counter clockwise by a given angle.
+     *
+     * @param angle the angle in radians
+     * @return itself
+     */
+    default Vector2 rotCountClock(double angle) {
+        final double
+            x = getX(), y = getY(),
+            sin = Math.sin(angle),
+            cos = Math.cos(angle);
+        return set(
+            x*cos - y*sin,
+            x*sin + cos*y);
+    }
+    
+    /**
+     * Rotates the vector clockwise by a given angle.
+     *
+     * @param angle the angle in radians
+     * @return itself
+     */
+    default Vector2 rotClock(double angle) {
+        return rotCountClock(-angle);
+    }
+    
     // MISC
     
     abstract Vector2 clone();
+    
+    default double[] toArray() {
+        return new double[] {getX(), getY()};
+    }
     
 }

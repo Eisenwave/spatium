@@ -1,5 +1,6 @@
 package net.grian.spatium.util;
 
+import net.grian.spatium.Spatium;
 import org.jetbrains.annotations.Contract;
 
 import java.awt.Color;
@@ -233,6 +234,44 @@ public final class ColorMath {
         return anaglyph(red(rgb), green(rgb), blue(rgb), alpha(rgb));
     }
 
+    // COLOR MODEL CONVERSIONS
+    
+    /**
+     * Converts an rgb color into the <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIE 1931 Color
+     * Space</a>.
+     *
+     * @param r the red value (0-1)
+     * @param g the green value(0-1)
+     * @param b the blue value (0-1)
+     * @return the xyz values
+     */
+    public static float[] xyz(float r, float g, float b) {
+        final float
+            x = 0.4124F*r + 0.3576F*g + 0.1805F*b,
+            y = 0.2126F*r + 0.7152F*g + 0.0722F*b,
+            z = 0.0193F*r + 0.1192F*g + 0.9505F*b;
+            //sum = x + y + z;
+        
+        return new float[] {x, y, z};
+        /*
+        if (Spatium.isZero(sum))
+            return new float[] {0, 0, z};
+        
+        return new float[] {x/sum, y/sum, z};
+        */
+    }
+    
+    /**
+     * Converts an rgb color into the <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIE 1931 Color
+     * Space</a>.
+     *
+     * @param rgb the color
+     * @return the xyz values
+     */
+    public static float[] xyz(int rgb) {
+        return xyz(red(rgb)/255F, green(rgb)/255F, blue(rgb)/255F);
+    }
+    
     /**
      * Returns an accurate luminance value of a color.
      *
@@ -267,7 +306,86 @@ public final class ColorMath {
     public static float luminance(int rgb) {
         return luminance(red(rgb), green(rgb), blue(rgb));
     }
-
+    
+    /**
+     * Returns the brightness value of the color.
+     *
+     * @param rgb the color
+     * @return the color's brightness
+     */
+    public static float brightness(int rgb) {
+        return PrimMath.max(red(rgb), green(rgb), blue(rgb)) / 255F;
+    }
+    
+    /**
+     * Returns the brightness value of the color.
+     *
+     * @param r the red channel (0-0xFF)
+     * @param g the green channel (0-0xFF)
+     * @param b the blue channel (0-0xFF)
+     * @return the color's brightness
+     */
+    @Contract(pure = true)
+    public static float saturation(int r, int g, int b) {
+        final int
+            min = PrimMath.min(r, g, b),
+            max = PrimMath.max(r, g, b);
+        return (max-min) / (float) max;
+    }
+    
+    /**
+     * Returns the brightness value of the color.
+     *
+     * @param rgb the color
+     * @return the color's brightness
+     */
+    @Contract(pure = true)
+    public static float saturation(int rgb) {
+        return saturation(red(rgb), green(rgb), blue(rgb));
+    }
+    
+    /**
+     * Returns the hue value of the color.
+     *
+     * @param r the red channel (0-0xFF)
+     * @param g the green channel (0-0xFF)
+     * @param b the blue channel (0-0xFF)
+     * @return the color's hue
+     */
+    @Contract(pure = true)
+    public static float hue(int r, int g, int b) {
+        final int
+            min = PrimMath.min(r, g, b),
+            max = PrimMath.max(r, g, b);
+        
+        float
+            rc = (max - r) / (float) (max - min),
+            gc = (max - g) / (float) (max - min),
+            bc = (max - b) / (float) (max - min),
+            hue;
+        
+        if (r == max)
+            hue = bc - gc;
+        else if (g == max)
+            hue = 2.0f + rc - bc;
+        else
+            hue = 4.0f + gc - rc;
+        
+        hue /= 6.0f;
+        return hue<0? hue + 1.0f : hue;
+    }
+    
+    /**
+     * Returns the hue value of the color.
+     *
+     * @param rgb the color
+     * @return the color's hue
+     */
+    @Contract(pure = true)
+    public static float hue(int rgb) {
+        return hue(red(rgb), green(rgb), blue(rgb));
+    }
+    
     /**
      * Returns a fast approximation of the luminance of a color.
      *
@@ -336,6 +454,8 @@ public final class ColorMath {
         return rgb & 0xFF;
     }
 
+    // MISC
+    
     /**
      * Splits up an ARGB int into its 4 components (alpha, red, green blue)
      *

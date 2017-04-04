@@ -1,5 +1,6 @@
 package net.grian.spatium.geo3;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.coll.Projections;
 import net.grian.spatium.impl.Ray3Impl;
 import net.grian.spatium.iter.BlockIntervalIterator;
@@ -129,16 +130,17 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @return the squared length of this ray
      */
     abstract double getLengthSquared();
-
+    
     /**
      * Returns the origin of this ray in a new vector.
      *
      * @return the origin of this ray in a new vector
      */
+    @Override
     default Vector3 getOrigin() {
         return Vector3.fromXYZ(getOrgX(), getOrgY(), getOrgZ());
     }
-
+    
     /**
      * Returns the direction of this ray in a new vector.
      *
@@ -147,13 +149,19 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
     default Vector3 getDirection() {
         return Vector3.fromXYZ(getDirX(), getDirY(), getDirZ());
     }
+    
+    default AxisAlignedBB getBoundaries() {
+        return AxisAlignedBB.between(getOrigin(), getEnd());
+    }
 
+    // PATH IMPL
+    
     /**
-     * Returns the end of this ray in a new vector. This is equal to the sum of
-     * the origin and direction of the vector.
+     * Returns the end of this ray in a new vector. This is equal to the sum of the origin and direction of the vector.
      *
      * @return the end of this ray in a new vector
      */
+    @Override
     default Vector3 getEnd() {
         return Vector3.fromXYZ(getOrgX() + getDirX(), getOrgY() + getDirY(), getOrgZ() + getDirZ());
     }
@@ -173,7 +181,9 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param z the z-coordinate of the point
      * @return whether the ray is equal to the given point at any point
      */
-    abstract boolean contains(double x, double y, double z);
+    default boolean contains(double x, double y, double z) {
+        return Vector3.between(getOrgX(), getOrgY(), getOrgZ(), x, y, z).isMultipleOf(getDirection());
+    }
 
     /**
      * Returns whether the ray is equal to the given point at any point.
@@ -183,26 +193,6 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      */
     default boolean contains(Vector3 point) {
         return contains(point.getX(), point.getY(), point.getZ());
-    }
-
-    /**
-     * Tests at which point of the ray the ray collides with another point.
-     *
-     * @param x the x-coordinate of the point
-     * @param y the y-coordinate of the point
-     * @param z the z-coordinate of the point
-     * @return the ray multiplier or {@link Double#NaN} if there is no collision
-     */
-    abstract double containsAt(double x, double y, double z);
-
-    /**
-     * Tests at which point of the ray the ray collides with another point.
-     *
-     * @param point the point
-     * @return the ray multiplier or {@link Double#NaN} if there is no collision
-     */
-    default double containsAt(Vector3 point) {
-        return containsAt(point.getX(), point.getY(), point.getZ());
     }
 
     /**
@@ -246,13 +236,24 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
      * @param z the z-coordinate of the vector
      */
     abstract void setDirection(double x, double y, double z);
+    
+    /**
+     * Sets the direction of this ray to a given vector.
+     *
+     * @param v the vector
+     */
+    default void setDirection(Vector3 v) {
+        setDirection(v.getX(), v.getY(), v.getZ());
+    }
 
     /**
      * Sets the length of this ray to a given length.
      *
      * @param t the new hypot
      */
-    abstract void setLength(double t);
+    default void setLength(double t) {
+        scaleDirection(t / getLength());
+    }
 
     default void normalize() {
         setLength(1);
@@ -265,7 +266,7 @@ public interface Ray3 extends Path3, Serializable, Cloneable {
     }
     
     default void scaleDirection(double x, double y, double z) {
-        setDirection(getOrgX()*x, getOrgY()*y, getOrgZ()*z);
+        setDirection(getDirX()*x, getDirY()*y, getDirZ()*z);
     }
     
     default void scaleOrigin(double factor) {

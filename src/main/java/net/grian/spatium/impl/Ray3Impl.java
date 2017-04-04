@@ -151,22 +151,23 @@ public class Ray3Impl implements Ray3 {
         double t = (x - this.xo) / this.xd;
 
         return
-                Spatium.equals(t, (y - this.yo) / this.yd) &&
-                Spatium.equals(t, (z - this.zo) / this.zd);
+            Spatium.equals(t, (y - this.yo) / this.yd) &&
+            Spatium.equals(t, (z - this.zo) / this.zd);
     }
-
-    @Override
+    
+    /*
     public double containsAt(double x, double y, double z) {
         double t = (x - this.xo) / this.xd;
 
         if (
-                Spatium.equals(t, (y - this.yo) / this.yd) &&
-                Spatium.equals(t, (z - this.zo) / this.zd))
+            Spatium.equals(t, (y - this.yo) / this.yd) &&
+            Spatium.equals(t, (z - this.zo) / this.zd))
             return t;
 
         else
             return Double.NaN;
     }
+    */
 
     // MISC
     

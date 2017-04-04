@@ -1,6 +1,7 @@
 package net.grian.spatium.impl;
 
 import net.grian.spatium.geo2.Circle;
+import net.grian.spatium.geo2.Vector2;
 
 public class CircleImpl implements Circle {
     
@@ -26,6 +27,11 @@ public class CircleImpl implements Circle {
     @Override
     public double getY() {
         return y;
+    }
+    
+    @Override
+    public Vector2 getCenter() {
+        return Vector2.fromXY(x, y);
     }
     
     @Override

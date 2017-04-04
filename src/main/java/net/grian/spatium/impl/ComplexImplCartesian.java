@@ -41,12 +41,12 @@ public class ComplexImplCartesian implements Complex {
     }
 
     @Override
-    public double getRadius() {
+    public double getModulo() {
         return Math.hypot(a, b);
     }
 
     @Override
-    public double getRadiusSquared() {
+    public double getModuloSquared() {
         return a*a + b*b;
     }
 
@@ -72,8 +72,8 @@ public class ComplexImplCartesian implements Complex {
     }
 
     @Override
-    public Complex setRadius(double r) {
-        double factor = r / getRadius();
+    public Complex setModulo(double r) {
+        double factor = r / getModulo();
         this.a *= factor;
         this.b *= factor;
         return this;
@@ -82,7 +82,7 @@ public class ComplexImplCartesian implements Complex {
     @Override
     public Complex setAngle(double phi) {
         phi += getAngle();
-        double r = getRadius();
+        double r = getModulo();
 
         this.a = Math.acos(phi) * r;
         this.b = Math.asin(phi) * r;

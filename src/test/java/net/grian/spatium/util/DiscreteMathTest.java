@@ -12,6 +12,17 @@ import static org.junit.Assert.*;
 public class DiscreteMathTest {
     
     @Test
+    public void sumRange() throws Exception {
+        assertEquals(10, DiscreteMath.sumRange(4));
+        assertEquals(-10, DiscreteMath.sumRange(-4));
+        assertEquals(76205685, DiscreteMath.sumRange(12345));
+        
+        assertEquals(10, DiscreteMath.sumRange(1, 4));
+        assertEquals(10, DiscreteMath.sumRange(0, 4));
+        assertEquals(9, DiscreteMath.sumRange(-1, 4));
+    }
+    
+    @Test
     public void entropy() throws Exception {
         double entropy = DiscreteMath.entropy(.65, .11, .05, .05, .04, .04, .04, .02);
         assertEquals(entropy, 1.8565868237673904, Spatium.EPSILON);

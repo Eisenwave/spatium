@@ -4,6 +4,7 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.geo3.Vector3;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class Matrices {
     
@@ -18,6 +19,7 @@ public final class Matrices {
      * @throws MatrixDimensionsException if the matrices are not equal in
      * size
      */
+    @NotNull
     public static Matrix sum(Matrix a, Matrix b) {
         if (!a.equalSize(b)) throw new MatrixDimensionsException(a, b);
 
@@ -40,6 +42,7 @@ public final class Matrices {
      * @throws MatrixDimensionsException if the matrices are not equal in
      * size
      */
+    @NotNull
     public static Matrix difference(Matrix a, Matrix b) {
         if (!a.equalSize(b)) throw new MatrixDimensionsException(a, b);
         
@@ -59,6 +62,7 @@ public final class Matrices {
      * @param matrices the matrices
      * @return the sum of the matrices
      */
+    @NotNull
     public static Matrix sum(Matrix... matrices) {
         if (matrices.length == 0)
             throw new IllegalArgumentException("no matrices given");
@@ -74,6 +78,7 @@ public final class Matrices {
         return result;
     }
     
+    @NotNull
     public static Vector3 product(Matrix a, double x, double y, double z) {
         if (a.getRows() != 3 || a.getColumns() != 3)
             throw new MatrixDimensionsException("matrix must be 3x3");
@@ -84,6 +89,7 @@ public final class Matrices {
             a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
     }
     
+    @NotNull
     public static Vector3 product(Matrix a, Vector3 column) {
         return product(a, column.getX(), column.getY(), column.getZ());
     }
@@ -97,6 +103,7 @@ public final class Matrices {
      * @throws MatrixDimensionsException if the rows of the first matrix do
      * not equal the columns of the second matrix
      */
+    @NotNull
     public static Matrix product(Matrix a, Matrix b) {
         if (a.getColumns() != b.getRows())
             throw new MatrixDimensionsException(a, b);
@@ -132,6 +139,7 @@ public final class Matrices {
      * @return the matrix
      * @throws IllegalArgumentException if the array is empty
      */
+    @NotNull
     public static Matrix product(Matrix... matrices) {
         if (matrices.length == 0) throw new IllegalArgumentException("no matrices given");
         if (matrices.length == 1) return matrices[0].clone();
@@ -159,6 +167,7 @@ public final class Matrices {
      * @param matrix the matrix
      * @return the square of the matrix
      */
+    @NotNull
     public static Matrix square(Matrix matrix) {
         return product(matrix, matrix);
     }
@@ -169,6 +178,7 @@ public final class Matrices {
      * @param matrix the matrix
      * @return the cube of the matrix
      */
+    @NotNull
     public static Matrix cube(Matrix matrix) {
         return product(square(matrix), matrix);
     }
@@ -180,6 +190,7 @@ public final class Matrices {
      * @return the matrix to a given power
      * @throws MatrixException if the power is negative or <code>power == 0 & rows != columns</code>
      */
+    @NotNull
     public static Matrix pow(Matrix matrix, int power) {
         if (power < 0)
             throw new MatrixException("power must be positive");
@@ -208,6 +219,7 @@ public final class Matrices {
      * @param matrix the matrix
      * @return a new matrix
      */
+    @NotNull
     @Contract(pure = true)
     public static Matrix transpose(Matrix matrix) {
         final int
@@ -243,6 +255,7 @@ public final class Matrices {
      * @return the two eigenvalues of the matrix
      * @throws MatrixDimensionsException if the matrix has less than two rows or columns
      */
+    @NotNull
     @Contract(value = "null -> fail", pure = true)
     public static double[] eigenvalues2(Matrix a) {
         double
@@ -273,6 +286,7 @@ public final class Matrices {
      * @return the two eigenvectors of the matrix
      * @throws MatrixDimensionsException if the matrix has less than two rows or columns
      */
+    @NotNull
     @Contract(value = "null -> fail", pure = true)
     public static Vector2[] eigenvectors2(Matrix m) {
         double[] lambda = eigenvalues2(m);

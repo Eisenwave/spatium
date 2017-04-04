@@ -1,5 +1,6 @@
 package net.grian.spatium.impl;
 
+import net.grian.spatium.Spatium;
 import net.grian.spatium.geo2.Ray2;
 import net.grian.spatium.geo2.Vector2;
 
@@ -38,6 +39,26 @@ public class Ray2Impl implements Ray2 {
     @Override
     public double getDirY() {
         return dy;
+    }
+    
+    @Override
+    public double getLength() {
+        return Spatium.hypot(dx, dy);
+    }
+    
+    @Override
+    public double getLengthSquared() {
+        return dx*dx + dy*dy;
+    }
+    
+    @Override
+    public Vector2 getEnd() {
+        return Vector2.fromXY(x+dx, y+dy);
+    }
+    
+    @Override
+    public Vector2 getPoint(double t) {
+        return Vector2.fromXY(x + dx*t, y + dy*t);
     }
     
     //SETTERS

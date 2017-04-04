@@ -22,7 +22,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param b the imaginary part
      * @return a new complex number
      */
-    public static Complex fromCartesian(double a, double b) {
+    static Complex fromCartesian(double a, double b) {
         return new ComplexImplCartesian(a, b);
     }
 
@@ -36,7 +36,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param phi the angle
      * @return a new complex number
      */
-    public static Complex fromEuler(double r, double phi) {
+    static Complex fromEuler(double r, double phi) {
         return new ComplexImplEuler(r, phi);
     }
 
@@ -47,45 +47,57 @@ public interface Complex extends Serializable, Cloneable {
      *
      * @return the real part
      */
-    public abstract double getReal();
+    abstract double getReal();
 
     /**
      * Returns the imaginary part of this complex number.
      *
      * @return the imaginary part
      */
-    public abstract double getImaginary();
+    abstract double getImaginary();
 
     /**
      * Returns the angle {@code phi} of this complex number.
      *
      * @return the angle
      */
-    public abstract double getAngle();
+    abstract double getAngle();
 
     /**
      * Returns the radius of this complex number.
      *
      * @return the radius
      */
-    public abstract double getRadius();
+    abstract double getModulo();
 
     /**
      * Returns the squared radius of this complex number.
      *
      * @return the squared radius
      */
-    public abstract double getRadiusSquared();
+    abstract double getModuloSquared();
 
     // CHECKERS
 
     /**
      * Returns whether this complex number is equal to another complex number.
      */
-    public default boolean equals(Complex z) {
+    default boolean equals(Complex z) {
         return
-                Spatium.equals(this.getRadiusSquared(), z.getRadiusSquared()) &&
-                Spatium.equals(this.getAngle(), z.getAngle());
+            Spatium.equals(this.getModuloSquared(), z.getModuloSquared()) &&
+            Spatium.equals(this.getAngle(), z.getAngle());
+    }
+    
+    default boolean isReal() {
+        return Spatium.isZero(getImaginary());
+    }
+    
+    default boolean isFinite() {
+        return Double.isFinite(getReal()) && Double.isFinite(getImaginary());
+    }
+    
+    default boolean isZero() {
+        return Spatium.isZero(getReal()) && Spatium.isZero(getImaginary());
     }
 
     // SETTERS
@@ -96,7 +108,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param re the value
      * @return itself
      */
-    public abstract Complex setReal(double re);
+    abstract Complex setReal(double re);
 
     /**
      * Sets the imaginary part of the complex number to a new value.
@@ -104,7 +116,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param im the value
      * @return itself
      */
-    public abstract Complex setImaginary(double im);
+    abstract Complex setImaginary(double im);
 
     /**
      * Sets the radius of the complex number to a new value.
@@ -112,7 +124,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param r the radius
      * @return itself
      */
-    public abstract Complex setRadius(double r);
+    abstract Complex setModulo(double r);
 
     /**
      * Sets the angle {@code phi} of the complex number to a new value.
@@ -120,21 +132,23 @@ public interface Complex extends Serializable, Cloneable {
      * @param phi the angle
      * @return itself
      */
-    public abstract Complex setAngle(double phi);
+    abstract Complex setAngle(double phi);
+    
+    // OPERATIONS
 
     /**
      * Inverts the imaginary part of the complex number.
      *
      * @return itself
      */
-    public abstract Complex conjugate();
+    abstract Complex conjugate();
 
     /**
      * Multiplies the complex number with itself.
      *
      * @return itself
      */
-    public abstract Complex square();
+    abstract Complex square();
 
     /**
      * Multiplies the complex number with a number (scalar multiplication).
@@ -142,7 +156,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param factor the factor
      * @return itself
      */
-    public abstract Complex multiply(double factor);
+    abstract Complex multiply(double factor);
 
     /**
      * Multiplies the complex number with another complex number.
@@ -150,7 +164,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param z the complex number
      * @return itself
      */
-    public abstract Complex multiply(Complex z);
+    abstract Complex multiply(Complex z);
 
     /**
      * Divides the complex number by a number (scalar multiplication).
@@ -158,7 +172,7 @@ public interface Complex extends Serializable, Cloneable {
      * @param divisor the divisor
      * @return itself
      */
-    public abstract Complex divide(double divisor);
+    abstract Complex divide(double divisor);
 
     /**
      * Divides the complex number by another complex number.
@@ -166,17 +180,10 @@ public interface Complex extends Serializable, Cloneable {
      * @param z the complex number
      * @return itself
      */
-    public abstract Complex divide(Complex z);
+    abstract Complex divide(Complex z);
 
     // MISC
-
-    /**
-     * Returns a new copy of this complex number. The representation of the
-     * complex number (cartesian or euler) will be the same as the original
-     * object's.
-     *
-     * @return a copy of this complex number of equal representation
-     */
-    public abstract Complex clone();
+    
+    abstract Complex clone();
 
 }

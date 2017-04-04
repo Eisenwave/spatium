@@ -18,13 +18,23 @@ public class ConeImpl implements Cone {
         this.r = r;
     }
     
+    public ConeImpl(ConeImpl copyOf) {
+        this.x = copyOf.x;
+        this.y = copyOf.y;
+        this.z = copyOf.z;
+        this.dx = copyOf.dx;
+        this.dy = copyOf.dy;
+        this.dz = copyOf.dz;
+        this.r = copyOf.r;
+    }
+    
     @Override
     public Vector3 getApex() {
         return Vector3.fromXYZ(x, y, z);
     }
     
     @Override
-    public Vector3 getDirection() {
+    public Vector3 getAxis() {
         return Vector3.fromXYZ(dx, dy, dz);
     }
     
@@ -92,6 +102,14 @@ public class ConeImpl implements Cone {
         this.x += x;
         this.y += y;
         this.z += z;
+    }
+    
+    // MISC
+    
+    
+    @Override
+    public Cone clone() {
+        return new ConeImpl(this);
     }
     
 }

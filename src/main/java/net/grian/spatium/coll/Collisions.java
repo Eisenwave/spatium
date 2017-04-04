@@ -4,8 +4,6 @@ import net.grian.spatium.Spatium;
 import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
 import net.grian.spatium.matrix.Matrix;
-import net.grian.spatium.util.PrimMath;
-import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
@@ -23,28 +21,6 @@ public final class Collisions {
     private Collisions() {}
 
     //AUTO - TESTS
-
-    /**
-     * Tests whether two points collide. This is equivalent to testing whether the two points are in the same position.
-     *
-     * @param a the first point
-     * @param b the second point
-     * @return whether the points collide
-     */
-    public static boolean test(Vector3 a, Vector3 b) {
-        return a.equals(b);
-    }
-    
-    /**
-     * Tests whether two rays collide. This is equivalent to testing whether the two points are in the same position.
-     *
-     * @param a the first ray
-     * @param b the second ray
-     * @return whether the rays collide
-     */
-    public static boolean test(Ray2 a, Ray2 b) {
-        return !a.getDirection().isMultipleOf(b.getDirection());
-    }
     
     /**
      * Returns whether two {@link AxisPlane}s collide/intersect.
@@ -67,69 +43,7 @@ public final class Collisions {
      * @return whether the points collide
      */
     public static boolean test(Plane a, Plane b) {
-        Vector3 normalA = a.getNormal();
-        Vector3 normalB = b.getNormal();
-        
-        return !normalA.isMultipleOf(normalB);
-    }
-    
-    /**
-     * Tests whether two {@link Circle}s collide/intersect.
-     *
-     * @param a the first sphere
-     * @param b the second sphere
-     * @return whether the spheres collide/intersect.
-     */
-    public static boolean test(Circle a, Circle b) {
-        return a.getCenter().distanceTo(b.getCenter()) <= a.getRadius() + b.getRadius();
-    }
-
-    /**
-     * Tests whether two {@link Sphere}s collide/intersect.
-     *
-     * @param a the first sphere
-     * @param b the second sphere
-     * @return whether the spheres collide/intersect.
-     */
-    public static boolean test(Sphere a, Sphere b) {
-        return a.getCenter().distanceTo(b.getCenter()) <= a.getRadius() + b.getRadius();
-    }
-    
-    /**
-     * Tests whether two {@link AxisAlignedBB}s collide/intersect.
-     *
-     * @param a the first bounding box
-     * @param b the second bounding box
-     * @return whether the boxes collide/intersect
-     */
-    public static boolean test(AxisAlignedBB a, AxisAlignedBB b) {
-        return
-            a.getMinX() <= b.getMaxX() &&
-            a.getMaxX() >= b.getMinX() &&
-            a.getMinY() <= b.getMaxY() &&
-            a.getMaxY() >= b.getMinY() &&
-            a.getMinZ() <= b.getMaxZ() &&
-            a.getMaxZ() >= b.getMinZ();
-    }
-    
-    /**
-     * Tests whether two {@link OrientedBB}s collide/intersect.
-     *
-     * @param a the first bounding box
-     * @param b the second bounding box
-     * @return whether the boxes collide/intersect
-     */
-    public static boolean test(OrientedBB a, OrientedBB b) {
-        //inverse transform matrix of a allows for conversion of second box to local space of first box
-        //due to this, the first box can be seen as an AABB after transforming second box
-        Matrix toLocalTransform = a.getTransform().getInverse();
-        
-        //more simple AABB & OBB intersection test
-        AxisAlignedBB localA = a.toAABB();
-        OrientedBB localB = b.clone();
-        localB.transform(toLocalTransform);
-        
-        return test(localA, localB);
+        return !a.getNormal().isMultipleOf(b.getNormal());
     }
 
     /**
@@ -148,19 +62,6 @@ public final class Collisions {
             a.getMinZ() <= b.getMaxZ() &&
             a.getMaxZ() >= b.getMinZ();
     }
-
-    /**
-     * Tests whether two {@link Triangle3}s collide/intersect.
-     *
-     * @param a the first triangle
-     * @param b the second triangle
-     * @return whether the triangles collide/intersect
-     */
-    public static boolean test(Triangle3 a, Triangle3 b) {
-        return Intersections.triangleTriangle(a, b) != null;
-    }
-
-    //HETERO - TESTS
     
     /**
      * Tests whether an {@link AxisAlignedBB} and a point ({@link Vector3}) collide.
@@ -188,6 +89,38 @@ public final class Collisions {
             case Z: return (box.getMinZ() <= d) != (box.getMaxZ() <= d);
             default: throw new IllegalArgumentException("plane has no axis");
         }
+    }
+    
+    /**
+     * Tests whether two {@link Rectangle}s collide/intersect.
+     *
+     * @param a the first rectangle
+     * @param b the second rectangle
+     * @return whether the boxes collide/intersect
+     */
+    public static boolean test(Rectangle a, Rectangle b) {
+        return
+            a.getMinX() <= b.getMaxX() &&
+            a.getMaxX() >= b.getMinX() &&
+            a.getMinY() <= b.getMaxY() &&
+            a.getMaxY() >= b.getMinY();
+    }
+    
+    /**
+     * Tests whether two {@link AxisAlignedBB}s collide/intersect.
+     *
+     * @param a the first bounding box
+     * @param b the second bounding box
+     * @return whether the boxes collide/intersect
+     */
+    public static boolean test(AxisAlignedBB a, AxisAlignedBB b) {
+        return
+            a.getMinX() <= b.getMaxX() &&
+            a.getMaxX() >= b.getMinX() &&
+            a.getMinY() <= b.getMaxY() &&
+            a.getMaxY() >= b.getMinY() &&
+            a.getMinZ() <= b.getMaxZ() &&
+            a.getMaxZ() >= b.getMinZ();
     }
     
     /**
@@ -246,6 +179,26 @@ public final class Collisions {
     }
     
     /**
+     * Tests whether two {@link OrientedBB}s collide/intersect.
+     *
+     * @param a the first bounding box
+     * @param b the second bounding box
+     * @return whether the boxes collide/intersect
+     */
+    public static boolean test(OrientedBB a, OrientedBB b) {
+        //inverse transform matrix of a allows for conversion of second box to local space of first box
+        //due to this, the first box can be seen as an AABB after transforming second box
+        Matrix toLocalTransform = a.getTransform().getInverse();
+        
+        //more simple AABB & OBB intersection test
+        AxisAlignedBB localA = a.toAABB();
+        OrientedBB localB = b.clone();
+        localB.transform(toLocalTransform);
+        
+        return test(localA, localB);
+    }
+    
+    /**
      * Tests whether a {@link OrientedBB} and a {@link Sphere} collide.
      *
      * @param box the bounding box
@@ -265,14 +218,36 @@ public final class Collisions {
     }
     
     /**
-     * Tests whether a {@link Sphere} and a Point collide.
+     * Tests whether two {@link Circle}s collide/intersect.
      *
-     * @param sphere the sphere
-     * @param point the point
-     * @return whether the sphere and the point collide
+     * @param a the first sphere
+     * @param b the second sphere
+     * @return whether the spheres collide/intersect.
      */
-    public static boolean test(Sphere sphere, Vector3 point) {
-        return sphere.contains(point);
+    public static boolean test(Circle a, Circle b) {
+        final double
+            dx = b.getX() - a.getX(),
+            dy = b.getY() - a.getY(),
+            r = a.getRadius() + b.getRadius();
+        
+        return dx*dx + dy*dy <= r*r;
+    }
+    
+    /**
+     * Tests whether two {@link Sphere}s collide/intersect.
+     *
+     * @param a the first sphere
+     * @param b the second sphere
+     * @return whether the spheres collide/intersect.
+     */
+    public static boolean test(Sphere a, Sphere b) {
+        final double
+            dx = b.getX() - a.getX(),
+            dy = b.getY() - a.getY(),
+            dz = b.getZ() - a.getZ(),
+            r = a.getRadius() + b.getRadius();
+        
+        return dx*dx + dy*dy + dz*dz <= r*r;
     }
 
     /**
@@ -316,6 +291,17 @@ public final class Collisions {
     }
     
     /**
+     * Tests whether two rays collide. This is equivalent to testing whether the two points are in the same position.
+     *
+     * @param a the first ray
+     * @param b the second ray
+     * @return whether the rays collide
+     */
+    public static boolean test(Ray2 a, Ray2 b) {
+        return !a.getDirection().isMultipleOf(b.getDirection());
+    }
+    
+    /**
      * Tests whether a {@link Ray3} and a {@link Ray3} collide.
      *
      * @param a the first ray
@@ -327,17 +313,6 @@ public final class Collisions {
     }
 
     /**
-     * Tests whether a {@link Ray3} and a Point ({@link Vector3}) collide.
-     *
-     * @param ray the ray
-     * @param point the point
-     * @return whether the box and the point collide
-     */
-    public static boolean test(Ray3 ray, Vector3 point) {
-        return ray.contains(point);
-    }
-
-    /**
      * Tests whether a {@link Ray3} and a {@link Plane} collide.
      *
      * @param ray the ray
@@ -345,7 +320,7 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray3 ray, Plane plane) {
-        return Double.isFinite(Rays.cast(ray, plane));
+        return !ray.getDirection().isOrthogonalTo(plane.getNormal());
     }
 
     /**
@@ -378,13 +353,16 @@ public final class Collisions {
     public static boolean test(Ray3 ray, AxisPlane plane) {
         switch (plane.getAxis()) {
             case X: return
-                !(Spatium.isZero(ray.getDirY()) &&  Spatium.isZero(ray.getDirZ())) ||
+                !Spatium.isZero(ray.getDirY()) ||
+                !Spatium.isZero(ray.getDirZ()) ||
                 Spatium.equals(ray.getOrgX(), plane.getDepth());
             case Y: return
-                !(Spatium.isZero(ray.getDirZ()) &&  Spatium.isZero(ray.getDirX())) ||
+                !Spatium.isZero(ray.getDirZ()) ||
+                !Spatium.isZero(ray.getDirX()) ||
                 Spatium.equals(ray.getOrgY(), plane.getDepth());
             case Z: return
-                !(Spatium.isZero(ray.getDirX()) &&  Spatium.isZero(ray.getDirY())) ||
+                !Spatium.isZero(ray.getDirX()) ||
+                !Spatium.isZero(ray.getDirY()) ||
                 Spatium.equals(ray.getOrgZ(), plane.getDepth());
             default: throw new IllegalArgumentException("plane has no axis");
         }
@@ -399,16 +377,11 @@ public final class Collisions {
      */
     @SuppressWarnings("Duplicates")
     public static boolean test(Ray2 ray, Circle circle) {
-        Vector2
-            origin = ray.getOrigin(),
-            center = circle.getCenter();
-        double radius = circle.getRadius();
-        
-        if (center.distanceTo(origin) <= radius) return true;
-        
-        Vector2 closestPoint = ray.getPoint( Projections.pointOnRay(ray, center) );
-        
-        return center.distanceTo(closestPoint) <= circle.getRadius();
+        return
+            // either the circle contains origin of ray, or ...
+            circle.contains( ray.getOrigin() ) ||
+            // the circle contains closest point on the ray to the circle center
+            circle.contains( ray.getPoint(Projections.pointOnRay(ray, circle.getCenter())) );
     }
 
     /**
@@ -419,16 +392,47 @@ public final class Collisions {
      * @return whether the ray and the plane collide
      */
     public static boolean test(Ray3 ray, Sphere sphere) {
-        Vector3
+        return
+            // either the sphere contains origin of ray, or ...
+            sphere.contains( ray.getOrigin() ) ||
+            // the sphere contains closest point on the ray to the sphere center
+            sphere.contains( ray.getPoint(Projections.pointOnRay(ray, sphere.getCenter())) );
+    }
+    
+    /**
+     * Tests whether a {@link Ray2} and a {@link Polygon2} collide.
+     *
+     * @param ray the ray
+     * @param polygon the polygon
+     * @return whether the ray and the plane collide
+     */
+    public static boolean test(Ray2 ray, Polygon2 polygon) {
+        // basically check if all points of the polygon are on the same side of the ray
+        Vector2
+            //ray origin
             origin = ray.getOrigin(),
-            center = sphere.getCenter();
-        double radius = sphere.getRadius();
+            //vector ortho. to ray direction ("normal" of the "2d plane" so to speak)
+            normal = ray.getDirection().getInverse();
+        Vector2[] vertices = polygon.getVertices();
+        
+        boolean positive = normal.dot(Vector2.between(origin, vertices[0])) >= 0;
+        for (int i = 1; i < vertices.length; i++) {
+            //if vertex is not on the same side as the first vertex, return true
+            if (normal.dot(Vector2.between(origin, vertices[0])) >= 0 != positive)
+                return true;
+        }
+        return false;
+    }
     
-        if (center.distanceTo(origin) <= radius) return true;
-    
-        Vector3 closestPoint = ray.getPoint( Projections.pointOnRay(ray, center) );
-    
-        return center.distanceTo(closestPoint) <= sphere.getRadius();
+    /**
+     * Tests whether two rays collide. This is equivalent to testing whether the two points are in the same position.
+     *
+     * @param ray the ray
+     * @param box the rectangle
+     * @return whether the rays collide
+     */
+    public static boolean test(Ray2 ray, Rectangle box) {
+        return Double.isFinite(Rays.cast(ray, box));
     }
 
     /**
@@ -454,7 +458,84 @@ public final class Collisions {
     public static boolean test(Ray3 ray, OrientedBB box) {
         return Double.isFinite(Rays.cast(ray, box));
     }
-
+    
+    /**
+     * Tests whether two {@link Polygon2}s collide/intersect.
+     *
+     * @param a the first triangle
+     * @param b the second triangle
+     * @return whether the triangles collide/intersect
+     */
+    public static boolean test(Polygon2 a, Polygon2 b) {
+        //early and inexpensive cancel if the polygon bounds don't intersect
+        if ( !test(a.getBoundaries(), b.getBoundaries()) )
+            return false;
+        
+        final Vector2[]
+            va = a.getVertices(),
+            vb = b.getVertices();
+        
+        for (int i = 0; i < va.length; i++) {
+            Ray2 edge = a.getEdge(i);
+            
+            double[]
+                ta = Projections.polygonOnRay(edge, a), //proj[min,max] of a onto edge
+                tb = Projections.polygonOnRay(edge, b); //proj[min,max] of b onto edge
+            if (ta[0] > tb[1] || ta[1] < tb[0]) //if projections don't overlap, abort
+                return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Tests whether a {@link Polygon2} and a point ({@link Vector2}) collide.
+     *
+     * @param polygon the polygon
+     * @param point the point
+     * @return whether the polygon and the point collide
+     */
+    public static boolean test(Polygon2 polygon, Vector2 point) {
+        Rectangle bounds = polygon.getBoundaries();
+        if (!bounds.contains(point))
+            return false;
+        
+        //find a ray outside the polygon that points towards the point
+        Ray2 ray = Ray2.fromOD(bounds.getMinX(), point.getY(), 1, 0);
+        Vector2 origin = ray.getOrigin();
+        double distSqr = point.distanceTo(origin);
+        
+        int count = 0;
+        final int lim = polygon.getVertexCount();
+        
+        for (int i = 0; i < lim; i++) {
+            Ray2 edge = polygon.getEdge(i);
+            double t = Rays.cast(edge, ray);
+            if (
+                //ray intersects edge somewhere
+                Double.isFinite(t) &&
+                //intersection is inside edge range (0 to 1)
+                t >= 0 || t <= 1 &&
+                //intersection is actually inbetween the origin and point
+                edge.getPoint(t).subtract(origin).getLengthSquared() <= distSqr)
+                count++;
+        }
+        
+        //uneven intersection count -> point inside polygon
+        return count%2 == 1;
+    }
+    
+    /**
+     * Tests whether two {@link Triangle3}s collide/intersect.
+     *
+     * @param a the first triangle
+     * @param b the second triangle
+     * @return whether the triangles collide/intersect
+     */
+    public static boolean test(Triangle3 a, Triangle3 b) {
+        return Intersections.triangleTriangle(a, b) != null;
+    }
+    
     /**
      * Tests whether a {@link Triangle3} and an {@link Plane} collide. This operation is performed by checking if not
      * all points of triangle are on the same side of the plane.
@@ -498,16 +579,5 @@ public final class Collisions {
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }
-
-    /**
-     * Tests whether an {@link AxisAlignedTSBP} and a Point collide.
-     *
-     * @param plane the plane
-     * @param point the point
-     * @return whether the box and the point collide
-     */
-    public static boolean test(AxisAlignedTSBP plane, Vector3 point) {
-        return plane.contains(point);
-    }
-
+    
 }

@@ -3,6 +3,7 @@ package net.grian.spatium.impl;
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Space;
+import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.iter.BlockIterator;
 import net.grian.spatium.util.PrimMath;
 
@@ -76,7 +77,15 @@ public class BlockSelectionImpl implements BlockSelection {
     public int getSizeZ() {
         return zmax - zmin + 1;
     }
-
+    
+    @Override
+    public Vector3 getCenter() {
+        return Vector3.fromXYZ(
+            (xmax-xmin) / 2D,
+            (ymax-ymin) / 2D,
+            (zmax-zmin) / 2D);
+    }
+    
     // CHECKERS
 
 
@@ -88,9 +97,9 @@ public class BlockSelectionImpl implements BlockSelection {
     @Override
     public boolean contains(int x, int y, int z) {
         return
-                x >= xmin && x <= xmax &&
-                y >= ymin && y <= ymax &&
-                z >= zmin && z <= zmax;
+            x >= xmin && x <= xmax &&
+            y >= ymin && y <= ymax &&
+            z >= zmin && z <= zmax;
     }
     
     // SETTERS

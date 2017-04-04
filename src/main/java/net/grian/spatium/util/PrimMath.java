@@ -5,134 +5,171 @@ import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-@SuppressWarnings("WeakerAccess")
 public final class PrimMath {
     
     private PrimMath() {}
     
-    //// ROUND ////
+    // ROUND
+    @Contract(pure = true)
+    public static long down(double d) {
+        return (long) d;
+    }
+    
+    @Contract(pure = true)
+    public static int down(float f) {
+        return (int) f;
+    }
+    
+    @Contract(pure = true)
     public static long floor(double d) {
         return (long) ( (d % 1 == 0)? d : (d < 0) ? --d : d );
     }
-
+    
+    @Contract(pure = true)
     public static int floor(float f) {
         return (int) ( (f % 1 == 0)? f : (f < 0)? --f : f );
     }
-
+    
+    @Contract(pure = true)
     public static long ceil(double d) {
         return (long) ( (d % 1 == 0)? d : (d < 0) ? d : ++d );
     }
-
+    
+    @Contract(pure = true)
     public static int ceil(float f) {
         return (int) ( (f % 1 == 0)? f : (f < 0)? f : ++f );
     }
-
+    
+    @Contract(pure = true)
     public static long round(double d) {
         return (long) ( (d < 0) ? (d-0.5F) : (d+0.5F) );
     }
-
+    
+    @Contract(pure = true)
     public static int round(float f) {
         return (int) ( (f < 0) ? (f-0.5F) : (f+0.5F) );
     }
 
-    //// AVERAGE ////
+    // AVERAGE
+    
+    @Contract(pure = true)
     public static long average(long...array) {
         return sum(array) / array.length;
     }
     
+    @Contract(pure = true)
     public static int average(int...array) {
         return (int) (sum(array) / array.length);
     }
     
+    @Contract(pure = true)
     public static short average(short...array) {
         return (short) (sum(array) / array.length);
     }
     
+    @Contract(pure = true)
     public static byte average(byte...array) {
         return (byte) (sum(array) / array.length);
     }
-
+    
+    @Contract(pure = true)
     public static double average(double...array) {
         return sum(array) / array.length;
     }
-
+    
+    @Contract(pure = true)
     public static float average(float...array) {
         return (float) (sum(array) / array.length);
     }
 
-    //SIGNUM
+    // SIGNUM
+    
+    @Contract(pure = true)
     public static int signum(long x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
-
+    
+    @Contract(pure = true)
     public static int signum(int x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
-
+    
+    @Contract(pure = true)
     public static int signum(short x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
-
+    
+    @Contract(pure = true)
     public static int signum(byte x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
-
+    
+    @Contract(pure = true)
     public static int signum(double x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
-
+    
+    @Contract(pure = true)
     public static int signum(float x) {
         if (x==0) return 0;
         return x > 0? 1 : -1;
     }
     
-    //// SUM ////
+    // SUM
+    
+    @Contract(pure = true)
     public static long sum(long...array) {
         long sum = 0;
         for (long val : array) sum += val;
         return sum;
     }
     
+    @Contract(pure = true)
     public static long sum(int...array) {
         int sum = 0;
         for (int val : array) sum += val;
         return sum;
     }
     
+    @Contract(pure = true)
     public static int sum(short...array) {
         short sum = 0;
         for (short val : array) sum += val;
         return sum;
     }
     
+    @Contract(pure = true)
     public static int sum(byte...array) {
         short sum = 0;
         for (byte val : array) sum += val;
         return sum;
     }
     
+    @Contract(pure = true)
     public static double sum(double...array) {
         double sum = 0;
         for (double val : array) sum += val;
         return sum;
     }
     
+    @Contract(pure = true)
     public static double sum(float...array) {
         float sum = 0;
         for (float val : array) sum += val;
         return sum;
     }
     
+    // RANDOM NUMBER GENERATION
+    
     private static class RNGHolder {
         private final static Random RNG = new Random();
     }
     
-    //// RANDOM ////
     public static long randomLong(long max) {
         return (long) (RNGHolder.RNG.nextDouble() * max);
     }
@@ -205,7 +242,8 @@ public final class PrimMath {
         return min + randomFloat(max - min);
     }
     
-    //// WRAP ////
+    // WRAP
+    
     /**
      * Wraps one number around two other numbers.
      * When wrapping an overflowed number, the maximum boundary can't be the result,
@@ -436,7 +474,8 @@ public final class PrimMath {
             return val;
     }
     
-    //// CLAMP ////
+    // CLAMP
+    
     @Contract(pure = true)
     public static long clamp(long min, long val, long max) {
         if (min > max) throw new IllegalArgumentException("min > max");
@@ -479,7 +518,7 @@ public final class PrimMath {
         return (val < min) ? min : (val > max) ? max : val;
     }
 
-    //ABS
+    // ABSOLUTE
 
     @Contract(pure = true)
     public static long abs(long number) {
@@ -492,13 +531,13 @@ public final class PrimMath {
     }
 
     @Contract(pure = true)
-    public static short abs(short number) {
-        return number<0? (short) -number : number;
+    public static int abs(short number) {
+        return number<0? -number : number;
     }
 
     @Contract(pure = true)
-    public static byte abs(byte number) {
-        return number<0? (byte) -number : number;
+    public static int abs(byte number) {
+        return number<0? -number : number;
     }
 
     @Contract(pure = true)
@@ -512,7 +551,6 @@ public final class PrimMath {
     }
 
     //MAX
-
     
     @Contract(pure = true)
     public static long max(long a, long b) {
@@ -577,7 +615,8 @@ public final class PrimMath {
     }
 
     //VARARGS MAX
-
+    
+    @Contract(pure = true)
     public static long max(@Nonnull long... nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
@@ -589,7 +628,8 @@ public final class PrimMath {
             if (nums[i] > max) max = nums[i];
         return max;
     }
-
+    
+    @Contract(pure = true)
     public static int max(@Nonnull int... nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
@@ -601,7 +641,8 @@ public final class PrimMath {
             if (nums[i] > max) max = nums[i];
         return max;
     }
-
+    
+    @Contract(pure = true)
     public static double max(@Nonnull double... nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
@@ -614,6 +655,7 @@ public final class PrimMath {
         return max;
     }
     
+    @Contract(pure = true)
     public static float max(@Nonnull float... nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
@@ -658,7 +700,7 @@ public final class PrimMath {
         return a<b? a : b;
     }
 
-    //TRIPPLE MIN
+    // TRIPPLE MIN
 
     @Contract(pure = true)
     public static long min(long a, long b, long c) {
@@ -690,7 +732,7 @@ public final class PrimMath {
         return min(a, min(b, c));
     }
 
-    //VARARGS MIN
+    // VARARGS MIN
     
     @Contract(pure = true)
     public static long min(@Nonnull long... nums) {

@@ -164,6 +164,11 @@ public class MatrixImpl implements Matrix {
 
     @Override
     public MatrixImpl getInverse() {
+        if (!isSquare())
+            throw new MatrixDimensionsException("non-square matrices have no inverse ("+rows+", "+columns+")");
+        if (rows == 1) return clone();
+        if (rows == 2) return inverse2();
+        
         MatrixImpl adj = getAdjugate();
         //determinant can be obtained faster since adjugate already contains all necessary information
         double det = 0;
@@ -172,6 +177,13 @@ public class MatrixImpl implements Matrix {
 
         adj.scale(1 / det);
         return adj;
+    }
+    
+    private MatrixImpl inverse2() {
+        MatrixImpl m = cofactors2();
+        m.transpose();
+        m.scale(1 / determinant2());
+        return m;
     }
 
     private MatrixImpl cofactors2() {
