@@ -83,10 +83,11 @@ public final class Matrices {
         if (a.getRows() != 3 || a.getColumns() != 3)
             throw new MatrixDimensionsException("matrix must be 3x3");
 
-        return Vector3.fromXYZ(
-            a.get(0,0)*x + a.get(0,1)*y + a.get(0,2)*z,
-            a.get(1,0)*x + a.get(1,1)*y + a.get(1,2)*z,
-            a.get(2,0)*x + a.get(2,1)*z + a.get(2,2)*z);
+        double[] v = new double[3];
+        for (int i = 0; i < v.length; i++)
+            v[i] = a.get(i, 0)*x + a.get(i, 1)*y + a.get(i, 2)*z;
+        
+        return Vector3.fromXYZ(v[0], v[1], v[2]);
     }
     
     @NotNull

@@ -65,12 +65,19 @@ public class OrientedBBImpl implements OrientedBB {
 
     @Override
     public Vector3 getMin() {
-        return getCenter().subtract(Matrices.product(trans, dx, dy, dz));
+        //return getCenter().subtract(Matrices.product(trans, dx, dy, dz));
+        return getCenter()
+            .subtract(getAxisX().multiply(dx))
+            .subtract(getAxisY().multiply(dy))
+            .subtract(getAxisZ().multiply(dz));
     }
 
     @Override
     public Vector3 getMax() {
-        return getCenter().add(Matrices.product(trans, dx, dy, dz));
+        return getCenter()
+            .add(getAxisX().multiply(dx))
+            .add(getAxisY().multiply(dy))
+            .add(getAxisZ().multiply(dz));
     }
 
     @Override

@@ -3,6 +3,8 @@ package net.grian.spatium.geo3;
 import net.grian.spatium.Spatium;
 import net.grian.spatium.cache.CacheMath;
 import net.grian.spatium.enums.Axis;
+import net.grian.spatium.matrix.Matrices;
+import net.grian.spatium.matrix.Matrix;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -44,6 +46,8 @@ public class OrientedBBTest {
         assertEquals(AxisAlignedBB.fromPoints(-1, -1, -1, 0, 1, 2), box.getBoundaries());
     }
     
+    private final static Matrix ROT_Y_45 = Matrix.fromRotY(Spatium.radians(45));
+    
     /**
      * Test a few simple assertions on an OBB without any transformation.
      */
@@ -56,18 +60,28 @@ public class OrientedBBTest {
         assertEquals(8, box.getVolume(), Spatium.EPSILON);
         assertEquals(aabb, box.getBoundaries());
         
-        box.rotateY(Spatium.radians(45));
+        box.transform(ROT_Y_45);
+        assertEquals(ROT_Y_45, box.getTransform());
         
         Vector3 expX = Vector3.fromXYZ( CacheMath.HALF_SQRT_2, 0, CacheMath.HALF_SQRT_2);
         Vector3 expY = Axis.Y.vector();
         Vector3 expZ = Vector3.fromXYZ(-CacheMath.HALF_SQRT_2, 0, CacheMath.HALF_SQRT_2);
+        Vector3 expMin = Vector3.fromXYZ(0, -1, -CacheMath.SQRT_2);
+        Vector3 expMax = Vector3.fromXYZ(0,  1,  CacheMath.SQRT_2);
         AxisAlignedBB expBounds = AxisAlignedBB.fromCenterDims(0,0,0, CacheMath.SQRT_2, 1, CacheMath.SQRT_2);
-        
+    
+        /*System.out.println(ROT_Y_45.toString());
+        System.out.println(box.getAxisX());
+        System.out.println(Matrices.product(ROT_Y_45, 1, 0, 0));
+        System.out.println(Matrices.product(ROT_Y_45, 1, 1, 1));
+        System.out.println(Matrices.product(ROT_Y_45, 1, 1, 1));*/
         assertEquals(Vector3.fromXYZ(0, 0, 0), box.getCenter());
         assertEquals(8, box.getVolume(), Spatium.EPSILON);
         assertEquals(expX, box.getAxisX());
         assertEquals(expY, box.getAxisY());
         assertEquals(expZ, box.getAxisZ());
+        assertEquals(expMin, box.getMin());
+        assertEquals(expMax, box.getMax());
         assertEquals(expBounds, box.getBoundaries());
     }
     

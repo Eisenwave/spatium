@@ -73,14 +73,14 @@ public interface OrientedBB extends Space, Serializable, Cloneable {
     //GETTERS
 
     /**
-     * Returns the minimum point of the box after applying rotation.
+     * Returns the local minimum of this bounding box.
      *
      * @return the minimum point of the box after applying rotation
      */
     abstract Vector3 getMin();
 
     /**
-     * Returns the maximum point of the box after applying rotation.
+     * Returns the local maximum of this bounding box.
      *
      * @return the maximum point of the box after applying rotation
      */
