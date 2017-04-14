@@ -157,7 +157,10 @@ public class SphereImpl implements Sphere {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"{center="+getCenter()+",r="+getRadius()+"}";
+        return Sphere.class.getSimpleName()+
+            "{x="+x+
+            ",y="+y+
+            ",r="+r+"}";
     }
     
 }

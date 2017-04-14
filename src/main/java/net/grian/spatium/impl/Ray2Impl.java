@@ -123,7 +123,7 @@ public class Ray2Impl implements Ray2 {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+
+        return Ray2.class.getSimpleName()+
             "{org="+getOrigin()+
             ",dir="+getDirection()+"}";
     }

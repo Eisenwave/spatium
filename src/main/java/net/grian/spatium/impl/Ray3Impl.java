@@ -178,7 +178,7 @@ public class Ray3Impl implements Ray3 {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"{o="+getOrigin()+",d="+getDirection()+"}";
+        return Ray3.class.getSimpleName() + "{org="+getOrigin()+",dir="+getDirection()+"}";
     }
 
 }

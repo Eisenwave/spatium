@@ -130,7 +130,7 @@ public class Triangle2Impl implements Triangle2 {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"["+getA()+","+getB()+","+getC()+"]";
+        return Triangle2.class.getSimpleName() + "["+getA()+","+getB()+","+getC()+"]";
     }
     
 }

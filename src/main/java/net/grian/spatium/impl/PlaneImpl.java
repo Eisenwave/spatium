@@ -109,6 +109,6 @@ public class PlaneImpl implements Plane {
 
     @Override
     public String toString() {
-        return "("+xn+", "+yn+", "+zn+") * ((x, y, z) - ("+x+", "+y+", "+z+"))";
+        return "("+xn+", "+yn+", "+zn+") * (v - ("+x+", "+y+", "+z+"))";
     }
 }

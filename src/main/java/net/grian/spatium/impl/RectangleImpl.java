@@ -93,9 +93,9 @@ public class RectangleImpl implements Rectangle {
     
     @Override
     public String toString() {
-        return getClass()+
+        return Rectangle.class.getSimpleName()+
             "{min="+getMin()+
-            ",max="+getMaxX()+"}";
+            ",max="+getMax()+"}";
     }
     
 }

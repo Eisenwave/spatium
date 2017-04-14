@@ -171,6 +171,11 @@ public interface AxisAlignedBB extends Space, Serializable, Cloneable {
             y >= getMinY() && y <= getMaxY() &&
             z >= getMinZ() && z <= getMaxZ();
     }
+    
+    default boolean isCube() {
+        final double d = getSizeX();
+        return Spatium.equals(d, getSizeY()) && Spatium.equals(d, getSizeZ());
+    }
 
     // TRANSFORMATIONS
 

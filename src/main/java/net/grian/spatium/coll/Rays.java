@@ -388,6 +388,28 @@ public final class Rays {
 
         return !Spatium.isZero(t)? t : Double.NaN;
     }
+    
+    /**
+     * <p>
+     *     Tests where a {@link Ray3} and a {@link Tetrahedron} collide.
+     * </p>
+     * <p>
+     *     The returned value is a multiplier for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray3#setLength(double)} (mutation) or {@link Ray3#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param tetra the tetrahedron
+     * @return where the ray and the box collide or {@link Double#NaN}
+     */
+    public static double cast(Ray3 ray, Tetrahedron tetra) {
+        double[] entryExit = pierce(ray, tetra);
+        return entryExit==null? Double.NaN : entryExit[0];
+    }
 
     //ENTRY AND EXIT RAY CASTS
     
@@ -710,6 +732,42 @@ public final class Rays {
     
     /**
      * <p>
+     *     Tests where a {@link Ray3} enters and exits a {@link Tetrahedron}.
+     * </p>
+     * <p>
+     *     The returned values are multipliers for the directional vector of the ray at which the ray and the other
+     *     object collide with each other.
+     * </p>
+     * <p>
+     *     The point of the collision can be obtained by setting the hypot of the first ray to a multiplier using
+     *     {@link Ray3#setLength(double)} (mutation) or {@link Ray3#getPoint(double)} (no mutation).
+     * </p>
+     *
+     * @param ray the ray
+     * @param tetra the tetrahedron
+     * @return the entry and exit points of the ray or null
+     */
+    @Nullable
+    public static double[] pierce(Ray3 ray, Tetrahedron tetra) {
+        double
+            tmin = Double.POSITIVE_INFINITY,
+            tmax = Double.NEGATIVE_INFINITY;
+        boolean intersection = false;
+        
+        for (int i = 0; i < 4; i++) {
+            double t = cast(ray, tetra.getTriangle(i));
+            if (!Double.isFinite(t)) continue;
+    
+            if (!intersection) intersection = true;
+            if (t < tmin) tmin = t;
+            if (t > tmax) tmax = t;
+        }
+        
+        return intersection? new double[] {tmin, tmax} : null;
+    }
+    
+    /**
+     * <p>
      *     Tests where a {@link Ray3} enters and exits an {@link AxisCylinder}.
      * </p>
      * <p>
@@ -741,6 +799,8 @@ public final class Rays {
         //now we have to check where the 2D ray collides with the cylinder circle
         return null;
     }
+    
+    // MOVING OBJECT ENTRY EXIT
 
     /**
      * Tests where a moving {@link AxisAlignedBB} enters and exits a static {@link AxisAlignedBB}.

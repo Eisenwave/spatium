@@ -32,10 +32,8 @@ public final class ColorMath {
     
     @Contract(pure = true)
     public static int fromRGB(int r, int g, int b, int a) {
-        if (r > 0xFF || g > 0xFF || b > 0xFF || a > 0xFF)
-            throw new IllegalArgumentException("channel out of range (> 0xFF");
-        if (r < 0 || g < 0 || b < 0 || a < 0)
-            throw new IllegalArgumentException("channel out of range (< 0");
+        if (r > 0xFF || g > 0xFF || b > 0xFF || a > 0xFF || r < 0 || g < 0 || b < 0 || a < 0)
+            throw new IllegalArgumentException("channel out of range; argb{"+r+", "+g+", "+b+", "+a+"}");
 
         return a<<24 | r<<16 | g<<8 | b;
     }
@@ -76,16 +74,24 @@ public final class ColorMath {
     //OPERATIONS
 
     /**
-     * Returns the total difference between the components of two colors.
+     * <p>
+     *     Returns the total difference between the components of two colors.
+     * </p>
+     * <p>
+     *     This is the sum of the differences of the red, blue, green (and alpha) channels of both colors.
+     * </p>
+     * <p>
+     *     With transparency, the maximum difference may be {@code 1020}, without: {@code 765}.
+     * </p>
      *
      * @param a first color
      * @param b second color
-     * @param transparency false if transparency is ignored
+     * @param transparency true if alpha channel difference is to be measured
      * @return difference between colors
      */
     @Contract(pure = true)
     public static int componentDifference(int a, int b, boolean transparency) {
-        int difference = Math.abs(red(a)-red(b)) +Math.abs(green(a)-green(b)) + Math.abs(blue(a)-blue(b));
+        int difference = Math.abs(red(a)-red(b)) + Math.abs(green(a)-green(b)) + Math.abs(blue(a)-blue(b));
         if (transparency)
             difference += Math.abs(alpha(a)-alpha(b));
         return difference;
@@ -455,6 +461,20 @@ public final class ColorMath {
     }
 
     // MISC
+    
+    /**
+     * Returns a random color.
+     *
+     * @param alpha whether the color should have random alpha (if false, alpha = 255)
+     * @return a new random color
+     */
+    public static int random(boolean alpha) {
+        return fromRGB(
+            PrimMath.randomInt(255),
+            PrimMath.randomInt(255),
+            PrimMath.randomInt(255),
+            alpha? PrimMath.randomInt(255) : 255);
+    }
     
     /**
      * Splits up an ARGB int into its 4 components (alpha, red, green blue)

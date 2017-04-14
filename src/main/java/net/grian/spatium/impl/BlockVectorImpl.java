@@ -155,7 +155,7 @@ public class BlockVectorImpl implements BlockVector {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"["+x+","+y+","+z+"]";
+        return "("+x+","+y+","+z+")";
     }
 
 }

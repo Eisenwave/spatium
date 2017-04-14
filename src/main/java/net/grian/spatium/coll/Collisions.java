@@ -73,23 +73,6 @@ public final class Collisions {
     public static boolean test(AxisAlignedBB box, Vector3 point) {
         return box.contains(point);
     }
-
-    /**
-     * Tests whether an {@link AxisAlignedBB} and an {@link AxisPlane} collide.
-     *
-     * @param box the bounding box
-     * @param plane the plane
-     * @return whether the box and the sphere collide
-     */
-    public static boolean test(AxisAlignedBB box, AxisPlane plane) {
-        double d = plane.getDepth();
-        switch (plane.getAxis()) {
-            case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
-            case Y: return (box.getMinY() <= d) != (box.getMaxY() <= d);
-            case Z: return (box.getMinZ() <= d) != (box.getMaxZ() <= d);
-            default: throw new IllegalArgumentException("plane has no axis");
-        }
-    }
     
     /**
      * Tests whether two {@link Rectangle}s collide/intersect.
@@ -116,23 +99,28 @@ public final class Collisions {
     public static boolean test(AxisAlignedBB a, AxisAlignedBB b) {
         return
             a.getMinX() <= b.getMaxX() &&
-            a.getMaxX() >= b.getMinX() &&
-            a.getMinY() <= b.getMaxY() &&
-            a.getMaxY() >= b.getMinY() &&
-            a.getMinZ() <= b.getMaxZ() &&
-            a.getMaxZ() >= b.getMinZ();
+                a.getMaxX() >= b.getMinX() &&
+                a.getMinY() <= b.getMaxY() &&
+                a.getMaxY() >= b.getMinY() &&
+                a.getMinZ() <= b.getMaxZ() &&
+                a.getMaxZ() >= b.getMinZ();
     }
     
     /**
-     * Tests whether an {@link Rectangle} and a {@link Area} collide.
+     * Tests whether an {@link AxisAlignedBB} and an {@link AxisPlane} collide.
      *
-     * @param box the rectangle
-     * @param area the area
+     * @param box the bounding box
+     * @param plane the plane
      * @return whether the box and the sphere collide
      */
-    public static boolean test(Rectangle box, Area area) {
-        Vector2 closestPoint = Vectors.clamp(area.getCenter(), box);
-        return area.contains(closestPoint);
+    public static boolean test(AxisAlignedBB box, AxisPlane plane) {
+        double d = plane.getDepth();
+        switch (plane.getAxis()) {
+            case X: return (box.getMinX() <= d) != (box.getMaxX() <= d);
+            case Y: return (box.getMinY() <= d) != (box.getMaxY() <= d);
+            case Z: return (box.getMinZ() <= d) != (box.getMaxZ() <= d);
+            default: throw new IllegalArgumentException("plane has no axis");
+        }
     }
     
     /**
@@ -448,7 +436,7 @@ public final class Collisions {
     }
     
     /**
-     * Tests whether a {@link Ray3} and a {@link AxisAlignedBB} collide.
+     * Tests whether a {@link Ray3} and an {@link AxisAlignedBB} collide.
      *
      *
      * @param ray the ray
@@ -457,6 +445,30 @@ public final class Collisions {
      */
     public static boolean test(Ray3 ray, OrientedBB box) {
         return Double.isFinite(Rays.cast(ray, box));
+    }
+    
+    /**
+     * Tests whether a {@link Ray3} and a {@link Triangle3} collide.
+     *
+     *
+     * @param ray the ray
+     * @param triangle the triangle
+     * @return whether the ray and the box collide
+     */
+    public static boolean test(Ray3 ray, Triangle3 triangle) {
+        return Double.isFinite(Rays.cast(ray, triangle));
+    }
+    
+    /**
+     * Tests whether a {@link Ray3} and a {@link Tetrahedron} collide.
+     *
+     *
+     * @param ray the ray
+     * @param tetra the tetrahedron
+     * @return whether the ray and the box collide
+     */
+    public static boolean test(Ray3 ray, Tetrahedron tetra) {
+        return Double.isFinite(Rays.cast(ray, tetra));
     }
     
     /**
@@ -548,10 +560,10 @@ public final class Collisions {
         Vector3
             p = plane.getPoint(),
             n = plane.getNormal();
-        return !(
-            Vector3.between(triangle.getA(), p).dot(n) > 0 ==
-            Vector3.between(triangle.getB(), p).dot(n) > 0 ==
-            Vector3.between(triangle.getC(), p).dot(n) > 0 );
+        final boolean first = Vector3.between(triangle.getA(), p).dot(n) > 0;
+        return
+            first != Vector3.between(triangle.getA(), p).dot(n) > 0 ||
+            first != Vector3.between(triangle.getC(), p).dot(n) > 0;
     }
 
     /**
@@ -563,19 +575,23 @@ public final class Collisions {
      * @return whether the triangle and the plane collide
      */
     public static boolean test(Triangle3 triangle, AxisPlane plane) {
+        boolean first;
         switch (plane.getAxis()) {
-            case X: return !(
-                triangle.getA().getX() > plane.getDepth() ==
-                triangle.getB().getX() > plane.getDepth() ==
-                triangle.getC().getX() > plane.getDepth() );
-            case Y: return !(
-                triangle.getA().getY() > plane.getDepth() ==
-                triangle.getB().getY() > plane.getDepth() ==
-                triangle.getC().getY() > plane.getDepth() );
-            case Z: return !(
-                triangle.getA().getZ() > plane.getDepth() ==
-                triangle.getB().getZ() > plane.getDepth() ==
-                triangle.getC().getZ() > plane.getDepth() );
+            case X:
+                first = triangle.getA().getX() > plane.getDepth();
+                return
+                    first != triangle.getB().getX() > plane.getDepth() ||
+                    first != triangle.getC().getX() > plane.getDepth();
+            case Y:
+                first = triangle.getA().getY() > plane.getDepth();
+                return
+                    first != triangle.getB().getY() > plane.getDepth() ||
+                    first != triangle.getC().getY() > plane.getDepth();
+            case Z:
+                first = triangle.getA().getZ() > plane.getDepth();
+                return
+                    first != triangle.getB().getZ() > plane.getDepth() ||
+                    triangle.getC().getZ() > plane.getDepth();
             default: throw new IllegalArgumentException("plane has no axis");
         }
     }

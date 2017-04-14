@@ -35,7 +35,7 @@ public interface Triangle2 extends Area, Polygon2 {
      * @return the length of side a
      */
     default double getLengthAB() {
-        return Vector2.between(getA(), getB()).getLength();
+        return getB().subtract(getA()).getLength();
     }
     
     /**
@@ -44,7 +44,7 @@ public interface Triangle2 extends Area, Polygon2 {
      * @return the length of side b
      */
     default double getLengthBC() {
-        return Vector2.between(getB(), getC()).getLength();
+        return getC().subtract(getB()).getLength();
     }
     
     /**
@@ -53,22 +53,22 @@ public interface Triangle2 extends Area, Polygon2 {
      * @return the length of side c
      */
     default double getLengthCA() {
-        return Vector2.between(getC(), getA()).getLength();
+        return getA().subtract(getC()).getLength();
     }
     
     /**
-     * Returns the area of this triangle (half surface area). By default, this is done using
-     * <a href="https://en.wikipedia.org/wiki/Heron's_formula">Heron's Formula</a>.
+     * Returns the area of this triangle (half surface area).
      *
      * @return the area of the triangle
+     * @implNote The default implementation uses the same method as {@link net.grian.spatium.geo3.Triangle3}.
      */
     @Override
     default double getArea() {
-        final double
-            ab = getLengthAB(), bc = getLengthBC(), ca = getLengthCA(),
-            s = (ab + bc + ca) / 2;
-        
-        return Math.sqrt(s * (s-ab) * (s-bc) * (s-ca));
+        final Vector2
+            a = getA(),
+            ab = getB().subtract(a),
+            ac = getC().subtract(a);
+        return Math.abs( ab.getX()*ac.getY() - ab.getY()*ac.getX() ) / 2;
     }
     
     @Override
@@ -155,9 +155,24 @@ public interface Triangle2 extends Area, Polygon2 {
     // TRANSFORMATIONS
     
     @Override
-    abstract void translate(double x, double y);
+    default void translate(double x, double y) {
+        setA(getA().add(x, y));
+        setB(getB().add(x, y));
+        setC(getC().add(x, y));
+    }
     
-    abstract void scale(double x, double y);
+    default void scale(double x, double y) {
+        setA(getA().multiply(x, y));
+        setB(getB().multiply(x, y));
+        setC(getC().multiply(x, y));
+    }
+    
+    default void scaleCentric(double x, double y) {
+        Vector2 center = getCenter();
+        translate(-center.getX(), -center.getY());
+        scale(x, y);
+        translate( center.getX(),  center.getY());
+    }
     
     @Override
     default void scale(double factor) {
@@ -168,8 +183,6 @@ public interface Triangle2 extends Area, Polygon2 {
     default void scaleCentric(double factor) {
         scaleCentric(factor, factor);
     }
-    
-    abstract void scaleCentric(double x, double y);
     
     // MISC
     

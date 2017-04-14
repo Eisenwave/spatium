@@ -89,4 +89,5 @@ public class Vector2Impl implements Vector2 {
     public Vector2 clone() {
         return new Vector2Impl(this);
     }
+    
 }

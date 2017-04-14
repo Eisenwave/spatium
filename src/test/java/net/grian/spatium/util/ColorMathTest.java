@@ -13,6 +13,38 @@ public class ColorMathTest {
         assertArrayEquals(new float[] {0.5792F, 0.2831F, 0.7281F}, magenta, 1E-5F);
     }
     */
+    
+    @Test
+    public void componentDifference_constants() throws Exception {
+        assertEquals(0, ColorMath.componentDifference(ColorMath.DEBUG1, ColorMath.DEBUG1, true));
+        assertEquals(255, ColorMath.componentDifference(ColorMath.SOLID_RED, ColorMath.SOLID_YELLOW, true));
+        assertEquals(510, ColorMath.componentDifference(ColorMath.SOLID_RED, ColorMath.SOLID_BLUE, true));
+        assertEquals(765, ColorMath.componentDifference(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, false));
+        assertEquals(1020, ColorMath.componentDifference(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, true));
+        
+    }
+    
+    @Test
+    public void componentDifference_random() throws Exception {
+        for (int i = 0; i < 100; i++) {
+            final int random = ColorMath.random(true);
+            assertEquals(0, ColorMath.componentDifference(random, random, true));
+        }
+    }
+    
+    @Test
+    public void rgb() throws Exception {
+        for (int i = 0; i<10000; i++) {
+            int rgb0 = ColorMath.random(true);
+            int rgb1 = ColorMath.fromRGB(
+                ColorMath.red(rgb0),
+                ColorMath.green(rgb0),
+                ColorMath.blue(rgb0),
+                ColorMath.alpha(rgb0));
+            
+            assertEquals(rgb0, rgb1);
+        }
+    }
 
     private final static int
     SOLID = ColorMath.fromRGB(1F, 1F, 1F, 1F),

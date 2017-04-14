@@ -85,17 +85,21 @@ public interface Triangle3 extends Polygon3, Serializable, Cloneable {
     }
 
     /**
-     * Returns the area of this triangle (half surface area). By default, this is done using
-     * <a href="https://en.wikipedia.org/wiki/Heron's_formula">Heron's Formula</a>.
+     * Returns the area of this triangle (half surface area).
      *
      * @return the area of the triangle
+     *
+     * @implNote The default implementation makes use of the fact that the magnitude of the cross product of two
+     * vectors is equal to the area of the parallelogram between the vectors, so: <blockquote>
+     *     <code>area of triangle = |C-A x B-A| / 2</code>
+     * </blockquote>
      */
     default double getArea() {
-        final double
-            ab = getLengthAB(), bc = getLengthBC(), ca = getLengthCA(),
-            s = (ab + bc + ca) / 2;
-
-        return Math.sqrt(s * (s-ab) * (s-bc) * (s-ca));
+        Vector3
+            a = getA(),
+            ab = getB().subtract(a),
+            ac = getC().subtract(a);
+        return ab.cross(ac).getLength() / 2;
     }
     
     default double getCircumference() {

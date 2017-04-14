@@ -59,14 +59,41 @@ public final class Vectors {
         return clamp(point.getX(), point.getY(), point.getZ(), bounds);
     }
     
-    // CROSS PRODUCT
+    // VECTOR PRODUCTS
+    
+    @Contract(pure = true)
+    public static double dot(double ax, double ay, double bx, double by) {
+        return ax*bx + ay*by;
+    }
+    
+    @Contract(pure = true)
+    public static double dot(double ax, double ay, double az, double bx, double by, double bz) {
+        return ax*bx + ay*by + az*bz;
+    }
     
     @NotNull
+    @Contract(pure = true)
     public static Vector3 cross(double ax, double ay, double az, double bx, double by, double bz) {
         return Vector3.fromXYZ(
             ay*bz - az*by,
             az*bx - ax*bz,
             ax*by - ay*bx);
+    }
+    
+    @Contract(pure = true)
+    public static double triple(double ax, double ay, double az,
+                                double bx, double by, double bz,
+                                double cx, double cy, double cz) {
+        return dot(
+            ax, ay, az,
+            ay*bz - az*by,
+            az*bx - ax*bz,
+            ax*by - ay*bx);
+    }
+    
+    @Contract(pure = true)
+    public static double triple(Vector3 a, Vector3 b, Vector3 c) {
+        return a.dot(b.cross(c));
     }
     
     // MIN & MAX
@@ -468,7 +495,7 @@ public final class Vectors {
      */
     @NotNull
     public static Vector2 orthoClockwise(Vector2 v) {
-        return Vector2.fromXY(v.getY(), -v.getY());
+        return Vector2.fromXY(v.getY(), -v.getX());
     }
     
     /**
@@ -486,7 +513,7 @@ public final class Vectors {
      */
     @NotNull
     public static Vector2 orthoCounterClockwise(Vector2 v) {
-        return Vector2.fromXY(-v.getY(), v.getY());
+        return Vector2.fromXY(-v.getY(), v.getX());
     }
     
     /**
@@ -571,11 +598,25 @@ public final class Vectors {
      * @param a the first vector
      * @param b the second vector
      * @return the sum of vectors
-     * @throws IllegalArgumentException if the array is empty
      */
     @NotNull
     public static Vector2 sum(Vector2 a, Vector2 b) {
         return Vector2.fromXY(a.getX()+b.getX(), a.getY()+b.getY());
+    }
+    
+    /**
+     * Returns <code>a + r*b</code>
+     *
+     * @param a the first vector
+     * @param r the real multiplier of b
+     * @param b the second vector
+     * @return the sum of vectors
+     */
+    @NotNull
+    public static Vector2 sum(Vector2 a, double r, Vector2 b) {
+        return Vector2.fromXY(
+            a.getX() + r*b.getX(),
+            a.getY() + r*b.getY());
     }
     
     /**
@@ -584,11 +625,26 @@ public final class Vectors {
      * @param a the first vector
      * @param b the second vector
      * @return the sum of vectors
-     * @throws IllegalArgumentException if the array is empty
      */
     @NotNull
     public static Vector3 sum(Vector3 a, Vector3 b) {
         return Vector3.fromXYZ(a.getX()+b.getX(), a.getY()+b.getY(), a.getZ()+b.getZ());
+    }
+    
+    /**
+     * Returns <code>a + r*b</code>
+     *
+     * @param a the first vector
+     * @param r the real multiplier of b
+     * @param b the second vector
+     * @return the sum of vectors
+     */
+    @NotNull
+    public static Vector3 sum(Vector3 a, double r, Vector3 b) {
+        return Vector3.fromXYZ(
+            a.getX() + r*b.getX(),
+            a.getY() + r*b.getY(),
+            a.getZ() + r*b.getZ());
     }
     
     /**

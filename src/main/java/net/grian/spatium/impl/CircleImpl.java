@@ -89,10 +89,10 @@ public class CircleImpl implements Circle {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+
-            "{x="+getX()+
-            ",y="+getY()+
-            ",r="+getRadius()+"}";
+        return Circle.class.getSimpleName()+
+            "{x="+x+
+            ",y="+y+
+            ",r="+r+"}";
     }
     
 }

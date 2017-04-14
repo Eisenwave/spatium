@@ -42,7 +42,15 @@ public class AxisPlaneImpl implements AxisPlane {
         this.depth = depth;
         return this;
     }
-
+    
+    // MISC
+    
+    
+    @Override
+    public String toString() {
+        return axis.name().toLowerCase() + "=" + depth;
+    }
+    
     @Override
     public AxisPlane clone() {
         return new AxisPlaneImpl(this);

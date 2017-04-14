@@ -160,7 +160,7 @@ public class Triangle3Impl implements Triangle3 {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+"["+getA()+","+getB()+","+getC()+"]";
+        return Triangle3.class.getSimpleName() + "["+getA()+","+getB()+","+getC()+"]";
     }
     
 }
