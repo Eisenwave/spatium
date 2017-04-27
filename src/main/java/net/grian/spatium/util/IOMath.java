@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Contract;
 public final class IOMath {
 
     private IOMath() {}
+    
+    // PRIMITIVE WRITE
 
     @Contract("_ -> !null")
     public static byte[] toBytes(long Long) {
@@ -43,6 +45,8 @@ public final class IOMath {
         return toBytes(java.lang.Float.floatToIntBits(Float));
     }
 
+    // PRIMITIVE READ
+    
     public static long asLong(byte[] bytes) {
         return
             ((long) (bytes[0] & 0xFF) << 56) |
@@ -75,6 +79,8 @@ public final class IOMath {
         return Float.intBitsToFloat(asInt(bytes));
     }
 
+    // BYTE INVERSION
+    
     public static int invertBytes(int Int) {
         byte[] bytes = toBytes(Int);
         return ((bytes[3] & 0xFF) << 24) | ((bytes[2] & 0xFF) << 16) | ((bytes[1] & 0xFF) << 8) | (bytes[0] & 0xFF);

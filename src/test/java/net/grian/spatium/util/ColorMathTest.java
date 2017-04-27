@@ -16,11 +16,11 @@ public class ColorMathTest {
     
     @Test
     public void componentDifference_constants() throws Exception {
-        assertEquals(0, ColorMath.componentDifference(ColorMath.DEBUG1, ColorMath.DEBUG1, true));
-        assertEquals(255, ColorMath.componentDifference(ColorMath.SOLID_RED, ColorMath.SOLID_YELLOW, true));
-        assertEquals(510, ColorMath.componentDifference(ColorMath.SOLID_RED, ColorMath.SOLID_BLUE, true));
-        assertEquals(765, ColorMath.componentDifference(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, false));
-        assertEquals(1020, ColorMath.componentDifference(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, true));
+        assertEquals(0, ColorMath.componentDiff(ColorMath.DEBUG1, ColorMath.DEBUG1, true));
+        assertEquals(255, ColorMath.componentDiff(ColorMath.SOLID_RED, ColorMath.SOLID_YELLOW, true));
+        assertEquals(510, ColorMath.componentDiff(ColorMath.SOLID_RED, ColorMath.SOLID_BLUE, true));
+        assertEquals(765, ColorMath.componentDiff(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, false));
+        assertEquals(1020, ColorMath.componentDiff(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, true));
         
     }
     
@@ -28,7 +28,8 @@ public class ColorMathTest {
     public void componentDifference_random() throws Exception {
         for (int i = 0; i < 100; i++) {
             final int random = ColorMath.random(true);
-            assertEquals(0, ColorMath.componentDifference(random, random, true));
+            assertEquals(0, ColorMath.componentDiff(random, random, true));
+            assertEquals(0, ColorMath.componentDiff(random, random, false));
         }
     }
     

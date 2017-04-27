@@ -33,7 +33,7 @@ public final class Strings {
     }
     
     public static String[] append(String[] tail, String... head) {
-        return PrimArrays.contact(tail, head);
+        return PrimArrays.concat(tail, head);
     }
     
     public static String[] append(String[] tail, String head) {
@@ -489,7 +489,7 @@ public final class Strings {
         String[] result = new String[0];
         
         for (String part : parts)
-            result = PrimArrays.contact(result, split(part, length));
+            result = PrimArrays.concat(result, split(part, length));
         
         return result;
     }

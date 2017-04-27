@@ -1,9 +1,9 @@
 package net.grian.spatium.util;
 
-import net.grian.spatium.Spatium;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * A utility library for performing calculations with colors represented as primitive ARGB integers.
@@ -28,7 +28,7 @@ public final class ColorMath {
 
     private ColorMath() {}
 
-    //"CONSTRUCTORS"
+    // RGB "CONSTRUCTORS"
     
     @Contract(pure = true)
     public static int fromRGB(int r, int g, int b, int a) {
@@ -52,6 +52,8 @@ public final class ColorMath {
     public static int fromRGB(int r, int g, int b) {
         return fromRGB(r, g, b, 0xFF);
     }
+    
+    // OTHER "CONSTRUCTORS"
 
     @Contract(pure = true)
     public static int fromHSB(float h, float s, float b, float a) {
@@ -81,20 +83,21 @@ public final class ColorMath {
      *     This is the sum of the differences of the red, blue, green (and alpha) channels of both colors.
      * </p>
      * <p>
-     *     With transparency, the maximum difference may be {@code 1020}, without: {@code 765}.
+     *     With alpha, the maximum difference may be {@code 1020}, without: {@code 765}.
      * </p>
      *
      * @param a first color
      * @param b second color
-     * @param transparency true if alpha channel difference is to be measured
+     * @param alpha true if alpha channel difference is to be measured
      * @return difference between colors
      */
     @Contract(pure = true)
-    public static int componentDifference(int a, int b, boolean transparency) {
-        int difference = Math.abs(red(a)-red(b)) + Math.abs(green(a)-green(b)) + Math.abs(blue(a)-blue(b));
-        if (transparency)
-            difference += Math.abs(alpha(a)-alpha(b));
-        return difference;
+    public static int componentDiff(int a, int b, boolean alpha) {
+        return
+            Math.abs(red(a)-red(b)) +
+            Math.abs(green(a)-green(b)) +
+            Math.abs(blue(a)-blue(b)) +
+            (alpha? Math.abs(alpha(a)-alpha(b)) : 0);
     }
 
     /**
@@ -110,7 +113,7 @@ public final class ColorMath {
      * @return the visual difference between the colors
      */
     @Contract(pure = true)
-    public static int visualDifference(int redA, int grnA, int bluA, int redB, int grnB, int bluB) {
+    public static int visualDiff(int redA, int grnA, int bluA, int redB, int grnB, int bluB) {
         int redM = (redA + redB) >> 1,
             red = redA - redB,
             grn = grnA - grnB,
@@ -137,8 +140,8 @@ public final class ColorMath {
      * @return the visual difference between the colors
      */
     @Contract(pure = true)
-    public static int visualDifference(int a, int b) {
-        return visualDifference(red(a), green(a), blue(a), red(b), green(b), blue(b));
+    public static int visualDiff(int a, int b) {
+        return visualDiff(red(a), green(a), blue(a), red(b), green(b), blue(b));
     }
 
     /**
@@ -251,6 +254,7 @@ public final class ColorMath {
      * @param b the blue value (0-1)
      * @return the xyz values
      */
+    @NotNull
     public static float[] xyz(float r, float g, float b) {
         final float
             x = 0.4124F*r + 0.3576F*g + 0.1805F*b,
@@ -274,8 +278,19 @@ public final class ColorMath {
      * @param rgb the color
      * @return the xyz values
      */
+    @NotNull
     public static float[] xyz(int rgb) {
         return xyz(red(rgb)/255F, green(rgb)/255F, blue(rgb)/255F);
+    }
+    
+    @NotNull
+    public static float[] hsb(int r, int g, int b) {
+        return Color.RGBtoHSB(r, g, b, null);
+    }
+    
+    @NotNull
+    public static float[] hsb(int rgb) {
+        return hsb(red(rgb), green(rgb), blue(rgb));
     }
     
     /**
@@ -483,22 +498,38 @@ public final class ColorMath {
      * @return an array of bytes in ARGB order
      */
     @Contract("_ -> !null")
-    public static byte[] asByteArrayARGB(int rgb) {
+    public static byte[] bytesARGB(int rgb) {
         return new byte[] {(byte) alpha(rgb), (byte) red(rgb), (byte) green(rgb), (byte) blue(rgb)};
     }
-
+    
     /**
-     * Splits up an ARGB int into its 4 components (alpha, red, green blue)
+     * Splits up an ARGB int into its 3 components (red, green blue)
      *
      * @param rgb the argb value
-     * @return an array of ints in ARGB order
+     * @return an array of bytes in RGB order
      */
     @Contract("_ -> !null")
-    public static int[] split(int rgb) {
-        return new int[] {alpha(rgb), red(rgb), green(rgb), blue(rgb)};
+    public static byte[] bytesRGB(int rgb) {
+        return new byte[] {(byte) red(rgb), (byte) green(rgb), (byte) blue(rgb)};
     }
 
-    //PREDICATES
+    // TRANSPARENCY
+    
+    /**
+     * Returns the {@link Transparency} of an ARGB integer.
+     *
+     * @param rgb the rgb value.
+     * @return the transparency
+     */
+    @Contract(pure = true)
+    public static int getTransparency(int rgb) {
+        if ( (rgb & 0xFF_000000) == 0xFF_000000 )
+            return Transparency.OPAQUE;
+        else if ( (rgb & 0xFF_000000) == 0 )
+            return Transparency.BITMASK;
+        else
+            return Transparency.TRANSLUCENT;
+    }
 
     @Contract(pure = true)
     public static boolean isTransparent(int rgb) {

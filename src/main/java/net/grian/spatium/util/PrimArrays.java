@@ -123,8 +123,10 @@ public final class PrimArrays {
         return prim;
     }
     
+    // CONCATENATION
+    
     @Contract(pure = true)
-    public static <T> T[] contact(T[] tail, T[] head) {
+    public static <T> T[] concat(T[] tail, T[] head) {
         Class<?> component = tail.getClass().getComponentType();
         T[] array = newInstance(component, tail.length+head.length);
     
@@ -135,7 +137,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static long[] contact(long[] tail, long[] head) {
+    public static long[] concat(long[] tail, long[] head) {
         long[] array = new long[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -145,7 +147,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static int[] contact(int[] tail, int[] head) {
+    public static int[] concat(int[] tail, int[] head) {
         int[] array = new int[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -155,7 +157,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static short[] contact(short[] tail, short[] head) {
+    public static short[] concat(short[] tail, short[] head) {
         short[] array = new short[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -165,7 +167,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static char[] contact(char[] tail, char[] head) {
+    public static char[] concat(char[] tail, char[] head) {
         char[] array = new char[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -175,7 +177,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static byte[] contact(byte[] tail, byte[] head) {
+    public static byte[] concat(byte[] tail, byte[] head) {
         byte[] array = new byte[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -185,7 +187,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static double[] contact(double[] tail, double[] head) {
+    public static double[] concat(double[] tail, double[] head) {
         double[] array = new double[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -195,7 +197,7 @@ public final class PrimArrays {
     }
     
     @Contract(pure = true)
-    public static float[] contact(float[] tail, float[] head) {
+    public static float[] concat(float[] tail, float[] head) {
         float[] array = new float[tail.length+head.length];
     
         System.arraycopy(tail, 0, array, 0, tail.length);
@@ -203,152 +205,6 @@ public final class PrimArrays {
         
         return array;
     }
-    
-    //EQUAL
-    
-    @Contract(pure = true)
-    public static boolean equal(int[] array1, int[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(short[] array1, short[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(byte[] array1, byte[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(char[] array1, char[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(double[] array1, double[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(float[] array1, float[] array2) {
-        if (array1.length != array2.length) return false;
-        for (int i = 0; i<array1.length; i++) {
-            if (array1[i] != array2[i]) return false; 
-        }
-        return true;
-    }
-    
-    //CONTAINS
-    
-    @Contract(pure = true)
-    public static <T> boolean contains(T[] array, T value) {
-        for (T anArray : array)
-            if (anArray.equals(value))
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(long[] array, long value) {
-        for (long anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(int[] array, int value) {
-        for (int anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(short[] array, short value) {
-        for (short anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(byte[] array, byte value) {
-        for (byte anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(char[] array, char value) {
-        for (char anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(double[] array, double value) {
-        for (double anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    @Contract(pure = true)
-    public static boolean contains(float[] array, float value) {
-        for (float anArray : array)
-            if (anArray == value)
-                return true;
-        return false;
-    }
-    
-    //PASTE
-    
-    public static <T> void paste(T[] tail, T[] array, int index) {
-        if (tail.length < array.length+index)
-            throw new IllegalArgumentException();
-        System.arraycopy(array, 0, tail, index, array.length);
-    }
-    
-    public static void paste(double[] into, double[] array, int index) {
-        if (into.length < array.length+index) throw new IllegalArgumentException();
-        System.arraycopy(array, 0, into, index, array.length);
-    }
-    
-    @Contract(pure = true)
-    public static boolean equal(long[] array1, long[] array2) {
-        if (array1.length != array2.length)
-            return false;
-        for (int i = 0; i<array1.length; i++)
-            if (array1[i] != array2[i]) return false;
-        return true;
-    }
-    
-    //MERGE
     
     @Contract(pure = true)
     @SafeVarargs
@@ -471,6 +327,72 @@ public final class PrimArrays {
         return result;
     }
     
+    //CONTAINS
+    
+    @Contract(pure = true)
+    public static <T> boolean contains(T[] array, T value) {
+        for (T anArray : array)
+            if (anArray.equals(value))
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(long[] array, long value) {
+        for (long anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(int[] array, int value) {
+        for (int anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(short[] array, short value) {
+        for (short anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(byte[] array, byte value) {
+        for (byte anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(char[] array, char value) {
+        for (char anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(double[] array, double value) {
+        for (double anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
+    @Contract(pure = true)
+    public static boolean contains(float[] array, float value) {
+        for (float anArray : array)
+            if (anArray == value)
+                return true;
+        return false;
+    }
+    
     //NEW INSTANCE
     
     @SuppressWarnings("unchecked")
@@ -483,121 +405,12 @@ public final class PrimArrays {
         return (T[]) Array.newInstance(component, length);
     }
     
-    //OVERLAP
-    
-    public static <T> boolean overlap(T[] array1, T[] array2) {
-        if (array1.length < array2.length) {//iterate over shorter array to trigger contains() less often and reduce overhead
-            for (T anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (T anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(long[] array1, long[] array2) {
-        if (array1.length < array2.length) {
-            for (long anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (long anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(int[] array1, int[] array2) {
-        if (array1.length < array2.length) {
-            for (int anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (int anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(short[] array1, short[] array2) {
-        if (array1.length < array2.length) {
-            for (short anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (short anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(char[] array1, char[] array2) {
-        if (array1.length < array2.length) {
-            for (char anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (char anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(byte[] array1, byte[] array2) {
-        if (array1.length < array2.length) {
-            for (byte anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (byte anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(double[] array1, double[] array2) {
-        if (array1.length < array2.length) {
-            for (double anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (double anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    public static boolean overlap(float[] array1, float[] array2) {
-        if (array1.length < array2.length) {
-            for (float anArray1 : array1) if (contains(array2, anArray1)) return true;
-        }
-        else {
-            assert array1.length > array2.length;
-            for (float anArray2 : array2) if (contains(array1, anArray2)) return true;
-        }
-        
-        return false;
-    }
-    
-    //PARSE
+    // RANDOM VALUE
     
     private static Random random = null;
     
     private synchronized static Random initRNG() {
         return random==null? random=new Random() : random;
-    }
-    
-    @SafeVarargs
-    public static <T> T[] randomMultiple(int count, T... array) {
-        Random rng = initRNG();
-        T[] results = newInstance(array.getClass().getComponentType(), count);
-        for (int i = 0; i<results.length; i++) {
-            results[i] = array[ rng.nextInt(array.length) ];
-        }
-        
-        return results;
     }
     
     /**
@@ -672,6 +485,54 @@ public final class PrimArrays {
     public static float random(float... array) {
         return array[ initRNG().nextInt(array.length) ];
     }
+    
+    // FLIP
+    
+    public static <T> void flip(T[] array) {
+        final int lim = array.length / 2;
+        
+        for (int i = 0; i < lim; i++) {
+            final int j = array.length-1-i;
+            T val = array[i];
+            array[i] = array[j];
+            array[j] = val;
+        }
+    }
+    
+    public static void flip(long[] array) {
+        final int lim = array.length / 2;
+        
+        for (int i = 0; i < lim; i++) {
+            final int j = array.length-1-i;
+            long val = array[i];
+            array[i] = array[j];
+            array[j] = val;
+        }
+    }
+    
+    public static void flip(int[] array) {
+        final int lim = array.length / 2;
+        
+        for (int i = 0; i < lim; i++) {
+            final int j = array.length-1-i;
+            int val = array[i];
+            array[i] = array[j];
+            array[j] = val;
+        }
+    }
+    
+    public static void flip(byte[] array) {
+        final int lim = array.length / 2;
+        
+        for (int i = 0; i < lim; i++) {
+            final int j = array.length-1-i;
+            byte val = array[i];
+            array[i] = array[j];
+            array[j] = val;
+        }
+    }
+    
+    // SWAP
     
     /**
      * Swaps two elements in an array.
@@ -776,124 +637,6 @@ public final class PrimArrays {
         float val1 = array[i1];
         array[i1] = array[i2];
         array[i2] = val1;
-    }
-    
-    public static <T> T[] subArray(T[] array, int min, int lim) {
-        if (min < 0) throw new NegativeArraySizeException("min < 0");
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min >= lim) return newInstance(array.getClass().getComponentType(), 0);
-        
-        int length = lim-min;
-        T[] result = newInstance(array.getClass().getComponentType(), length);
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;	
-    }
-    
-    public static long[] subArray(long[] array, int min, int lim) {
-        if (min < 0) throw new NegativeArraySizeException("min < 0");
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new long[0];
-        
-        int length = lim-min;
-        long[] result = new long[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;	
-    }
-    
-    public static int[] subArray(int[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new int[0];
-        
-        int length = lim-min;
-        int[] result = new int[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static short[] subArray(short[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new short[0];
-        
-        int length = lim-min;
-        short[] result = new short[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static char[] subArray(char[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new char[0];
-        
-        int length = lim-min;
-        char[] result = new char[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static byte[] subArray(byte[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new byte[0];
-        
-        int length = lim-min;
-        byte[] result = new byte[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static double[] subArray(double[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new double[0];
-        
-        int length = lim-min;
-        double[] result = new double[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static float[] subArray(float[] array, int min, int lim) {
-        if (lim < 0) throw new NegativeArraySizeException("lim < 0");
-        if (min > lim) return new float[0];
-        
-        int length = lim-min;
-        float[] result = new float[length];
-        System.arraycopy(array, min, result, 0, length);
-        
-        return result;
-    }
-    
-    public static <T> T[] subArray(T[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static long[] subArray(long[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static int[] subArray(int[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static short[] subArray(short[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static char[] subArray(char[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static double[] subArray(double[] array, int min) {
-        return subArray(array, min, array.length);
-    }
-    
-    public static float[] subArray(float[] array, int min) {
-        return subArray(array, min, array.length);
     }
 
 }
