@@ -41,7 +41,7 @@ public final class CacheMath {
     
     //list of common constants or numbers
     public final static double
-        GOLDEN = 1.618033988749894848204586834365638117720309179805762862135,
+        GOLDEN = (1 + Math.sqrt(5)) / 2,
         TAU = Math.PI * 2,
         HALF_PI = Math.PI / 2;
     
