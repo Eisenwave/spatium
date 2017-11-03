@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <resourceExtensions />
-    <wildcardResourcePatterns>
-      <entry name="!?*.java" />
-      <entry name="!?*.form" />
-      <entry name="!?*.class" />
-      <entry name="!?*.groovy" />
-      <entry name="!?*.scala" />
-      <entry name="!?*.flex" />
-      <entry name="!?*.kt" />
-      <entry name="!?*.clj" />
-      <entry name="!?*.aj" />
-    </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="materia" />
-        <module name="spatium" />
+        <module name="eisen-nbt" />
+        <module name="spatium-array" />
+        <module name="spatium-core" />
+        <module name="spatium-function" />
+        <module name="spatium-math" />
+        <module name="spatium-util" />
+        <module name="spatiumarray" />
         <module name="Torrens" />
-        <module name="Utilities" />
+        <module name="torrens-3d" />
+        <module name="torrens-core" />
+        <module name="torrens-image" />
+        <module name="torrens-nbt" />
+        <module name="torrens-schematic" />
+        <module name="torrens-wavefront" />
         <module name="VoxelVert" />
+        <module name="voxelvert-bukkit" />
+        <module name="voxelvert-bukkit-gui" />
+        <module name="voxelvert-core" />
+        <module name="voxelvert-ui" />
         <module name="vv" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="eisen-nbt" target="1.5" />
       <module name="materia" target="1.8" />
       <module name="spatium" target="1.8" />
+      <module name="spatium-array" target="1.8" />
+      <module name="spatium-core" target="1.8" />
+      <module name="spatium-function" target="1.8" />
+      <module name="spatium-math" target="1.8" />
+      <module name="spatium-util" target="1.8" />
+      <module name="spatiumarray" target="1.8" />
       <module name="Torrens" target="1.8" />
+      <module name="torrens" target="1.8" />
+      <module name="torrens-3d" target="1.8" />
+      <module name="torrens-core" target="1.8" />
+      <module name="torrens-image" target="1.8" />
+      <module name="torrens-nbt" target="1.8" />
+      <module name="torrens-qubicle" target="1.8" />
+      <module name="torrens-schematic" target="1.8" />
+      <module name="torrens-wavefront" target="1.8" />
       <module name="Utilities" target="1.8" />
       <module name="VoxelVert" target="1.8" />
+      <module name="voxelvert" target="1.8" />
+      <module name="voxelvert-bukkit" target="1.8" />
+      <module name="voxelvert-bukkit-gui" target="1.8" />
+      <module name="voxelvert-core" target="1.8" />
+      <module name="voxelvert-ui" target="1.8" />
       <module name="vv" target="1.8" />
     </bytecodeTargetLevel>
   </component>
