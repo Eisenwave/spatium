@@ -1,15 +1,10 @@
 package net.grian.spatium.util;
 
-import net.grian.spatium.cache.CacheMath;
 import org.jetbrains.annotations.Contract;
 
 /**
  * <p>
  *     Utility class that provides faster or more convenient alternatives to {@link Math}.
- * </p>
- * <p>
- *     This is not to be confused with {@link CacheMath} which uses lookup tables, not faster algorithms to return
- *     results more efficiently.
  * </p>
  *
  */
@@ -82,6 +77,8 @@ public final class FastMath {
         return Math.log(number);
     }
     
+    private final static double LN_2 = Math.log(2);
+    
     /**
      * <p>
      *     Returns the binary logarithm of a number <b>n</b>.
@@ -96,7 +93,7 @@ public final class FastMath {
      */
     @Contract(pure = true)
     public static double log2(double number) {
-        return Math.log(number) / CacheMath.LN_2;
+        return Math.log(number) / LN_2;
     }
     
     /**
@@ -119,8 +116,8 @@ public final class FastMath {
     /**
      * Returns the smallest positive power of two which is greater or equal than the given number.
      * <blockquote>
-     *     <code>greaterPow2(25) = 32</code>
-     *     <code>greaterPow2(8) = 8</code>
+     *     <code>greaterPow2(25) = 32</code><br>
+     *     <code>greaterPow2(8) = 8</code><br>
      *     <code>greaterPow2(-2) = 1</code>
      * </blockquote>
      *
@@ -195,7 +192,7 @@ public final class FastMath {
      */
     @Contract(pure = true)
     public static int minusOnePow(int exp) {
-        return exp%2 == 0 ? 1 : -1;
+        return (exp & 1) == 0? 1 : -1;
     }
     
     @Contract(pure = true)

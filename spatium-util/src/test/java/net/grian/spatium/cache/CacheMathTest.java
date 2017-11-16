@@ -1,8 +1,7 @@
 package net.grian.spatium.cache;
 
-import net.grian.spatium.cache.CacheMath;
-import net.grian.spatium.util.Spatium;
 import net.grian.spatium.util.FastMath;
+import net.grian.spatium.util.Spatium;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
