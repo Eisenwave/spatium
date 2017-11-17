@@ -41,7 +41,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static long floor(double num) {
-        return (long) ( (num % 1 == 0)? num : (num < 0) ? --num : num );
+        return (long) ((num % 1 == 0)? num : (num < 0)? --num : num);
     }
     
     /**
@@ -52,7 +52,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int floor(float num) {
-        return (int) ( (num % 1 == 0)? num : (num < 0)? --num : num );
+        return (int) ((num % 1 == 0)? num : (num < 0)? --num : num);
     }
     
     /**
@@ -63,7 +63,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static long ceil(double num) {
-        return (long) ( (num % 1 == 0)? num : (num < 0) ? num : ++num );
+        return (long) ((num % 1 == 0)? num : (num < 0)? num : ++num);
     }
     
     /**
@@ -74,15 +74,15 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int ceil(float num) {
-        return (int) ( (num % 1 == 0)? num : (num < 0)? num : ++num );
+        return (int) ((num % 1 == 0)? num : (num < 0)? num : ++num);
     }
     
     /**
      * <p>
-     *     If positive, rounds a number up if its decimals are <code>0.5</code> or greater, else down.
+     * If positive, rounds a number up if its decimals are <code>0.5</code> or greater, else down.
      * </p>
      * <p>
-     *     Else rounds a number down if its decimals are <code>-0.5</code> or lower, else up.
+     * Else rounds a number down if its decimals are <code>-0.5</code> or lower, else up.
      * </p>
      *
      * @param num the number
@@ -90,15 +90,15 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static long round(double num) {
-        return (long) ( (num < 0) ? (num-0.5F) : (num+0.5F) );
+        return (long) ((num < 0)? (num - 0.5F) : (num + 0.5F));
     }
     
     /**
      * <p>
-     *     If positive, rounds a number up if its decimals are <code>0.5</code> or greater, else down.
+     * If positive, rounds a number up if its decimals are <code>0.5</code> or greater, else down.
      * </p>
      * <p>
-     *     Else rounds a number down if its decimals are <code>-0.5</code> or lower, else up.
+     * Else rounds a number down if its decimals are <code>-0.5</code> or lower, else up.
      * </p>
      *
      * @param num the number
@@ -106,41 +106,41 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int round(float num) {
-        return (int) ( (num < 0) ? (num-0.5F) : (num+0.5F) );
+        return (int) ((num < 0)? (num - 0.5F) : (num + 0.5F));
     }
-
+    
     // AVERAGE
     
     @Contract(pure = true)
-    public static long average(long...array) {
+    public static long average(long... array) {
         return sum(array) / array.length;
     }
     
     @Contract(pure = true)
-    public static int average(int...array) {
+    public static int average(int... array) {
         return (int) (sum(array) / array.length);
     }
     
     @Contract(pure = true)
-    public static short average(short...array) {
+    public static short average(short... array) {
         return (short) (sum(array) / array.length);
     }
     
     @Contract(pure = true)
-    public static byte average(byte...array) {
+    public static byte average(byte... array) {
         return (byte) (sum(array) / array.length);
     }
     
     @Contract(pure = true)
-    public static double average(double...array) {
+    public static double average(double... array) {
         return sum(array) / array.length;
     }
     
     @Contract(pure = true)
-    public static float average(float...array) {
+    public static float average(float... array) {
         return (float) (sum(array) / array.length);
     }
-
+    
     // SIGNUM
     
     @Contract(pure = true)
@@ -150,7 +150,7 @@ public final class PrimMath {
     
     @Contract(pure = true)
     public static int signum(int x) {
-        return x > 0? 1 : x < 0? -1 : 0;
+        return Integer.compare(x, 0);
     }
     
     @Contract(pure = true)
@@ -176,42 +176,42 @@ public final class PrimMath {
     // SUM
     
     @Contract(pure = true)
-    public static long sum(long...array) {
+    public static long sum(long... array) {
         long sum = 0;
         for (long val : array) sum += val;
         return sum;
     }
     
     @Contract(pure = true)
-    public static long sum(int...array) {
+    public static long sum(int... array) {
         int sum = 0;
         for (int val : array) sum += val;
         return sum;
     }
     
     @Contract(pure = true)
-    public static int sum(short...array) {
+    public static int sum(short... array) {
         short sum = 0;
         for (short val : array) sum += val;
         return sum;
     }
     
     @Contract(pure = true)
-    public static int sum(byte...array) {
+    public static int sum(byte... array) {
         short sum = 0;
         for (byte val : array) sum += val;
         return sum;
     }
     
     @Contract(pure = true)
-    public static double sum(double...array) {
+    public static double sum(double... array) {
         double sum = 0;
         for (double val : array) sum += val;
         return sum;
     }
     
     @Contract(pure = true)
-    public static double sum(float...array) {
+    public static double sum(float... array) {
         float sum = 0;
         for (float val : array) sum += val;
         return sum;
@@ -322,6 +322,7 @@ public final class PrimMath {
      * <tr><td>2</td><td>0</td><td>1</td><td>0</td></tr>
      * </tbody>
      * </table>
+     *
      * @param val the value
      * @param min the minimum of the range
      * @param max the maximum of the range
@@ -368,6 +369,7 @@ public final class PrimMath {
      * <tr><td>2</td><td>0</td><td>1</td><td>0</td></tr>
      * </tbody>
      * </table>
+     *
      * @param val the value
      * @param min the minimum of the range
      * @param max the maximum of the range
@@ -414,6 +416,7 @@ public final class PrimMath {
      * <tr><td>2</td><td>0</td><td>1</td><td>0</td></tr>
      * </tbody>
      * </table>
+     *
      * @param val the value
      * @param min the minimum of the range
      * @param max the maximum of the range
@@ -460,6 +463,7 @@ public final class PrimMath {
      * <tr><td>2</td><td>0</td><td>1</td><td>0</td></tr>
      * </tbody>
      * </table>
+     *
      * @param val the value
      * @param min the minimum of the range
      * @param max the maximum of the range
@@ -506,6 +510,7 @@ public final class PrimMath {
      * <tr><td>2</td><td>0</td><td>1</td><td>0</td></tr>
      * </tbody>
      * </table>
+     *
      * @param val the value
      * @param min the minimum of the range
      * @param max the maximum of the range
@@ -542,7 +547,7 @@ public final class PrimMath {
     public static long clamp(long min, long val, long max) {
         if (min > max) throw new IllegalArgumentException("min > max");
         
-        return (val < min) ? min : (val > max) ? max : val;
+        return (val < min)? min : (val > max)? max : val;
     }
     
     /**
@@ -557,8 +562,8 @@ public final class PrimMath {
     @Contract(pure = true)
     public static int clamp(int min, int val, int max) {
         if (min > max) throw new IllegalArgumentException("min > max");
-
-        return (val < min) ? min : (val > max) ? max : val;
+        
+        return (val < min)? min : (val > max)? max : val;
     }
     
     /**
@@ -573,8 +578,8 @@ public final class PrimMath {
     @Contract(pure = true)
     public static short clamp(short min, short val, short max) {
         if (min > max) throw new IllegalArgumentException("min > max");
-
-        return (val < min) ? min : (val > max) ? max : val;
+        
+        return (val < min)? min : (val > max)? max : val;
     }
     
     /**
@@ -589,8 +594,8 @@ public final class PrimMath {
     @Contract(pure = true)
     public static byte clamp(byte min, byte val, byte max) {
         if (min > max) throw new IllegalArgumentException("min > max");
-
-        return (val < min) ? min : (val > max) ? max : val;
+        
+        return (val < min)? min : (val > max)? max : val;
     }
     
     /**
@@ -605,8 +610,8 @@ public final class PrimMath {
     @Contract(pure = true)
     public static double clamp(double min, double val, double max) {
         if (min > max) throw new IllegalArgumentException("min > max");
-
-        return (val < min) ? min : (val > max) ? max : val;
+        
+        return (val < min)? min : (val > max)? max : val;
     }
     
     /**
@@ -621,10 +626,32 @@ public final class PrimMath {
     @Contract(pure = true)
     public static float clamp(float min, float val, float max) {
         if (min > max) throw new IllegalArgumentException("min > max");
-
-        return (val < min) ? min : (val > max) ? max : val;
+        
+        return (val < min)? min : (val > max)? max : val;
     }
-
+    
+    /**
+     * Clamps a number to be in range(0,1).
+     *
+     * @param number the number
+     * @return the clamped number
+     */
+    @Contract(pure = true)
+    public static float clamp01(float number) {
+        return number < 0? 0 : number > 1? 1 : number;
+    }
+    
+    /**
+     * Clamps a number to be in range(0,1).
+     *
+     * @param number the number
+     * @return the clamped number
+     */
+    @Contract(pure = true)
+    public static double clamp01(double number) {
+        return number < 0? 0 : number > 1? 1 : number;
+    }
+    
     // ABSOLUTE
     
     /**
@@ -635,7 +662,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static long abs(long number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
     
     /**
@@ -646,7 +673,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int abs(int number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
     
     /**
@@ -657,7 +684,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int abs(short number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
     
     /**
@@ -668,7 +695,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static int abs(byte number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
     
     /**
@@ -679,7 +706,7 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static double abs(double number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
     
     /**
@@ -690,43 +717,43 @@ public final class PrimMath {
      */
     @Contract(pure = true)
     public static float abs(float number) {
-        return number<0? -number : number;
+        return number < 0? -number : number;
     }
-
+    
     //MAX
     
     @Contract(pure = true)
     public static long max(long a, long b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static int max(int a, int b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static short max(short a, short b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static byte max(byte a, byte b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static double max(double a, double b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static float max(float a, float b) {
-        return a>b? a : b;
+        return a > b? a : b;
     }
-
+    
     //TRIPPLE MAX
-
+    
     @Contract(pure = true)
     public static long max(long a, long b, long c) {
         return max(a, max(b, c));
@@ -756,7 +783,7 @@ public final class PrimMath {
     public static float max(float a, float b, float c) {
         return max(a, max(b, c));
     }
-
+    
     //VARARGS MAX
     
     @Contract(pure = true)
@@ -767,7 +794,7 @@ public final class PrimMath {
         if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         long max = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] > max) max = nums[i];
         return max;
     }
@@ -780,7 +807,7 @@ public final class PrimMath {
         if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         int max = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] > max) max = nums[i];
         return max;
     }
@@ -793,7 +820,7 @@ public final class PrimMath {
         if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         double max = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] > max) max = nums[i];
         return max;
     }
@@ -806,45 +833,45 @@ public final class PrimMath {
         if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         float max = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] > max) max = nums[i];
         return max;
     }
-
+    
     //MIN
-
+    
     @Contract(pure = true)
     public static long min(long a, long b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static int min(int a, int b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
     
     @Contract(pure = true)
     public static short min(short a, short b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static byte min(byte a, byte b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static double min(double a, double b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
-
+    
     @Contract(pure = true)
     public static float min(float a, float b) {
-        return a<b? a : b;
+        return a < b? a : b;
     }
-
+    
     // TRIPPLE MIN
-
+    
     @Contract(pure = true)
     public static long min(long a, long b, long c) {
         return min(a, min(b, c));
@@ -874,7 +901,7 @@ public final class PrimMath {
     public static float min(float a, float b, float c) {
         return min(a, min(b, c));
     }
-
+    
     // VARARGS MIN
     
     @Contract(pure = true)
@@ -883,9 +910,9 @@ public final class PrimMath {
         if (nums.length == 1) return nums[0];
         if (nums.length == 2) return min(nums[0], nums[1]);
         if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
-
+        
         long min = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] < min) min = nums[i];
         return min;
     }
@@ -896,9 +923,9 @@ public final class PrimMath {
         if (nums.length == 1) return nums[0];
         if (nums.length == 2) return min(nums[0], nums[1]);
         if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
-
+        
         int min = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] < min) min = nums[i];
         return min;
     }
@@ -909,24 +936,24 @@ public final class PrimMath {
         if (nums.length == 1) return nums[0];
         if (nums.length == 2) return min(nums[0], nums[1]);
         if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
-
+        
         double min = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] < min) min = nums[i];
         return min;
     }
-
+    
     @Contract(pure = true)
     public static float min(@NotNull float... nums) {
         if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
         if (nums.length == 2) return min(nums[0], nums[1]);
         if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
-
+        
         float min = nums[0];
-        for (int i = 1; i<nums.length; i++)
+        for (int i = 1; i < nums.length; i++)
             if (nums[i] < min) min = nums[i];
         return min;
     }
-
+    
 }
