@@ -22,7 +22,7 @@ public class Incrementer2 {
     }
 
     public boolean canIncrement() {
-        return y < limY || x < limX;
+        return y < limY && x < limX;
     }
 
     public int[] get() {
@@ -41,10 +41,12 @@ public class Incrementer2 {
     }
 
     public void increment() {
+        if (!canIncrement())
+            throw new NoSuchElementException("lim=("+limX+","+limY+")");
+        
         if (++x >= limX) {
             x = 0;
-            if (++y >= limY)
-                throw new NoSuchElementException("("+x+","+y+"), lim=("+limX+","+limY+")");
+            ++y;
         }
     }
     
