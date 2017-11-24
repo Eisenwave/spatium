@@ -49,23 +49,5 @@ public class Incrementer2 {
             ++y;
         }
     }
-    
-    /**
-     * Returns the next pair of coordinates.
-     *
-     * @throws NoSuchElementException if there is no next pair
-     * @see #increment()
-     */
-    public int[] peek() {
-        int rx = x, ry = y;
-        
-        if (x + 1 >= limX) {
-            rx = 0;
-            if (y + 1 >= limY)
-                throw new NoSuchElementException("("+x+","+y+"), lim=("+limX+","+limY+")");
-        }
-        
-        return new int[] {rx, ry};
-    }
 
 }
