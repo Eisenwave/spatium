@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.grian.spatium</groupId>
+    <groupId>eisenwave.spatium</groupId>
     <artifactId>spatium</artifactId>
     <packaging>pom</packaging>
     <version>0.1</version>
@@ -13,7 +13,7 @@
         <module>spatium-core</module>
     </modules>
     <name>Spatium</name>
-    <description>Grian 3D library</description>
+    <description>3D library</description>
 
     <developers>
         <developer>
@@ -34,23 +34,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- repositories>
-        <repository>
-            <id>nexus</id>
-            <url>http://grian.net:8081/repository/grian/</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <url>http://grian.net:8081/repository/grian/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <url>http://grian.net:8081/repository/grian/</url>
-        </snapshotRepository>
-    </distributionManagement -->
 
 </project>
