@@ -1,6 +1,6 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.impl.Slab3Impl;
 import org.jetbrains.annotations.NotNull;
 

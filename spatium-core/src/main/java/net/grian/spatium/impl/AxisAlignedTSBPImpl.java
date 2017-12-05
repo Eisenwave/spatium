@@ -1,8 +1,8 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.enums.Direction;
-import net.grian.spatium.enums.Direction.AxisDirection;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.enums.Direction;
+import eisenwave.spatium.enums.Direction.AxisDirection;
 import net.grian.spatium.geo3.AxisAlignedTSBP;
 import net.grian.spatium.geo3.Ray3;
 

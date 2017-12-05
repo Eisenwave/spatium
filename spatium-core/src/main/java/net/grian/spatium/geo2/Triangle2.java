@@ -1,7 +1,7 @@
 package net.grian.spatium.geo2;
 
 import net.grian.spatium.impl.Triangle2Impl;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.jetbrains.annotations.NotNull;
 
 public interface Triangle2 extends Area, Polygon2 {

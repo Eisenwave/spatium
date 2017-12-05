@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.enums.Axis;
+import eisenwave.spatium.enums.Axis;
 import net.grian.spatium.geo3.*;
 
 public class AxisSlab33Impl implements AxisSlab3 {

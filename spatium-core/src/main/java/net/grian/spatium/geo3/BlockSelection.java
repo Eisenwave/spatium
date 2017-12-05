@@ -1,13 +1,13 @@
 package net.grian.spatium.geo3;
 
 import net.grian.spatium.impl.BlockSelectionImpl;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
 
-import static net.grian.spatium.util.PrimMath.*;
+import static eisenwave.spatium.util.PrimMath.*;
 
 public interface BlockSelection extends Space, Iterable<BlockVector>, Serializable, Cloneable {
 

@@ -1,6 +1,6 @@
 package net.grian.spatium.geo2;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.impl.RectangleImpl;
 import org.jetbrains.annotations.NotNull;
 

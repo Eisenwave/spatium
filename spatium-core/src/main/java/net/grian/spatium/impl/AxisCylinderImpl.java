@@ -1,7 +1,7 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.enums.Axis;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.enums.Axis;
 import net.grian.spatium.geo3.AxisCylinder;
 import net.grian.spatium.geo3.Vector3;
 import org.jetbrains.annotations.NotNull;

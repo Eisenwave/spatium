@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.cache.CacheMath;
+import eisenwave.spatium.cache.CacheMath;
 import net.grian.spatium.geo3.Path3;
 import net.grian.spatium.geo3.Sphere;
 import net.grian.spatium.geo3.Vector3;

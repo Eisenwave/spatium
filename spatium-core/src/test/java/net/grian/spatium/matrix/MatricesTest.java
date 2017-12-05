@@ -1,6 +1,6 @@
 package net.grian.spatium.matrix;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo2.Vector2;
 import org.junit.Test;
 

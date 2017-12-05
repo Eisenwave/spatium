@@ -4,7 +4,7 @@ import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.iter.BlockIterator;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 
 import java.util.Iterator;
 

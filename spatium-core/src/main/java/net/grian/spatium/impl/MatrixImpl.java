@@ -2,8 +2,8 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.matrix.Matrix;
 import net.grian.spatium.matrix.MatrixDimensionsException;
-import net.grian.spatium.util.FastMath;
-import net.grian.spatium.util.Strings;
+import eisenwave.spatium.util.FastMath;
+import eisenwave.spatium.util.Strings;
 
 import java.util.Arrays;
 

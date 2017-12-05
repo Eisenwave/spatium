@@ -1,6 +1,6 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo2.Triangle2;
 import net.grian.spatium.geo3.Plane;
 import net.grian.spatium.geo3.Ray3;

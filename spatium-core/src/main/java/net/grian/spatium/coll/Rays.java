@@ -1,7 +1,7 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.cache.CacheMath;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.cache.CacheMath;
 import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
 import org.jetbrains.annotations.*;

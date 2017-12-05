@@ -1,12 +1,12 @@
 package net.grian.spatium.transform;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo3.Vector3;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import static net.grian.spatium.enums.Direction.*;
+import static eisenwave.spatium.enums.Direction.*;
 
 public class QuaternionTest {
     

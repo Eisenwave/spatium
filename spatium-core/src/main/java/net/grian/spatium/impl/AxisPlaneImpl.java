@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.enums.Axis;
+import eisenwave.spatium.enums.Axis;
 import net.grian.spatium.geo3.AxisPlane;
 
 public class AxisPlaneImpl implements AxisPlane {

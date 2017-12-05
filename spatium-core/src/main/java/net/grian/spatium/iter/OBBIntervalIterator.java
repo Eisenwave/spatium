@@ -2,7 +2,7 @@ package net.grian.spatium.iter;
 
 import net.grian.spatium.geo3.OrientedBB;
 import net.grian.spatium.geo3.Vector3;
-import net.grian.spatium.util.Incrementer3;
+import eisenwave.spatium.util.Incrementer3;
 
 import java.util.Iterator;
 

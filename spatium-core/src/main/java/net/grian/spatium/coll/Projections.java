@@ -1,11 +1,11 @@
 package net.grian.spatium.coll;
 
-import net.grian.spatium.enums.Axis;
+import eisenwave.spatium.enums.Axis;
 import net.grian.spatium.geo2.*;
 import net.grian.spatium.geo3.*;
 import net.grian.spatium.transform.Quaternion;
-import net.grian.spatium.util.PrimMath;
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.PrimMath;
+import eisenwave.spatium.util.Spatium;
 import org.jetbrains.annotations.NotNull;
 
 public final class Projections {

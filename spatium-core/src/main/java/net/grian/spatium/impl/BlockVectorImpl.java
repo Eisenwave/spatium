@@ -1,9 +1,9 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.enums.Direction;
+import eisenwave.spatium.enums.Direction;
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Vector3;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 
 import java.util.Arrays;
 

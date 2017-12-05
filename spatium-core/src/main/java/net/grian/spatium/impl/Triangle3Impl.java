@@ -1,6 +1,6 @@
 package net.grian.spatium.impl;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo3.Triangle3;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.transform.Transformation;

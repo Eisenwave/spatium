@@ -2,7 +2,7 @@ package net.grian.spatium.iter;
 
 import net.grian.spatium.geo3.BlockVector;
 import net.grian.spatium.geo3.Ray3;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

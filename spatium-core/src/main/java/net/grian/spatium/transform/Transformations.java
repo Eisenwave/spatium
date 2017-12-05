@@ -1,6 +1,6 @@
 package net.grian.spatium.transform;
 
-import net.grian.spatium.enums.Axis;
+import eisenwave.spatium.enums.Axis;
 import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.matrix.Matrix;

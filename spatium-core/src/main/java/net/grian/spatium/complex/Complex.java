@@ -1,6 +1,6 @@
 package net.grian.spatium.complex;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.impl.ComplexImplCartesian;
 import net.grian.spatium.impl.ComplexImplEuler;
 

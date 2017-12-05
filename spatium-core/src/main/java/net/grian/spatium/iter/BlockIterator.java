@@ -2,7 +2,7 @@ package net.grian.spatium.iter;
 
 import net.grian.spatium.geo3.BlockSelection;
 import net.grian.spatium.geo3.BlockVector;
-import net.grian.spatium.util.Incrementer3;
+import eisenwave.spatium.util.Incrementer3;
 
 import java.util.Iterator;
 

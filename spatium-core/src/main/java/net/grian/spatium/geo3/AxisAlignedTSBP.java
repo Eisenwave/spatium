@@ -1,8 +1,8 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.enums.Axis;
-import net.grian.spatium.enums.Direction;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.enums.Axis;
+import eisenwave.spatium.enums.Direction;
 
 import java.io.Serializable;
 

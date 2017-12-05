@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-import static net.grian.spatium.util.PrimMath.*;
+import static eisenwave.spatium.util.PrimMath.*;
 
 public interface BlockVector extends Serializable, Cloneable {
     

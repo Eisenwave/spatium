@@ -1,6 +1,6 @@
 package net.grian.spatium.polynom;
 
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.jetbrains.annotations.Contract;
 
 public final class Polynomials {

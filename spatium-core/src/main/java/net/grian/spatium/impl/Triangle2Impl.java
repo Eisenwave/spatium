@@ -4,7 +4,7 @@ import net.grian.spatium.geo2.Ray2;
 import net.grian.spatium.geo2.Rectangle;
 import net.grian.spatium.geo2.Triangle2;
 import net.grian.spatium.geo2.Vector2;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 
 public class Triangle2Impl implements Triangle2 {
     

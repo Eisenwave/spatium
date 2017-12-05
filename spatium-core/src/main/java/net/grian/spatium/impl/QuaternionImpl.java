@@ -2,7 +2,7 @@ package net.grian.spatium.impl;
 
 import net.grian.spatium.transform.Quaternion;
 import net.grian.spatium.geo3.Vector3;
-import net.grian.spatium.util.Strings;
+import eisenwave.spatium.util.Strings;
 
 
 public class QuaternionImpl implements Quaternion {

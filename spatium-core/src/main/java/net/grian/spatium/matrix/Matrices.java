@@ -1,6 +1,6 @@
 package net.grian.spatium.matrix;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo2.Vector2;
 import net.grian.spatium.geo3.Vector3;
 import org.jetbrains.annotations.Contract;

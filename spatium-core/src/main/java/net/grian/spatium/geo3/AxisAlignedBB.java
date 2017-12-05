@@ -1,14 +1,14 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.enums.Direction;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.enums.Direction;
 import net.grian.spatium.impl.AxisAlignedBBImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-import static net.grian.spatium.util.PrimMath.*;
-import static net.grian.spatium.enums.Direction.*;
+import static eisenwave.spatium.util.PrimMath.*;
+import static eisenwave.spatium.enums.Direction.*;
 
 /**
  * An axis aligned bounding box, or the cubical space between two points.

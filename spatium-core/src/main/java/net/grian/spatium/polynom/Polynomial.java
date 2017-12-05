@@ -1,6 +1,6 @@
 package net.grian.spatium.polynom;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.impl.PolynomialImpl;
 
 /**

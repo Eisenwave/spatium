@@ -1,10 +1,10 @@
 package net.grian.spatium.geo3;
 
-import net.grian.spatium.util.Spatium;
-import net.grian.spatium.cache.CacheMath;
+import eisenwave.spatium.util.Spatium;
+import eisenwave.spatium.cache.CacheMath;
 import net.grian.spatium.geo2.Rectangle;
 import net.grian.spatium.geo2.Vector2;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

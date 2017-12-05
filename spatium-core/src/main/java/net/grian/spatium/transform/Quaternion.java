@@ -1,6 +1,6 @@
 package net.grian.spatium.transform;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.spatium.impl.QuaternionImpl;
 import org.jetbrains.annotations.*;
