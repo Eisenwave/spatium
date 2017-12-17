@@ -1,42 +1,41 @@
 package eisenwave.spatium.enums;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import static eisenwave.spatium.enums.Axis.*;
 import static eisenwave.spatium.enums.Direction.AxisDirection.*;
 
 /**
  * <p>
- *     One of six directions, or movements into negative or positive directions of one of three axes in 3D space.
+ * One of six directions, or movements into negative or positive directions of one of three axes in 3D space.
  * </p>
  * <p>
- *     This enum is universal (not specific to Minecraft geometry) and thus highly recommended for strictly
- *     for geometric operations, unlike its Minecraft counterpart ({@link Face}).
+ * This enum is universal (not specific to Minecraft geometry) and thus highly recommended for strictly
+ * for geometric operations, unlike its Minecraft counterpart ({@link Face}).
  * </p>
- * 
+ *
  * @see Face
  */
 public enum Direction {
-    NEGATIVE_X(-1,  0,  0, NEGATIVE, X, Face.WEST,  "-X"),
-    POSITIVE_X( 1,  0,  0, POSITIVE, X, Face.EAST,  "+X"),
-    NEGATIVE_Y( 0, -1,  0, NEGATIVE, Y, Face.DOWN,  "-Y"),
-    POSITIVE_Y( 0,  1,  0, POSITIVE, Y, Face.UP,    "+Y"),
-    NEGATIVE_Z( 0,  0, -1, NEGATIVE, Z, Face.NORTH, "-Z"),
-    POSITIVE_Z( 0,  0,  1, POSITIVE, Z, Face.SOUTH, "+Z");
-
-    private final Axis axis;
-    private final AxisDirection direction;
-    private final Face face;
+    NEGATIVE_X(-1, 0, 0, NEGATIVE, X, "-X"),
+    POSITIVE_X(1, 0, 0, POSITIVE, X, "+X"),
+    NEGATIVE_Y(0, -1, 0, NEGATIVE, Y, "-Y"),
+    POSITIVE_Y(0, 1, 0, POSITIVE, Y, "+Y"),
+    NEGATIVE_Z(0, 0, -1, NEGATIVE, Z, "-Z"),
+    POSITIVE_Z(0, 0, 1, POSITIVE, Z, "+Z");
+    
+    private Axis axis;
+    private AxisDirection direction;
     private final int x, y, z;
     private final String name;
-
-    Direction(int x, int y, int z, AxisDirection direction, Axis axis, Face face, String name) {
+    
+    Direction(int x, int y, int z, AxisDirection direction, Axis axis, String name) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.axis = axis;
         this.direction = direction;
-        this.face = face;
         this.name = name;
     }
     
@@ -54,7 +53,7 @@ public enum Direction {
     public int z() {
         return z;
     }
-
+    
     /**
      * Returns the opposite of this direction. This does not influence the
      * {@link Axis} of this direction, however the {@link AxisDirection} is
@@ -62,70 +61,71 @@ public enum Direction {
      *
      * @return the opposite direction
      */
+    @NotNull
     @Contract(pure = true)
     public Direction opposite() {
-        return direction.opposite().withAxis(axis());
+        return direction.opposite().withAxis(axis);
     }
-
+    
     /**
      * Returns the axis that this direction is on.
      *
      * @return the axis that this direction is on
      */
+    @NotNull
     @Contract(pure = true)
     public Axis axis() {
         return axis;
     }
-
+    
     /**
      * Returns the axis that this direction is on.
      *
      * @return the axis that this direction is on
      */
+    @NotNull
     @Contract(pure = true)
     public Face face() {
-        return face;
+        return Face.values()[ordinal()];
     }
-
+    
     /**
      * Returns the {@link AxisDirection} that this direction is pointing
      * towards.
+     *
      * @return the direction on the axis of this direction
      */
+    @NotNull
     @Contract(pure = true)
     public AxisDirection direction() {
         return direction;
     }
-
+    
+    @NotNull
     @Contract(pure = true)
     public static Direction valueOf(Axis axis, AxisDirection direction) {
-        return direction.withAxis(axis);
+        return values()[axis.ordinal() * 2 + direction.ordinal()];
     }
     
     /**
      * The direction on an axis (positive or negative).
      */
     public static enum AxisDirection {
-        POSITIVE(POSITIVE_X, POSITIVE_Y, POSITIVE_Z),
-        NEGATIVE(NEGATIVE_X, NEGATIVE_Y, NEGATIVE_Z);
-
-        private final Direction[] directions;
-        
-        private AxisDirection(Direction x, Direction y, Direction z) {
-            this.directions = new Direction[]{x, y, z};
-        }
+        NEGATIVE(),
+        POSITIVE();
+    
+        private AxisDirection() {}
         
         @Contract(pure = true)
         public AxisDirection opposite() {
-            if (this==POSITIVE) return NEGATIVE;
-            else return POSITIVE;
+            return this == POSITIVE? NEGATIVE : POSITIVE;
         }
         
         @Contract(pure = true)
         public Direction withAxis(Axis axis) {
-            return directions[axis.ordinal()];
+            return Direction.valueOf(axis, this);
         }
-
+    
     }
     
     @Override
@@ -151,5 +151,5 @@ public enum Direction {
         return sum;
     }
     */
-
+    
 }

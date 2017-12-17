@@ -4,23 +4,24 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
- *     A face or side of a cube.
+ * A face or side of a cube.
  * </p>
  * <p>
- *     This enum is specific to Minecraft space and for strictly mathematical uses, its use is not recommended.
- *     Use {@link Direction} instead.
+ * This enum is specific to Minecraft space and for strictly mathematical uses, its use is not recommended.
+ * Use {@link Direction} instead.
  * </p>
  */
 public enum Face {
-    UP    (Direction.POSITIVE_Y),
-    DOWN  (Direction.NEGATIVE_Y),
-    NORTH (Direction.NEGATIVE_Z),
-    SOUTH (Direction.POSITIVE_Z),
-    EAST  (Direction.POSITIVE_X),
-    WEST  (Direction.NEGATIVE_X);
-
+    WEST(Direction.NEGATIVE_X),
+    EAST(Direction.POSITIVE_X),
+    DOWN(Direction.NEGATIVE_Y),
+    UP(Direction.POSITIVE_Y),
+    NORTH(Direction.NEGATIVE_Z),
+    SOUTH(Direction.POSITIVE_Z);
+    
     private final Direction direction;
     private Face opposite;
+    
     static {//necessary since constructors would lead to forward references
         UP.opposite = DOWN;
         DOWN.opposite = UP;
@@ -73,16 +74,16 @@ public enum Face {
             default: return null;
         }
     }
-
+    
     Face(Direction direction) {
         this.direction = direction;
     }
-
+    
     /**
      * Returns the direction corresponding to the face. In Minecraft space,
      * this is the direction from the center of the side of a cube with this
      * face.
-     *
+     * <p>
      * <br><br>For example, {@link Face#UP} corresponds to
      * {@link Direction#POSITIVE_Y}.
      *
@@ -91,7 +92,7 @@ public enum Face {
     public Direction direction() {
         return direction;
     }
-
+    
     /**
      * Returns the axis of this direction.
      *
@@ -100,7 +101,7 @@ public enum Face {
     public Axis axis() {
         return direction.axis();
     }
-
+    
     /**
      * Returns the opposite face.
      *
@@ -109,5 +110,5 @@ public enum Face {
     public Face opposite() {
         return opposite;
     }
-
+    
 }
