@@ -361,26 +361,6 @@ public final class Strings {
         return str.toLowerCase().startsWith(prefix.toLowerCase());
     }
     
-    /**
-     * Returns the suffix of this object which is potentially an auto wrapper.
-     * The suffix of a float is an 'f' and the suffix of a double is a 'd'.
-     * More numbers will receive a suffix. Shorts will have an 's' suffix and
-     * Bytes will have a 'b'. In addition, Strings will be surrounded by double
-     * quotes and Characters by single quotes.
-     *
-     * @param obj the object
-     */
-    public static String identifiedString(Object obj) {
-        if (obj instanceof String) return "\""+obj+"\"";
-        else if (obj instanceof Character) return "'"+obj+"'";
-        else if (obj instanceof Byte) return obj+"b";
-        else if (obj instanceof Short) return obj+"s";
-        else if (obj instanceof Float) return obj+"f";
-        else if (obj instanceof Double) return obj+"d";
-        else if (obj instanceof Long) return obj+"L";
-        else return obj.toString();
-    }
-    
     public static int compare(String str0, String str1) {
         return compare(str0.toCharArray(), str1.toCharArray());
     }

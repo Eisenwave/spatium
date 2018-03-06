@@ -5,7 +5,9 @@ import eisenwave.spatium.cache.CacheMath;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IcoSpheres {
+public final class IcoSpheres {
+    
+    private IcoSpheres() {}
     
     /**
      * Constructs an icosahedron with given radius.

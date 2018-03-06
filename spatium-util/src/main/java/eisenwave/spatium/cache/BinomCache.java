@@ -2,7 +2,7 @@ package eisenwave.spatium.cache;
 
 import eisenwave.spatium.util.FastMath;
 
-public final class BinomCache {
+public class BinomCache {
 
     private final int rows;
 
