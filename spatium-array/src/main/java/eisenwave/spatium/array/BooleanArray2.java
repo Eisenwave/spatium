@@ -9,16 +9,19 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, Cloneable {
-
-    private final byte[] data;
+    
+    private final static long HIGHEST_BIT = 0x8000_0000_0000_0000L;
+    private final static int ENTRY_SIZE = Long.SIZE;
+    
+    private final long[] data;
     
     protected final int stride, padding;
-
+    
     public BooleanArray2(int x, int y) {
         super(x, y);
-        this.stride = (int) Math.ceil((float) x/Byte.SIZE);
-        this.padding = Byte.SIZE - (x%Byte.SIZE);
-        this.data = new byte[stride * y];
+        this.stride = (int) Math.ceil((float) x / ENTRY_SIZE);
+        this.padding = ENTRY_SIZE - (x % ENTRY_SIZE);
+        this.data = new long[stride * y];
     }
     
     /**
@@ -33,53 +36,108 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, 
         this.data = Arrays.copyOf(copyOf.data, copyOf.data.length);
     }
     
+    // GETTERS
+    
     /**
-     * Constructs a new array by copying WBMP byte data.
+     * Returns the stride of the array.
+     * This is the width of each row in bytes of the backing array.
      *
-     * @param x the x-dimensions
-     * @param y the y-dimensions
-     * @param wbmp the wbmp data
-     * @param offset the offset in the wbmp array
+     * @return the stride of the array
      */
-    public BooleanArray2(int x, int y, byte[] wbmp, int offset) {
-        this(x, y);
-        System.arraycopy(data, 0, wbmp, offset, data.length);
-    }
-    
-    @Override
-    protected int indexOf(int x, int y) {
-        return x / Byte.SIZE + (y * stride);
-    }
-    
-    public boolean get(int x, int y) {
-        return (data[indexOf(x,y)] & (0b10000000 >>> (x%Byte.SIZE))) != 0;
-    }
-
-    public void set(int x, int y, boolean value) {
-        if (value) enable(x, y);
-        else disable(x, y);
-    }
-
-    public void enable(int x, int y) {
-         data[indexOf(x,y)] |= 0b10000000 >>> (x%Byte.SIZE);
-    }
-
-    public void disable(int x, int y) {
-        data[indexOf(x,y)] &= ~(0b10000000 >>> (x%Byte.SIZE));
-    }
-    
     public int getStride() {
         return stride;
     }
     
+    /**
+     * Returns the padding of the array.
+     * This is the amount of bits which represent no data in the backing array.
+     *
+     * @return the padding of the array
+     */
     public int getPadding() {
         return padding;
+    }
+    
+    @Override
+    protected int indexOf(int x, int y) {
+        return x / ENTRY_SIZE + (y * stride);
+    }
+    
+    public boolean get(int x, int y) {
+        return (data[indexOf(x, y)] & (HIGHEST_BIT >>> (x % ENTRY_SIZE))) != 0;
+    }
+    
+    public boolean[] getRow(int y) {
+        final int offY = y * stride;
+        final boolean[] result = new boolean[sizeX];
+        
+        //System.err.println("getRow(" + y + ") " + offY + " " + sizeX + "x" + sizeY + " " + stride);
+        for (int i = 0; i < stride; i++) {
+            int lim = (i == stride - 1)? (ENTRY_SIZE - padding) : ENTRY_SIZE;
+            long entry = data[offY + i];
+            
+            for (int b = 0; b < lim; b++) {
+                result[i * ENTRY_SIZE + b] = (entry & (HIGHEST_BIT >>> b)) != 0;
+            }
+        }
+        
+        return result;
+    }
+    
+    // SINGLE SETTERS
+    
+    public void set(int x, int y, boolean value) {
+        if (value) enable(x, y);
+        else disable(x, y);
+    }
+    
+    public void flip(int x, int y) {
+        set(x, y, !get(x, y));
+    }
+    
+    public void enable(int x, int y) {
+        data[indexOf(x, y)] |= HIGHEST_BIT >>> (x % ENTRY_SIZE);
+    }
+    
+    public void disable(int x, int y) {
+        data[indexOf(x, y)] &= ~(HIGHEST_BIT >>> (x % ENTRY_SIZE));
+    }
+    
+    // OPERATIONS
+    
+    public void not() {
+        for (int i = 0; i < data.length; i++)
+            data[i] = ~data[i];
+    }
+    
+    public void xor(BooleanArray2 array) {
+        if (this.getSizeX() != array.getSizeX() || this.getSizeY() != array.getSizeY())
+            throw new IllegalArgumentException("Can only operate with an array of equal dimensions");
+        
+        for (int i = 0; i < data.length; i++)
+            data[i] ^= array.data[i];
+    }
+    
+    public void and(BooleanArray2 array) {
+        if (this.getSizeX() != array.getSizeX() || this.getSizeY() != array.getSizeY())
+            throw new IllegalArgumentException("Can only operate with an array of equal dimensions");
+        
+        for (int i = 0; i < data.length; i++)
+            data[i] &= array.data[i];
+    }
+    
+    public void or(BooleanArray2 array) {
+        if (this.getSizeX() != array.getSizeX() || this.getSizeY() != array.getSizeY())
+            throw new IllegalArgumentException("Can only operate with an array of equal dimensions");
+        
+        for (int i = 0; i < data.length; i++)
+            data[i] |= array.data[i];
     }
     
     // MISC
     
     @Override
-    public BooleanArray2 clone()  {
+    public BooleanArray2 clone() {
         return new BooleanArray2(this);
     }
     
@@ -107,11 +165,13 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, 
      *
      * @return the target array or a freshly allocated array
      */
+    @Deprecated
     public byte[] toWBMP(@Nullable byte[] target, int offset) {
-        if (target == null) target = new byte[this.data.length];
+        throw new UnsupportedOperationException();
+        /* if (target == null) target = new byte[this.data.length];
         System.arraycopy(this.data, 0, target, offset, this.data.length);
         
-        return target;
+        return target; */
     }
     
     // ITERATION
@@ -121,73 +181,74 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, 
     public BooleanArrayIterator2 iterator() {
         return new BooleanArrayIterator2();
     }
-
+    
     private final class BooleanArrayIterator2 implements Iterator<Boolean> {
-
+        
         private final Incrementer2 incrementer = new Incrementer2(sizeX, sizeY);
-
+        
         private BooleanArrayIterator2() {}
-
+        
         @Override
         public boolean hasNext() {
             return incrementer.canIncrement();
         }
-
+        
         @Override
         public Boolean next() {
             return nextBoolean();
         }
-
+        
         public boolean nextBoolean() {
             int[] pos = incrementer.getAndIncrement();
             return get(pos[0], pos[1]);
         }
-
+        
     }
     
     // UTIL
     
     @NotNull
-    public static String toString(byte[] bytes, ByteStringer stringer) {
+    public static String toString(long[] bytes, Stringer stringer) {
         Objects.requireNonNull(stringer);
-        if (bytes.length==0) return "[]";
+        if (bytes.length == 0) return "[]";
         
         StringBuilder builder = new StringBuilder("[");
         for (int i = 1; i < bytes.length; i++) {
             builder
-                .append(stringer.accept(bytes[i-1]))
+                .append(stringer.accept(bytes[i - 1]))
                 .append(", ");
         }
         return builder
-            .append(Integer.toHexString(bytes[bytes.length-1]&0xFF))
+            .append(stringer.accept(bytes[bytes.length - 1]))
             .append("]")
             .toString();
     }
     
     @NotNull
-    public static String toString(byte[] bytes, int radix, boolean upperCase) {
+    public static String toString(long[] bytes, int radix, boolean upperCase) {
         if (radix < 2) throw new IllegalArgumentException("radix < 2");
-        
-        ByteStringer stringer = upperCase?
-            b -> Integer.toString(b&0xFF, radix).toUpperCase() :
-            b -> Integer.toString(b&0xFF, radix);
+    
+        Stringer stringer = upperCase?
+            b -> Long.toString(b, radix).toUpperCase() :
+            b -> Long.toString(b, radix);
         
         return toString(bytes, stringer);
     }
     
     @NotNull
-    public static String toHexString(byte[] bytes) {
-        return toString(bytes, b -> Integer.toHexString(b&0xFF));
+    public static String toHexString(long[] bytes) {
+        return toString(bytes, Long::toHexString);
     }
     
     @NotNull
-    public static String toBinaryString(byte[] bytes) {
-        return toString(bytes, b -> Integer.toBinaryString(b&0xFF));
+    public static String toBinaryString(long[] bytes) {
+        return toString(bytes, Long::toBinaryString);
     }
     
     @FunctionalInterface
-    public static interface ByteStringer {
-        String accept(byte b);
+    public static interface Stringer {
+    
+        String accept(long b);
     }
-
+    
 }

@@ -789,9 +789,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static long max(@NotNull long... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return max(nums[0], nums[1]);
-        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         long max = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -802,9 +799,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static int max(@NotNull int... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return max(nums[0], nums[1]);
-        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         int max = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -815,9 +809,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static double max(@NotNull double... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return max(nums[0], nums[1]);
-        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         double max = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -828,9 +819,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static float max(@NotNull float... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return max(nums[0], nums[1]);
-        if (nums.length == 3) return max(nums[0], nums[1], nums[2]);
         
         float max = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -907,9 +895,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static long min(@NotNull long... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return min(nums[0], nums[1]);
-        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
         
         long min = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -920,9 +905,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static int min(@NotNull int... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return min(nums[0], nums[1]);
-        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
         
         int min = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -933,9 +915,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static double min(@NotNull double... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return min(nums[0], nums[1]);
-        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
         
         double min = nums[0];
         for (int i = 1; i < nums.length; i++)
@@ -946,9 +925,6 @@ public final class PrimMath {
     @Contract(pure = true)
     public static float min(@NotNull float... nums) {
         if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        if (nums.length == 2) return min(nums[0], nums[1]);
-        if (nums.length == 3) return min(nums[0], nums[1], nums[2]);
         
         float min = nums[0];
         for (int i = 1; i < nums.length; i++)

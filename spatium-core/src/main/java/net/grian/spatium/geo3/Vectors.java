@@ -296,7 +296,7 @@ public final class Vectors {
      */
     @NotNull
     public static Vector3 rypToXYZ(double r, double yaw, double pitch) {
-        //handle singularity at pitch = 90 degrees (vector pointing straight up)
+        // handle singularity at pitch = 90 degrees (vector pointing straight up)
         if (Spatium.equals(Math.abs(pitch), CacheMath.HALF_PI)) {
             return Vector3.fromXYZ(
                 0,
@@ -310,6 +310,17 @@ public final class Vectors {
             
             return Vector3.fromXYZ(x, y, z);
         }
+    }
+    
+    /**
+     * Converts yaw into a unit vector in the xz-plane.
+     *
+     * @param yaw the yaw in radians
+     * @return a new vector
+     */
+    @NotNull
+    public static Vector3 yawToXYZ(double yaw) {
+        return Vector3.fromXYZ(Math.sin(-yaw), 0, Math.cos(yaw));
     }
     
     // PROJECTIONS

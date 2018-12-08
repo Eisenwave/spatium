@@ -107,6 +107,14 @@ public enum Direction {
         return values()[axis.ordinal() * 2 + direction.ordinal()];
     }
     
+    @NotNull
+    public static Direction[] valuesOf(Axis axis) {
+        return new Direction[] {
+            valueOf(axis, AxisDirection.NEGATIVE),
+            valueOf(axis, AxisDirection.POSITIVE)
+        };
+    }
+    
     /**
      * The direction on an axis (positive or negative).
      */

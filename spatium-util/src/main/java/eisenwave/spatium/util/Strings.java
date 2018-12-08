@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
+import java.util.function.Predicate;
 
 public final class Strings {
     
@@ -328,15 +328,10 @@ public final class Strings {
     }
     
     public static void filter(final Collection<String> list, final String prefix, boolean ignoreCase) {
-        Iterator<String> iter = list.iterator();
-        
-        while (iter.hasNext()) {
-            final String str = iter.next();
-            if (ignoreCase && !str.startsWith(prefix))
-                iter.remove();
-            else if (!startsWithIgnoreCase(str, prefix))
-                iter.remove();
-        }
+        Predicate<String> filter = ignoreCase? str ->
+            str.startsWith(prefix) :
+            str -> !startsWithIgnoreCase(str, prefix);
+        list.removeIf(filter);
     }
     
     public static boolean startsWithDig(String str) {
