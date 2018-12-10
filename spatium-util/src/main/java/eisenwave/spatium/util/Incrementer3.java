@@ -23,7 +23,7 @@ public class Incrementer3 {
     }
     
     public boolean canIncrement() {
-        return z < limX || y < limY || x < limZ;
+        return x < limX && y < limY && z < limZ;
     }
     
     public int[] get() {
