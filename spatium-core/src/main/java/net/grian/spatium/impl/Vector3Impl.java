@@ -58,12 +58,10 @@ public class Vector3Impl implements Vector3 {
         return Spatium.degrees( getPitchRad() );
     }
     
-    @SuppressWarnings("SuspiciousNameCombination")
     public double getYawRad() {
         return -Math.atan2(x, z);
     }
     
-    @SuppressWarnings("SuspiciousNameCombination")
     public double getPitchRad() {
         /* singularity is not being handled explicitly anymore since Math.atan handles it automatically
         final double dot = x*x + z*z;

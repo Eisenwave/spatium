@@ -2,7 +2,6 @@ package eisenwave.spatium.util;
 
 import java.util.Random;
 
-@SuppressWarnings("Duplicates")
 public final class NumberUtil {
     
     private final static int

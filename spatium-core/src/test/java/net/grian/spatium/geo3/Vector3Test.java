@@ -50,7 +50,6 @@ public class Vector3Test {
      *
      * @throws Exception if the test fails
      */
-    @SuppressWarnings("Duplicates")
     @Test
     public void transformRotX_followsRightHandRule() throws Exception {
         Vector3 vector = POS_Z.clone();
@@ -97,7 +96,6 @@ public class Vector3Test {
      *
      * @throws Exception if the test fails
      */
-    @SuppressWarnings("Duplicates")
     @Test
     public void transformRotZ_followsRightHandRule() throws Exception {
         Vector3 vector = POS_X.clone();

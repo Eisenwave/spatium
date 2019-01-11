@@ -18,7 +18,6 @@ public class Array3<T> extends AbstractArray3 implements Iterable<T> {
         this.data = (T[]) Array.newInstance(component, this.length);
     }
     
-    @SuppressWarnings("unchecked")
     public Array3(Array3<T> copyOf) {
         super(copyOf);
         

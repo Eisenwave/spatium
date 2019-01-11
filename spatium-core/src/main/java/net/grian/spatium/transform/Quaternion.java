@@ -457,7 +457,6 @@ public interface Quaternion extends Serializable, Cloneable {
      *     the rotation {@code b}.
      * </p>
      *
-     * @deprecated use {@link #product(Quaternion, Quaternion)}
      * @param q the quaternion
      * @return itself
      */

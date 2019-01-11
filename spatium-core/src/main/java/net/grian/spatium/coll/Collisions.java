@@ -363,7 +363,6 @@ public final class Collisions {
      * @param circle the circle
      * @return whether the ray and the plane collide
      */
-    @SuppressWarnings("Duplicates")
     public static boolean test(Ray2 ray, Circle circle) {
         return
             // either the circle contains origin of ray, or ...

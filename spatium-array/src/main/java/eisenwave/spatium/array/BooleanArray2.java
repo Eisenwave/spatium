@@ -1,11 +1,10 @@
 package eisenwave.spatium.array;
 
-import eisenwave.spatium.util.Incrementer2;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, Cloneable {
@@ -184,13 +183,14 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, 
     
     private final class BooleanArrayIterator2 implements Iterator<Boolean> {
         
-        private final Incrementer2 incrementer = new Incrementer2(sizeX, sizeY);
+        private int x = 0, y = 0;
+        private boolean hasNext = true;
         
         private BooleanArrayIterator2() {}
         
         @Override
         public boolean hasNext() {
-            return incrementer.canIncrement();
+            return hasNext;
         }
         
         @Override
@@ -199,8 +199,15 @@ public class BooleanArray2 extends AbstractArray2 implements Iterable<Boolean>, 
         }
         
         public boolean nextBoolean() {
-            int[] pos = incrementer.getAndIncrement();
-            return get(pos[0], pos[1]);
+            if (!hasNext)
+                throw new NoSuchElementException(x + ", " + y);
+            boolean result = get(x, y);
+            if (++x >= sizeX) {
+                x = 0;
+                if (++y >= sizeY)
+                    hasNext = false;
+            }
+            return result;
         }
         
     }

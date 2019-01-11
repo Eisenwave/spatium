@@ -1,8 +1,5 @@
 package eisenwave.spatium.util;
 
-import eisenwave.spatium.util.FastMath;
-import eisenwave.spatium.util.PrimMath;
-import eisenwave.spatium.util.TestUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -31,7 +28,7 @@ public class FastMathTest {
             long classic = TestUtil.millisOf(() -> {
                 boolean bool;
                 for (int i = 0; i < 1 << 24; i++)
-                    bool = FastMath.log2(i) % 0 == 0;
+                    bool = FastMath.log2(i) % 2 == 0;
             });
             System.out.println("classic: "+classic);
         }

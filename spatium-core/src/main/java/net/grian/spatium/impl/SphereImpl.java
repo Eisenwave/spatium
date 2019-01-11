@@ -60,7 +60,7 @@ public class SphereImpl implements Sphere {
         return r*r;
     }
 
-    private final static double four_thirds_pi = (double) ((4d / 3d) * Math.PI);
+    private final static double four_thirds_pi = (4d / 3d) * Math.PI;
 
     @Override
     public double getVolume() {
@@ -68,7 +68,7 @@ public class SphereImpl implements Sphere {
         return four_thirds_pi * r*r*r;
     }
 
-    private final static double four_pi = (double) (4 * Math.PI);
+    private final static double four_pi = 4 * Math.PI;
 
     @Override
     public double getSurfaceArea() {

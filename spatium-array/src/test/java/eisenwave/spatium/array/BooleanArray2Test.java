@@ -21,6 +21,15 @@ public class BooleanArray2Test {
     }
     
     @Test
+    public void iterate() {
+        int elements = 0;
+        BooleanArray2 array = new BooleanArray2(5, 7);
+        for (@SuppressWarnings("unused") boolean b : array)
+            elements++;
+        assertEquals(5 * 7, elements);
+    }
+    
+    @Test
     public void getRow() {
         boolean[][] rows = {
             toBooleans("1"),
@@ -102,7 +111,7 @@ public class BooleanArray2Test {
     
     @Test
     public void not() {
-        final int sizeX = 1000, sizeY = 1000;
+        final int sizeX = 100, sizeY = 100;
     
         BooleanArray2 array = createNoise(sizeX, sizeY);
         BooleanArray2 notArray = array.clone();
@@ -115,7 +124,7 @@ public class BooleanArray2Test {
     
     @Test
     public void xor() {
-        final int sizeX = 1000, sizeY = 1000;
+        final int sizeX = 100, sizeY = 100;
         
         BooleanArray2 array = createNoise(sizeX, sizeY);
         BooleanArray2 notArray = array.clone();
@@ -128,7 +137,7 @@ public class BooleanArray2Test {
     
     @Test
     public void getRandom() {
-        final int sizeX = 1000, sizeY = 1000;
+        final int sizeX = 100, sizeY = 100;
         
         Random random = ThreadLocalRandom.current();
         BooleanArray2 array = new BooleanArray2(sizeX, sizeY);

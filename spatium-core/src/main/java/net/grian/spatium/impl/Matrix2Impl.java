@@ -34,7 +34,6 @@ public class Matrix2Impl implements Matrix {
         }
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
     public double[] getRow(int i) {
         switch (i) {
@@ -44,7 +43,6 @@ public class Matrix2Impl implements Matrix {
         }
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
     public double[] getColumn(int j) {
         switch (j) {

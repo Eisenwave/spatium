@@ -313,7 +313,7 @@ public interface BlockSelection extends Space, Iterable<BlockVector>, Serializab
                     BlockVector.fromXYZ(x, y, z);
     }
 
-    /**
+    /*
      * Performs an operation for every block in this selection.
      *
      * @param action the operation to perform

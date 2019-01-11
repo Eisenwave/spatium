@@ -205,7 +205,6 @@ public class MatrixImpl implements Matrix {
      * @param row the row index
      * @param col the column index
      */
-    @SuppressWarnings("ConstantConditions")
     private void pasteWithoutRowCol(MatrixImpl matrix, int row, int col) {
         final int m = rows - 1;
         

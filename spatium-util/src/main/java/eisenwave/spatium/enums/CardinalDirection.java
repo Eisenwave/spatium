@@ -3,7 +3,6 @@ package eisenwave.spatium.enums;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("Duplicates")
 public enum CardinalDirection {
     NORTH (180, Face.NORTH),
     EAST  (-90, Face.EAST),

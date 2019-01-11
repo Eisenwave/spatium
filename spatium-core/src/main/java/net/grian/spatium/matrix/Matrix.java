@@ -291,7 +291,7 @@ public interface Matrix {
     }
     */
     
-    /**
+    /*
      * <p>
      *     Runs the aho algorithm on a given adjacency matrix with given accumulative and path-operations.
      * </p>
@@ -322,7 +322,7 @@ public interface Matrix {
         }
     } */
     
-    /**
+    /*
      * Runs the Floyd-Warshall algorithm on a given adjacency matrix.
      *
      * @param matrix the matrix

@@ -279,7 +279,6 @@ public final class Transformations {
      * @param axis the axis around which the point is to be rotated (unit vector)
      * @param theta the angle of the rotation in radians
      */
-    @SuppressWarnings("deprecation")
     @Deprecated
     public static void rotate(Vector3 point, Vector3 axis, double theta) {
         rotate(point, Quaternion.fromRotation(axis, theta));

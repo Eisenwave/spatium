@@ -11,7 +11,6 @@ public class IntArray3 extends AbstractArray3 implements Iterable<Integer>, Clon
 
     private final int[] data;
 
-    @SuppressWarnings("unchecked")
     public IntArray3(int x, int y, int z) {
         super(x,y,z);
         this.data = new int[x * y * z];

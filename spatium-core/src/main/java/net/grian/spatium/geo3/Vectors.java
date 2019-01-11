@@ -179,7 +179,6 @@ public final class Vectors {
             Vector3.fromXYZ(Math.max(ax, bx), Math.max(ay, by), Math.min(az, bz))};
     }
     
-    @SuppressWarnings("Duplicates")
     @NotNull
     public static Vector2[] minMax(Vector2... v) {
         if (v.length == 0) throw new IllegalArgumentException("no vectors given");
@@ -204,7 +203,6 @@ public final class Vectors {
         };
     }
     
-    @SuppressWarnings("Duplicates")
     @NotNull
     public static Vector3[] minMax(Vector3... v) {
         if (v.length == 0) throw new IllegalArgumentException("no vectors given");
@@ -636,7 +634,6 @@ public final class Vectors {
      * @param v the vector
      * @return a perpendicular vector
      */
-    @SuppressWarnings("SuspiciousNameCombination")
     @NotNull
     public static Vector3 ortho(Vector3 v) {
         return ortho(v.getX(), v.getY(), v.getZ());

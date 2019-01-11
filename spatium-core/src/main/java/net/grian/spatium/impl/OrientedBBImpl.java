@@ -154,7 +154,7 @@ public class OrientedBBImpl implements OrientedBB {
         };
     }
     
-    @SuppressWarnings({"SuspiciousNameCombination", "ConstantConditions"})
+    @SuppressWarnings({"SuspiciousNameCombination"})
     @Override
     public AxisAlignedBB getBoundaries() {
         final Vector3[]
